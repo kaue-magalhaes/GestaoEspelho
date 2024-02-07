@@ -1,6 +1,7 @@
 <script setup>
 import ApplicationLogo from '@/Components/ApplicationLogo.vue';
 import { Link } from '@inertiajs/vue3';
+import { Card } from '@/components/ui/card'
 </script>
 
 <template>
@@ -11,10 +12,8 @@ import { Link } from '@inertiajs/vue3';
             </Link>
         </div>
 
-        <div
-            class="w-full sm:max-w-md mt-6 px-6 py-4 bg-white shadow-md overflow-hidden sm:rounded-lg"
-        >
+        <Card class="w-full sm:max-w-md mt-6 p-6">
             <slot />
-        </div>
+        </Card>
     </div>
 </template>
