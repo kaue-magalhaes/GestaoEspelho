@@ -5,6 +5,7 @@ import { Label } from '@/Components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Button } from '@/components/ui/button';
+import { CardDescription, CardTitle } from '@/components/ui/card';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 
 defineProps({
@@ -32,6 +33,11 @@ const submit = () => {
 <template>
     <GuestLayout>
         <Head title="Log in" />
+
+        <template #card-header>
+            <CardTitle>Faça login na sua conta</CardTitle>
+            <CardDescription>Faça login em sua conta usando seu e-mail e senha.</CardDescription>
+        </template>
 
         <div v-if="status" class="mb-4 font-medium text-sm text-green-600">
             {{ status }}
