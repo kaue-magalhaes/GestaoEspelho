@@ -56,7 +56,7 @@ const submit = () => {
 
             <div class="mt-4">
                 <Label for="password">
-                    Password
+                    Senha
                 </Label>
 
                 <Input id="password" type="password" class="mt-1 block w-full" v-model="form.password" required />
@@ -75,7 +75,7 @@ const submit = () => {
             <div class="block mt-4">
                 <Label class="flex items-center">
                     <Checkbox name="remember" v-model:checked="form.remember" />
-                    <span class="ms-2 text-sm text-gray-600 cursor-pointer">Remember me</span>
+                    <span class="ms-2 text-sm text-gray-600 cursor-pointer">Lembre de mim</span>
                 </Label>
             </div>
 
