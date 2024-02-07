@@ -4,7 +4,7 @@ import InputError from '@/Components/InputError.vue';
 import { Label } from '@/Components/ui/label';
 import { Button } from '@/Components/ui/button';
 import { Input } from '@/Components/ui/input';
-import { CardDescription, CardTitle } from '@/components/ui/card';
+import { CardDescription, CardTitle } from '@/Components/ui/card';
 import { Head, useForm } from '@inertiajs/vue3';
 
 const form = useForm({

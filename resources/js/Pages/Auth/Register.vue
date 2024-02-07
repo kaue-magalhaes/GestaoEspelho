@@ -4,7 +4,7 @@ import InputError from '@/Components/InputError.vue';
 import { Label } from '@/Components/ui/label';
 import { Button } from '@/Components/ui/button';
 import { Input } from '@/Components/ui/input';
-import { CardDescription, CardTitle } from '@/components/ui/card';
+import { CardDescription, CardTitle } from '@/Components/ui/card';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 
 const form = useForm({
@@ -23,7 +23,7 @@ const submit = () => {
 
 <template>
     <GuestLayout>
-        <Head title="Register" />
+        <Head title="Registrar" />
 
         <template #card-header>
             <CardTitle>Criar uma nova conta</CardTitle>

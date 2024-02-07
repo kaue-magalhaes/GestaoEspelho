@@ -5,7 +5,7 @@ import { Label } from '@/Components/ui/label';
 import { Input } from '@/Components/ui/input';
 import { Checkbox } from '@/Components/ui/checkbox';
 import { Button } from '@/Components/ui/button';
-import { CardDescription, CardTitle } from '@/components/ui/card';
+import { CardDescription, CardTitle } from '@/Components/ui/card';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 
 defineProps({
@@ -32,7 +32,7 @@ const submit = () => {
 
 <template>
     <GuestLayout>
-        <Head title="Log in" />
+        <Head title="Login" />
 
         <template #card-header>
             <CardTitle>Faça login na sua conta</CardTitle>
