@@ -17,11 +17,11 @@ defineProps({
 </script>
 
 <template>
-    <Head title="Profile" />
+    <Head title="Perfil" />
 
     <AuthenticatedLayout>
         <template #header>
-            <CardTitle class="font-semibold text-xl text-gray-800 leading-tight">Profile</CardTitle>
+            <CardTitle class="font-semibold text-xl text-gray-800 leading-tight">Perfil de usuário</CardTitle>
         </template>
 
         <div class="py-12">
