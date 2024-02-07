@@ -1,10 +1,10 @@
 <script setup>
-import Checkbox from '@/Components/Checkbox.vue';
 import GuestLayout from '@/Layouts/GuestLayout.vue';
 import InputError from '@/Components/InputError.vue';
-import InputLabel from '@/Components/InputLabel.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import TextInput from '@/Components/TextInput.vue';
+import { Label } from '@/Components/ui/label';
+import { Input } from '@/components/ui/input';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Button } from '@/components/ui/button';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 
 defineProps({
@@ -39,41 +39,30 @@ const submit = () => {
 
         <form @submit.prevent="submit">
             <div>
-                <InputLabel for="email" value="Email" />
+                <Label for="email">
+                    Email
+                </Label>
 
-                <TextInput
-                    id="email"
-                    type="email"
-                    class="mt-1 block w-full"
-                    v-model="form.email"
-                    required
-                    autofocus
-                    autocomplete="username"
-                />
+                <Input id="email" type="email" class="mt-1 block w-full" v-model="form.email" required autofocus />
 
                 <InputError class="mt-2" :message="form.errors.email" />
             </div>
 
             <div class="mt-4">
-                <InputLabel for="password" value="Password" />
+                <Label for="password">
+                    Password
+                </Label>
 
-                <TextInput
-                    id="password"
-                    type="password"
-                    class="mt-1 block w-full"
-                    v-model="form.password"
-                    required
-                    autocomplete="current-password"
-                />
+                <Input id="password" type="password" class="mt-1 block w-full" v-model="form.password" required />
 
                 <InputError class="mt-2" :message="form.errors.password" />
             </div>
 
             <div class="block mt-4">
-                <label class="flex items-center">
+                <Label class="flex items-center">
                     <Checkbox name="remember" v-model:checked="form.remember" />
-                    <span class="ms-2 text-sm text-gray-600">Remember me</span>
-                </label>
+                    <span class="ms-2 text-sm text-gray-600 cursor-pointer">Remember me</span>
+                </Label>
             </div>
 
             <div class="flex items-center justify-end mt-4">
@@ -85,9 +74,9 @@ const submit = () => {
                     Forgot your password?
                 </Link>
 
-                <PrimaryButton class="ms-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
+                <Button class="ms-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
                     Log in
-                </PrimaryButton>
+                </Button>
             </div>
         </form>
     </GuestLayout>
