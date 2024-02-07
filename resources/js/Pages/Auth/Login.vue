@@ -62,6 +62,14 @@ const submit = () => {
                 <Input id="password" type="password" class="mt-1 block w-full" v-model="form.password" required />
 
                 <InputError class="mt-2" :message="form.errors.password" />
+
+                <Link
+                    v-if="canResetPassword"
+                    :href="route('password.request')"
+                    class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                >
+                    Esqueceu sua senha?
+                </Link>
             </div>
 
             <div class="block mt-4">
@@ -73,11 +81,10 @@ const submit = () => {
 
             <div class="flex items-center justify-end mt-4">
                 <Link
-                    v-if="canResetPassword"
-                    :href="route('password.request')"
+                    :href="route('register')"
                     class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                 >
-                    Esqueceu sua senha?
+                    Não possui uma conta?
                 </Link>
 
                 <Button class="ms-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
