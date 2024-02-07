@@ -2,9 +2,9 @@
 import GuestLayout from '@/Layouts/GuestLayout.vue';
 import InputError from '@/Components/InputError.vue';
 import { Label } from '@/Components/ui/label';
-import { Input } from '@/components/ui/input';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Button } from '@/components/ui/button';
+import { Input } from '@/Components/ui/input';
+import { Checkbox } from '@/Components/ui/checkbox';
+import { Button } from '@/Components/ui/button';
 import { CardDescription, CardTitle } from '@/components/ui/card';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 

@@ -2,8 +2,8 @@
 import GuestLayout from '@/Layouts/GuestLayout.vue';
 import InputError from '@/Components/InputError.vue';
 import { Label } from '@/Components/ui/label';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import { Button } from '@/Components/ui/button';
+import { Input } from '@/Components/ui/input';
 import { CardDescription, CardTitle } from '@/components/ui/card';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 
