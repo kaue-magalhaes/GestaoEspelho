@@ -21,9 +21,6 @@ const showingNavigationDropdown = ref(false);
                                 <NavLink :href="route('espelho')" :active="route().current('espelho')">
                                     Espelho
                                 </NavLink>
-                                <NavLink :href="route('preview')" :active="route().current('preview')">
-                                    Preview
-                                </NavLink>
                             </div>
                         </div>
 
