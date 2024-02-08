@@ -33,44 +33,40 @@ const addColumn = () => {
                 <Carousel class="focus-visible:outline-none">
                     <CarouselContent>
                         <CarouselItem>
-                            <div class="p-1">
-                                <Card>
-                                    <CardHeader>
-                                        <CardTitle class="text-lg p-4 font-semibold">
-                                            Área de criação do espelho
-                                        </CardTitle>
-    
-                                        <div class="flex justify-end items-center p-4">
-                                            <Button @click="addRow">Adicionar linha</Button>
-                                            <Button class="ml-2" @click="addColumn">Adicionar coluna</Button>
-                                        </div>
-                                    </CardHeader>
-    
-                                    <CardContent>
-                                        <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                                            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                                                <tr>
-                                                    <th v-for="column in columns" :key="column" class="px-6 py-3">
-                                                        Coluna {{ column }}
-                                                    </th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr v-for="(row, rowIndex) in tableData" :key="rowIndex" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                                    <td v-for="(cell, columnIndex) in row" :key="columnIndex" class="px-6 py-4">
-                                                        <Input v-model="tableData[rowIndex][columnIndex]" />
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </CardContent>
-                                </Card>
-                            </div>
+                            <Card>
+                                <CardHeader>
+                                    <CardTitle class="text-lg p-4 font-semibold">
+                                        Área de criação do espelho
+                                    </CardTitle>
+
+                                    <div class="flex justify-end items-center p-4">
+                                        <Button @click="addRow">Adicionar linha</Button>
+                                        <Button class="ml-2" @click="addColumn">Adicionar coluna</Button>
+                                    </div>
+                                </CardHeader>
+
+                                <CardContent>
+                                    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                                        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                                            <tr>
+                                                <th v-for="column in columns" :key="column" class="px-6 py-3">
+                                                    Coluna {{ column }}
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr v-for="(row, rowIndex) in tableData" :key="rowIndex" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                                <td v-for="(cell, columnIndex) in row" :key="columnIndex" class="px-6 py-4">
+                                                    <Input v-model="tableData[rowIndex][columnIndex]" />
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </CardContent>
+                            </Card>
                         </CarouselItem>
                         <CarouselItem>
-                            <div class="p-1">
-                                <Preview />
-                            </div>
+                            <Preview />
                         </CarouselItem>
                     </CarouselContent>
                 </Carousel>
