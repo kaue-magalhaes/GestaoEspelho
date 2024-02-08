@@ -11,7 +11,9 @@ import { Card, CardHeader, CardTitle } from '@/Components/ui/card';
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <Card>
                     <CardHeader>
-                        <CardTitle class="text-lg p-4 font-semibold">Espelho</CardTitle>
+                        <CardTitle class="text-lg p-4 font-semibold">
+                            Área de criação do espelho
+                        </CardTitle>
                     </CardHeader>
                 </Card>
             </div>
