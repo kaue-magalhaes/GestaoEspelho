@@ -17,10 +17,6 @@ use Inertia\Inertia;
 */
 
 Route::get('/', function () {
-    return redirect()->route('espelho');
-});
-
-Route::get('/espelho', function () {
     return Inertia::render('Espelho');
 })->middleware(['auth', 'verified'])->name('espelho');
 
