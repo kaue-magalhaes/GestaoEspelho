@@ -17,12 +17,12 @@ use Inertia\Inertia;
 */
 
 Route::get('/', function () {
-    return redirect()->route('dashboard');
+    return redirect()->route('espelho');
 });
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/espelho', function () {
+    return Inertia::render('Espelho');
+})->middleware(['auth', 'verified'])->name('espelho');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
