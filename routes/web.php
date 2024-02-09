@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\EspelhoController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -28,6 +29,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/preview' , function () {
         return Inertia::render('Preview');
     })->name('preview');
+
+    Route::post('/espelho', [EspelhoController::class, 'store'])->name('espelho.store');
+
 });
 
 Route::get('/test', function () {

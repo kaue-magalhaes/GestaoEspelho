@@ -2,7 +2,7 @@
 import { ArrowLeft } from "lucide-vue-next";
 import { useCarousel } from "./useCarousel";
 import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/Components/ui/button";
 
 const props = defineProps({
   class: { type: null, required: false },

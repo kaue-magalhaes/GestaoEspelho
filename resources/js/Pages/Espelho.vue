@@ -6,11 +6,28 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/Components/ui/input';
 import { Carousel, CarouselContent, CarouselItem } from '@/Components/ui/carousel';
 import { Card, CardContent, CardHeader, CardTitle } from '@/Components/ui/card';
+
+import Calendar from 'primevue/calendar';
 import Preview from './Preview.vue';
 
 const rows = ref(1);
 const columns = ref(1);
 const tableData = ref([['']]);
+
+const dates = ref(null);
+
+const form = useForm({
+    dates: null,
+});
+
+watch(dates, (newValue) => {
+    form.dates = newValue;
+    submit();
+});
+
+const submit = () => {
+    form.post(route('espelho.store'));
+};
 
 const addRow = () => {
     rows.value++;
@@ -37,6 +54,7 @@ const addColumn = () => {
                                 <CardHeader>
                                     <CardTitle class="text-lg p-4 font-semibold">
                                         Área de criação do espelho
+
                                     </CardTitle>
 
                                     <div class="flex justify-end items-center p-4">
@@ -46,6 +64,9 @@ const addColumn = () => {
                                 </CardHeader>
 
                                 <CardContent>
+                                    <div class="flex justify-center mb-2">
+                                        <Calendar v-model="dates" selectionMode="range" :manualInput="false" />
+                                    </div>
                                     <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                                         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                                             <tr>
@@ -66,6 +87,7 @@ const addColumn = () => {
                             </Card>
                         </CarouselItem>
                         <CarouselItem>
+                            <VuePdfEmbed annotation-layer text-layer :source="pdfSource" />
                             <Preview />
                         </CarouselItem>
                     </CarouselContent>
