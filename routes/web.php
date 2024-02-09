@@ -30,8 +30,9 @@ Route::middleware('auth')->group(function () {
         return Inertia::render('Preview');
     })->name('preview');
 
+    Route::get(('document/test'), [DocumentController::class, 'test'])->name('document.test');
     Route::post('/document/create', [DocumentController::class, 'create'])->name('document.create');
-    Route::get('/document/view', [DocumentController::class, 'view'])->name('document.view');
+    Route::get('/document/preview/{filename}', [DocumentController::class, 'preview'])->name('document.preview');
 });
 
 Route::get('/test', function () {
