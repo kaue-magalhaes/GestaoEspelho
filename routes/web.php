@@ -32,7 +32,8 @@ Route::middleware('auth')->group(function () {
 
     Route::get(('document/test'), [DocumentController::class, 'test'])->name('document.test');
     Route::post('/document/create', [DocumentController::class, 'create'])->name('document.create');
-    Route::get('/document/preview/{filename}', [DocumentController::class, 'preview'])->name('document.preview');
+    Route::post('/document/preview/', [DocumentController::class, 'preview'])->name('document.preview');
+    Route::get('/document/view', [DocumentController::class, 'view'])->name('document.view');
 });
 
 Route::get('/test', function () {
