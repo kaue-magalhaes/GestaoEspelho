@@ -49,15 +49,9 @@ class DocumentController extends Controller
         return $pdf->stream();
     }
 
-    public function view($filename)
+    public function view()
     {
-        // Verifica se o arquivo existe
-        if (!Storage::exists('public/pdfs/' . $filename)) {
-            return response()->json(['error' => 'Arquivo não encontrado'], 404);
-        }
-
-        // Retorna a página Inertia com o nome do arquivo
-        return Inertia::render('DocumentViewer', ['filename' => $filename]);
+        return Inertia::render('DocumentViewer');
     }
 
     /**
