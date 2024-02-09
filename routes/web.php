@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\EspelhoController;
+use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -26,12 +26,12 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    Route::get('/preview' , function () {
+    Route::get('/preview', function () {
         return Inertia::render('Preview');
     })->name('preview');
 
-    Route::post('/espelho', [EspelhoController::class, 'store'])->name('espelho.store');
-
+    Route::post('/document/create', [DocumentController::class, 'create'])->name('document.create');
+    Route::get('/document/view', [DocumentController::class, 'view'])->name('document.view');
 });
 
 Route::get('/test', function () {
