@@ -26,7 +26,7 @@ watch(dates, (newValue) => {
 });
 
 const submit = () => {
-    form.post(route('espelho.store'));
+    form.post(route('espelho.create'));
 };
 
 const addRow = () => {
