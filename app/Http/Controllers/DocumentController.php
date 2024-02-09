@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class DocumentController extends Controller
 {
@@ -16,7 +18,29 @@ class DocumentController extends Controller
 
     public function create(Request $request)
     {
-        //
+        // Validação dos dados recebidos
+        $request->validate([
+            'nome'     => 'required',
+            'data'     => 'required|date',
+            'conteudo' => 'required',
+        ]);
+
+        // Criação do PDF
+        $pdf = Pdf::loadView('pdf.document', [
+            'nome'     => $request->nome,
+            'data'     => $request->data,
+            'conteudo' => $request->conteudo,
+        ]);
+
+        // Armazenamento do PDF
+        $nomeArquivo = 'documento_' . time() . '.pdf';
+        Storage::put('public/pdfs/' . $nomeArquivo, $pdf->output());
+
+        // Retorno da resposta
+        return response()->json([
+            'message'  => 'Documento criado com sucesso',
+            'filename' => $nomeArquivo,
+        ]);
     }
 
     /**
