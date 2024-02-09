@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use Barryvdh\DomPDF\Facade\Pdf;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Inertia\Inertia;
 
 class DocumentController extends Controller
 {
@@ -16,31 +18,46 @@ class DocumentController extends Controller
         //
     }
 
-    public function create(Request $request)
+    public function test()
+    {
+        return Inertia::render('TestePdf');
+    }
+
+    public function preview(Request $request)
     {
         // Validação dos dados recebidos
         $request->validate([
             'nome'     => 'required',
-            'data'     => 'required|date',
+            'dates'    => 'required|array',
+            'dates.*'  => 'date',
             'conteudo' => 'required',
         ]);
+
+        // Formatação das datas
+        $dates = array_map(function ($date) {
+            return Carbon::parse($date)->format('d/m/Y');
+        }, $request->dates);
 
         // Criação do PDF
         $pdf = Pdf::loadView('pdf.document', [
             'nome'     => $request->nome,
-            'data'     => $request->data,
+            'dates'    => $dates,
             'conteudo' => $request->conteudo,
         ]);
 
-        // Armazenamento do PDF
-        $nomeArquivo = 'documento_' . time() . '.pdf';
-        Storage::put('public/pdfs/' . $nomeArquivo, $pdf->output());
+        // Retorna o PDF como uma resposta HTTP
+        return $pdf->stream();
+    }
 
-        // Retorno da resposta
-        return response()->json([
-            'message'  => 'Documento criado com sucesso',
-            'filename' => $nomeArquivo,
-        ]);
+    public function view($filename)
+    {
+        // Verifica se o arquivo existe
+        if (!Storage::exists('public/pdfs/' . $filename)) {
+            return response()->json(['error' => 'Arquivo não encontrado'], 404);
+        }
+
+        // Retorna a página Inertia com o nome do arquivo
+        return Inertia::render('DocumentViewer', ['filename' => $filename]);
     }
 
     /**
