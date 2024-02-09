@@ -62,67 +62,121 @@ import { Card, CardHeader } from '@/Components/ui/card';
                         </div>
 
                         <div class="max-w-7xl w-full flex flex-col items-center">
-                            <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                                    <tr>
-                                        <th class="px-6 py-3">
-                                            Product name
+                            <table class="w-full text-black">
+                                <thead class="text-xs text-black uppercase bg-gray-300 border-x border-t">
+                                    <tr class="text-center text-base">
+                                        <th class="px-6 py-4">
+                                            PROMOTORIAS DE MACAPÁ
                                         </th>
                                         <th class="px-6 py-3">
-                                            Color
+                                            Promotor(a)
                                         </th>
                                         <th class="px-6 py-3">
-                                            Category
-                                        </th>
-                                        <th class="px-6 py-3">
-                                            Price
-                                        </th>
-                                        <th class="px-6 py-3">
-                                            <span class="sr-only">Edit</span>
+                                            Período
                                         </th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                                        <th class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                            Apple MacBook Pro 17"
+                                <tbody class="text-center">
+                                    <tr class="bg-white hover:bg-gray-50 border">
+                                        <th class="px-6 py-4 font-medium whitespace-nowrap">
+                                            <div class="flex flex-col items-center">
+                                                <h1 class="font-bold text-gray-900 dark:text-gray-200">
+                                                    1ª PJ CÍVEL
+                                                </h1>
+                                                <p class="text-xs">
+                                                    (1ª,2ª,3ª Cíveis e de Fazenda Pública)
+                                                </p>
+                                                <p class="text-xs">
+                                                    Resolução 002/2021-CPJ
+                                                </p>
+                                            </div>
                                         </th>
                                         <td class="px-6 py-4">
-                                            Silver
+                                            <h1 class="font-bold text-gray-900 dark:text-gray-200">
+                                                Dra. Eliana Mena Cavalcante
+                                            </h1>
+                                            <p class="text-xs">
+                                                (Coordenadora PJ Cíveis-Port. 040/2012)
+                                            </p>
                                         </td>
                                         <td class="px-6 py-4">
-                                            Laptop
-                                        </td>
-                                        <td class="px-6 py-4">
-                                            $2999
+                                            <h1 class="font-bold text-gray-900 dark:text-gray-200">
+                                                Reunião CNMP
+                                            </h1>
+                                            <p class="text-xs">
+                                                04/02/2024 - 06/02/2024
+                                            </p>
+                                            <p class="text-xs text-red-500">
+                                                Designada Dra. Marcela (resp.)
+                                            </p>
                                         </td>
                                     </tr>
-                                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                                        <th class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                            Microsoft Surface Pro
+                                    <tr class="bg-white hover:bg-gray-50 border">
+                                        <th class="px-6 py-4 font-medium whitespace-nowrap">
+                                            <div class="flex flex-col items-center">
+                                                <h1 class="font-bold text-gray-900 dark:text-gray-200">
+                                                    1ª PJ CÍVEL
+                                                </h1>
+                                                <p class="text-xs">
+                                                    (1ª,2ª,3ª Cíveis e de Fazenda Pública)
+                                                </p>
+                                                <p class="text-xs">
+                                                    Resolução 002/2021-CPJ
+                                                </p>
+                                            </div>
                                         </th>
                                         <td class="px-6 py-4">
-                                            White
+                                            <h1 class="font-bold text-gray-700 dark:text-gray-200">
+                                                Dra. Eliana Mena Cavalcante
+                                            </h1>
+                                            <p class="text-xs">
+                                                (Coordenadora PJ Cíveis-Port. 040/2012)
+                                            </p>
                                         </td>
                                         <td class="px-6 py-4">
-                                            Laptop PC
-                                        </td>
-                                        <td class="px-6 py-4">
-                                            $1999
+                                            <h1 class="font-bold text-gray-700 dark:text-gray-200">
+                                                Reunião CNMP
+                                            </h1>
+                                            <p class="text-xs">
+                                                04/02/2024 - 06/02/2024
+                                            </p>
+                                            <p class="text-xs text-red-500">
+                                                Designada Dra. Marcela (resp.)
+                                            </p>
                                         </td>
                                     </tr>
-                                    <tr class="bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-600">
-                                        <th class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                            Magic Mouse 2
+                                    <tr class="bg-white hover:bg-gray-50 border">
+                                        <th class="px-6 py-4 font-medium whitespace-nowrap">
+                                            <div class="flex flex-col items-center">
+                                                <h1 class="font-bold text-gray-900 dark:text-gray-200">
+                                                    1ª PJ CÍVEL
+                                                </h1>
+                                                <p class="text-xs">
+                                                    (1ª,2ª,3ª Cíveis e de Fazenda Pública)
+                                                </p>
+                                                <p class="text-xs">
+                                                    Resolução 002/2021-CPJ
+                                                </p>
+                                            </div>
                                         </th>
                                         <td class="px-6 py-4">
-                                            Black
+                                            <h1 class="font-bold text-gray-700 dark:text-gray-200">
+                                                Dra. Eliana Mena Cavalcante
+                                            </h1>
+                                            <p class="text-xs">
+                                                (Coordenadora PJ Cíveis-Port. 040/2012)
+                                            </p>
                                         </td>
                                         <td class="px-6 py-4">
-                                            Accessories
-                                        </td>
-                                        <td class="px-6 py-4">
-                                            $99
+                                            <h1 class="font-bold text-gray-700 dark:text-gray-200">
+                                                Reunião CNMP
+                                            </h1>
+                                            <p class="text-xs">
+                                                04/02/2024 - 06/02/2024
+                                            </p>
+                                            <p class="text-xs text-red-500">
+                                                Designada Dra. Marcela (resp.)
+                                            </p>
                                         </td>
                                     </tr>
                                 </tbody>

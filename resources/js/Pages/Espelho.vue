@@ -1,7 +1,7 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { ref } from 'vue';
-import { Head } from '@inertiajs/vue3';
+import { ref, watch } from 'vue';
+import { Head, useForm } from '@inertiajs/vue3';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/Components/ui/input';
 import { Carousel, CarouselContent, CarouselItem } from '@/Components/ui/carousel';
