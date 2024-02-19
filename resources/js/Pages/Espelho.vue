@@ -1,10 +1,17 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import { ref } from 'vue';
 import { Head } from '@inertiajs/vue3';
 import { Carousel, CarouselContent, CarouselItem } from '@/Components/ui/carousel';
-import Preview from './Preview.vue';
+import Preview from '@/Components/Preview.vue';
 import EspelhoEdit from '@/Components/EspelhoEdit.vue';
 
+const periodo = ref(null);
+
+const updatePeriodo = (value) => {
+    console.log(value);
+  periodo.value = value;
+};
 </script>
 
 <template>
@@ -15,10 +22,14 @@ import EspelhoEdit from '@/Components/EspelhoEdit.vue';
                 <Carousel class="focus-visible:outline-none">
                     <CarouselContent>
                         <CarouselItem>
-                            <EspelhoEdit />
+                            <EspelhoEdit
+                                @update:periodo="updatePeriodo"
+                            />
                         </CarouselItem>
                         <CarouselItem>
-                            <Preview />
+                            <Preview
+                                :periodo="periodo"
+                            />
                         </CarouselItem>
                     </CarouselContent>
                 </Carousel>

@@ -1,12 +1,25 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, defineEmits, watch } from 'vue';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/Components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/Components/ui/card';
 import Calendar from 'primevue/calendar';
+import { format } from 'date-fns';
 
-const dates = ref(null);
+const periodo = ref(null);
 
+const emit = defineEmits(['update:periodo']);
+
+watch(periodo, (value) => {
+  if (value[0] === null || value[1] === null) return [null, null];
+  const dataInicio = value[0];
+  const dataFinal = value[1];
+
+  const dataInicioFormatada = format(dataInicio, 'dd/MM/yyyy');
+  const dataFinalFormatada = format(dataFinal, 'dd/MM/yyyy');
+
+  emit('update:periodo', [dataInicioFormatada, dataFinalFormatada]);
+});
 </script>
 
 <template>
@@ -26,7 +39,7 @@ const dates = ref(null);
             inputId="period"
             showIcon
             placeholder="Selecione o período"
-            v-model=dates
+            v-model=periodo
             class="text-sm"
           />
         </span>
