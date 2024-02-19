@@ -2,15 +2,37 @@
 import { ref, defineEmits, watch } from 'vue';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/Components/ui/label';
+import { Input } from '@/Components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/Components/ui/card';
 import Calendar from 'primevue/calendar';
 import { format } from 'date-fns';
+import { Trash2 } from 'lucide-vue-next';
 
-const periodo = ref(null);
+const periodoEspelho = ref(null);
+const urgenciaInputComponent = ref([]);
 
-const emit = defineEmits(['update:periodo']);
+const emit = defineEmits([
+  'update:periodoEspelho',
+  'update:promotorUrgencia',
+  'update:periodoUrgencia',
+  'remove:promotorUrgenciaItem',
+]);
 
-watch(periodo, (value) => {
+const adicionarInput = () => {
+  urgenciaInputComponent.value.push({ 
+    value: {
+      promotorUrgencia: '',
+      periodoUrgencia: '',
+    }
+  });
+};
+
+const removeInput = (index) => {
+  urgenciaInputComponent.value.splice(index, 1);
+  emit('remove:promotorUrgenciaItem', index);
+};
+
+watch(periodoEspelho, (value) => {
   if (value[0] === null || value[1] === null) return [null, null];
   const dataInicio = value[0];
   const dataFinal = value[1];
@@ -18,7 +40,7 @@ watch(periodo, (value) => {
   const dataInicioFormatada = format(dataInicio, 'dd/MM/yyyy');
   const dataFinalFormatada = format(dataFinal, 'dd/MM/yyyy');
 
-  emit('update:periodo', [dataInicioFormatada, dataFinalFormatada]);
+  emit('update:periodoEspelho', [dataInicioFormatada, dataFinalFormatada]);
 });
 </script>
 
@@ -39,7 +61,7 @@ watch(periodo, (value) => {
             inputId="period"
             showIcon
             placeholder="Selecione o período"
-            v-model=periodo
+            v-model=periodoEspelho
             class="text-sm"
           />
         </span>
@@ -52,7 +74,26 @@ watch(periodo, (value) => {
               <Label class="text-xl">
                 Plantão de Atendimentos em Caráter de Urgência - Macapá:
               </Label>
-              <Button variant="ghost" class="w-1/4">
+              <div v-for="(input, index) in urgenciaInputComponent" :key="index" class="w-full px-4 flex justify-center items-center space-x-4">
+                <div class="flex flex-row items-center w-full space-x-4">
+                  <Label class="text-base whitespace-nowrap">
+                    Nome do Promotor:
+                  </Label>
+                  <Input v-model.lazy="input.value.promotorUrgencia" @change="emit('update:promotorUrgencia', index, input.value.promotorUrgencia)" class="mb-2 w-full" />
+                </div>
+                <div class="flex flex-row items-center w-full space-x-4">
+                  <Label class="text-base">
+                    Período:
+                  </Label>
+                  <Input v-model.lazy="input.value.periodoUrgencia" @change="emit('update:periodoUrgencia', index, input.value.periodoUrgencia)" class="mb-2 w-full" />
+                </div>
+                <div class="flex mb-2">
+                  <Button @click="removeInput(index)" variant="destructive" class="p-3">
+                    <Trash2 class="w-5 h-5 text-white" />
+                  </Button>
+                </div>
+              </div>
+              <Button variant="ghost" class="w-1/4" @click="adicionarInput">
                 Adicionar +
               </Button>
             </Card>

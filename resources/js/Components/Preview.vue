@@ -2,7 +2,8 @@
 import { Card, CardHeader } from '@/Components/ui/card';
 
 const props = defineProps({
-    periodo: Array,
+    periodoEspelho: Array,
+    atendimentosUrgenciaMacapa: Object,
 });
 </script>
 
@@ -27,8 +28,8 @@ const props = defineProps({
                         <div class="text-sm text-gray-500 dark:text-gray-400">
                             Procuradorias de Justiça do Estado do Amapá
                         </div>
-                        <div v-if="periodo" class="text-sm text-gray-500 dark:text-gray-400">
-                            Espelho de {{ periodo[0] }} a {{ periodo[1] }}
+                        <div v-if="periodoEspelho" class="text-sm text-gray-500 dark:text-gray-400">
+                            Espelho de {{ periodoEspelho[0] }} a {{ periodoEspelho[1] }}
                         </div>
                     </div>
 
@@ -38,22 +39,15 @@ const props = defineProps({
                         </div>
 
                         <!-- Pequena tabela sobre o PLANTÃO DE MACAPÁ PARA ATENDIMENTOS EM CARÁTER DE URGÊNCIA -->
-                        <div class="w-full border-2 border-black p-4 rounded-md">
+                        <div v-if="atendimentosUrgenciaMacapa.length" class="w-full border-2 border-black p-4 rounded-md">
                             <div class="w-full flex flex-col items-center">
                                 <h2 class="text-xl font-bold mb-4">PLANTÃO DE MACAPÁ PARA ATENDIMENTOS EM CARÁTER DE URGÊNCIA</h2>
                                 <ul>
-                                    <li class="mb-2 text-center">
-                                        <span class="font-semibold"> - Dr. MATHEUS SILVA MENDES</span> <span> (12/12/2022).</span>
-                                        <span class="font-semibold"> - Dr. MATHEUS SILVA MENDES</span> <span> (12/12/2022).</span>
-                                    </li>
-                                    <li class="mb-2 text-center">
-                                        <span class="font-semibold"> - Dr. MATHEUS SILVA MENDES</span> <span> (12/12/2022).</span>
-                                        <span class="font-semibold"> - Dr. MATHEUS SILVA MENDES</span> <span> (12/12/2022).</span>
-                                    </li>
-                                    <li class="mb-2 text-center">
-                                        <span class="font-semibold"> - Dr. MATHEUS SILVA MENDES</span> <span> (12/12/2022).</span>
-                                        <span class="font-semibold"> - Dr. MATHEUS SILVA MENDES</span> <span> (12/12/2022).</span>
-                                    </li>
+                                    <ul class="grid grid-cols-2 gap-4">
+                                        <li class="mb-2 text-left" v-for="atendimento in atendimentosUrgenciaMacapa" :key="atendimento.promotor">
+                                            <span class="font-semibold"> - {{ atendimento.promotor }}</span> <span> ({{ atendimento.periodo }}).</span>
+                                        </li>
+                                    </ul>
                                 </ul>
                             </div>
                         </div>

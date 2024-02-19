@@ -6,11 +6,30 @@ import { Carousel, CarouselContent, CarouselItem } from '@/Components/ui/carouse
 import Preview from '@/Components/Preview.vue';
 import EspelhoEdit from '@/Components/EspelhoEdit.vue';
 
-const periodo = ref(null);
+const periodoEspelho = ref(null);
 
-const updatePeriodo = (value) => {
-    console.log(value);
-  periodo.value = value;
+const atendimentosUrgenciaMacapa = ref([]);
+
+const updatePeriodoEspelho = (value) => {
+    periodoEspelho.value = value;
+};
+
+const updatePromotorUrgencia = (index, value) => {
+    if (!atendimentosUrgenciaMacapa.value[index]) {
+        atendimentosUrgenciaMacapa.value[index] = {};
+    }
+    atendimentosUrgenciaMacapa.value[index].promotor = value;
+};
+
+const updatePeriodoUrgencia = (index, value) => {
+    if (!atendimentosUrgenciaMacapa.value[index]) {
+        atendimentosUrgenciaMacapa.value[index] = {};
+    }
+    atendimentosUrgenciaMacapa.value[index].periodo = value;
+};
+
+const removePromotorUrgenciaItem = (index) => {
+    atendimentosUrgenciaMacapa.value.splice(index, 1);
 };
 </script>
 
@@ -23,12 +42,16 @@ const updatePeriodo = (value) => {
                     <CarouselContent>
                         <CarouselItem>
                             <EspelhoEdit
-                                @update:periodo="updatePeriodo"
+                                @update:periodo-espelho="updatePeriodoEspelho"
+                                @update:promotor-urgencia="updatePromotorUrgencia"
+                                @update:periodo-urgencia="updatePeriodoUrgencia"
+                                @remove:promotor-urgencia-item="removePromotorUrgenciaItem"
                             />
                         </CarouselItem>
                         <CarouselItem>
                             <Preview
-                                :periodo="periodo"
+                                :periodo-espelho="periodoEspelho"
+                                :atendimentos-urgencia-macapa="atendimentosUrgenciaMacapa"
                             />
                         </CarouselItem>
                     </CarouselContent>
