@@ -1,8 +1,9 @@
 <script setup>
 import { ref, defineEmits, watch } from 'vue';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/Components/ui/button';
 import { Label } from '@/Components/ui/label';
 import { Input } from '@/Components/ui/input';
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue} from '@/Components/ui/select'
 import { Card, CardContent, CardHeader, CardTitle } from '@/Components/ui/card';
 import Calendar from 'primevue/calendar';
 import { format } from 'date-fns';
@@ -32,13 +33,17 @@ const removeInput = (index) => {
   emit('remove:promotorUrgenciaItem', index);
 };
 
+const dateFormat = (date) => {
+  return format(date, 'dd/MM/yyyy');
+};
+
 watch(periodoEspelho, (value) => {
   if (value[0] === null || value[1] === null) return [null, null];
   const dataInicio = value[0];
   const dataFinal = value[1];
 
-  const dataInicioFormatada = format(dataInicio, 'dd/MM/yyyy');
-  const dataFinalFormatada = format(dataFinal, 'dd/MM/yyyy');
+  const dataInicioFormatada = dateFormat(dataInicio);
+  const dataFinalFormatada = dateFormat(dataFinal);
 
   emit('update:periodoEspelho', [dataInicioFormatada, dataFinalFormatada]);
 });
@@ -79,13 +84,31 @@ watch(periodoEspelho, (value) => {
                   <Label class="text-base whitespace-nowrap">
                     Nome do Promotor:
                   </Label>
-                  <Input v-model.lazy="input.value.promotorUrgencia" @change="emit('update:promotorUrgencia', index, input.value.promotorUrgencia)" class="mb-2 w-full" />
+                  <Select v-model="input.value.promotorUrgencia" class="mb-2 w-full">
+                    <SelectTrigger>
+                      <SelectValue placeholder="Selecione o promotor" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        <SelectLabel>Promotores</SelectLabel>
+                        <SelectItem v-for="promotor in $page.props.promotores.all" :key="promotor.id" :value="promotor.nome" @click="emit('update:promotorUrgencia', index, promotor.nome)">
+                          {{ promotor.nome }}
+                        </SelectItem>
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
                 </div>
                 <div class="flex flex-row items-center w-full space-x-4">
                   <Label class="text-base">
                     Período:
                   </Label>
-                  <Input v-model.lazy="input.value.periodoUrgencia" @change="emit('update:periodoUrgencia', index, input.value.periodoUrgencia)" class="mb-2 w-full" />
+                  <Calendar
+                    dateFormat="dd/mm/yy"
+                    showIcon
+                    placeholder="Selecione o período"
+                    v-model=input.value.periodoUrgencia
+                    @update:modelValue="emit('update:periodoUrgencia', index, dateFormat(input.value.periodoUrgencia))"
+                  />
                 </div>
                 <div class="flex mb-2">
                   <Button @click="removeInput(index)" variant="destructive" class="p-3">
