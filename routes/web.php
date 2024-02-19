@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -25,15 +24,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-
-    Route::get('/preview', function () {
-        return Inertia::render('Preview');
-    })->name('preview');
-
-    Route::get(('document/test'), [DocumentController::class, 'test'])->name('document.test');
-    Route::post('/document/create', [DocumentController::class, 'create'])->name('document.create');
-    Route::post('/document/preview/', [DocumentController::class, 'preview'])->name('document.preview');
-    Route::get('/document/view', [DocumentController::class, 'view'])->name('document.view');
 });
 
 Route::get('/test', function () {
