@@ -15,7 +15,11 @@ class Promotoria extends Model
         'promotor_id',
     ];
 
-    public function promotor()
+    /**
+     * Get the promotor that owns the Promotoria
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function promotor(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(Promotor::class);
     }
