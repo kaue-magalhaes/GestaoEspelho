@@ -17,7 +17,7 @@ class PromotoriaFactory extends Factory
     public function definition(): array
     {
         return [
-            'nome' => $this->faker->name(),
+            'nome'        => $this->faker->name(),
             'promotor_id' => \App\Models\Promotor::factory(),
         ];
     }
