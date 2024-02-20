@@ -33,7 +33,7 @@ const props = defineProps({
                         </div>
                     </div>
 
-                    <div class="max-w-5xl w-full flex flex-col items-center space-y-4">
+                    <div v-if="atendimentosUrgenciaMacapa.length" class="max-w-5xl w-full flex flex-col items-center space-y-4">
                         <div class="text-xl font-bold text-gray-700 dark:text-gray-200 mb-2">
                             PROMOTORIAS DE JUSTIÇA DE ENTRÂNCIA FINAL – MACAPÁ
                         </div>
