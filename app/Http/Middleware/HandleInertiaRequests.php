@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use App\Models\Promotor;
+use App\Models\Promotoria;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -37,6 +38,9 @@ class HandleInertiaRequests extends Middleware
             ],
             'promotores' => [
                 'all' => Promotor::all(),
+            ],
+            'promotorias' => [
+                'all' => Promotoria::with('promotor')->get(),
             ],
         ];
     }
