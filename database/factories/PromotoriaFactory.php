@@ -16,8 +16,21 @@ class PromotoriaFactory extends Factory
      */
     public function definition(): array
     {
+        $promotoriaWords = [
+            'Promotoria de Justiça',
+            'Promotoria de Defesa do Consumidor',
+            'Promotoria de Justiça de Família',
+            'Promotoria de Justiça de Meio Ambiente',
+            'Promotoria de Justiça de Direitos Humanos',
+            'Promotoria de Justiça de Cidadania',
+            'Promotoria de Justiça de Infância e Juventude',
+            'Promotoria de Justiça de Combate à Violência Doméstica',
+            'Promotoria de Justiça de Combate à Corrupção',
+            'Promotoria de Justiça de Combate ao Crime Organizado',
+        ];
+
         return [
-            'nome'        => $this->faker->name(),
+            'nome'        => $this->faker->unique()->randomElement($promotoriaWords),
             'promotor_id' => \App\Models\Promotor::factory(),
         ];
     }
