@@ -5,17 +5,18 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Promotor extends Model
+class Promotoria extends Model
 {
     use HasFactory;
-    protected $table = 'promotores';
+    protected $table = 'promotorias';
 
     protected $fillable = [
         'nome',
+        'promotor_id',
     ];
 
-    public function promotorias()
+    public function promotor()
     {
-        return $this->hasMany(Promotoria::class);
+        return $this->belongsTo(Promotor::class);
     }
 }
