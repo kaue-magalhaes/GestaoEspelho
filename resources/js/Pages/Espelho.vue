@@ -2,7 +2,7 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { ref } from 'vue';
 import { Head } from '@inertiajs/vue3';
-import { Carousel, CarouselContent, CarouselItem } from '@/Components/ui/carousel';
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/Components/ui/carousel';
 import Preview from '@/Components/Preview.vue';
 import EspelhoEdit from '@/Components/EspelhoEdit.vue';
 
@@ -55,6 +55,8 @@ const removePromotorUrgenciaItem = (index) => {
                             />
                         </CarouselItem>
                     </CarouselContent>
+                    <CarouselPrevious />
+                    <CarouselNext />
                 </Carousel>
             </div>
         </div>
