@@ -1,10 +1,7 @@
-<script setup>
-import { AlertDialogTrigger } from "radix-vue";
+<script setup lang="ts">
+import { AlertDialogTrigger, type AlertDialogTriggerProps } from 'radix-vue'
 
-const props = defineProps({
-  asChild: { type: Boolean, required: false },
-  as: { type: null, required: false },
-});
+const props = defineProps<AlertDialogTriggerProps>()
 </script>
 
 <template>

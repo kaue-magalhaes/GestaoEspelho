@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { ref } from 'vue';
 import { Head } from '@inertiajs/vue3';
@@ -6,29 +6,29 @@ import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious
 import Preview from '@/Components/Preview.vue';
 import EspelhoEdit from '@/Components/EspelhoEdit.vue';
 
-const periodoEspelho = ref(null);
+const periodoEspelho = ref<string[]>([]);
 
-const atendimentosUrgenciaMacapa = ref([]);
+const atendimentosUrgenciaMacapa = ref<any[]>([]);
 
-const updatePeriodoEspelho = (value) => {
+const updatePeriodoEspelho = (value: string[]) => {
     periodoEspelho.value = value;
 };
 
-const updatePromotorUrgencia = (index, value) => {
+const updatePromotorUrgencia = (index: number, value: string) => {
     if (!atendimentosUrgenciaMacapa.value[index]) {
         atendimentosUrgenciaMacapa.value[index] = {};
     }
     atendimentosUrgenciaMacapa.value[index].promotor = value;
 };
 
-const updatePeriodoUrgencia = (index, value) => {
+const updatePeriodoUrgencia = (index: number, value: string) => {
     if (!atendimentosUrgenciaMacapa.value[index]) {
         atendimentosUrgenciaMacapa.value[index] = {};
     }
     atendimentosUrgenciaMacapa.value[index].periodo = value;
 };
 
-const removePromotorUrgenciaItem = (index) => {
+const removePromotorUrgenciaItem = (index: number) => {
     atendimentosUrgenciaMacapa.value.splice(index, 1);
 };
 </script>

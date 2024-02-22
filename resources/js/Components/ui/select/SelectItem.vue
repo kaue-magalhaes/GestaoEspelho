@@ -1,30 +1,24 @@
-<script setup>
-import { computed } from "vue";
+<script setup lang="ts">
+import { type HTMLAttributes, computed } from 'vue'
 import {
   SelectItem,
   SelectItemIndicator,
+  type SelectItemProps,
   SelectItemText,
   useForwardProps,
-} from "radix-vue";
-import { Check } from "lucide-vue-next";
-import { cn } from "@/lib/utils";
+} from 'radix-vue'
+import { Check } from 'lucide-vue-next'
+import { cn } from '@/lib/utils'
 
-const props = defineProps({
-  value: { type: String, required: true },
-  disabled: { type: Boolean, required: false },
-  textValue: { type: String, required: false },
-  asChild: { type: Boolean, required: false },
-  as: { type: null, required: false },
-  class: { type: null, required: false },
-});
+const props = defineProps<SelectItemProps & { class?: HTMLAttributes['class'] }>()
 
 const delegatedProps = computed(() => {
-  const { class: _, ...delegated } = props;
+  const { class: _, ...delegated } = props
 
-  return delegated;
-});
+  return delegated
+})
 
-const forwardedProps = useForwardProps(delegatedProps);
+const forwardedProps = useForwardProps(delegatedProps)
 </script>
 
 <template>
@@ -33,7 +27,7 @@ const forwardedProps = useForwardProps(delegatedProps);
     :class="
       cn(
         'relative flex w-full cursor-default select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-none focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
-        props.class
+        props.class,
       )
     "
   >

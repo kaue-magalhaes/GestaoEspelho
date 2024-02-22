@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import GuestLayout from '@/Layouts/GuestLayout.vue';
 import InputError from '@/Components/InputError.vue';
 import { Label } from '@/Components/ui/label';
@@ -7,16 +7,10 @@ import { Input } from '@/Components/ui/input';
 import { CardDescription, CardTitle } from '@/Components/ui/card';
 import { Head, useForm } from '@inertiajs/vue3';
 
-const props = defineProps({
-    email: {
-        type: String,
-        required: true,
-    },
-    token: {
-        type: String,
-        required: true,
-    },
-});
+const props = defineProps<{
+    email: string;
+    token: string;
+}>();
 
 const form = useForm({
     token: props.token,
@@ -27,7 +21,9 @@ const form = useForm({
 
 const submit = () => {
     form.post(route('password.store'), {
-        onFinish: () => form.reset('password', 'password_confirmation'),
+        onFinish: () => {
+            form.reset('password', 'password_confirmation');
+        },
     });
 };
 </script>

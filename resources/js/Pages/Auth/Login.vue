@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import GuestLayout from '@/Layouts/GuestLayout.vue';
 import InputError from '@/Components/InputError.vue';
 import { Label } from '@/Components/ui/label';
@@ -8,14 +8,10 @@ import { Button } from '@/Components/ui/button';
 import { CardDescription, CardTitle } from '@/Components/ui/card';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 
-defineProps({
-    canResetPassword: {
-        type: Boolean,
-    },
-    status: {
-        type: String,
-    },
-});
+defineProps<{
+    canResetPassword?: boolean;
+    status?: string;
+}>();
 
 const form = useForm({
     email: '',
@@ -25,7 +21,9 @@ const form = useForm({
 
 const submit = () => {
     form.post(route('login'), {
-        onFinish: () => form.reset('password'),
+        onFinish: () => {
+            form.reset('password');
+        },
     });
 };
 </script>

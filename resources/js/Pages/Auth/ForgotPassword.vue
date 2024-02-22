@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import GuestLayout from '@/Layouts/GuestLayout.vue';
 import InputError from '@/Components/InputError.vue';
 import { Label } from '@/Components/ui/label';
@@ -7,11 +7,9 @@ import { Input } from '@/Components/ui/input';
 import { CardDescription, CardTitle } from '@/Components/ui/card';
 import { Head, useForm } from '@inertiajs/vue3';
 
-defineProps({
-    status: {
-        type: String,
-    },
-});
+defineProps<{
+    status?: string;
+}>();
 
 const form = useForm({
     email: '',

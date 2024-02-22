@@ -1,7 +1,7 @@
 {
   "$schema": "https://shadcn-vue.com/schema.json",
   "style": "default",
-  "typescript": false,
+  "typescript": true,
   "tailwind": {
     "config": "tailwind.config.js",
     "css": "resources/css/app.css",
@@ -10,7 +10,7 @@
   },
   "framework": "laravel",
   "aliases": {
-    "components": "@/components",
+    "components": "@/Components",
     "utils": "@/lib/utils"
   }
 }

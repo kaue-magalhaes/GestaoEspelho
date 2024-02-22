@@ -1,17 +1,36 @@
-<script setup>
-import { ref, defineEmits, watch } from 'vue';
+<script setup lang="ts">
+import { usePage } from '@inertiajs/vue3';
+import { ref, defineEmits, watch, computed } from 'vue';
+
 import { Button } from '@/Components/ui/button';
 import { Label } from '@/Components/ui/label';
 import { Input } from '@/Components/ui/input';
-import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue} from '@/Components/ui/select'
+import { Calendar } from '@/Components/ui/calendar'
+import {Popover,PopoverContent,PopoverTrigger,} from '@/Components/ui/popover'
 import { Card, CardContent, CardHeader, CardTitle } from '@/Components/ui/card';
-import { Dialog, DialogContent, DialogTrigger, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/Components/ui/dialog';
-import Calendar from 'primevue/calendar';
-import { format } from 'date-fns';
-import { Plus, Trash2 } from 'lucide-vue-next';
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue} from '@/Components/ui/select'
+import { Dialog, DialogContent, DialogTrigger, DialogHeader, DialogTitle, DialogDescription } from '@/Components/ui/dialog';
 
-const periodoEspelho = ref(null);
-const urgenciaInputComponent = ref([]);
+import { cn } from '@/lib/utils'
+import { format } from 'date-fns';
+import { Plus, Trash2, Calendar as CalendarIcon } from 'lucide-vue-next';
+
+const promotores = usePage().props.promotores;
+const promotorias = usePage().props.promotorias;
+
+const periodoEspelho = ref({
+  start: null,
+  end: null,
+});
+
+const urgenciaInputComponent = ref([
+  { 
+    value: {
+      promotorUrgencia: '',
+      periodoUrgencia: '',
+    }
+  }
+]);
 
 const eventos = [
   { id: 1, nome: 'Férias', selecionado: false },
@@ -37,25 +56,24 @@ const adicionarInput = () => {
   });
 };
 
-const removeInput = (index) => {
+const removeInput = (index: number) => {
   urgenciaInputComponent.value.splice(index, 1);
   emit('remove:promotorUrgenciaItem', index);
 };
 
-const dateFormat = (date) => {
+const dateFormat = (date: Date) => {
   return format(date, 'dd/MM/yyyy');
 };
 
-watch(periodoEspelho, (value) => {
-  if (value[0] === null || value[1] === null) return [null, null];
-  const dataInicio = value[0];
-  const dataFinal = value[1];
-
-  const dataInicioFormatada = dateFormat(dataInicio);
-  const dataFinalFormatada = dateFormat(dataFinal);
-
-  emit('update:periodoEspelho', [dataInicioFormatada, dataFinalFormatada]);
+watch(periodoEspelho, (newValue) => {
+  const start = newValue.start ? dateFormat(newValue.start) : '';
+  const end = newValue.end ? dateFormat(newValue.end) : '';
+  console.log([start, end]);
+  
+  emit('update:periodoEspelho', [start, end]);
 });
+
+
 </script>
 
 <template>
@@ -65,19 +83,39 @@ watch(periodoEspelho, (value) => {
         <CardTitle class="font-semibold">
           Espelho do Ministério Público
         </CardTitle>
-        <span class="flex items-end">
+        <span class="flex items-center">
           <Label for="period" class="text-base mr-4">
             Período:
           </Label>
-          <Calendar
-            selectionMode="range"
-            dateFormat="dd/mm/yy"
-            inputId="period"
-            showIcon
-            placeholder="Selecione o período"
-            v-model=periodoEspelho
-            class="text-sm"
-          />
+          <div :class="cn('grid gap-2', $attrs.class ?? '')">
+            <Popover>
+              <PopoverTrigger as-child>
+                <Button
+                  id="date"
+                  :variant="'outline'"
+                  :class="cn(
+                    'w-[300px] justify-start text-left font-normal',
+                    !periodoEspelho && 'text-muted-foreground',
+                  )"
+                >
+                  <CalendarIcon class="mr-2 h-4 w-4" />
+
+                  <span>
+                    {{ periodoEspelho.start ? (
+                      periodoEspelho.end ? `${format(periodoEspelho.start, 'LLL dd, y')} - ${format(periodoEspelho.end, 'LLL dd, y')}`
+                      : format(periodoEspelho.start, 'LLL dd, y')
+                    ) : 'Selecione o periodo' }}
+                  </span>
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent class="w-auto p-0" align="start">
+                <Calendar
+                  v-model.range="periodoEspelho"
+                  :columns="2"
+                />
+              </PopoverContent>
+            </Popover>
+          </div>
         </span>
       </CardHeader>
   
@@ -103,7 +141,7 @@ watch(periodoEspelho, (value) => {
                     <SelectContent>
                       <SelectGroup>
                         <SelectLabel>Promotores</SelectLabel>
-                        <SelectItem v-for="promotor in $page.props.promotores.all" :key="promotor.id" :value="promotor.nome" @click="emit('update:promotorUrgencia', index, promotor.nome)">
+                        <SelectItem v-for="promotor in promotores" :key="promotor.id" :value="promotor.nome" @click="emit('update:promotorUrgencia', index, promotor.nome)">
                           {{ promotor.nome }}
                         </SelectItem>
                       </SelectGroup>
@@ -114,13 +152,35 @@ watch(periodoEspelho, (value) => {
                   <Label class="text-base">
                     Período:
                   </Label>
-                  <Calendar
-                    dateFormat="dd/mm/yy"
-                    showIcon
-                    placeholder="Selecione o período"
-                    v-model=input.value.periodoUrgencia
-                    @update:modelValue="emit('update:periodoUrgencia', index, dateFormat(input.value.periodoUrgencia))"
-                  />
+                  <div :class="cn('grid gap-2', $attrs.class ?? '')">
+                    <Popover>
+                      <PopoverTrigger as-child>
+                        <Button
+                          id="date"
+                          :variant="'outline'"
+                          :class="cn(
+                            'w-[300px] justify-start text-left font-normal',
+                            !periodoEspelho && 'text-muted-foreground',
+                          )"
+                        >
+                          <CalendarIcon class="mr-2 h-4 w-4" />
+
+                          <span>
+                            {{ periodoEspelho.start ? (
+                              periodoEspelho.end ? `${format(periodoEspelho.start, 'LLL dd, y')} - ${format(periodoEspelho.end, 'LLL dd, y')}`
+                              : format(periodoEspelho.start, 'LLL dd, y')
+                            ) : 'Selecione o periodo' }}
+                          </span>
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent class="w-auto p-0" align="start">
+                        <Calendar
+                          v-model.range="periodoEspelho"
+                          :columns="2"
+                        />
+                      </PopoverContent>
+                    </Popover>
+                  </div>
                 </div>
                 <div class="flex mb-2">
                   <Button @click="removeInput(index)" variant="destructive" class="p-3">
@@ -149,7 +209,7 @@ watch(periodoEspelho, (value) => {
                   </tr>
                 </thead>
                 <tbody class="text-start">
-                  <tr class="bg-white hover:bg-gray-50 border" v-for="promotoria in $page.props.promotorias.all" :key="promotoria.id">
+                  <tr class="bg-white hover:bg-gray-50 border" v-for="promotoria in promotorias" :key="promotoria.id">
                     <th class="px-6 py-4 font-medium whitespace-nowrap">
                       <div class="flex flex-col items-center">
                         <h1 class="font-bold text-gray-900 dark:text-gray-200">
@@ -159,7 +219,7 @@ watch(periodoEspelho, (value) => {
                     </th>
                     <td class="px-6 py-4">
                       <h1 class="font-bold text-gray-900 dark:text-gray-200">
-                        {{ promotoria.promotor.nome }}
+                        {{ promotoria.promotor }}
                       </h1>
                     </td>
                     <td class="px-6 py-4">
@@ -202,13 +262,35 @@ watch(periodoEspelho, (value) => {
                                 <Label class="text-base">
                                   Período:
                                 </Label>
-                                <Calendar
-                                  selectionMode="range"
-                                  dateFormat="dd/mm/yy"
-                                  showIcon
-                                  placeholder="Selecione o período"
-                                  inputClass="w-full placeholder-black h-10 py-2 px-3 border placeholder-opacity-50"
-                                />
+                                <div :class="cn('grid gap-2', $attrs.class ?? '')">
+                                  <Popover>
+                                    <PopoverTrigger as-child>
+                                      <Button
+                                        id="date"
+                                        :variant="'outline'"
+                                        :class="cn(
+                                          'w-[300px] justify-start text-left font-normal',
+                                          !periodoEspelho && 'text-muted-foreground',
+                                        )"
+                                      >
+                                        <CalendarIcon class="mr-2 h-4 w-4" />
+
+                                        <span>
+                                          {{ periodoEspelho.start ? (
+                                            periodoEspelho.end ? `${format(periodoEspelho.start, 'LLL dd, y')} - ${format(periodoEspelho.end, 'LLL dd, y')}`
+                                            : format(periodoEspelho.start, 'LLL dd, y')
+                                          ) : 'Selecione o periodo' }}
+                                        </span>
+                                      </Button>
+                                    </PopoverTrigger>
+                                    <PopoverContent class="w-auto p-0" align="start">
+                                      <Calendar
+                                        v-model.range="periodoEspelho"
+                                        :columns="2"
+                                      />
+                                    </PopoverContent>
+                                  </Popover>
+                                </div>
                               </div>
                             </div>
                             <div class="flex items-center space-x-4">
@@ -229,7 +311,7 @@ watch(periodoEspelho, (value) => {
                                   <SelectContent>
                                     <SelectGroup>
                                       <SelectLabel>Promotores</SelectLabel>
-                                      <SelectItem v-for="promotor in $page.props.promotores.all" :key="promotor.id" :value="promotor.nome">
+                                      <SelectItem v-for="promotor in promotores" :key="promotor.id" :value="promotor.nome">
                                         {{ promotor.nome }}
                                       </SelectItem>
                                     </SelectGroup>

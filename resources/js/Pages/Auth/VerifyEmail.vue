@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { computed } from 'vue';
 import GuestLayout from '@/Layouts/GuestLayout.vue';
 import { Button } from '@/Components/ui/button';
@@ -6,11 +6,9 @@ import { Alert, AlertDescription, AlertTitle } from '@/Components/ui/alert'
 import { CardDescription, CardTitle } from '@/Components/ui/card';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 
-const props = defineProps({
-    status: {
-        type: String,
-    },
-});
+const props = defineProps<{
+    status?: string;
+}>();
 
 const form = useForm({});
 

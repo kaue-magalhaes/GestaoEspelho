@@ -1,6 +1,6 @@
-<script setup>
-import { Button } from '@/Components/ui/button';
+<script setup lang="ts">
 import InputError from '@/Components/InputError.vue';
+import { Button } from '@/Components/ui/button';
 import { Label } from '@/Components/ui/label';
 import { Input } from '@/Components/ui/input';
 import {
@@ -12,12 +12,12 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from '@/components/ui/alert-dialog'
+} from '@/Components/ui/alert-dialog'
 import { CardHeader, CardTitle, CardDescription, CardContent } from '@/Components/ui/card';
 import { useForm } from '@inertiajs/vue3';
 import { ref } from 'vue';
 
-const passwordInput = ref(null);
+const passwordInput = ref<HTMLInputElement | null>(null);
 
 const form = useForm({
     password: '',
@@ -26,11 +26,12 @@ const form = useForm({
 const deleteUser = () => {
     form.delete(route('profile.destroy'), {
         preserveScroll: true,
-        onError: () => passwordInput.value.focus(),
-        onFinish: () => form.reset(),
+        onError: () => passwordInput.value?.focus(),
+        onFinish: () => {
+            form.reset();
+        },
     });
 };
-
 </script>
 
 <template>
