@@ -28,7 +28,7 @@ const props = defineProps({
                         <div class="text-sm text-gray-500 dark:text-gray-400">
                             Procuradorias de Justiça do Estado do Amapá
                         </div>
-                        <div v-if="periodoEspelho" class="text-sm text-gray-500 dark:text-gray-400">
+                        <div v-if="periodoEspelho.length > 0" class="text-sm text-gray-500 dark:text-gray-400">
                             Espelho de {{ periodoEspelho[0] }} a {{ periodoEspelho[1] }}
                         </div>
                     </div>

@@ -3,8 +3,8 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { ref } from 'vue';
 import { Head } from '@inertiajs/vue3';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/Components/ui/carousel';
-import Preview from '@/Components/Preview.vue';
-import EspelhoEdit from '@/Components/EspelhoEdit.vue';
+import Preview from '@/Components/EspelhoComponents/Preview.vue';
+import EspelhoEdit from '@/Components/EspelhoComponents/EspelhoEdit.vue';
 
 const periodoEspelho = ref<string[]>([]);
 
