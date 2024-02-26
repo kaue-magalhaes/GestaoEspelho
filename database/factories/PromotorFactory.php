@@ -17,7 +17,7 @@ class PromotorFactory extends Factory
     public function definition(): array
     {
         return [
-            'nome' => $this->faker->name(),
+            'nome'          => $this->faker->name(),
             'is_substituto' => $this->faker->boolean(),
         ];
     }
