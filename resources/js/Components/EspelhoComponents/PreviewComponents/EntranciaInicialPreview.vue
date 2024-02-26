@@ -4,6 +4,8 @@ import { onMounted } from 'vue';
 
 import TabelaPromotoriaPreview from '@/Components/EspelhoComponents/PreviewComponents/TabelaPromotoriaPreview.vue';
 
+type DadosType = { promotoria: Promotoria; evento: string }[];
+
 const props = defineProps({
   promotoriasInteriorAgenda: {
     type: Array as () => { promotoria: Promotoria; evento: string }[],
@@ -11,16 +13,22 @@ const props = defineProps({
   },
 });
 
-const dadosDeTeste = [
+const dadosDeTeste: DadosType = [
   {
     promotoria: {
       id: 1,
       nome: '1ª Promotoria',
       municipio: 'Laranjal do Jari',
+      promotor_id: 1,
       promotor: {
         id: 1,
         nome: 'Promotor de Justiça de Santana',
+        is_substituto: false,
+        created_at: '2021-08-10T00:00:00',
+        updated_at: '2021-08-10T00:00:00',
       },
+      created_at: '2021-08-10T00:00:00',
+      updated_at: '2021-08-10T00:00:00',
     },
     evento: 'Férias',
   },
@@ -29,87 +37,91 @@ const dadosDeTeste = [
       id: 2,
       nome: '2ª Promotoria',
       municipio: 'Laranjal do Jari',
+      promotor_id: 2,
       promotor: {
         id: 2,
-        nome: 'Promotor de Justiça de Macapá',
+        nome: 'Promotor de Justiça de Santana',
+        is_substituto: false,
+        created_at: '2021-08-10T00:00:00',
+        updated_at: '2021-08-10T00:00:00',
       },
+      created_at: '2021-08-10T00:00:00',
+      updated_at: '2021-08-10T00:00:00',
     },
-    evento: 'Licença',
+    evento: 'Férias',
   },
   {
     promotoria: {
       id: 3,
       nome: '3ª Promotoria',
       municipio: 'Laranjal do Jari',
+      promotor_id: 3,
       promotor: {
         id: 3,
-        nome: 'Promotor de Justiça de Macapá',
+        nome: 'Promotor de Justiça de Santana',
+        is_substituto: false,
+        created_at: '2021-08-10T00:00:00',
+        updated_at: '2021-08-10T00:00:00',
       },
+      created_at: '2021-08-10T00:00:00',
+      updated_at: '2021-08-10T00:00:00',
     },
-    evento: 'Licença',
+    evento: 'Férias',
   },
   {
     promotoria: {
       id: 4,
       nome: '4ª Promotoria',
       municipio: 'Laranjal do Jari',
+      promotor_id: 4,
       promotor: {
         id: 4,
-        nome: 'Promotor de Justiça de Macapá',
+        nome: 'Promotor de Justiça de Santana',
+        is_substituto: false,
+        created_at: '2021-08-10T00:00:00',
+        updated_at: '2021-08-10T00:00:00',
       },
+      created_at: '2021-08-10T00:00:00',
+      updated_at: '2021-08-10T00:00:00',
     },
-    evento: 'Licença',
+    evento: 'Férias',
   },
   {
     promotoria: {
       id: 5,
-      nome: '5ª Promotoria',
-      municipio: 'Laranjal do Jari',
+      nome: '1ª Promotoria',
+      municipio: 'Santana',
+      promotor_id: 4,
       promotor: {
-        id: 5,
-        nome: 'Promotor de Justiça de Macapá',
+        id: 4,
+        nome: 'Promotor de Justiça de Santana',
+        is_substituto: false,
+        created_at: '2021-08-10T00:00:00',
+        updated_at: '2021-08-10T00:00:00',
       },
+      created_at: '2021-08-10T00:00:00',
+      updated_at: '2021-08-10T00:00:00',
     },
-    evento: 'Licença',
-  },
-  {
-    promotoria: {
-      id: 6,
-      nome: '6ª Promotoria',
-      municipio: 'Laranjal do Jari',
-      promotor: {
-        id: 6,
-        nome: 'Promotor de Justiça de Macapá',
-      },
-    },
-    evento: 'Licença',
-  },
-  {
-    promotoria: {
-      id: 7,
-      nome: '7ª Promotoria',
-      municipio: 'Laranjal do Jari',
-      promotor: {
-        id: 7,
-        nome: 'Promotor de Justiça de Macapá',
-      },
-    },
-    evento: 'Licença',
-  },
-  {
-    promotoria: {
-      id: 8,
-      nome: '8ª Promotoria',
-      municipio: 'Laranjal do Jari',
-      promotor: {
-        id: 8,
-        nome: 'Promotor de Justiça de Macapá',
-      },
-    },
-    evento: 'Licença',
+    evento: 'Férias',
   },
 ]
 
+const agruparPorMunicipio = (dados: DadosType) => {
+  return dados.reduce((grupos: { [key: string]: DadosType }, item) => {
+    const chave = item.promotoria.municipio;
+    if (!grupos[chave]) {
+      grupos[chave] = [];
+    }
+    grupos[chave].push(item);
+    return grupos;
+  }, {});
+};
+
+const dadosAgrupados = agruparPorMunicipio(dadosDeTeste);
+
+onMounted(() => {
+
+});
 </script>
 
 <template>
@@ -118,7 +130,7 @@ const dadosDeTeste = [
       Entrância Inicial
     </h1>
     <TabelaPromotoriaPreview
-     :dados="dadosDeTeste"
+     :dados="dadosAgrupados"
     />
   </div>
 </template>
