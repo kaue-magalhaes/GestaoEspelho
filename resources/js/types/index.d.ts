@@ -29,6 +29,6 @@ export type PageProps<T extends Record<string, unknown> = Record<string, unknown
         all: Promotor[];
     };
     promotorias: {
-        all: Promotoria;
+        all: Promotoria[];
     }
 };
