@@ -1,9 +1,20 @@
-<script setup>
+<script setup lang="ts">
+import { Promotoria } from '@/types';
 import { Card, CardHeader } from '@/Components/ui/card';
 
 const props = defineProps({
-    periodoEspelho: Array,
-    atendimentosUrgenciaMacapa: Object,
+    promotorias: {
+        type: Array as () => Promotoria[],
+        required: true,
+    },
+    periodoEspelho: {
+        type: Array as () => string[],
+        required: true,
+    },
+    atendimentosUrgenciaMacapa: {
+        type: Array as () => any[],
+        required: true,
+    },
 });
 </script>
 
@@ -51,7 +62,17 @@ const props = defineProps({
                                 </ul>
                             </div>
                         </div>
-                        
+                        <div v-for="promotoria in props.promotorias" :key="promotoria.id">
+                            <div class="text-xl font-bold text-gray-700 dark:text-gray-200 mb-2">
+                                {{ promotoria.nome }}
+                            </div>
+                            <div class="text-sm text-gray-500 dark:text-gray-400">
+                                Promotor(a): {{ promotoria.promotor.nome }}
+                            </div>
+                            <div class="text-sm text-gray-500 dark:text-gray-400">
+                                Período: Reunião CNMP 04/02/2024 - 06/02/2024
+                            </div>
+                        </div>
                         <!-- Tabela das Procuradorias de Justiça de Entrância Final - Macapá -->
                         <table class="w-full text-black">
                             <thead class="text-xs text-black uppercase bg-gray-300 border-x border-t">

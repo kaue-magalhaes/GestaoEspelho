@@ -14,6 +14,7 @@ const emit = defineEmits([
   'update:promotorUrgencia',
   'update:periodoUrgencia',
   'remove:promotorUrgenciaItem',
+  'update:promotorias',
 ]);
 
 const props = defineProps({
@@ -38,6 +39,10 @@ const updatePeriodoUrgencia = (index: number, value: Date) => {
 const removePromotorUrgenciaItem = (index: number) => {
   emit('remove:promotorUrgenciaItem', index);
 };
+
+const updatePromotorias = (value: { all: Promotoria[] }) => {
+  emit('update:promotorias', value);
+};
 </script>
 
 <template>
@@ -52,6 +57,7 @@ const removePromotorUrgenciaItem = (index: number) => {
       <EntranciaFinalMacapaTabela 
         :promotorias="promotorias"
         :promotores="promotores"
+        @update:promotorias="updatePromotorias"
       />
     </div>
   </div>

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { Promotoria } from '@/types';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { ref } from 'vue';
 import { Head } from '@inertiajs/vue3';
@@ -7,8 +8,13 @@ import Preview from '@/Components/EspelhoComponents/Preview.vue';
 import Editor from '@/Components/EspelhoComponents/Editor.vue';
 
 const periodoEspelho = ref<string[]>([]);
+const promotorias = ref<Promotoria[]>([]);
 
 const atendimentosUrgenciaMacapa = ref<any[]>([]);
+
+const updatePromotorias = (value: { all: Promotoria[] }) => {
+    promotorias.value = value.all;
+};
 
 const updatePeriodoEspelho = (value: string[]) => {
     periodoEspelho.value = value;
@@ -42,6 +48,7 @@ const removePromotorUrgenciaItem = (index: number) => {
                     <CarouselContent>
                         <CarouselItem>
                             <Editor
+                                @update:promotorias="updatePromotorias"
                                 @update:periodo-espelho="updatePeriodoEspelho"
                                 @update:promotor-urgencia="updatePromotorUrgencia"
                                 @update:periodo-urgencia="updatePeriodoUrgencia"
@@ -50,6 +57,7 @@ const removePromotorUrgenciaItem = (index: number) => {
                         </CarouselItem>
                         <CarouselItem>
                             <Preview
+                                :promotorias="promotorias"
                                 :periodo-espelho="periodoEspelho"
                                 :atendimentos-urgencia-macapa="atendimentosUrgenciaMacapa"
                             />

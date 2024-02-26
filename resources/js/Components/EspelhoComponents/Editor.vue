@@ -1,20 +1,25 @@
 <script setup lang="ts">
-import { usePage } from '@inertiajs/vue3';
+import { Promotoria } from '@/types';
 import { ref } from 'vue';
+import { usePage } from '@inertiajs/vue3';
 
-import { Button } from '@/Components/ui/button';
 import { Label } from '@/Components/ui/label';
-import { Input } from '@/Components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/Components/ui/card';
-import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue} from '@/Components/ui/select'
-import { Dialog, DialogContent, DialogTrigger, DialogHeader, DialogTitle, DialogDescription } from '@/Components/ui/dialog';
 import DatePicker from '@/Components/DatePicker.vue';
+import EntranciaFinalMacapa from '@/Components/EspelhoComponents/EntranciaFinalMacapa.vue';
 
 import { format } from 'date-fns';
-import EntranciaFinalMacapa from './EntranciaFinalMacapa.vue';
 
 const promotores = usePage().props.promotores;
 const promotorias = usePage().props.promotorias;
+
+const emit = defineEmits([
+  'update:promotorias',
+  'update:periodoEspelho',
+  'update:promotorUrgencia',
+  'update:periodoUrgencia',
+  'remove:promotorUrgenciaItem',
+]);
 
 const periodoEspelho = ref({
   isChanged: false,
@@ -22,19 +27,16 @@ const periodoEspelho = ref({
   end: new Date(),
 });
 
-const emit = defineEmits([
-  'update:periodoEspelho',
-  'update:promotorUrgencia',
-  'update:periodoUrgencia',
-  'remove:promotorUrgenciaItem',
-]);
-
 const updatePeriodoEspelho = (value: { start: Date; end: Date }) => {
   periodoEspelho.value.isChanged = true;
   periodoEspelho.value.start = value.start;
   periodoEspelho.value.end = value.end;
 
   emit('update:periodoEspelho', [format(periodoEspelho.value.start, 'dd/MM/yyyy'), format(periodoEspelho.value.end, 'dd/MM/yyyy')]);
+};
+
+const updatePromotorias = (value: { all: Promotoria[] }) => {
+  emit('update:promotorias', value);
 };
 
 const promotorUrgencia = (index: number, value: string) => {
@@ -73,6 +75,7 @@ const removePromotorUrgenciaItem = (index: number) => {
         <EntranciaFinalMacapa
           :promotores="promotores"
           :promotorias="promotorias"
+          @update:promotorias="updatePromotorias"
           @update:promotor-urgencia="promotorUrgencia"
           @update:periodo-urgencia="periodoUrgencia"
           @remove:promotor-urgencia-item="removePromotorUrgenciaItem"

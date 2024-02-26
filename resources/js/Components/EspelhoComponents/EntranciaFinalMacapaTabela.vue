@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Promotoria, Promotor } from '@/types';
+import { onMounted } from 'vue';
 
 import { Input } from '@/Components/ui/input';
 import { Label } from '@/Components/ui/label';
@@ -7,6 +8,10 @@ import { Button } from '@/Components/ui/button';
 import DatePicker from '@/Components/DatePicker.vue';
 import { Dialog, DialogContent, DialogTrigger, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogClose } from '@/Components/ui/dialog';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue} from '@/Components/ui/select'
+
+const emit = defineEmits([
+  'update:promotorias',
+]);
 
 const props = defineProps({
   promotorias: {
@@ -26,6 +31,10 @@ const eventos = [
   { id: 4, nome: 'Reunião', selecionado: true },
   { id: 5, nome: 'Outros', selecionado: false },
 ];
+
+onMounted(() => {
+  emit('update:promotorias', props.promotorias);
+});
 </script>
 
 <template>
@@ -129,9 +138,11 @@ const eventos = [
                 </div>
               </div>
               <DialogFooter>
-                <Button variant="default">
-                  Adicionar Evento
-                </Button>
+                <DialogClose as-child>
+                  <Button variant="default">
+                    Adicionar Evento
+                  </Button>
+                </DialogClose>
                 <DialogClose as-child>
                   <Button variant="secondary">
                     Cancelar
