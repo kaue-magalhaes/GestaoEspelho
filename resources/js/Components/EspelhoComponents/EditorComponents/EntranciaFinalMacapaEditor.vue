@@ -17,7 +17,7 @@ const emit = defineEmits([
   'update:promotorias',
 ]);
 
-const props = defineProps({
+/* const props = defineProps({
   promotores: {
     type: Object as () => { all: Promotor[]; },
     required: true,
@@ -26,7 +26,7 @@ const props = defineProps({
     type: Object as () => { all: Promotoria[]; },
     required: true,
   },
-});
+}); */
 
 const updatePromotorUrgencia = (index: number, value: string) => {
   emit('update:promotorUrgencia', index, value);
@@ -47,7 +47,7 @@ const updatePromotorias = (value: { all: Promotoria[] }) => {
 
 <template>
   <div class="grid grid-cols-2 gap-4">
-    <PlantaoCaraterUrgenciaMacapa 
+    <!-- <PlantaoCaraterUrgenciaMacapa 
       :promotores="promotores"
       @update:promotor-urgencia="updatePromotorUrgencia"
       @update:periodo-urgencia="updatePeriodoUrgencia"
@@ -59,6 +59,11 @@ const updatePromotorias = (value: { all: Promotoria[] }) => {
         :promotores="promotores"
         @update:promotorias="updatePromotorias"
       />
-    </div>
+    </div> -->
+    <!-- titulo PROMOTORIAS DE JUSTIÇA DE ENTRÂNCIA FINAL – MACAPÁ -->
+    <PlantaoCaraterUrgenciaEditor />
+    <TabelaPromotoriasEditor />
+    <!-- titulo PROMOTORIAS DE JUSTIÇA DE ENTRÂNCIA FINAL – MACAPÁ – PROMOTORIAS ESPECIALIZADAS -->
+    <TabelaPromotoriasEspecializadas />
   </div>
 </template>

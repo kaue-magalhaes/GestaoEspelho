@@ -8,6 +8,7 @@ export interface User {
 export interface Promotor {
     id: number;
     nome: string;
+    is_substituto: boolean;
     created_at: string;
     updated_at: string;
 }
@@ -15,6 +16,7 @@ export interface Promotor {
 export interface Promotoria {
     id: number;
     nome: string;
+    municipio: string;
     promotor_id: number;
     created_at: string;
     updated_at: string;

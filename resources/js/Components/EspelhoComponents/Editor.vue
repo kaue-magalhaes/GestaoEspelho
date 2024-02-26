@@ -1,14 +1,17 @@
 <script setup lang="ts">
-import { Promotoria } from '@/types';
+import { Promotor, Promotoria } from '@/types';
 import { ref } from 'vue';
 import { usePage } from '@inertiajs/vue3';
 
 import { Label } from '@/Components/ui/label';
-import { Card, CardContent, CardHeader, CardTitle } from '@/Components/ui/card';
 import DatePicker from '@/Components/DatePicker.vue';
-import EntranciaFinalMacapa from '@/Components/EspelhoComponents/EntranciaFinalMacapa.vue';
+import { Card, CardContent, CardHeader, CardTitle } from '@/Components/ui/card';
 
 import { format } from 'date-fns';
+import EntranciaFinalMacapaEditor from './EditorComponents/EntranciaFinalMacapaEditor.vue';
+import EntranciaFinalSantanaEditor from './EditorComponents/EntranciaFinalSantanaEditor.vue';
+import EntranciaInicialEditor from './EditorComponents/EntranciaInicialEditor.vue';
+import TabelaPromotoresSubstitutosEditor from '@/Components/EspelhoComponents/EditorComponents/TabelaPromotoresSubstitutosEditor.vue';
 
 const promotores = usePage().props.promotores;
 const promotorias = usePage().props.promotorias;
@@ -19,6 +22,7 @@ const emit = defineEmits([
   'update:promotorUrgencia',
   'update:periodoUrgencia',
   'remove:promotorUrgenciaItem',
+  '@update:nova-atribuicao',
 ]);
 
 const periodoEspelho = ref({
@@ -72,14 +76,18 @@ const removePromotorUrgenciaItem = (index: number) => {
       </CardHeader>
   
       <CardContent>
-        <EntranciaFinalMacapa
+        <!-- <EntranciaFinalMacapaEditor
           :promotores="promotores"
           :promotorias="promotorias"
-          @update:promotorias="updatePromotorias"
-          @update:promotor-urgencia="promotorUrgencia"
-          @update:periodo-urgencia="periodoUrgencia"
-          @remove:promotor-urgencia-item="removePromotorUrgenciaItem"
         />
+        <EntranciaFinalSantanaEditor
+          :promotores="promotores"
+          :promotorias="promotorias"
+        />
+        <EntranciaInicialEditor
+          :promotores="promotores"
+          :promotorias="promotorias"
+        /> -->
       </CardContent>
     </div>
   </Card>
