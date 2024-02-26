@@ -4,7 +4,7 @@ import { ref } from 'vue';
 import { Head } from '@inertiajs/vue3';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/Components/ui/carousel';
 import Preview from '@/Components/EspelhoComponents/Preview.vue';
-import EspelhoEdit from '@/Components/EspelhoComponents/EspelhoEdit.vue';
+import Editor from '@/Components/EspelhoComponents/Editor.vue';
 
 const periodoEspelho = ref<string[]>([]);
 
@@ -41,7 +41,7 @@ const removePromotorUrgenciaItem = (index: number) => {
                 <Carousel class="focus-visible:outline-none">
                     <CarouselContent>
                         <CarouselItem>
-                            <EspelhoEdit
+                            <Editor
                                 @update:periodo-espelho="updatePeriodoEspelho"
                                 @update:promotor-urgencia="updatePromotorUrgencia"
                                 @update:periodo-urgencia="updatePeriodoUrgencia"
