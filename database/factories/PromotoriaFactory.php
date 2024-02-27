@@ -29,8 +29,19 @@ class PromotoriaFactory extends Factory
             'Promotoria de Justiça de Combate ao Crime Organizado',
         ];
 
+        $municipioWords = [
+            'Macapá',
+            'Santana',
+            'Laranjal do Jari',
+            'Oiapoque',
+            'Mazagão',
+            'Porto Grande',
+            'Ferreira Gomes',
+        ];
+
         return [
             'nome'        => $this->faker->unique()->randomElement($promotoriaWords),
+            'municipio'   => $this->faker->randomElement($municipioWords),
             'promotor_id' => \App\Models\Promotor::factory(),
         ];
     }
