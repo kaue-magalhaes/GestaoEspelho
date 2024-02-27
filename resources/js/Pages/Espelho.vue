@@ -19,7 +19,7 @@ const props = defineProps({
 });
 
 const periodoEspelho = ref<string[]>([]);
-const promotoriasInteriorEventos = ref<{ promotoria: Promotoria; eventoFormatado: { tipo: string; periodo: string[]; titulo: string; promotorDesignado: string } }[]>([]);
+const promotoriasInteriorEventos = ref<{ promotoria: Promotoria; eventoFormatado: { tipo: string; periodo: string[]; titulo: string; promotorDesignado: string }[] }[]>([]);
 const atendimentosUrgenciaMacapa = ref<any[]>([]);
 const promotoriasUpdate = ref<Promotoria[]>([]);
 const listaPromotoresSubstitutosAtribuicoes = ref<{ promotor: Promotor; atribuicao: Array<string> }[]>([]);
@@ -50,7 +50,12 @@ const removePromotorUrgenciaItem = (index: number) => {
     atendimentosUrgenciaMacapa.value.splice(index, 1);
 };
 
-const updatePromotoriasInteriorEventos = (value: { promotoria: Promotoria; eventoFormatado: { tipo: string; periodo: string[]; titulo: string; promotorDesignado: string } }) => {
+const deleteEventoInterior = (promotoria_id: number) => {
+    const index = promotoriasInteriorEventos.value.findIndex((evento) => evento.promotoria.id === promotoria_id);
+    promotoriasInteriorEventos.value.splice(index, 1);
+};
+
+const updatePromotoriasInteriorEventos = (value: { promotoria: Promotoria; eventoFormatado: { tipo: string; periodo: string[]; titulo: string; promotorDesignado: string }[] }) => {
     //console.log("updatePromotoriasInteriorEventos", value);
     promotoriasInteriorEventos.value.push(value);
 };
@@ -79,6 +84,7 @@ onMounted(() => {
                                 @update:periodoEspelho="updatePeriodoEspelho"
                                 @update:promotoriasInteriorEventos="updatePromotoriasInteriorEventos"
                                 @update:novaAtribuicao="adicionaNovaAtribuicao"
+                                @delete:deleteEventoInterior="deleteEventoInterior"
                             />
                         </CarouselItem>
                         <CarouselItem>

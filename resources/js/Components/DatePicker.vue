@@ -17,7 +17,6 @@ const props = defineProps({
     type: Object as PropType<{ start: Date; end: Date }>,
     default: () => ({ start: null, end: null }),
   },
-
   range: {
     type: Boolean,
     default: false,

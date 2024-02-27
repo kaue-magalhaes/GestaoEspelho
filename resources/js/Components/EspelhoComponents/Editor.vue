@@ -21,6 +21,7 @@ const emit = defineEmits([
   'remove:promotorUrgenciaItem',
   'update:novaAtribuicao',
   'update:promotoriasInteriorEventos',
+  'delete:deleteEventoInterior',
 ]);
 
 const props = defineProps({
@@ -43,6 +44,8 @@ const periodoEspelho = ref({
   start: new Date(),
   end: new Date(),
 });
+
+const eventoFormatado = ref<{ tipo: string; periodo: string[]; titulo: string; promotorDesignado: string }[]>([]);
 
 const updatePeriodoEspelho = (value: { start: Date; end: Date }) => {
   periodoEspelho.value.isChanged = true;
@@ -70,16 +73,20 @@ const removePromotorUrgenciaItem = (index: number) => {
 
 const updatePromotoriasInteriorEventos = (unidade: Promotoria, evento: { tipo: string; periodo: { start: Date; end: Date }; titulo: string; promotorDesignado: string }) => {
   //console.log(unidade);
-  const eventoFormatado = {
+  eventoFormatado.value.push({
     tipo: evento.tipo,
     periodo: [format(evento.periodo.start, 'dd/MM/yyyy'), format(evento.periodo.end, 'dd/MM/yyyy')],
     titulo: evento.titulo,
     promotorDesignado: evento.promotorDesignado,
-  };
+  });
   
   const value = { promotoria: unidade, eventoFormatado };
 
   emit('update:promotoriasInteriorEventos', value);
+};
+
+const deleteEventoInterior = (promotoria_id: number) => {
+  emit('delete:deleteEventoInterior', promotoria_id);
 };
 onMounted(() => {
   //console.log(props.promotorias);
@@ -118,6 +125,7 @@ onMounted(() => {
         <EntranciaInicialEditor
           :promotoriasInterior="promotoriasInterior"
           @update:adicionaEvento="updatePromotoriasInteriorEventos"
+          @delete:deleteEventoInterior="deleteEventoInterior"
         />
       </CardContent>
     </div>

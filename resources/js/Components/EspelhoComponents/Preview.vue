@@ -16,7 +16,7 @@ const props = defineProps({
         required: true,
     },
     promotoriasInteriorEventos: {
-        type: Array as () => { promotoria: Promotoria; eventoFormatado: { tipo: string; periodo: string[]; titulo: string; promotorDesignado: string } }[],
+        type: Array as () => { promotoria: Promotoria; eventoFormatado: { tipo: string; periodo: string[]; titulo: string; promotorDesignado: string }[] }[],
         required: true,
     },
     listaPromotoresSubstitutosAtribuicoes: {

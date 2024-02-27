@@ -1,14 +1,18 @@
 <script setup lang="ts">
 import { Promotoria } from '@/types';
-import { onMounted } from 'vue';
+import { onMounted, ref } from 'vue';
 import { usePage } from '@inertiajs/vue3';
 
+import Button from '@/Components/ui/button/Button.vue';
 import AdicionarEventoBotao from '@/Components/EspelhoComponents/AdicionarEventoBotao.vue';
+
+import { Edit, Trash } from 'lucide-vue-next';
 
 const promotores = usePage().props.promotores;
 
 const emit = defineEmits([
   'update:adicionaEvento',
+  'delete:deleteEvento',
 ]);
 
 const props = defineProps({
@@ -18,10 +22,24 @@ const props = defineProps({
   },
 });
 
+const eventos = ref<{ promotoria_id: number; evento: { tipo: string; periodo: { start: Date; end: Date }; titulo: string; promotorDesignado: string } }[]>([]);
+
 const adicionaEvento = (promotoriaKey: string, promotoria_id: number, evento: { tipo: string; periodo: { start: Date; end: Date }; titulo: string; promotorDesignado: string }) => {
   const unidade = props.dados[promotoriaKey].find((promotoria) => promotoria.id === promotoria_id);
 
+  eventos.value.push({
+    promotoria_id,
+    evento,
+  });
+
   emit('update:adicionaEvento', unidade, evento);
+};
+
+const deleteEvento = (promotoria_id: number) => {
+  emit('delete:deleteEvento', promotoria_id);
+  const index = eventos.value.findIndex((evento) => evento.promotoria_id === promotoria_id);
+
+  eventos.value.splice(index, 1);
 };
 
 onMounted(() => {
@@ -46,7 +64,7 @@ onMounted(() => {
             Periodo
           </th>
         </tr>
-        <tr class="bg-white hover:bg-gray-50" v-for="dadoPromotoria in props.dados[municipioKey]" :key="dadoPromotoria.id">
+        <tr class="bg-white" v-for="dadoPromotoria in props.dados[municipioKey]" :key="dadoPromotoria.id">
           <td class="border px-6 py-4 font-medium">
             {{ dadoPromotoria.nome }}
           </td>
@@ -54,6 +72,24 @@ onMounted(() => {
             {{ dadoPromotoria.promotor.nome }}
           </td>
           <td class="border px-6 py-4">
+            <span v-for="evento in eventos" :key="evento.promotoria_id">
+              <span class="flex flex-col" v-if="evento.promotoria_id === dadoPromotoria.id">
+                {{ evento.evento.tipo }} - {{ evento.evento.titulo }}
+                <div class="flex items-center justify-between">
+                  <div>
+                    {{ evento.evento.tipo }} - {{ evento.evento.titulo }}
+                  </div>
+                  <div class="flex space-x-2">
+                    <Button variant="outline" size="icon">
+                      <Edit class="w-4 h-4" />
+                    </Button>
+                    <Button variant="destructive" size="icon" @click="deleteEvento">
+                      <Trash class="w-4 h-4" />
+                    </Button>
+                  </div>
+                </div>
+              </span>
+            </span>
             <AdicionarEventoBotao
               :promotoriaKey="municipioKey"
               :promotoria="dadoPromotoria"
@@ -78,15 +114,29 @@ onMounted(() => {
             Periodo
           </th>
         </tr>
-        <tr class="bg-white hover:bg-gray-50" v-for="dadoPromotoria in props.dados[municipioKey]" :key="dadoPromotoria.id">
-          <td class="border px-6 py-4">
-            <div class="flex flex-col items-center">
-              <h1 class="font-bold text-gray-900 dark:text-gray-200">
-                {{ dadoPromotoria.promotor.nome }}
-              </h1>
-            </div>
+        <tr class="bg-white" v-for="dadoPromotoria in props.dados[municipioKey]" :key="dadoPromotoria.id">
+          <td class="border px-6 py-4 font-medium">
+            {{ dadoPromotoria.promotor.nome }}
           </td>
-          <td class="border px-6 py-4">
+          <td class="border px-6 py-4 space-y-2">
+            <span v-for="evento in eventos" :key="evento.promotoria_id">
+              <span class="flex flex-col" v-if="evento.promotoria_id === dadoPromotoria.id">
+                {{ evento.evento.tipo }} - {{ evento.evento.titulo }}
+                <div class="flex items-center justify-between">
+                  <div>
+                    {{ evento.evento.tipo }} - {{ evento.evento.titulo }}
+                  </div>
+                  <div class="flex space-x-2">
+                    <Button variant="outline" size="icon">
+                      <Edit class="w-4 h-4" />
+                    </Button>
+                    <Button variant="destructive" size="icon" @click="deleteEvento">
+                      <Trash class="w-4 h-4" />
+                    </Button>
+                  </div>
+                </div>
+              </span>
+            </span>
             <AdicionarEventoBotao
               :promotoriaKey="municipioKey"
               :promotoria="dadoPromotoria"

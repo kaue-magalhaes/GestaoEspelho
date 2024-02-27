@@ -2,7 +2,7 @@
 import { Promotoria } from '@/types';
 import { onMounted } from 'vue';
 
-type DadosType = { promotoria: Promotoria; eventoFormatado: { tipo: string; periodo: string[]; titulo: string; promotorDesignado: string } }[];
+type DadosType = { promotoria: Promotoria; eventoFormatado: { tipo: string; periodo: string[]; titulo: string; promotorDesignado: string }[] }[];
 
 const props = defineProps({
   dados: {
@@ -35,23 +35,21 @@ onMounted(() => {
           <td class="border px-6 py-4 font-medium">
             {{ dadoPromotoria.promotoria.nome }}
           </td>
-          <td class="border px-6 py-4">
-            <div class="flex flex-col items-center">
-              <h1 class="font-bold text-gray-900 dark:text-gray-200">
-                {{ dadoPromotoria.promotoria.promotor.nome }}
-              </h1>
-            </div>
+          <td class="border px-6 py-4 font-medium">
+            {{ dadoPromotoria.promotoria.promotor.nome }}
           </td>
           <td class="border px-6 py-4">
-            <div>
-              {{ dadoPromotoria.eventoFormatado.tipo }} - {{ dadoPromotoria.eventoFormatado.titulo }}
-            </div>
-            <div>
-              {{ dadoPromotoria.eventoFormatado.periodo[0] }} a {{ dadoPromotoria.eventoFormatado.periodo[1] }}
-            </div>
-            <div>
-              Promotor designado: {{ dadoPromotoria.eventoFormatado.promotorDesignado }}
-            </div>
+            <span class="flex flex-col space-y-2" v-for="evento in dadoPromotoria.eventoFormatado" :key="evento.tipo">
+              <div>
+                {{ evento.tipo }} - {{ evento.titulo }}
+              </div>
+              <div>
+                {{ evento.periodo[0] }} a {{ evento.periodo[1] }}
+              </div>
+              <div>
+                Promotor designado: {{ evento.promotorDesignado }}
+              </div>
+            </span>
           </td>
         </tr>
       </tbody>
@@ -71,23 +69,21 @@ onMounted(() => {
           </th>
         </tr>
         <tr class="bg-white hover:bg-gray-50" v-for="dadoPromotoria in props.dados[municipioKey]" :key="dadoPromotoria.promotoria.id">
-          <td class="border px-6 py-4">
-            <div class="flex flex-col items-center">
-              <h1 class="font-bold text-gray-900 dark:text-gray-200">
-                {{ dadoPromotoria.promotoria.promotor.nome }}
-              </h1>
-            </div>
+          <td class="border px-6 py-4 font-medium">
+              {{ dadoPromotoria.promotoria.promotor.nome }}
           </td>
           <td class="border px-6 py-4">
-            <div>
-              {{ dadoPromotoria.eventoFormatado.tipo }} - {{ dadoPromotoria.eventoFormatado.titulo }}
-            </div>
-            <div>
-              {{ dadoPromotoria.eventoFormatado.periodo[0] }} a {{ dadoPromotoria.eventoFormatado.periodo[1] }}
-            </div>
-            <div>
-              Promotor designado: {{ dadoPromotoria.eventoFormatado.promotorDesignado }}
-            </div>
+            <span class="flex flex-col space-y-2" v-for="evento in dadoPromotoria.eventoFormatado" :key="evento.tipo">
+              <div>
+                {{ evento.tipo }} - {{ evento.titulo }}
+              </div>
+              <div>
+                {{ evento.periodo[0] }} a {{ evento.periodo[1] }}
+              </div>
+              <div>
+                Promotor designado: {{ evento.promotorDesignado }}
+              </div>
+            </span>
           </td>
         </tr>
       </tbody>

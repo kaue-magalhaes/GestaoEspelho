@@ -29,7 +29,7 @@ const props = defineProps({
 });
 
 const tipoEvento = ref<string>('');
-const periodoEvento = ref<Object>({ start: new Date(), end: new Date() });
+const periodoEvento = ref<{ start: Date; end: Date }>({ start: new Date(), end: new Date() });
 const tituloEvento = ref<string>('');
 const promotorDesignado = ref<string>('');
 
@@ -41,6 +41,18 @@ const eventos = [
   { id: 5, nome: 'Outros', selecionado: false },
 ];
 
+const resetarInformacoes = () => {
+  tipoEvento.value = '';
+  periodoEvento.value = { start: new Date(), end: new Date() };
+  tituloEvento.value = '';
+  promotorDesignado.value = '';
+};
+
+const adicionaEvento = (promotoriaKey: string, promotoria_id: number, evento: { tipo: string; periodo: { start: Date; end: Date }; titulo: string; promotorDesignado: string }) => {
+  emit('update:adicionaEvento', promotoriaKey, promotoria_id, evento);
+  resetarInformacoes();
+};
+
 onMounted(() => {
   //console.log(props.promotores);
 });
@@ -49,7 +61,7 @@ onMounted(() => {
 <template>
     <Dialog>
         <DialogTrigger as-child>
-            <Button variant="link">
+            <Button variant="ghost" class="w-full mt-2">
                 Adicionar Evento
             </Button>
         </DialogTrigger>
@@ -86,7 +98,11 @@ onMounted(() => {
                         <Label class="text-base">
                             Período:
                         </Label>
-                        <DatePicker :range="true" @update:period="periodoEvento = $event" />
+                        <DatePicker 
+                            :range="true"
+                            :period="periodoEvento"
+                            @update:period="periodoEvento = $event"
+                        />
                     </div>
                 </div>
                 <div class="flex items-center space-x-4">
@@ -118,13 +134,13 @@ onMounted(() => {
             </div>
             <DialogFooter>
                 <DialogClose as-child>
-                    <Button variant="default" @click="emit('update:adicionaEvento', promotoriaKey, promotoria.id, { tipo: tipoEvento, periodo: periodoEvento, titulo: tituloEvento, promotorDesignado: promotorDesignado })">
-                        Adicionar Evento
+                    <Button variant="destructive" @click="resetarInformacoes">
+                        Cancelar
                     </Button>
                 </DialogClose>
                 <DialogClose as-child>
-                    <Button variant="secondary">
-                        Cancelar
+                    <Button variant="default" @click="adicionaEvento(promotoriaKey, promotoria.id, { tipo: tipoEvento, periodo: periodoEvento, titulo: tituloEvento, promotorDesignado: promotorDesignado })">
+                        Adicionar Evento
                     </Button>
                 </DialogClose>
             </DialogFooter>

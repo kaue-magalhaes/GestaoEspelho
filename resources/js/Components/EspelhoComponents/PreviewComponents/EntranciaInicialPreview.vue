@@ -6,18 +6,17 @@ import TabelaPromotoriaPreview from '@/Components/EspelhoComponents/PreviewCompo
 
 const props = defineProps({
   promotoriasInteriorAgenda: {
-    type: Array as () => { promotoria: Promotoria; eventoFormatado: { tipo: string; periodo: string[]; titulo: string; promotorDesignado: string } }[],
+    type: Array as () => { promotoria: Promotoria; eventoFormatado: { tipo: string; periodo: string[]; titulo: string; promotorDesignado: string }[] }[],
     required: true,
   },
 });
 
 const agruparPorMunicipio = (dados: typeof props.promotoriasInteriorAgenda) => {
+  console.log(dados);
+  
   return dados.reduce((grupos: { [key: string]: typeof props.promotoriasInteriorAgenda }, item) => {
     const chave = item.promotoria.municipio;
-    if (!grupos[chave]) {
-      grupos[chave] = [];
-    }
-    grupos[chave].push(item);
+    
     return grupos;
   }, {});
 };

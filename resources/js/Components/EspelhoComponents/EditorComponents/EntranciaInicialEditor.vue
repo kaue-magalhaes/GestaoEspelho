@@ -6,6 +6,7 @@ import TabelaPromotoriaEditor from '@/Components/EspelhoComponents/EditorCompone
 
 const emit = defineEmits([
   'update:adicionaEvento',
+  'delete:deleteEventoInterior',
 ]);
 
 const props = defineProps({
@@ -34,6 +35,10 @@ const adicionaEvento = (unidade: Promotoria, evento: { tipo: string; periodo: { 
   emit('update:adicionaEvento', unidade, evento);
 };
 
+const deleteEventoInterior = (promotoria_id: number) => {
+  emit('delete:deleteEventoInterior', promotoria_id);
+};
+
 onMounted(() => {
 
 });
@@ -47,6 +52,7 @@ onMounted(() => {
     <TabelaPromotoriaEditor
      :dados="dadosAgrupados"
      @update:adicionaEvento="adicionaEvento"
+     @delete:deleteEvento="deleteEventoInterior"
     />
   </div>
 </template>
