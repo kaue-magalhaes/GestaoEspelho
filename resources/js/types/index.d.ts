@@ -27,9 +27,7 @@ export type PageProps<T extends Record<string, unknown> = Record<string, unknown
     auth: {
         user: User;
     };
-    promotores: {
-        all: Promotor[];
-    };
+    promotores: Promotor[];
     promotorias: {
         all: Promotoria[];
     }
