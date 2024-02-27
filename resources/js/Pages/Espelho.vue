@@ -9,7 +9,7 @@ import Editor from '@/Components/EspelhoComponents/Editor.vue';
 
 const props = defineProps({
     promotorias: {
-        type: Array as () => Promotoria[],
+        type: Object as () => { all: Promotoria[] },
         required: true,
     },
     promotores: {
@@ -19,6 +19,7 @@ const props = defineProps({
 });
 
 const periodoEspelho = ref<string[]>([]);
+const promotoriasInteriorEventos = ref<{ promotoria: Promotoria; eventoFormatado: { tipo: string; periodo: string[]; titulo: string; promotorDesignado: string } }[]>([]);
 const atendimentosUrgenciaMacapa = ref<any[]>([]);
 const promotoriasUpdate = ref<Promotoria[]>([]);
 const listaPromotoresSubstitutosAtribuicoes = ref<{ promotor: Promotor; atribuicao: Array<string> }[]>([]);
@@ -49,12 +50,18 @@ const removePromotorUrgenciaItem = (index: number) => {
     atendimentosUrgenciaMacapa.value.splice(index, 1);
 };
 
-const AdicionaNovaAtribuicao = (value: { promotor: Promotor; atribuicao: Array<string> }) => {
+const updatePromotoriasInteriorEventos = (value: { promotoria: Promotoria; eventoFormatado: { tipo: string; periodo: string[]; titulo: string; promotorDesignado: string } }) => {
+    //console.log("updatePromotoriasInteriorEventos", value);
+    promotoriasInteriorEventos.value.push(value);
+};
+
+const adicionaNovaAtribuicao = (value: { promotor: Promotor; atribuicao: Array<string> }) => {
     listaPromotoresSubstitutosAtribuicoes.value.push(value);
 };
 
 onMounted(() => {
-    //console.log(props.promotores);
+    //console.log(props.promotorias);
+    //console.log(promotoriasInteriorEventos.value);
 });
 </script>
 
@@ -67,14 +74,19 @@ onMounted(() => {
                     <CarouselContent>
                         <CarouselItem>
                             <Editor
-                                @update:nova-atribuicao="AdicionaNovaAtribuicao"
+                                :promotorias="promotorias.all"
+                                :promotores="promotores"
+                                @update:periodoEspelho="updatePeriodoEspelho"
+                                @update:promotoriasInteriorEventos="updatePromotoriasInteriorEventos"
+                                @update:novaAtribuicao="adicionaNovaAtribuicao"
                             />
                         </CarouselItem>
                         <CarouselItem>
                             <Preview
+                                :promotorias="promotorias.all"
+                                :periodoEspelho="periodoEspelho"
+                                :promotoriasInteriorEventos="promotoriasInteriorEventos"
                                 :listaPromotoresSubstitutosAtribuicoes="listaPromotoresSubstitutosAtribuicoes"
-                                :promotorias="promotorias"
-                                :periodo-espelho="periodoEspelho"
                                 :atendimentos-urgencia-macapa="atendimentosUrgenciaMacapa"
                             />
                         </CarouselItem>

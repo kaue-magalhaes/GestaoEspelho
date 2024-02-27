@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { Promotor } from '@/types';
 import { onMounted } from 'vue';
 
 const props = defineProps({

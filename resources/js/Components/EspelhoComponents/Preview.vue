@@ -11,12 +11,16 @@ const props = defineProps({
         type: Array as () => Promotoria[],
         required: true,
     },
-    listaPromotoresSubstitutosAtribuicoes: {
-        type: Array as () => { promotor: Promotor; atribuicao: Array<string> }[],
-        required: true,
-    },
     periodoEspelho: {
         type: Array as () => string[],
+        required: true,
+    },
+    promotoriasInteriorEventos: {
+        type: Array as () => { promotoria: Promotoria; eventoFormatado: { tipo: string; periodo: string[]; titulo: string; promotorDesignado: string } }[],
+        required: true,
+    },
+    listaPromotoresSubstitutosAtribuicoes: {
+        type: Array as () => { promotor: Promotor; atribuicao: Array<string> }[],
         required: true,
     },
     atendimentosUrgenciaMacapa: {
@@ -61,7 +65,9 @@ onMounted(() => {
         <CardContent>
             <!-- <EntranciaFinalMacapaPreview />
             <EntranciaFinalSantanaPreview /> -->
-            <EntranciaInicialPreview /> 
+            <EntranciaInicialPreview
+                :promotoriasInteriorAgenda="promotoriasInteriorEventos"
+            />
             <TabelaPromotoresSubstitutosPreview
                 :listaPromotoresSubstitutosAtribuicoes="listaPromotoresSubstitutosAtribuicoes"
             />

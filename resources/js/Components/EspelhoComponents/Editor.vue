@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Promotor, Promotoria } from '@/types';
-import { ref } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import { usePage } from '@inertiajs/vue3';
 
 import { Label } from '@/Components/ui/label';
@@ -13,17 +13,30 @@ import EntranciaFinalSantanaEditor from './EditorComponents/EntranciaFinalSantan
 import EntranciaInicialEditor from './EditorComponents/EntranciaInicialEditor.vue';
 import TabelaPromotoresSubstitutosEditor from '@/Components/EspelhoComponents/EditorComponents/TabelaPromotoresSubstitutosEditor.vue';
 
-const promotores = usePage().props.promotores;
-const promotorias = usePage().props.promotorias;
-
 const emit = defineEmits([
   'update:promotorias',
   'update:periodoEspelho',
   'update:promotorUrgencia',
   'update:periodoUrgencia',
   'remove:promotorUrgenciaItem',
-  '@update:nova-atribuicao',
+  'update:novaAtribuicao',
+  'update:promotoriasInteriorEventos',
 ]);
+
+const props = defineProps({
+  promotorias: {
+    type: Array as () => Promotoria[],
+    required: true,
+  },
+  promotores: {
+    type: Array as () => Promotor[],
+    required: true,
+  },
+});
+
+const promotoriasInterior = computed(() => {
+  return props.promotorias.filter((promotoria) => promotoria.municipio !== 'Macapá' && promotoria.municipio !== 'Santana');
+});
 
 const periodoEspelho = ref({
   isChanged: false,
@@ -54,6 +67,24 @@ const periodoUrgencia = (index: number, value: Date) => {
 const removePromotorUrgenciaItem = (index: number) => {
   emit('remove:promotorUrgenciaItem', index);
 };
+
+const updatePromotoriasInteriorEventos = (unidade: Promotoria, evento: { tipo: string; periodo: { start: Date; end: Date }; titulo: string; promotorDesignado: string }) => {
+  //console.log(unidade);
+  const eventoFormatado = {
+    tipo: evento.tipo,
+    periodo: [format(evento.periodo.start, 'dd/MM/yyyy'), format(evento.periodo.end, 'dd/MM/yyyy')],
+    titulo: evento.titulo,
+    promotorDesignado: evento.promotorDesignado,
+  };
+  
+  const value = { promotoria: unidade, eventoFormatado };
+
+  emit('update:promotoriasInteriorEventos', value);
+};
+onMounted(() => {
+  //console.log(props.promotorias);
+  //console.log(promotoriasInterior.value);
+});
 </script>
 
 <template>
@@ -83,11 +114,11 @@ const removePromotorUrgenciaItem = (index: number) => {
         <EntranciaFinalSantanaEditor
           :promotores="promotores"
           :promotorias="promotorias"
-        />
-        <EntranciaInicialEditor
-          :promotores="promotores"
-          :promotorias="promotorias"
         /> -->
+        <EntranciaInicialEditor
+          :promotoriasInterior="promotoriasInterior"
+          @update:adicionaEvento="updatePromotoriasInteriorEventos"
+        />
       </CardContent>
     </div>
   </Card>
