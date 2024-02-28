@@ -53,8 +53,10 @@ const resetarInformacoes = () => {
 };
 
 const adicionaEvento = (evento: { tipo: string; periodo: { start: Date; end: Date }; titulo: string; promotorDesignado: string }) => {
-  emit('update:adicionaEvento',props.nomePromotoria , props.nomeMunicipio, evento);
-  resetarInformacoes();
+    console.log(evento);
+    
+    emit('update:adicionaEvento',props.nomePromotoria , props.nomeMunicipio, evento);
+    resetarInformacoes();
 };
 
 onMounted(() => {
