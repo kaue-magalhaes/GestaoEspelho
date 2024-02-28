@@ -10,6 +10,7 @@ import { format } from 'date-fns';
 import { Edit, Trash } from 'lucide-vue-next';
 
 type Evento = {
+  id: number;
   tipo: string;
   periodo:{
     start: Date | null;
@@ -25,6 +26,7 @@ type Municipios = {
     nome: string;
     nomePromotor: string;
     eventos: {
+      id: number;
       tipo: string;
       periodo: string[];
       titulo: string;
@@ -40,6 +42,7 @@ const emit = defineEmits([
   'delete:deleteEvento',
 ]);
 
+/* TENHO QUE GARANTIR QUE RECEBAM UM VALOR COM O ID */
 const props = defineProps({
   municipios: {
     type: Array as () => Municipios[],
@@ -50,6 +53,7 @@ const props = defineProps({
 const municipiosReativos = ref<Municipios[]>(props.municipios);
 
 const evento = ref<Evento>({
+  id: 0,
   tipo: '',
   periodo:{
       start: null,
@@ -68,14 +72,23 @@ const adicionaEvento = (nomePromotoria: String, nomeMunicipio: String, eventoSel
   const promotoriaId = municipioSelecionado?.promotorias.findIndex((promotoria) => promotoria.nome === nomePromotoria);
 
   //console.log(promotoriaId);
-
-  evento.value = eventoSelelcionado;
   
   municipiosReativos.value.forEach((municipio) => {
     municipio.promotorias.forEach((promotoria) => {
       if (promotoria.nome === nomePromotoria) {
         if (eventoSelelcionado.periodo.start && eventoSelelcionado.periodo.end) {
+          evento.value = {
+            id: promotoria.eventos.length,
+            tipo: eventoSelelcionado.tipo,
+            periodo: {
+              start: eventoSelelcionado.periodo.start,
+              end: eventoSelelcionado.periodo.end,
+            },
+            titulo: eventoSelelcionado.titulo,
+            promotorDesignado: eventoSelelcionado.promotorDesignado,
+          };
           promotoria.eventos.push({
+            id: promotoria.eventos.length,
             tipo: evento.value.tipo,
             periodo: [format(eventoSelelcionado.periodo.start, 'dd/MM/yyyy'), format(eventoSelelcionado.periodo.end, 'dd/MM/yyyy')],
             titulo: evento.value.titulo,
@@ -86,14 +99,25 @@ const adicionaEvento = (nomePromotoria: String, nomeMunicipio: String, eventoSel
     });
   });
 
+  //console.log(municipiosReativos.value);
+  
   emit('update:adicionaEvento', promotoriaId, municipioSelecionado, evento.value);
 };
 
-const deleteEvento = (promotoria_id: number) => {
-  //emit('delete:deleteEvento', promotoria_id);
-  //const index = eventos.value.findIndex((evento) => evento.promotoria_id === promotoria_id);
+const EditaEvento = (eventoId: number, nomePromotoria: string) => {
+  console.log(eventoId);
+  console.log(nomePromotoria);
+};
 
-  //eventos.value.splice(index, 1);
+const deleteEvento = (eventoId: number, nomePromotoria: string) => {
+  municipiosReativos.value.forEach((municipio) => {
+    municipio.promotorias.forEach((promotoria) => {
+      if (promotoria.nome === nomePromotoria) {
+        promotoria.eventos = promotoria.eventos.filter((evento) => evento.id !== eventoId);
+      }
+    });
+  });
+  emit('delete:deleteEvento', eventoId, nomePromotoria);
 };
 
 onMounted(() => {
@@ -126,7 +150,7 @@ onMounted(() => {
             {{ dadosPromotoria.nomePromotor }}
           </td>
           <td class="border px-6 py-4">
-            <span v-for="evento in dadosPromotoria.eventos" :key="evento.tipo">
+            <span v-for="evento in dadosPromotoria.eventos" :key="evento.id">
               <div class="flex items-center justify-between">
                 <div v-if="evento.titulo !== ''">
                   {{ evento.tipo }} - {{ evento.titulo }}
@@ -138,7 +162,7 @@ onMounted(() => {
                   <Button variant="outline" size="icon">
                     <Edit class="w-4 h-4" />
                   </Button>
-                  <Button variant="destructive" size="icon" @click="deleteEvento">
+                  <Button variant="destructive" size="icon" @click="deleteEvento(evento.id, dadosPromotoria.nome)">
                     <Trash class="w-4 h-4" />
                   </Button>
                 </div>
@@ -174,7 +198,7 @@ onMounted(() => {
             {{ dadosPromotoria.nomePromotor }}
           </td>
           <td class="border px-6 py-4">
-            <span v-for="evento in dadosPromotoria.eventos" :key="evento.tipo">
+            <span v-for="evento in dadosPromotoria.eventos" :key="evento.id">
               <div class="flex items-center justify-between space-y-2">
                 <div v-if="evento.titulo !== ''">
                   {{ evento.tipo }} - {{ evento.titulo }}
@@ -186,7 +210,7 @@ onMounted(() => {
                   <Button variant="outline" size="icon">
                     <Edit class="w-4 h-4" />
                   </Button>
-                  <Button variant="destructive" size="icon" @click="deleteEvento">
+                  <Button variant="destructive" size="icon" @click="deleteEvento(evento.id, dadosPromotoria.nome)">
                     <Trash class="w-4 h-4" />
                   </Button>
                 </div>

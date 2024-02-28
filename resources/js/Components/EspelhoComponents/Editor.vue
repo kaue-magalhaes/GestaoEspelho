@@ -19,6 +19,7 @@ type Municipios = {
     nome: string;
     nomePromotor: string;
     eventos: {
+      id: number;
       tipo: string;
       periodo: string[];
       titulo: string;
@@ -35,7 +36,6 @@ const emit = defineEmits([
   'remove:promotorUrgenciaItem',
   'update:novaAtribuicao',
   'update:municipiosDados',
-  'delete:deleteEventoInterior',
 ]);
 
 const props = defineProps({
@@ -116,8 +116,22 @@ const updateMunicipiosDados = (municipio: Municipios) => {
   emit('update:municipiosDados', municipiosDados.value);
 };
 
-const deleteEventoInterior = (promotoria_id: number) => {
-  emit('delete:deleteEventoInterior', promotoria_id);
+const deleteEventoInterior = (eventoId: number, nomePromotoria: string) => {
+  municipiosDados.value.forEach((municipio) => {
+    municipio.promotorias.forEach((promotoria) => {
+      if (promotoria.nome === nomePromotoria) {
+        promotoria.eventos = promotoria.eventos.filter((evento) => evento.id !== eventoId);
+      }
+      if (promotoria.eventos.length === 0) {
+        municipio.promotorias = municipio.promotorias.filter((p) => p.nome !== promotoria.nome);
+      }
+    });
+    if (municipio.promotorias.length === 0) {
+      municipiosDados.value = municipiosDados.value.filter((m) => m.nome !== municipio.nome);
+    }
+  });
+
+  emit('update:municipiosDados', municipiosDados.value)
 };
 onMounted(() => {
   //console.log(promotoriasInterior.value);

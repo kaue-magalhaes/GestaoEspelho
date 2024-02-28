@@ -32,6 +32,7 @@ const props = defineProps({
     },
 });
 
+/* Variaveis Reativas */
 const tipoEvento = ref<string>('');
 const periodoEvento = ref<{ start: Date; end: Date }>({ start: new Date(), end: new Date() });
 const tituloEvento = ref<string>('');
@@ -52,8 +53,8 @@ const resetarInformacoes = () => {
   promotorDesignado.value = '';
 };
 
-const adicionaEvento = (evento: { tipo: string; periodo: { start: Date; end: Date }; titulo: string; promotorDesignado: string }) => {
-    console.log(evento);
+const enviaDadosDoEvento = (evento: { tipo: string; periodo: { start: Date; end: Date }; titulo: string; promotorDesignado: string }) => {
+    //console.log(evento);
     
     emit('update:adicionaEvento',props.nomePromotoria , props.nomeMunicipio, evento);
     resetarInformacoes();
@@ -145,7 +146,7 @@ onMounted(() => {
                     </Button>
                 </DialogClose>
                 <DialogClose as-child>
-                    <Button variant="default" @click="adicionaEvento({ tipo: tipoEvento, periodo: periodoEvento, titulo: tituloEvento, promotorDesignado: promotorDesignado })">
+                    <Button variant="default" @click="enviaDadosDoEvento({ tipo: tipoEvento, periodo: periodoEvento, titulo: tituloEvento, promotorDesignado: promotorDesignado })">
                         Adicionar Evento
                     </Button>
                 </DialogClose>

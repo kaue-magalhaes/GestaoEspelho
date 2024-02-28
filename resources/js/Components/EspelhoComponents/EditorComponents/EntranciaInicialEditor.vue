@@ -7,19 +7,28 @@ import { format } from 'date-fns';
 import TabelaPromotoriaEditor from '@/Components/EspelhoComponents/EditorComponents/TabelaPromotoriaEditor.vue';
 
 type Evento = {
+  id: number;
   tipo: string;
-  periodo: string[];
+  periodo:{
+    start: Date | null;
+    end: Date | null;
+  };
   titulo: string;
   promotorDesignado: string;
 };
-
 
 type Municipios = {
   nome: string;
   promotorias: {
     nome: string;
     nomePromotor: string;
-    eventos: Evento[];
+    eventos: {
+      id: number;
+      tipo: string;
+      periodo: string[];
+      titulo: string;
+      promotorDesignado: string;
+    }[];
   }[];
 };
 
@@ -47,33 +56,33 @@ const resetMunicipiosDados = () => {
   };
 };
 
-const adicionaEvento = (promotoriaId: number, municipio: Municipios, evento: { tipo: string; periodo: { start: Date; end: Date }; titulo: string; promotorDesignado: string }) => {
+const adicionaEvento = (promotoriaId: number, municipio: Municipios, evento: Evento) => {
   //console.log(municipiosDados.value);
   municipiosDados.value.nome = municipio.nome;
-  municipiosDados.value.promotorias.push({
-    nome: municipio.promotorias[promotoriaId].nome,
-    nomePromotor: municipio.promotorias[promotoriaId].nomePromotor,
-    eventos: [
-      {
-        tipo: evento.tipo,
-        periodo: [format(evento.periodo.start, 'dd/MM/yyyy'), format(evento.periodo.end, 'dd/MM/yyyy')],
-        titulo: evento.titulo,
-        promotorDesignado: evento.promotorDesignado,
-      },
-    ],
-  });
-  //console.log(municipiosDados.value);
-
-  //console.log(municipiosDados.value);
-  
+  if (evento.periodo.start && evento.periodo.end) {
+    municipiosDados.value.promotorias.push({
+      nome: municipio.promotorias[promotoriaId].nome,
+      nomePromotor: municipio.promotorias[promotoriaId].nomePromotor,
+      eventos: [
+        {
+          id: evento.id,
+          tipo: evento.tipo,
+          periodo: [format(evento.periodo.start, 'dd/MM/yyyy'), format(evento.periodo.end, 'dd/MM/yyyy')],
+          titulo: evento.titulo,
+          promotorDesignado: evento.promotorDesignado,
+        },
+      ],
+    });
+  }
+  //console.log(municipiosDados.value);  
   
   emit('update:adicionaMunicipiosDados', municipiosDados.value);
 
   resetMunicipiosDados();
 };
 
-const deleteEventoInterior = (promotoria_id: number) => {
-  emit('delete:deleteEventoInterior', promotoria_id);
+const deleteEventoInterior = (eventoId: number, nomePromotoria: string) => {
+  emit('delete:deleteEventoInterior', eventoId, nomePromotoria);
 };
 
 onMounted(() => {
