@@ -37,6 +37,9 @@ const tipoEvento = ref<string>('');
 const periodoEvento = ref<{ start: Date; end: Date }>({ start: new Date(), end: new Date() });
 const tituloEvento = ref<string>('');
 const promotorDesignadoEvento = ref<string>('');
+const tipoEventoInvalido = ref<boolean>(false);
+const periodoEventoInvalido = ref<boolean>(false);
+const promotorDesignadoEventoInvalido = ref<boolean>(false);
 
 const eventos = [
   { id: 1, nome: 'Férias', selecionado: false },
@@ -45,6 +48,14 @@ const eventos = [
   { id: 4, nome: 'Reunião', selecionado: true },
   { id: 5, nome: 'Outros', selecionado: false },
 ];
+
+const verificaSeDadosDoEventoSaoValidos = () => {
+  tipoEventoInvalido.value = tipoEvento.value === '';
+  periodoEventoInvalido.value = periodoEvento.value.start === periodoEvento.value.end;
+  promotorDesignadoEventoInvalido.value = promotorDesignadoEvento.value === '';
+
+  return !tipoEventoInvalido.value && !periodoEventoInvalido.value && !promotorDesignadoEventoInvalido.value;
+};
 
 const resetarInformacoes = () => {
   tipoEvento.value = '';
@@ -55,9 +66,10 @@ const resetarInformacoes = () => {
 
 const enviaDadosDoEvento = (evento: { tipo: string; periodo: { start: Date; end: Date }; titulo: string; promotorDesignadoEvento: string }) => {
     //console.log(evento);
-    
-    emit('update:adicionaEvento',props.nomePromotoria , props.nomeMunicipio, evento);
-    resetarInformacoes();
+    if (verificaSeDadosDoEventoSaoValidos()) {
+        emit('update:adicionaEvento',props.nomePromotoria , props.nomeMunicipio, evento);
+        resetarInformacoes();
+    }
 };
 
 onMounted(() => {
