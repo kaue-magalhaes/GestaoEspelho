@@ -6,6 +6,20 @@ import { Card, CardContent, CardHeader } from '@/Components/ui/card';
 import EntranciaInicialPreview from '@/Components/EspelhoComponents/PreviewComponents/EntranciaInicialPreview.vue'
 import TabelaPromotoresSubstitutosPreview from '@/Components/EspelhoComponents/PreviewComponents/TabelaPromotoresSubstitutosPreview.vue';
 
+type Municipios = {
+  nome: string;
+  promotorias: {
+    nome: string;
+    nomePromotor: string;
+    eventos: {
+      tipo: string;
+      periodo: string[];
+      titulo: string;
+      promotorDesignado: string;
+    }[];
+  }[];
+};
+
 const props = defineProps({
     promotorias: {
         type: Array as () => Promotoria[],
@@ -15,8 +29,8 @@ const props = defineProps({
         type: Array as () => string[],
         required: true,
     },
-    promotoriasInteriorEventos: {
-        type: Array as () => { promotoria: Promotoria; eventoFormatado: { tipo: string; periodo: string[]; titulo: string; promotorDesignado: string }[] }[],
+    municipiosDados: {
+        type: Array as () => Municipios[],
         required: true,
     },
     listaPromotoresSubstitutosAtribuicoes: {
@@ -66,7 +80,7 @@ onMounted(() => {
             <!-- <EntranciaFinalMacapaPreview />
             <EntranciaFinalSantanaPreview /> -->
             <EntranciaInicialPreview
-                :promotoriasInteriorAgenda="promotoriasInteriorEventos"
+                :municipiosDados="municipiosDados"
             />
             <TabelaPromotoresSubstitutosPreview
                 :listaPromotoresSubstitutosAtribuicoes="listaPromotoresSubstitutosAtribuicoes"

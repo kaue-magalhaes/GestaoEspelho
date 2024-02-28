@@ -7,6 +7,20 @@ import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious
 import Preview from '@/Components/EspelhoComponents/Preview.vue';
 import Editor from '@/Components/EspelhoComponents/Editor.vue';
 
+type Municipios = {
+  nome: string;
+  promotorias: {
+    nome: string;
+    nomePromotor: string;
+    eventos: {
+      tipo: string;
+      periodo: string[];
+      titulo: string;
+      promotorDesignado: string;
+    }[];
+  }[];
+};
+
 const props = defineProps({
     promotorias: {
         type: Object as () => { all: Promotoria[] },
@@ -19,7 +33,7 @@ const props = defineProps({
 });
 
 const periodoEspelho = ref<string[]>([]);
-const promotoriasInteriorEventos = ref<{ promotoria: Promotoria; eventoFormatado: { tipo: string; periodo: string[]; titulo: string; promotorDesignado: string }[] }[]>([]);
+const municipiosDados = ref<Municipios[]>([]);
 const atendimentosUrgenciaMacapa = ref<any[]>([]);
 const promotoriasUpdate = ref<Promotoria[]>([]);
 const listaPromotoresSubstitutosAtribuicoes = ref<{ promotor: Promotor; atribuicao: Array<string> }[]>([]);
@@ -51,15 +65,13 @@ const removePromotorUrgenciaItem = (index: number) => {
 };
 
 const deleteEventoInterior = (promotoria_id: number) => {
-    const index = promotoriasInteriorEventos.value.findIndex((evento) => evento.promotoria.id === promotoria_id);
-    promotoriasInteriorEventos.value.splice(index, 1);
+    //const index = promotoriasInteriorEventos.value.findIndex((evento) => evento.promotoria.id === promotoria_id);
+    //promotoriasInteriorEventos.value.splice(index, 1);
 };
 
-const updatePromotoriasInteriorEventos = (value: { promotoria: Promotoria; eventoFormatado: { tipo: string; periodo: string[]; titulo: string; promotorDesignado: string }[] }) => {
-    //console.log("updatePromotoriasInteriorEventos", value);
-    promotoriasInteriorEventos.value.push(value);
-};
-
+const updateMunicipiosDados = (value: Municipios[]) => {
+    municipiosDados.value = value;
+}
 const adicionaNovaAtribuicao = (value: { promotor: Promotor; atribuicao: Array<string> }) => {
     listaPromotoresSubstitutosAtribuicoes.value.push(value);
 };
@@ -82,7 +94,7 @@ onMounted(() => {
                                 :promotorias="promotorias.all"
                                 :promotores="promotores"
                                 @update:periodoEspelho="updatePeriodoEspelho"
-                                @update:promotoriasInteriorEventos="updatePromotoriasInteriorEventos"
+                                @update:municipiosDados="updateMunicipiosDados"
                                 @update:novaAtribuicao="adicionaNovaAtribuicao"
                                 @delete:deleteEventoInterior="deleteEventoInterior"
                             />
@@ -91,7 +103,7 @@ onMounted(() => {
                             <Preview
                                 :promotorias="promotorias.all"
                                 :periodoEspelho="periodoEspelho"
-                                :promotoriasInteriorEventos="promotoriasInteriorEventos"
+                                :municipiosDados="municipiosDados"
                                 :listaPromotoresSubstitutosAtribuicoes="listaPromotoresSubstitutosAtribuicoes"
                                 :atendimentos-urgencia-macapa="atendimentosUrgenciaMacapa"
                             />

@@ -1,38 +1,75 @@
 <script setup lang="ts">
 import { Promotoria } from '@/types';
-import { onMounted } from 'vue';
+import { onMounted, ref } from 'vue';
+import { format } from 'date-fns';
+
 
 import TabelaPromotoriaEditor from '@/Components/EspelhoComponents/EditorComponents/TabelaPromotoriaEditor.vue';
 
+type Evento = {
+  tipo: string;
+  periodo: string[];
+  titulo: string;
+  promotorDesignado: string;
+};
+
+
+type Municipios = {
+  nome: string;
+  promotorias: {
+    nome: string;
+    nomePromotor: string;
+    eventos: Evento[];
+  }[];
+};
+
 const emit = defineEmits([
-  'update:adicionaEvento',
+  'update:adicionaMunicipiosDados',
   'delete:deleteEventoInterior',
 ]);
 
 const props = defineProps({
-  promotoriasInterior: {
-    type: Array as () =>  Promotoria[],
+  municipiosInterior: {
+    type: Array as () => Municipios[],
     required: true,
   },
 });
 
-const agruparPorMunicipio = (dados: typeof props.promotoriasInterior) => {
-  return dados.reduce((grupos: { [key: string]: typeof props.promotoriasInterior }, item) => {
-    const chave = item.municipio;
-    if (!grupos[chave]) {
-      grupos[chave] = [];
-    }
-    grupos[chave].push(item);
-    return grupos;
-  }, {});
+const municipiosDados = ref<Municipios>({
+  nome: '',
+  promotorias: [],
+});
+
+const resetMunicipiosDados = () => {
+  municipiosDados.value = {
+    nome: '',
+    promotorias: [],
+  };
 };
 
-const dadosAgrupados = agruparPorMunicipio(props.promotoriasInterior);
+const adicionaEvento = (promotoriaId: number, municipio: Municipios, evento: { tipo: string; periodo: { start: Date; end: Date }; titulo: string; promotorDesignado: string }) => {
+  //console.log(municipiosDados.value);
+  municipiosDados.value.nome = municipio.nome;
+  municipiosDados.value.promotorias.push({
+    nome: municipio.promotorias[promotoriaId].nome,
+    nomePromotor: municipio.promotorias[promotoriaId].nomePromotor,
+    eventos: [
+      {
+        tipo: evento.tipo,
+        periodo: [format(evento.periodo.start, 'dd/MM/yyyy'), format(evento.periodo.end, 'dd/MM/yyyy')],
+        titulo: evento.titulo,
+        promotorDesignado: evento.promotorDesignado,
+      },
+    ],
+  });
+  //console.log(municipiosDados.value);
 
-const adicionaEvento = (unidade: Promotoria, evento: { tipo: string; periodo: { start: Date; end: Date }; titulo: string; promotorDesignado: string }) => {
-  //console.log(unidade);
+  //console.log(municipiosDados.value);
   
-  emit('update:adicionaEvento', unidade, evento);
+  
+  emit('update:adicionaMunicipiosDados', municipiosDados.value);
+
+  resetMunicipiosDados();
 };
 
 const deleteEventoInterior = (promotoria_id: number) => {
@@ -50,7 +87,7 @@ onMounted(() => {
       Entrância Inicial
     </h1>
     <TabelaPromotoriaEditor
-     :dados="dadosAgrupados"
+     :municipios="municipiosInterior"
      @update:adicionaEvento="adicionaEvento"
      @delete:deleteEvento="deleteEventoInterior"
     />

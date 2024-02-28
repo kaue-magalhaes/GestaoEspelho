@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Promotoria, Promotor } from '@/types';
+import { Promotor } from '@/types';
 import { ref, onMounted } from 'vue';
 
 import { Input } from '@/Components/ui/input';
@@ -14,16 +14,20 @@ const emit = defineEmits([
 ]);
 
 const props = defineProps({
-    promotoriaKey: {
+    promotores: {
+        type: Array as () => Promotor[] ,
+        required: true,
+    },
+    nomePromotoria: {
         type: String,
         required: true,
     },
-    promotoria: {
-        type: Object as () => Promotoria,
+    nomeMunicipio: {
+        type: String,
         required: true,
     },
-    promotores: {
-        type: Array as () => Promotor[] ,
+    nomePromotor: {
+        type: String,
         required: true,
     },
 });
@@ -48,8 +52,8 @@ const resetarInformacoes = () => {
   promotorDesignado.value = '';
 };
 
-const adicionaEvento = (promotoriaKey: string, promotoria_id: number, evento: { tipo: string; periodo: { start: Date; end: Date }; titulo: string; promotorDesignado: string }) => {
-  emit('update:adicionaEvento', promotoriaKey, promotoria_id, evento);
+const adicionaEvento = (evento: { tipo: string; periodo: { start: Date; end: Date }; titulo: string; promotorDesignado: string }) => {
+  emit('update:adicionaEvento',props.nomePromotoria , props.nomeMunicipio, evento);
   resetarInformacoes();
 };
 
@@ -71,7 +75,7 @@ onMounted(() => {
                     Adicionar Evento
                 </DialogTitle>
                 <DialogDescription>
-                    Adicione um evento para o Promotor de Justiça {{ promotoria.promotor.nome }}.
+                    Adicione um evento para o Promotor de Justiça {{ nomePromotor }}.
                 </DialogDescription>
             </DialogHeader>
             <div class="flex flex-col space-y-4">
@@ -139,7 +143,7 @@ onMounted(() => {
                     </Button>
                 </DialogClose>
                 <DialogClose as-child>
-                    <Button variant="default" @click="adicionaEvento(promotoriaKey, promotoria.id, { tipo: tipoEvento, periodo: periodoEvento, titulo: tituloEvento, promotorDesignado: promotorDesignado })">
+                    <Button variant="default" @click="adicionaEvento({ tipo: tipoEvento, periodo: periodoEvento, titulo: tituloEvento, promotorDesignado: promotorDesignado })">
                         Adicionar Evento
                     </Button>
                 </DialogClose>
