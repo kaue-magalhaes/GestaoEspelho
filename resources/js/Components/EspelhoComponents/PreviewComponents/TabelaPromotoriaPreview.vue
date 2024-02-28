@@ -58,8 +58,11 @@ onMounted(() => {
           <td class="border px-6 py-4">
             <!-- eventos[] -->
             <span class="flex flex-col space-y-2" v-for="evento in dadosPromotoria.eventos" :key="evento.tipo">
-              <div>
+              <div v-if="evento.titulo !== ''">
                 {{ evento.tipo }} - {{ evento.titulo }}
+              </div>
+              <div v-else>
+                {{ evento.tipo }}
               </div>
               <div>
                 {{ evento.periodo[0] }} a {{ evento.periodo[1] }}
@@ -96,8 +99,11 @@ onMounted(() => {
           <td class="border px-6 py-4">
             <!-- eventos[] -->
             <span class="flex flex-col space-y-2" v-for="evento in dadosPromotoria.eventos" :key="evento.tipo">
-              <div>
+              <div v-if="evento.titulo !== ''">
                 {{ evento.tipo }} - {{ evento.titulo }}
+              </div>
+              <div v-else>
+                {{ evento.tipo }}
               </div>
               <div>
                 {{ evento.periodo[0] }} a {{ evento.periodo[1] }}
