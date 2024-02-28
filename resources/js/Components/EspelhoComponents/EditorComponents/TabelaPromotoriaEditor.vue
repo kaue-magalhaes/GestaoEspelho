@@ -6,6 +6,7 @@ import { usePage } from '@inertiajs/vue3';
 import Button from '@/Components/ui/button/Button.vue';
 import AdicionarEventoBotao from '@/Components/EspelhoComponents/AdicionarEventoBotao.vue';
 
+import { format } from 'date-fns';
 import { Edit, Trash } from 'lucide-vue-next';
 
 type Evento = {
@@ -46,6 +47,8 @@ const props = defineProps({
   },
 });
 
+const municipiosReativos = ref<Municipios[]>(props.municipios);
+
 const evento = ref<Evento>({
   tipo: '',
   periodo:{
@@ -58,17 +61,30 @@ const evento = ref<Evento>({
 
 const adicionaEvento = (nomePromotoria: String, nomeMunicipio: String, eventoSelelcionado: Evento) => {
   //console.log(nomePromotoria);
-  
   //console.log(nomeMunicipio);
   //console.log(eventoSelelcionado);
   
-  const municipioSelecionado = props.municipios.find((municipio) => municipio.nome === nomeMunicipio);
+  const municipioSelecionado = municipiosReativos.value.find((municipio) => municipio.nome === nomeMunicipio);
   const promotoriaId = municipioSelecionado?.promotorias.findIndex((promotoria) => promotoria.nome === nomePromotoria);
 
   //console.log(promotoriaId);
-  
 
   evento.value = eventoSelelcionado;
+  
+  municipiosReativos.value.forEach((municipio) => {
+    municipio.promotorias.forEach((promotoria) => {
+      if (promotoria.nome === nomePromotoria) {
+        if (eventoSelelcionado.periodo.start && eventoSelelcionado.periodo.end) {
+          promotoria.eventos.push({
+            tipo: evento.value.tipo,
+            periodo: [format(eventoSelelcionado.periodo.start, 'dd/MM/yyyy'), format(eventoSelelcionado.periodo.end, 'dd/MM/yyyy')],
+            titulo: evento.value.titulo,
+            promotorDesignado: evento.value.promotorDesignado,
+          });
+        }
+      }
+    });
+  });
 
   emit('update:adicionaEvento', promotoriaId, municipioSelecionado, evento.value);
 };
@@ -88,7 +104,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="w-full" v-for="municipio in municipios" :key="municipio.nome">
+  <div class="w-full" v-for="municipio in municipiosReativos" :key="municipio.nome">
     <table class="w-full text-black" v-if="municipio.promotorias.length > 1">
       <tbody class="text-center">
         <tr class="text-black uppercase bg-gray-300 border border-gray-400 text-center text-base">
@@ -112,8 +128,11 @@ onMounted(() => {
           <td class="border px-6 py-4">
             <span v-for="evento in dadosPromotoria.eventos" :key="evento.tipo">
               <div class="flex items-center justify-between">
-                <div>
+                <div v-if="evento.titulo !== ''">
                   {{ evento.tipo }} - {{ evento.titulo }}
+                </div>
+                <div v-else>
+                  {{ evento.tipo }}
                 </div>
                 <div class="flex space-x-2">
                   <Button variant="outline" size="icon">
@@ -154,11 +173,14 @@ onMounted(() => {
           <td class="border px-6 py-4 font-medium">
             {{ dadosPromotoria.nomePromotor }}
           </td>
-          <td class="border px-6 py-4 space-y-2">
+          <td class="border px-6 py-4">
             <span v-for="evento in dadosPromotoria.eventos" :key="evento.tipo">
-              <div class="flex items-center justify-between">
-                <div>
+              <div class="flex items-center justify-between space-y-2">
+                <div v-if="evento.titulo !== ''">
                   {{ evento.tipo }} - {{ evento.titulo }}
+                </div>
+                <div v-else>
+                  {{ evento.tipo }}
                 </div>
                 <div class="flex space-x-2">
                   <Button variant="outline" size="icon">
