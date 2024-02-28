@@ -16,7 +16,7 @@ type Municipios = {
       tipo: string;
       periodo: string[];
       titulo: string;
-      promotorDesignado: string;
+      promotorDesignadoEvento: string;
     }[];
   }[];
 };
@@ -66,7 +66,7 @@ const removePromotorUrgenciaItem = (index: number) => {
 
 const updateMunicipiosDados = (value: Municipios[]) => {
     municipiosDados.value = value;
-    console.log(municipiosDados.value);
+    //console.log(municipiosDados.value);
 }
 const adicionaNovaAtribuicao = (value: { promotor: Promotor; atribuicao: Array<string> }) => {
     listaPromotoresSubstitutosAtribuicoes.value.push(value);

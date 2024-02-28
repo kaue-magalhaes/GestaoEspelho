@@ -1,13 +1,12 @@
 <script setup lang="ts">
-import { Promotoria } from '@/types';
 import { onMounted, ref } from 'vue';
 import { usePage } from '@inertiajs/vue3';
 
 import Button from '@/Components/ui/button/Button.vue';
+import EditarEventoBotao from '@/Components/EspelhoComponents/EditarEventoBotao.vue';
 import AdicionarEventoBotao from '@/Components/EspelhoComponents/AdicionarEventoBotao.vue';
 
-import { format } from 'date-fns';
-import { Edit, Trash } from 'lucide-vue-next';
+import { Trash } from 'lucide-vue-next';
 
 type Evento = {
   id: number;
@@ -17,7 +16,7 @@ type Evento = {
     end: Date | null;
   };
   titulo: string;
-  promotorDesignado: string;
+  promotorDesignadoEvento: string;
 };
 
 type Municipios = {
@@ -28,9 +27,9 @@ type Municipios = {
     eventos: {
       id: number;
       tipo: string;
-      periodo: string[];
+      periodo: Date[];
       titulo: string;
-      promotorDesignado: string;
+      promotorDesignadoEvento: string;
     }[];
   }[];
 };
@@ -40,6 +39,7 @@ const promotores = usePage().props.promotores;
 const emit = defineEmits([
   'update:adicionaEvento',
   'delete:deleteEvento',
+  'update:editaEvento',
 ]);
 
 /* TENHO QUE GARANTIR QUE RECEBAM UM VALOR COM O ID */
@@ -56,43 +56,42 @@ const evento = ref<Evento>({
   id: 0,
   tipo: '',
   periodo:{
-      start: null,
-      end: null,
+    start: null,
+    end: null,
   },
   titulo: '',
-  promotorDesignado: '',
+  promotorDesignadoEvento: '',
 });
 
 const adicionaEvento = (nomePromotoria: String, nomeMunicipio: String, eventoSelelcionado: Evento) => {
   //console.log(nomePromotoria);
   //console.log(nomeMunicipio);
   //console.log(eventoSelelcionado);
-  
+  //console.log(eventoSelelcionado.promotorDesignadoEvento);
   const municipioSelecionado = municipiosReativos.value.find((municipio) => municipio.nome === nomeMunicipio);
   const promotoriaId = municipioSelecionado?.promotorias.findIndex((promotoria) => promotoria.nome === nomePromotoria);
 
   //console.log(promotoriaId);
-  
   municipiosReativos.value.forEach((municipio) => {
     municipio.promotorias.forEach((promotoria) => {
       if (promotoria.nome === nomePromotoria) {
-        if (eventoSelelcionado.periodo.start && eventoSelelcionado.periodo.end) {
-          evento.value = {
-            id: promotoria.eventos.length,
-            tipo: eventoSelelcionado.tipo,
-            periodo: {
-              start: eventoSelelcionado.periodo.start,
-              end: eventoSelelcionado.periodo.end,
-            },
-            titulo: eventoSelelcionado.titulo,
-            promotorDesignado: eventoSelelcionado.promotorDesignado,
-          };
+        evento.value = {
+          id: promotoria.eventos.length,
+          tipo: eventoSelelcionado.tipo,
+          periodo: {
+            start: eventoSelelcionado.periodo.start,
+            end: eventoSelelcionado.periodo.end,
+          },
+          titulo: eventoSelelcionado.titulo,
+          promotorDesignadoEvento: eventoSelelcionado.promotorDesignadoEvento,
+        };
+        if (evento.value.periodo.start && evento.value.periodo.end) {
           promotoria.eventos.push({
             id: promotoria.eventos.length,
             tipo: evento.value.tipo,
-            periodo: [format(eventoSelelcionado.periodo.start, 'dd/MM/yyyy'), format(eventoSelelcionado.periodo.end, 'dd/MM/yyyy')],
+            periodo: [evento.value.periodo.start, evento.value.periodo.end],
             titulo: evento.value.titulo,
-            promotorDesignado: evento.value.promotorDesignado,
+            promotorDesignadoEvento: evento.value.promotorDesignadoEvento,
           });
         }
       }
@@ -104,9 +103,27 @@ const adicionaEvento = (nomePromotoria: String, nomeMunicipio: String, eventoSel
   emit('update:adicionaEvento', promotoriaId, municipioSelecionado, evento.value);
 };
 
-const EditaEvento = (eventoId: number, nomePromotoria: string) => {
-  console.log(eventoId);
-  console.log(nomePromotoria);
+const EditaEvento = (nomePromotoria: string, evento: Evento) => {
+  //console.log(evento.promotorDesignadoEvento);
+  
+  municipiosReativos.value.forEach((municipio) => {
+    municipio.promotorias.forEach((promotoria) => {
+      if (promotoria.nome === nomePromotoria) {
+        promotoria.eventos.forEach((eventoPromotoria) => {
+          if (eventoPromotoria.id === evento.id) {
+            if (evento.periodo.start && evento.periodo.end) {
+              eventoPromotoria.tipo = evento.tipo;
+              eventoPromotoria.periodo = [evento.periodo.start, evento.periodo.end];
+              eventoPromotoria.titulo = evento.titulo;
+              eventoPromotoria.promotorDesignadoEvento = evento.promotorDesignadoEvento;
+            }
+          }
+        });
+      }
+    });
+  });
+
+  emit('update:editaEvento', nomePromotoria, evento);
 };
 
 const deleteEvento = (eventoId: number, nomePromotoria: string) => {
@@ -151,7 +168,7 @@ onMounted(() => {
           </td>
           <td class="border px-6 py-4">
             <span v-for="evento in dadosPromotoria.eventos" :key="evento.id">
-              <div class="flex items-center justify-between">
+              <div class="flex items-center justify-between space-y-2">
                 <div v-if="evento.titulo !== ''">
                   {{ evento.tipo }} - {{ evento.titulo }}
                 </div>
@@ -159,9 +176,18 @@ onMounted(() => {
                   {{ evento.tipo }}
                 </div>
                 <div class="flex space-x-2">
-                  <Button variant="outline" size="icon">
-                    <Edit class="w-4 h-4" />
-                  </Button>
+                  <EditarEventoBotao
+                    :promotores="promotores"
+                    :nomePromotoria="dadosPromotoria.nome"
+                    :nomeMunicipio="municipio.nome"
+                    :nomePromotor="dadosPromotoria.nomePromotor"
+                    :id = "evento.id"
+                    :tipo="evento.tipo"
+                    :periodo="evento.periodo"
+                    :titulo="evento.titulo"
+                    :promotorDesignadoEvento="evento.promotorDesignadoEvento"
+                    @update:editaEvento="EditaEvento"
+                  />
                   <Button variant="destructive" size="icon" @click="deleteEvento(evento.id, dadosPromotoria.nome)">
                     <Trash class="w-4 h-4" />
                   </Button>
@@ -207,9 +233,18 @@ onMounted(() => {
                   {{ evento.tipo }}
                 </div>
                 <div class="flex space-x-2">
-                  <Button variant="outline" size="icon">
-                    <Edit class="w-4 h-4" />
-                  </Button>
+                  <EditarEventoBotao
+                    :promotores="promotores"
+                    :nomePromotoria="dadosPromotoria.nome"
+                    :nomeMunicipio="municipio.nome"
+                    :nomePromotor="dadosPromotoria.nomePromotor"
+                    :id = "evento.id"
+                    :tipo="evento.tipo"
+                    :periodo="evento.periodo"
+                    :titulo="evento.titulo"
+                    :promotorDesignadoEvento="evento.promotorDesignadoEvento"
+                    @update:editaEvento="EditaEvento"
+                  />
                   <Button variant="destructive" size="icon" @click="deleteEvento(evento.id, dadosPromotoria.nome)">
                     <Trash class="w-4 h-4" />
                   </Button>

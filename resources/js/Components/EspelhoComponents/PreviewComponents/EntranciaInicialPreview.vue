@@ -13,7 +13,7 @@ type Municipios = {
       tipo: string;
       periodo: string[];
       titulo: string;
-      promotorDesignado: string;
+      promotorDesignadoEvento: string;
     }[];
   }[];
 };

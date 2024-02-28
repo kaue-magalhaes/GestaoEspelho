@@ -11,7 +11,7 @@ type Municipios = {
       tipo: string;
       periodo: string[];
       titulo: string;
-      promotorDesignado: string;
+      promotorDesignadoEvento: string;
     }[];
   }[];
 };
@@ -59,7 +59,6 @@ onMounted(() => {
           <td class="border px-6 py-4">
             <!-- eventos[] -->
             <span class="flex flex-col space-y-2" v-for="evento in dadosPromotoria.eventos" :key="evento.tipo">
-              {{ evento.id }}
               <div v-if="evento.titulo !== ''">
                 {{ evento.tipo }} - {{ evento.titulo }}
               </div>
@@ -70,7 +69,7 @@ onMounted(() => {
                 {{ evento.periodo[0] }} a {{ evento.periodo[1] }}
               </div>
               <div>
-                Promotor designado: {{ evento.promotorDesignado }}
+                Promotor designado: {{ evento.promotorDesignadoEvento }}
               </div>
             </span>
           </td>
@@ -101,7 +100,6 @@ onMounted(() => {
           <td class="border px-6 py-4">
             <!-- eventos[] -->
             <span class="flex flex-col space-y-2" v-for="evento in dadosPromotoria.eventos" :key="evento.tipo">
-              {{ evento.id }}
               <div v-if="evento.titulo !== ''">
                 {{ evento.tipo }} - {{ evento.titulo }}
               </div>
@@ -112,7 +110,7 @@ onMounted(() => {
                 {{ evento.periodo[0] }} a {{ evento.periodo[1] }}
               </div>
               <div>
-                Promotor designado: {{ evento.promotorDesignado }}
+                Promotor designado: {{ evento.promotorDesignadoEvento }}
               </div>
             </span>
           </td>

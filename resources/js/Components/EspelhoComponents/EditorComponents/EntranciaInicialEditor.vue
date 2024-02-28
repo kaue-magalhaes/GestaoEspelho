@@ -1,7 +1,5 @@
 <script setup lang="ts">
-import { Promotoria } from '@/types';
 import { onMounted, ref } from 'vue';
-import { format } from 'date-fns';
 
 
 import TabelaPromotoriaEditor from '@/Components/EspelhoComponents/EditorComponents/TabelaPromotoriaEditor.vue';
@@ -14,7 +12,7 @@ type Evento = {
     end: Date | null;
   };
   titulo: string;
-  promotorDesignado: string;
+  promotorDesignadoEvento: string;
 };
 
 type Municipios = {
@@ -25,9 +23,9 @@ type Municipios = {
     eventos: {
       id: number;
       tipo: string;
-      periodo: string[];
+      periodo: Date[];
       titulo: string;
-      promotorDesignado: string;
+      promotorDesignadoEvento: string;
     }[];
   }[];
 };
@@ -35,6 +33,7 @@ type Municipios = {
 const emit = defineEmits([
   'update:adicionaMunicipiosDados',
   'delete:deleteEventoInterior',
+  'update:editaEvento',
 ]);
 
 const props = defineProps({
@@ -58,6 +57,8 @@ const resetMunicipiosDados = () => {
 
 const adicionaEvento = (promotoriaId: number, municipio: Municipios, evento: Evento) => {
   //console.log(municipiosDados.value);
+  //console.log(evento.promotorDesignadoEvento);
+  
   municipiosDados.value.nome = municipio.nome;
   if (evento.periodo.start && evento.periodo.end) {
     municipiosDados.value.promotorias.push({
@@ -67,9 +68,9 @@ const adicionaEvento = (promotoriaId: number, municipio: Municipios, evento: Eve
         {
           id: evento.id,
           tipo: evento.tipo,
-          periodo: [format(evento.periodo.start, 'dd/MM/yyyy'), format(evento.periodo.end, 'dd/MM/yyyy')],
+          periodo: [evento.periodo.start, evento.periodo.end,],
           titulo: evento.titulo,
-          promotorDesignado: evento.promotorDesignado,
+          promotorDesignadoEvento: evento.promotorDesignadoEvento,
         },
       ],
     });
@@ -83,6 +84,10 @@ const adicionaEvento = (promotoriaId: number, municipio: Municipios, evento: Eve
 
 const deleteEventoInterior = (eventoId: number, nomePromotoria: string) => {
   emit('delete:deleteEventoInterior', eventoId, nomePromotoria);
+};
+
+const EditaEvento = (nomePromotoria: string, evento: Evento) => {
+  emit('update:editaEvento', nomePromotoria, evento);
 };
 
 onMounted(() => {
@@ -99,6 +104,7 @@ onMounted(() => {
      :municipios="municipiosInterior"
      @update:adicionaEvento="adicionaEvento"
      @delete:deleteEvento="deleteEventoInterior"
+     @update:editaEvento="EditaEvento"
     />
   </div>
 </template>
