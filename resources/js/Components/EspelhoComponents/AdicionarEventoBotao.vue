@@ -116,7 +116,7 @@ onMounted(() => {
                 <div class="flex items-center space-x-4">
                     <div class="w-1/2 space-y-1">
                         <Label class="text-base">
-                            Tipo do Evento:
+                            Tipo do Evento <span class="text-red-500">*</span>
                         </Label>
                         <Select class="mb-2 w-full" v-model="tipoEvento">
                             <SelectTrigger :class="{ 'border-red-500 border-2 text-red-500': tipoEventoInvalido }">
@@ -135,7 +135,7 @@ onMounted(() => {
                     </div>
                     <div class="w-1/2 space-y-1">
                         <Label class="text-base">
-                            Período:
+                            Período <span class="text-red-500">*</span>
                         </Label>
                         <DatePicker 
                             :range="true"
@@ -148,13 +148,13 @@ onMounted(() => {
                 <div class="flex items-center space-x-4">
                     <div class="w-1/2 space-y-1">
                         <Label class="text-base">
-                            Título do Evento:
+                            Título do Evento
                         </Label>
                         <Input type="text" placeholder="Digite o título do evento" v-model="tituloEvento" />
                     </div>
                     <div class="w-1/2 space-y-1">
                         <Label class="text-base">
-                            Promotor designado:
+                            Promotor designado <span class="text-red-500">*</span>
                         </Label>
                         <Select class="mb-2 w-full" v-model="promotorDesignadoEvento">
                             <SelectTrigger :class="{ 'border-red-500 border-2 text-red-500': promotorDesignadoEventoInvalido }">
