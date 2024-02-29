@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, PropType, watch } from 'vue'
+import { ref, PropType, onMounted } from 'vue'
 
 import { cn } from '@/lib/utils'
 import { format } from 'date-fns';
@@ -14,16 +14,39 @@ const emit = defineEmits(['update:period'])
 
 const props = defineProps({
   period: {
-    type: Object as PropType<{ start: Date; end: Date }>,
+    type: Object as PropType<{ start: Date; end: Date } | any>,
     default: () => ({ start: null, end: null }),
   },
   range: {
     type: Boolean,
     default: false,
   },
+  wasChanged: {
+    type: Boolean,
+    default: false,
+  },
+  isValidation: {
+    type: Boolean,
+    default: false,
+  },
 })
 
 const localPeriod = ref(props.period)
+const wasChanged = ref(props.wasChanged)
+
+const emitirMudanca = (value: any) => {
+  //console.log(value);
+  
+  wasChanged.value = true
+  localPeriod.value = value
+  //console.log(localPeriod.value);
+  
+  emit('update:period', value, wasChanged.value)
+}
+
+onMounted(() => {
+  //console.log(props.isValidation);
+})
 
 </script>
 
@@ -38,12 +61,13 @@ const localPeriod = ref(props.period)
           :class="cn(
             'w-[300px] justify-start text-left font-normal',
             !localPeriod && 'text-muted-foreground',
+            props.isValidation && 'border-2 border-red-500 text-red-500',
           )"
         >
           <CalendarIcon class="mr-2 h-4 w-4" />
 
           <span>
-            {{ localPeriod.start ? (
+            {{ localPeriod.start && wasChanged ? (
               localPeriod.end ? `${format(localPeriod.start, 'LLL dd, y')} - ${format(localPeriod.end, 'LLL dd, y')}`
               : format(localPeriod.start, 'LLL dd, y')
             ) : 'Selecione o periodo' }}
@@ -56,27 +80,29 @@ const localPeriod = ref(props.period)
           :class="cn(
             'w-[300px] justify-start text-left font-normal',
             !localPeriod && 'text-muted-foreground',
+            props.isValidation && 'border-2 border-red-500 text-red-500',
           )"
         >
           <CalendarIcon class="mr-2 h-4 w-4" />
 
           <span>
-            {{ localPeriod.start ? format(localPeriod.start, 'LLL dd, y') : 'Selecione a data' }}
+            {{ localPeriod && wasChanged ? format(localPeriod, 'LLL dd, y') : 'Selecione a data' }}
           </span>
         </Button>
+        <span v-if="props.isValidation" class="text-red-500 text-sm">Selecione o periodo</span>
       </PopoverTrigger>
       <PopoverContent class="w-auto p-0" align="start">
         <Calendar
           v-if="props.range"
           v-model.range="localPeriod"
           :columns="2"
-          @update:model-value="emit('update:period', $event)"
+          @update:model-value="emitirMudanca($event)"
         />
         <Calendar
           v-else
           v-model="localPeriod.start"
           :columns="1"
-          @update:model-value="emit('update:period', $event)"
+          @update:model-value="emitirMudanca($event)"
         />
       </PopoverContent>
     </Popover>

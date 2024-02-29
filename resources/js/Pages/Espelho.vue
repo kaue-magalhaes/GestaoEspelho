@@ -42,8 +42,12 @@ const updatePromotorias = (value: { all: Promotoria[] }) => {
     promotoriasUpdate.value = value.all;
 };
 
-const updatePeriodoEspelho = (value: string[]) => {
-    periodoEspelho.value = value;
+const updatePeriodoEspelho = (value: string[] | string) => {
+    if (Array.isArray(value)) {
+        periodoEspelho.value = value;
+    } else {
+        periodoEspelho.value.push(value);
+    }
 };
 
 const updatePromotorUrgencia = (index: number, value: string) => {

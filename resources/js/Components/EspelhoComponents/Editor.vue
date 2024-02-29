@@ -77,12 +77,21 @@ const periodoEspelho = ref({
 const municipiosDados = ref<MunicipiosString[]>([]);
 const municipiosInterior = ref<Municipios[]>([]);
 
-const updatePeriodoEspelho = (value: { start: Date; end: Date }) => {
+const updatePeriodoEspelho = (value: any) => {
+  //console.log(typeof value);
+  
   periodoEspelho.value.isChanged = true;
-  periodoEspelho.value.start = value.start;
-  periodoEspelho.value.end = value.end;
+  if (value.start !== undefined) {
+    periodoEspelho.value.start = value.start;
+    periodoEspelho.value.end = value.end;
 
-  emit('update:periodoEspelho', [format(periodoEspelho.value.start, 'dd/MM/yyyy'), format(periodoEspelho.value.end, 'dd/MM/yyyy')]);
+    emit('update:periodoEspelho', [format(periodoEspelho.value.start, 'dd/MM/yyyy'), format(periodoEspelho.value.end, 'dd/MM/yyyy')]);
+  } else {
+    periodoEspelho.value.start = new Date(value);
+    //console.log(periodoEspelho.value);
+    
+    emit('update:periodoEspelho', format(value, 'dd/MM/yyyy'));
+  }
 };
 
 const updatePromotorias = (value: { all: Promotoria[] }) => {

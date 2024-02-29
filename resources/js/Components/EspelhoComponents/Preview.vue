@@ -71,7 +71,12 @@ onMounted(() => {
                             Procuradorias de Justiça do Estado do Amapá
                         </div>
                         <div v-if="periodoEspelho.length > 0" class="text-sm text-gray-500 dark:text-gray-400">
-                            Espelho de {{ periodoEspelho[0] }} a {{ periodoEspelho[1] }}
+                            <span v-if="periodoEspelho[0] !== undefined && periodoEspelho[1] !== undefined">
+                                Espelho de {{ periodoEspelho[0] }} a {{ periodoEspelho[1] }}
+                            </span>
+                            <span v-else>
+                                Espelho do dia {{ periodoEspelho[0] }}
+                            </span>
                         </div>
                     </div>
                 </div>

@@ -6,7 +6,7 @@ import { Input } from '@/Components/ui/input';
 import { Label } from '@/Components/ui/label';
 import { Button } from '@/Components/ui/button';
 import DatePicker from '@/Components/DatePicker.vue';
-import { Dialog, DialogContent, DialogTrigger, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogClose } from '@/Components/ui/dialog';
+import { Dialog, DialogContent, DialogTrigger, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/Components/ui/dialog';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue} from '@/Components/ui/select';
 
 const emit = defineEmits([
@@ -39,7 +39,9 @@ const tituloEvento = ref<string>('');
 const promotorDesignadoEvento = ref<string>('');
 const tipoEventoInvalido = ref<boolean>(false);
 const periodoEventoInvalido = ref<boolean>(false);
+const periodoEventoAlterado = ref<boolean>(false);
 const promotorDesignadoEventoInvalido = ref<boolean>(false);
+const dialogOpen = ref<boolean>(false);
 
 const eventos = [
   { id: 1, nome: 'Férias', selecionado: false },
@@ -51,17 +53,33 @@ const eventos = [
 
 const verificaSeDadosDoEventoSaoValidos = () => {
   tipoEventoInvalido.value = tipoEvento.value === '';
-  periodoEventoInvalido.value = periodoEvento.value.start === periodoEvento.value.end;
+  periodoEventoInvalido.value = periodoEventoAlterado.value === false;
   promotorDesignadoEventoInvalido.value = promotorDesignadoEvento.value === '';
 
   return !tipoEventoInvalido.value && !periodoEventoInvalido.value && !promotorDesignadoEventoInvalido.value;
 };
 
 const resetarInformacoes = () => {
-  tipoEvento.value = '';
-  periodoEvento.value = { start: new Date(), end: new Date() };
-  tituloEvento.value = '';
-  promotorDesignadoEvento.value = '';
+    dialogOpen.value = false;
+    tipoEvento.value = '';
+    periodoEvento.value = { start: new Date(), end: new Date() };
+    tituloEvento.value = '';
+    promotorDesignadoEvento.value = '';
+    tipoEventoInvalido.value = false;
+    periodoEventoInvalido.value = false;
+    periodoEventoAlterado.value = false;
+    promotorDesignadoEventoInvalido.value = false;
+
+};
+
+const updatePeriodo = (periodo: { start: Date; end: Date } | any, alterado: boolean) => {
+    //console.log(periodo.start);
+    if (periodo.start === undefined) {
+        periodoEvento.value = periodo;
+    } else {
+        periodoEvento.value = { start: periodo.start, end: periodo.end };
+    }
+    periodoEventoAlterado.value = alterado;
 };
 
 const enviaDadosDoEvento = (evento: { tipo: string; periodo: { start: Date; end: Date }; titulo: string; promotorDesignadoEvento: string }) => {
@@ -69,6 +87,7 @@ const enviaDadosDoEvento = (evento: { tipo: string; periodo: { start: Date; end:
     if (verificaSeDadosDoEventoSaoValidos()) {
         emit('update:adicionaEvento',props.nomePromotoria , props.nomeMunicipio, evento);
         resetarInformacoes();
+        dialogOpen.value = false;
     }
 };
 
@@ -78,9 +97,9 @@ onMounted(() => {
 </script>
 
 <template>
-    <Dialog>
+    <Dialog :open="dialogOpen">
         <DialogTrigger as-child>
-            <Button variant="ghost" class="w-full mt-2">
+            <Button variant="ghost" class="w-full mt-2" @click="dialogOpen = true">
                 Adicionar Evento
             </Button>
         </DialogTrigger>
@@ -100,7 +119,7 @@ onMounted(() => {
                             Tipo do Evento:
                         </Label>
                         <Select class="mb-2 w-full" v-model="tipoEvento">
-                            <SelectTrigger>
+                            <SelectTrigger :class="{ 'border-red-500 border-2 text-red-500': tipoEventoInvalido }">
                                 <SelectValue placeholder="Selecione o tipo de evento" />
                             </SelectTrigger>
                             <SelectContent>
@@ -111,6 +130,7 @@ onMounted(() => {
                                     </SelectItem>
                                 </SelectGroup>
                             </SelectContent>
+                            <span v-if="tipoEventoInvalido" class="text-red-500 text-sm">Selecione o tipo do evento</span>
                         </Select>
                     </div>
                     <div class="w-1/2 space-y-1">
@@ -120,7 +140,8 @@ onMounted(() => {
                         <DatePicker 
                             :range="true"
                             :period="periodoEvento"
-                            @update:period="periodoEvento = $event"
+                            :is-validation="periodoEventoInvalido"
+                            @update:period="updatePeriodo"
                         />
                     </div>
                 </div>
@@ -136,7 +157,7 @@ onMounted(() => {
                             Promotor designado:
                         </Label>
                         <Select class="mb-2 w-full" v-model="promotorDesignadoEvento">
-                            <SelectTrigger>
+                            <SelectTrigger :class="{ 'border-red-500 border-2 text-red-500': promotorDesignadoEventoInvalido }">
                                 <SelectValue placeholder="Selecione o Promotor que foi designado" />
                             </SelectTrigger>
                             <SelectContent>
@@ -147,21 +168,18 @@ onMounted(() => {
                                     </SelectItem>
                                 </SelectGroup>
                             </SelectContent>
+                            <span v-if="promotorDesignadoEventoInvalido" class="text-red-500 text-sm">Selecione o Promotor designado</span>
                         </Select>
                     </div>
                 </div>
             </div>
             <DialogFooter>
-                <DialogClose as-child>
-                    <Button variant="destructive" @click="resetarInformacoes">
-                        Cancelar
-                    </Button>
-                </DialogClose>
-                <DialogClose as-child>
-                    <Button variant="default" @click="enviaDadosDoEvento({ tipo: tipoEvento, periodo: periodoEvento, titulo: tituloEvento, promotorDesignadoEvento: promotorDesignadoEvento })">
-                        Adicionar Evento
-                    </Button>
-                </DialogClose>
+                <Button variant="destructive" @click="resetarInformacoes">
+                    Cancelar
+                </Button>
+                <Button variant="default" @click="enviaDadosDoEvento({ tipo: tipoEvento, periodo: periodoEvento, titulo: tituloEvento, promotorDesignadoEvento: promotorDesignadoEvento })">
+                    Adicionar Evento
+                </Button>
             </DialogFooter>
         </DialogContent>
     </Dialog>
