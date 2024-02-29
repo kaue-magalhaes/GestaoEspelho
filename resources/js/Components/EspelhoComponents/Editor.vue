@@ -11,7 +11,6 @@ import { format } from 'date-fns';
 import EntranciaFinalMacapaEditor from './EditorComponents/EntranciaFinalMacapaEditor.vue';
 import EntranciaFinalSantanaEditor from './EditorComponents/EntranciaFinalSantanaEditor.vue';
 import EntranciaInicialEditor from './EditorComponents/EntranciaInicialEditor.vue';
-import TabelaPromotoresSubstitutosEditor from '@/Components/EspelhoComponents/EditorComponents/TabelaPromotoresSubstitutosEditor.vue';
 
 type Municipios = {
   nome: string;
@@ -268,11 +267,11 @@ onMounted(() => {
         <!-- <EntranciaFinalMacapaEditor
           :promotores="promotores"
           :promotorias="promotorias"
-        />
+        /> -->
         <EntranciaFinalSantanaEditor
           :promotores="promotores"
           :promotorias="promotorias"
-        /> -->
+        />
         <EntranciaInicialEditor
           :municipiosInterior="municipiosInterior"
           @update:adicionaMunicipiosDados="adicionaMunicipiosDados"
