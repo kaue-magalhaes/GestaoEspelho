@@ -42,6 +42,7 @@ class PromotoriaFactory extends Factory
         return [
             'nome'        => $this->faker->unique()->randomElement($promotoriaWords),
             'municipio'   => $this->faker->randomElement($municipioWords),
+            'is_especializada' => $this->faker->boolean(),
             'promotor_id' => \App\Models\Promotor::factory(),
         ];
     }

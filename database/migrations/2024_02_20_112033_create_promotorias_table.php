@@ -14,6 +14,7 @@ return new class extends Migration {
             $table->id();
             $table->string('nome');
             $table->string('municipio');
+            $table->boolean('is_especializada')->default(true);
             $table->foreignId('promotor_id')->references('id')->on('promotores');
             $table->timestamps();
         });
