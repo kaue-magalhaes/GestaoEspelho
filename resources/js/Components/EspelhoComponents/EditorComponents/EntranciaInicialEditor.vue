@@ -88,10 +88,6 @@ const deleteEventoInterior = (eventoId: number, nomePromotoria: string) => {
 const EditaEvento = (nomePromotoria: string, evento: Evento) => {
   emit('update:editaEvento', nomePromotoria, evento);
 };
-
-onMounted(() => {
-
-});
 </script>
 
 <template>
