@@ -1,51 +1,65 @@
 <script setup lang="ts">
-import { Promotor } from '@/types';
 import { onMounted } from 'vue';
 
+type Atribuicoes = {
+    id: number;
+    nomePromotor: string;
+    atribuicoes: {
+        id: number;
+        tipo: string;
+        periodo: string[];
+        titulo: string;
+        promotorDesignadoEvento: string;
+    }[]
+};
+
 const props = defineProps({
-  listaPromotoresSubstitutosAtribuicoes: {
-    type: Array as () => { promotor: Promotor; atribuicao: Array<string> }[],
+  listaAtribuicoes: {
+    type: Array as () => Atribuicoes[],
     required: true,
   },
 });
 
 onMounted(() => {
-  //console.log(props.listaPromotoresSubstitutosAtribuicoes);
+  //console.log(props.listaAtribuicoes);
 });
 </script>
 
 <template>
   <div class="max-w-5xl w-full mx-auto flex flex-col items-center space-y-4">
-    <table class="w-full text-black" v-if="props.listaPromotoresSubstitutosAtribuicoes.length > 0">
-      <thead class="text-xs text-black uppercase bg-gray-300 border-x border-t">
+    <h1 class="text-2xl font-bold text-gray-700 dark:text-gray-200">
+      Promotores de Justiça Substitutos
+    </h1>
+    <table class="w-full text-black" v-if="props.listaAtribuicoes.length > 0">
+      <thead class="text-xs text-black uppercase bg-gray-300 border border-gray-400 text-center">
         <tr class="text-center text-base">
-          <th class="px-6 py-4">
+          <th class="w-1/2 px-6 py-4 border border-gray-400">
             PROMOTOR (A)
           </th>
-          <th class="px-6 py-3">
+          <th class="w-1/2 px-6 py-4 border border-gray-400">
             ATRIBUIÇÕES
           </th>
         </tr>
       </thead>
       <tbody class="text-center">
-        <tr class="bg-white hover:bg-gray-50 border" v-for="promotor in props.listaPromotoresSubstitutosAtribuicoes" :key="promotor.promotor.id">
-          <th class="px-6 py-4 font-medium whitespace-nowrap">
-            <div class="flex flex-col items-center">
-              <h1 class="font-bold text-gray-900 dark:text-gray-200">
-                {{ promotor.promotor.nome }}
-              </h1>
-            </div>
-          </th>
-          <td class="px-6 py-4">
-            <h1 class="font-bold text-gray-900 dark:text-gray-200">
-              Reunião CNMP
-            </h1>
-            <p class="text-xs">
-              04/02/2024 - 06/02/2024
-            </p>
-            <p class="text-xs text-red-500">
-              Designada Dra. Marcela (resp.)
-            </p>
+        <tr class="bg-white hover:bg-gray-50 border" v-for="atribuicoes in props.listaAtribuicoes" :key="atribuicoes.id">
+          <td class="border px-6 py-4 font-medium">
+            {{ atribuicoes.nomePromotor }}
+          </td>
+          <td class="border px-6 py-4 font-medium">
+            <span class="flex items-center justify-center space-x-2" v-for="atribuicao in atribuicoes.atribuicoes" :key="atribuicao.id">
+              <span>
+                <span v-if="atribuicao.titulo !== ''">
+                {{ atribuicao.tipo }} - {{ atribuicao.titulo }}
+                </span>
+                <span v-else>
+                  {{ atribuicao.tipo }}
+                </span>
+              </span>
+              <p class="text-xs">
+                ({{ atribuicao.periodo[0] }} - {{ atribuicao.periodo[1] }})
+              </p>
+            </span>
           </td>
         </tr>
       </tbody>

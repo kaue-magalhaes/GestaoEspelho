@@ -49,7 +49,6 @@ const emit = defineEmits([
   'update:promotorUrgencia',
   'update:periodoUrgencia',
   'remove:promotorUrgenciaItem',
-  'update:novaAtribuicao',
   'update:municipiosDados',
 ]);
 
@@ -110,7 +109,7 @@ const removePromotorUrgenciaItem = (index: number) => {
   emit('remove:promotorUrgenciaItem', index);
 };
 
-const updateMunicipiosDados = (municipio: Municipios) => {
+const adicionaMunicipiosDados = (municipio: Municipios) => {
   //console.log(municipiosDados.value);
   const municipiosConvertidos = convertMunicipios(municipio);
 
@@ -135,9 +134,7 @@ const updateMunicipiosDados = (municipio: Municipios) => {
       }
     }
   }
-
   //console.log(municipiosDados.value);
-  
   emit('update:municipiosDados', municipiosDados.value);
 };
 
@@ -278,7 +275,7 @@ onMounted(() => {
         /> -->
         <EntranciaInicialEditor
           :municipiosInterior="municipiosInterior"
-          @update:adicionaMunicipiosDados="updateMunicipiosDados"
+          @update:adicionaMunicipiosDados="adicionaMunicipiosDados"
           @delete:deleteEventoInterior="deleteEventoInterior"
           @update:editaEvento="editaEvento"
         />

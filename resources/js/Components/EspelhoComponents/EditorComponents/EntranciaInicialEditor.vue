@@ -68,7 +68,7 @@ const adicionaEvento = (promotoriaId: number, municipio: Municipios, evento: Eve
         {
           id: evento.id,
           tipo: evento.tipo,
-          periodo: [evento.periodo.start, evento.periodo.end,],
+          periodo: [evento.periodo.start, evento.periodo.end],
           titulo: evento.titulo,
           promotorDesignadoEvento: evento.promotorDesignadoEvento,
         },
@@ -76,7 +76,6 @@ const adicionaEvento = (promotoriaId: number, municipio: Municipios, evento: Eve
     });
   }
   //console.log(municipiosDados.value);  
-  
   emit('update:adicionaMunicipiosDados', municipiosDados.value);
 
   resetMunicipiosDados();

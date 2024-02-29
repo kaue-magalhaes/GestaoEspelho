@@ -7,18 +7,31 @@ import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious
 import Preview from '@/Components/EspelhoComponents/Preview.vue';
 import Editor from '@/Components/EspelhoComponents/Editor.vue';
 
-type Municipios = {
-  nome: string;
-  promotorias: {
-    nome: string;
+type Atribuicoes = {
+    id: number;
     nomePromotor: string;
-    eventos: {
-      tipo: string;
-      periodo: string[];
-      titulo: string;
-      promotorDesignadoEvento: string;
+    atribuicoes: {
+        id: number;
+        tipo: string;
+        periodo: string[];
+        titulo: string;
+        promotorDesignadoEvento: string;
+    }[]
+};
+
+type Municipios = {
+    nome: string;
+    promotorias: {
+        nome: string;
+        nomePromotor: string;
+        eventos: {
+            id: number;
+            tipo: string;
+            periodo: string[];
+            titulo: string;
+            promotorDesignadoEvento: string;
+        }[];
     }[];
-  }[];
 };
 
 const props = defineProps({
@@ -36,7 +49,7 @@ const periodoEspelho = ref<string[]>([]);
 const municipiosDados = ref<Municipios[]>([]);
 const atendimentosUrgenciaMacapa = ref<any[]>([]);
 const promotoriasUpdate = ref<Promotoria[]>([]);
-const listaPromotoresSubstitutosAtribuicoes = ref<{ promotor: Promotor; atribuicao: Array<string> }[]>([]);
+const listaAtribuicoes = ref<Atribuicoes[]>([]);
 
 const updatePromotorias = (value: { all: Promotoria[] }) => {
     promotoriasUpdate.value = value.all;
@@ -69,11 +82,62 @@ const removePromotorUrgenciaItem = (index: number) => {
 };
 
 const updateMunicipiosDados = (value: Municipios[]) => {
+    //console.log(value);
     municipiosDados.value = value;
-    //console.log(municipiosDados.value);
+    listaAtribuicoes.value = [];
+    updateNovaAtribuicao(municipiosDados.value);
+    //console.log(listaAtribuicoes.value);
+    
 }
-const adicionaNovaAtribuicao = (value: { promotor: Promotor; atribuicao: Array<string> }) => {
-    listaPromotoresSubstitutosAtribuicoes.value.push(value);
+
+const updateNovaAtribuicao = (value: Municipios[] ) => {
+    value.forEach((municipio) => {
+        municipio.promotorias.forEach((promotoria) => {
+            promotoria.eventos.forEach((evento) => {
+                if (listaAtribuicoes.value.length === 0) {
+                    listaAtribuicoes.value.push({
+                        id: listaAtribuicoes.value.length,
+                        nomePromotor: evento.promotorDesignadoEvento,
+                        atribuicoes: [
+                            {
+                                id: evento.id,
+                                tipo: evento.tipo,
+                                periodo: evento.periodo,
+                                titulo: evento.titulo,
+                                promotorDesignadoEvento: evento.promotorDesignadoEvento,
+                            },
+                        ],
+                    });
+                } else {
+                    const index = listaAtribuicoes.value.findIndex((atribuicao) => atribuicao.nomePromotor === evento.promotorDesignadoEvento);
+                    if (index === -1) {
+                        listaAtribuicoes.value.push({
+                            id: listaAtribuicoes.value.length,
+                            nomePromotor: evento.promotorDesignadoEvento,
+                            atribuicoes: [
+                                {
+                                    id: evento.id,
+                                    tipo: evento.tipo,
+                                    periodo: evento.periodo,
+                                    titulo: evento.titulo,
+                                    promotorDesignadoEvento: evento.promotorDesignadoEvento,
+                                },
+                            ],
+                        });
+                    } else {
+                        listaAtribuicoes.value[index].atribuicoes.push({
+                            id: evento.id,
+                            tipo: evento.tipo,
+                            periodo: evento.periodo,
+                            titulo: evento.titulo,
+                            promotorDesignadoEvento: evento.promotorDesignadoEvento,
+                        });
+                    }
+                }
+            });
+        });
+    });
+    
 };
 
 onMounted(() => {
@@ -95,7 +159,6 @@ onMounted(() => {
                                 :promotores="promotores"
                                 @update:periodoEspelho="updatePeriodoEspelho"
                                 @update:municipiosDados="updateMunicipiosDados"
-                                @update:novaAtribuicao="adicionaNovaAtribuicao"
                             />
                         </CarouselItem>
                         <CarouselItem>
@@ -103,7 +166,7 @@ onMounted(() => {
                                 :promotorias="promotorias.all"
                                 :periodoEspelho="periodoEspelho"
                                 :municipiosDados="municipiosDados"
-                                :listaPromotoresSubstitutosAtribuicoes="listaPromotoresSubstitutosAtribuicoes"
+                                :listaAtribuicoes="listaAtribuicoes"
                                 :atendimentos-urgencia-macapa="atendimentosUrgenciaMacapa"
                             />
                         </CarouselItem>

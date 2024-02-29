@@ -52,6 +52,7 @@ const props = defineProps({
     promotorDesignadoEvento: {
         type: String,
         required: true,
+        default: '',
     },
 });
 
@@ -126,7 +127,8 @@ onMounted(() => {
                         <Label class="text-base">
                             Período:
                         </Label>
-                        <DatePicker 
+                        <DatePicker
+                            :was-changed="true"
                             :range="true"
                             :period="periodoEvento"
                             @update:period="periodoEvento = $event"

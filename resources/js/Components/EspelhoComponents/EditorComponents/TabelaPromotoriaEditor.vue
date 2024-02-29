@@ -5,6 +5,17 @@ import { usePage } from '@inertiajs/vue3';
 import Button from '@/Components/ui/button/Button.vue';
 import EditarEventoBotao from '@/Components/EspelhoComponents/EditarEventoBotao.vue';
 import AdicionarEventoBotao from '@/Components/EspelhoComponents/AdicionarEventoBotao.vue';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/Components/ui/alert-dialog'
 
 import { Trash } from 'lucide-vue-next';
 
@@ -188,9 +199,36 @@ onMounted(() => {
                     :promotorDesignadoEvento="evento.promotorDesignadoEvento"
                     @update:editaEvento="EditaEvento"
                   />
-                  <Button variant="destructive" size="icon" @click="deleteEvento(evento.id, dadosPromotoria.nome)">
-                    <Trash class="w-4 h-4" />
-                  </Button>
+                  <AlertDialog>
+                    <AlertDialogTrigger>
+                      <Button variant="destructive" size="icon">
+                        <Trash class="w-4 h-4" />
+                      </Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>
+                          <span v-if="evento.titulo !== ''">
+                            Tem certeza que deseja excluir o evento "{{ evento.tipo }} - {{ evento.titulo }}"?
+                          </span>
+                          <span v-else>
+                            Tem certeza que deseja excluir o evento "{{ evento.tipo }}"?
+                          </span>
+                        </AlertDialogTitle>
+                        <AlertDialogDescription>
+                          Esta ação não pode ser desfeita.
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel class="bg-red-500 hover:bg-red-400 text-white hover:text-white">
+                          Cancelar
+                        </AlertDialogCancel>
+                        <AlertDialogAction @click="deleteEvento(evento.id, dadosPromotoria.nome)">
+                          Excluir evento
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
                 </div>
               </div>
             </span>
@@ -245,9 +283,36 @@ onMounted(() => {
                     :promotorDesignadoEvento="evento.promotorDesignadoEvento"
                     @update:editaEvento="EditaEvento"
                   />
-                  <Button variant="destructive" size="icon" @click="deleteEvento(evento.id, dadosPromotoria.nome)">
-                    <Trash class="w-4 h-4" />
-                  </Button>
+                  <AlertDialog>
+                    <AlertDialogTrigger>
+                      <Button variant="destructive" size="icon">
+                        <Trash class="w-4 h-4" />
+                      </Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>
+                          <span v-if="evento.titulo !== ''">
+                            Tem certeza que deseja excluir o evento "{{ evento.tipo }} - {{ evento.titulo }}"?
+                          </span>
+                          <span v-else>
+                            Tem certeza que deseja excluir o evento "{{ evento.tipo }}"?
+                          </span>
+                        </AlertDialogTitle>
+                        <AlertDialogDescription>
+                          Esta ação não pode ser desfeita.
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel class="bg-red-500 hover:bg-red-400 text-white hover:text-white">
+                          Cancelar
+                        </AlertDialogCancel>
+                        <AlertDialogAction @click="deleteEvento(evento.id, dadosPromotoria.nome)">
+                          Excluir evento
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
                 </div>
               </div>
             </span>
