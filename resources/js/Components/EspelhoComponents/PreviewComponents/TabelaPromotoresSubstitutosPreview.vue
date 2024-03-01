@@ -26,11 +26,11 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="max-w-5xl w-full mx-auto flex flex-col items-center space-y-4">
+  <div class="max-w-5xl w-full mx-auto flex flex-col items-center space-y-4" v-if="props.listaAtribuicoes.length > 0">
     <h1 class="text-2xl font-bold text-gray-700 dark:text-gray-200">
       Promotores de Justiça Substitutos
     </h1>
-    <table class="w-full text-black" v-if="props.listaAtribuicoes.length > 0">
+    <table class="w-full text-black">
       <thead class="text-xs text-black uppercase bg-gray-300 border border-gray-400 text-center">
         <tr class="text-center text-base">
           <th class="w-1/2 px-6 py-4 border border-gray-400">
