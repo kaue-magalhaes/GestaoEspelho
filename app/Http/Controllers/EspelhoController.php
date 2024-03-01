@@ -17,7 +17,7 @@ class EspelhoController extends Controller
         $promotores = Promotor::all();
         $promotoria = Promotoria::with('promotor')->get()->toArray();
 
-        dd($promotoria);
+        //dd($promotoria);
 
         return Inertia::render('Espelho', [
             'promotores' => $promotores,
