@@ -47,10 +47,10 @@ class PromotoriaFactory extends Factory
         $municipio = $this->faker->randomElement($municipioWords);
          
         if ($municipio == 'Macapá' || $municipio == 'Santana') {
-            $nomeGrupo = $prefixosPromotoria[1] . $this->faker->randomElement($promotoriasNomeGrupoWords);
+            $nomeGrupo        = $prefixosPromotoria[1] . $this->faker->randomElement($promotoriasNomeGrupoWords);
             $numeroPromotoria = \App\Models\Promotoria::where('nome_grupo', $nomeGrupo)->count() + 1;
         } else {
-            $nomeGrupo = $municipio;
+            $nomeGrupo        = $municipio;
             $numeroPromotoria = \App\Models\Promotoria::where('nome_grupo', $nomeGrupo)->count() + 1;
         }
 
