@@ -17,6 +17,7 @@ export interface Promotoria {
     id: number;
     nome: string;
     municipio: string;
+    is_especializada: boolean;
     promotor_id: number;
     created_at: string;
     updated_at: string;

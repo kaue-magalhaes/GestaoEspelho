@@ -16,6 +16,7 @@ type Municipios = {
   nome: string;
   promotorias: {
     nome: string;
+    isEspecializada: boolean;
     nomePromotor: string;
     eventos: {
       id: number;
@@ -65,15 +66,18 @@ const props = defineProps({
 const promotoriasInterior = computed(() => {
   return props.promotorias.filter((promotoria) => promotoria.municipio !== 'Macapá' && promotoria.municipio !== 'Santana');
 });
+const promotoriasSantanaFiltro = computed(() => {
+  return props.promotorias.filter((promotoria) => promotoria.municipio === 'Santana');
+});
 
 const periodoEspelho = ref({
   isChanged: false,
   start: new Date(),
   end: new Date(),
 });
-
 const municipiosDados = ref<MunicipiosString[]>([]);
 const municipiosInterior = ref<Municipios[]>([]);
+const promotoriasSantana = ref<Municipios[]>([]);
 
 const updatePeriodoEspelho = (value: any) => {
   //console.log(typeof value);
@@ -203,7 +207,47 @@ const convertMunicipios = (municipio: Municipios) => {
   };
 };
 onMounted(() => {
-  //console.log(promotoriasInterior.value); 
+  //console.log(promotoriasInterior.value);
+  promotoriasSantanaFiltro.value.forEach((promotoria) => {
+    if (promotoriasSantana.value.length === 0) {
+      promotoriasSantana.value.push({
+        nome: promotoria.municipio,
+        promotorias: [
+          {
+            nome: promotoria.nome,
+            isEspecializada: promotoria.is_especializada,
+            nomePromotor: promotoria.promotor.nome,
+            eventos: [],
+          },
+        ],
+      });
+    } else {
+      const indexMunicipio = promotoriasSantana.value.findIndex((m) => m.nome === promotoria.municipio);
+      if (indexMunicipio === -1) {
+        promotoriasSantana.value.push({
+          nome: promotoria.municipio,
+          promotorias: [
+            {
+              nome: promotoria.nome,
+              isEspecializada: promotoria.is_especializada,
+              nomePromotor: promotoria.promotor.nome,
+              eventos: [],
+            },
+          ],
+        });
+      } else {
+        const indexPromotoria = promotoriasSantana.value[indexMunicipio].promotorias.findIndex((p) => p.nome === promotoria.nome);
+        if (indexPromotoria === -1) {
+          promotoriasSantana.value[indexMunicipio].promotorias.push({
+            nome: promotoria.nome,
+            isEspecializada: promotoria.is_especializada,
+            nomePromotor: promotoria.promotor.nome,
+            eventos: [],
+          });
+        }
+      }
+    }
+  });
   promotoriasInterior.value.forEach((promotoria) => {
     if (municipiosInterior.value.length === 0) {
       municipiosInterior.value.push({
@@ -211,6 +255,7 @@ onMounted(() => {
         promotorias: [
           {
             nome: promotoria.nome,
+            isEspecializada: promotoria.is_especializada,
             nomePromotor: promotoria.promotor.nome,
             eventos: [],
           },
@@ -224,6 +269,7 @@ onMounted(() => {
           promotorias: [
             {
               nome: promotoria.nome,
+              isEspecializada: promotoria.is_especializada,
               nomePromotor: promotoria.promotor.nome,
               eventos: [],
             },
@@ -234,6 +280,7 @@ onMounted(() => {
         if (indexPromotoria === -1) {
           municipiosInterior.value[indexMunicipio].promotorias.push({
             nome: promotoria.nome,
+            isEspecializada: promotoria.is_especializada,
             nomePromotor: promotoria.promotor.nome,
             eventos: [],
           });
@@ -269,8 +316,10 @@ onMounted(() => {
           :promotorias="promotorias"
         /> -->
         <EntranciaFinalSantanaEditor
-          :promotores="promotores"
-          :promotorias="promotorias"
+          :promotoriasSantana="promotoriasSantana"
+          @update:adicionaDados="adicionaMunicipiosDados"
+          @delete:deleteEvento="deleteEventoInterior"
+          @update:editaEvento="editaEvento"
         />
         <EntranciaInicialEditor
           :municipiosInterior="municipiosInterior"
