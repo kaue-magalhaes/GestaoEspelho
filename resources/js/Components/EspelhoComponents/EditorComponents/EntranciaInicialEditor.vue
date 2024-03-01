@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { GrupoPromotoria } from '@/types';
 import { ref } from 'vue';
 
 
@@ -12,22 +13,7 @@ type Evento = {
     end: Date | null;
   };
   titulo: string;
-  promotorDesignadoEvento: string;
-};
-
-type Municipios = {
-  nome: string;
-  promotorias: {
-    nome: string;
-    nomePromotor: string;
-    eventos: {
-      id: number;
-      tipo: string;
-      periodo: Date[];
-      titulo: string;
-      promotorDesignadoEvento: string;
-    }[];
-  }[];
+  promotor_designado_evento: string;
 };
 
 const emit = defineEmits([
@@ -38,12 +24,12 @@ const emit = defineEmits([
 
 const props = defineProps({
   municipiosInterior: {
-    type: Array as () => Municipios[],
+    type: Array as () => GrupoPromotoria[],
     required: true,
   },
 });
 
-const municipiosDados = ref<Municipios>({
+const municipiosDados = ref<GrupoPromotoria>({
   nome: '',
   promotorias: [],
 });
@@ -55,14 +41,15 @@ const resetMunicipiosDados = () => {
   };
 };
 
-const adicionaEvento = (promotoriaId: number, municipio: Municipios, evento: Evento) => {
+const adicionaEvento = (promotoriaId: number, municipio: GrupoPromotoria, evento: Evento) => {
   //console.log(municipiosDados.value);
-  //console.log(evento.promotorDesignadoEvento);
+  //console.log(evento.promotor_designado_evento);
   
   municipiosDados.value.nome = municipio.nome;
   if (evento.periodo.start && evento.periodo.end) {
     municipiosDados.value.promotorias.push({
       nome: municipio.promotorias[promotoriaId].nome,
+      is_especializada: municipio.promotorias[promotoriaId].is_especializada,
       nomePromotor: municipio.promotorias[promotoriaId].nomePromotor,
       eventos: [
         {
@@ -70,7 +57,7 @@ const adicionaEvento = (promotoriaId: number, municipio: Municipios, evento: Eve
           tipo: evento.tipo,
           periodo: [evento.periodo.start, evento.periodo.end],
           titulo: evento.titulo,
-          promotorDesignadoEvento: evento.promotorDesignadoEvento,
+          promotor_designado_evento: evento.promotor_designado_evento,
         },
       ],
     });

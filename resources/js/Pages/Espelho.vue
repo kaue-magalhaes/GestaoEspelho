@@ -1,38 +1,11 @@
 <script setup lang="ts">
-import { Promotor, Promotoria } from '@/types';
+import { Promotor, Promotoria, GrupoPromotoria, Atribuicoes } from '@/types';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { ref, onMounted } from 'vue';
 import { Head } from '@inertiajs/vue3';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/Components/ui/carousel';
 import Preview from '@/Components/EspelhoComponents/Preview.vue';
 import Editor from '@/Components/EspelhoComponents/Editor.vue';
-
-type Atribuicoes = {
-    id: number;
-    nomePromotor: string;
-    atribuicoes: {
-        id: number;
-        tipo: string;
-        periodo: string[];
-        titulo: string;
-        promotorDesignadoEvento: string;
-    }[]
-};
-
-type Municipios = {
-    nome: string;
-    promotorias: {
-        nome: string;
-        nomePromotor: string;
-        eventos: {
-            id: number;
-            tipo: string;
-            periodo: string[];
-            titulo: string;
-            promotorDesignadoEvento: string;
-        }[];
-    }[];
-};
 
 const props = defineProps({
     promotorias: {
@@ -46,7 +19,7 @@ const props = defineProps({
 });
 
 const periodoEspelho = ref<string[]>([]);
-const municipiosDados = ref<Municipios[]>([]);
+const municipiosDados = ref<GrupoPromotoria[]>([]);
 const atendimentosUrgenciaMacapa = ref<any[]>([]);
 const promotoriasUpdate = ref<Promotoria[]>([]);
 const listaAtribuicoes = ref<Atribuicoes[]>([]);
@@ -81,7 +54,7 @@ const removePromotorUrgenciaItem = (index: number) => {
     atendimentosUrgenciaMacapa.value.splice(index, 1);
 };
 
-const updateMunicipiosDados = (value: Municipios[]) => {
+const updateMunicipiosDados = (value: GrupoPromotoria[]) => {
     //console.log(value);
     municipiosDados.value = value;
     listaAtribuicoes.value = [];
@@ -90,37 +63,37 @@ const updateMunicipiosDados = (value: Municipios[]) => {
     
 }
 
-const updateNovaAtribuicao = (value: Municipios[] ) => {
+const updateNovaAtribuicao = (value: GrupoPromotoria[] ) => {
     value.forEach((municipio) => {
         municipio.promotorias.forEach((promotoria) => {
             promotoria.eventos.forEach((evento) => {
                 if (listaAtribuicoes.value.length === 0) {
                     listaAtribuicoes.value.push({
                         id: listaAtribuicoes.value.length,
-                        nomePromotor: evento.promotorDesignadoEvento,
+                        nome_promotor: evento.promotor_designado_evento,
                         atribuicoes: [
                             {
                                 id: evento.id,
                                 tipo: evento.tipo,
                                 periodo: evento.periodo,
                                 titulo: evento.titulo,
-                                promotorDesignadoEvento: evento.promotorDesignadoEvento,
+                                promotor_designado_evento: evento.promotor_designado_evento,
                             },
                         ],
                     });
                 } else {
-                    const index = listaAtribuicoes.value.findIndex((atribuicao) => atribuicao.nomePromotor === evento.promotorDesignadoEvento);
+                    const index = listaAtribuicoes.value.findIndex((atribuicao) => atribuicao.nome_promotor === evento.promotor_designado_evento);
                     if (index === -1) {
                         listaAtribuicoes.value.push({
                             id: listaAtribuicoes.value.length,
-                            nomePromotor: evento.promotorDesignadoEvento,
+                            nome_promotor: evento.promotor_designado_evento,
                             atribuicoes: [
                                 {
                                     id: evento.id,
                                     tipo: evento.tipo,
                                     periodo: evento.periodo,
                                     titulo: evento.titulo,
-                                    promotorDesignadoEvento: evento.promotorDesignadoEvento,
+                                    promotor_designado_evento: evento.promotor_designado_evento,
                                 },
                             ],
                         });
@@ -130,7 +103,7 @@ const updateNovaAtribuicao = (value: Municipios[] ) => {
                             tipo: evento.tipo,
                             periodo: evento.periodo,
                             titulo: evento.titulo,
-                            promotorDesignadoEvento: evento.promotorDesignadoEvento,
+                            promotor_designado_evento: evento.promotor_designado_evento,
                         });
                     }
                 }

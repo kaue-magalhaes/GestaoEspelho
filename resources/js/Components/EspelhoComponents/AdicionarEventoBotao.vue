@@ -36,11 +36,11 @@ const props = defineProps({
 const tipoEvento = ref<string>('');
 const periodoEvento = ref<{ start: Date; end: Date }>({ start: new Date(), end: new Date() });
 const tituloEvento = ref<string>('');
-const promotorDesignadoEvento = ref<string>('');
+const promotor_designado_evento = ref<string>('');
 const tipoEventoInvalido = ref<boolean>(false);
 const periodoEventoInvalido = ref<boolean>(false);
 const periodoEventoAlterado = ref<boolean>(false);
-const promotorDesignadoEventoInvalido = ref<boolean>(false);
+const promotor_designado_eventoInvalido = ref<boolean>(false);
 const dialogOpen = ref<boolean>(false);
 
 const eventos = [
@@ -54,9 +54,9 @@ const eventos = [
 const verificaSeDadosDoEventoSaoValidos = () => {
   tipoEventoInvalido.value = tipoEvento.value === '';
   periodoEventoInvalido.value = periodoEventoAlterado.value === false;
-  promotorDesignadoEventoInvalido.value = promotorDesignadoEvento.value === '';
+  promotor_designado_eventoInvalido.value = promotor_designado_evento.value === '';
 
-  return !tipoEventoInvalido.value && !periodoEventoInvalido.value && !promotorDesignadoEventoInvalido.value;
+  return !tipoEventoInvalido.value && !periodoEventoInvalido.value && !promotor_designado_eventoInvalido.value;
 };
 
 const resetarInformacoes = () => {
@@ -64,11 +64,11 @@ const resetarInformacoes = () => {
     tipoEvento.value = '';
     periodoEvento.value = { start: new Date(), end: new Date() };
     tituloEvento.value = '';
-    promotorDesignadoEvento.value = '';
+    promotor_designado_evento.value = '';
     tipoEventoInvalido.value = false;
     periodoEventoInvalido.value = false;
     periodoEventoAlterado.value = false;
-    promotorDesignadoEventoInvalido.value = false;
+    promotor_designado_eventoInvalido.value = false;
 
 };
 
@@ -82,7 +82,7 @@ const updatePeriodo = (periodo: { start: Date; end: Date } | any, alterado: bool
     periodoEventoAlterado.value = alterado;
 };
 
-const enviaDadosDoEvento = (evento: { tipo: string; periodo: { start: Date; end: Date }; titulo: string; promotorDesignadoEvento: string }) => {
+const enviaDadosDoEvento = (evento: { tipo: string; periodo: { start: Date; end: Date }; titulo: string; promotor_designado_evento: string }) => {
     //console.log(evento);
     if (verificaSeDadosDoEventoSaoValidos()) {
         emit('update:adicionaEvento',props.nomePromotoria , props.nomeMunicipio, evento);
@@ -156,8 +156,8 @@ onMounted(() => {
                         <Label class="text-base">
                             Promotor designado <span class="text-red-500">*</span>
                         </Label>
-                        <Select class="mb-2 w-full" v-model="promotorDesignadoEvento">
-                            <SelectTrigger :class="{ 'border-red-500 border-2 text-red-500': promotorDesignadoEventoInvalido }">
+                        <Select class="mb-2 w-full" v-model="promotor_designado_evento">
+                            <SelectTrigger :class="{ 'border-red-500 border-2 text-red-500': promotor_designado_eventoInvalido }">
                                 <SelectValue placeholder="Selecione o Promotor que foi designado" />
                             </SelectTrigger>
                             <SelectContent>
@@ -168,7 +168,7 @@ onMounted(() => {
                                     </SelectItem>
                                 </SelectGroup>
                             </SelectContent>
-                            <span v-if="promotorDesignadoEventoInvalido" class="text-red-500 text-sm">Selecione o Promotor designado</span>
+                            <span v-if="promotor_designado_eventoInvalido" class="text-red-500 text-sm">Selecione o Promotor designado</span>
                         </Select>
                     </div>
                 </div>
@@ -177,7 +177,7 @@ onMounted(() => {
                 <Button variant="destructive" @click="resetarInformacoes">
                     Cancelar
                 </Button>
-                <Button variant="default" @click="enviaDadosDoEvento({ tipo: tipoEvento, periodo: periodoEvento, titulo: tituloEvento, promotorDesignadoEvento: promotorDesignadoEvento })">
+                <Button variant="default" @click="enviaDadosDoEvento({ tipo: tipoEvento, periodo: periodoEvento, titulo: tituloEvento, promotor_designado_evento: promotor_designado_evento })">
                     Adicionar Evento
                 </Button>
             </DialogFooter>

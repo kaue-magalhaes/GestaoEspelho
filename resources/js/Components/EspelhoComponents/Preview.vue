@@ -1,37 +1,10 @@
 <script setup lang="ts">
+import { Promotor, Promotoria, GrupoPromotoria, Atribuicoes } from '@/types';
 import { computed, onMounted } from 'vue';
-import { Promotor, Promotoria } from '@/types';
 import { Card, CardContent, CardHeader } from '@/Components/ui/card';
 
 import EntranciaInicialPreview from '@/Components/EspelhoComponents/PreviewComponents/EntranciaInicialPreview.vue'
 import TabelaPromotoresSubstitutosPreview from '@/Components/EspelhoComponents/PreviewComponents/TabelaPromotoresSubstitutosPreview.vue';
-
-type Atribuicoes = {
-    id: number;
-    nomePromotor: string;
-    atribuicoes: {
-        id: number;
-        tipo: string;
-        periodo: string[];
-        titulo: string;
-        promotorDesignadoEvento: string;
-    }[]
-};
-
-type Municipios = {
-  nome: string;
-  promotorias: {
-    nome: string;
-    nomePromotor: string;
-    eventos: {
-      id: number;
-      tipo: string;
-      periodo: string[];
-      titulo: string;
-      promotorDesignadoEvento: string;
-    }[];
-  }[];
-};
 
 const props = defineProps({
     promotorias: {
@@ -43,7 +16,7 @@ const props = defineProps({
         required: true,
     },
     municipiosDados: {
-        type: Array as () => Municipios[],
+        type: Array as () => GrupoPromotoria[],
         required: true,
     },
     listaAtribuicoes: {

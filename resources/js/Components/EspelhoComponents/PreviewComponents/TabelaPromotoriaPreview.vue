@@ -1,24 +1,10 @@
 <script setup lang="ts">
+import { GrupoPromotoria } from '@/types';
 import { onMounted } from 'vue';
-
-type Municipios = {
-  nome: string;
-  promotorias: {
-    nome: string;
-    nomePromotor: string;
-    eventos: {
-      id: number;
-      tipo: string;
-      periodo: string[];
-      titulo: string;
-      promotorDesignadoEvento: string;
-    }[];
-  }[];
-};
 
 const props = defineProps({
   municipios: {
-    type: Array as () => Municipios[],
+    type: Array as () => GrupoPromotoria[],
     required: true,
   },
 });
@@ -69,7 +55,7 @@ onMounted(() => {
                 {{ evento.periodo[0] }} a {{ evento.periodo[1] }}
               </div>
               <div>
-                Promotor designado: {{ evento.promotorDesignadoEvento }}
+                Promotor designado: {{ evento.promotor_designado_evento }}
               </div>
             </span>
           </td>
@@ -110,7 +96,7 @@ onMounted(() => {
                 {{ evento.periodo[0] }} a {{ evento.periodo[1] }}
               </div>
               <div>
-                Promotor designado: {{ evento.promotorDesignadoEvento }}
+                Promotor designado: {{ evento.promotor_designado_evento }}
               </div>
             </span>
           </td>

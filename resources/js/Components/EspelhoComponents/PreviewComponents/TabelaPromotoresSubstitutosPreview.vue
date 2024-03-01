@@ -1,17 +1,6 @@
 <script setup lang="ts">
+import { Atribuicoes } from '@/types';
 import { onMounted } from 'vue';
-
-type Atribuicoes = {
-    id: number;
-    nomePromotor: string;
-    atribuicoes: {
-        id: number;
-        tipo: string;
-        periodo: string[];
-        titulo: string;
-        promotorDesignadoEvento: string;
-    }[]
-};
 
 const props = defineProps({
   listaAtribuicoes: {
@@ -44,7 +33,7 @@ onMounted(() => {
       <tbody class="text-center">
         <tr class="bg-white hover:bg-gray-50 border" v-for="atribuicoes in props.listaAtribuicoes" :key="atribuicoes.id">
           <td class="border px-6 py-4 font-medium">
-            {{ atribuicoes.nomePromotor }}
+            {{ atribuicoes.nome_promotor }}
           </td>
           <td class="border px-6 py-4 font-medium">
             <span class="flex items-center justify-center space-x-2" v-for="atribuicao in atribuicoes.atribuicoes" :key="atribuicao.id">

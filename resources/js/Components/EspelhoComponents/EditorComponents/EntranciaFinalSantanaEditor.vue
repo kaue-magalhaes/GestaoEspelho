@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { GrupoPromotoria } from '@/types';
+import { ref, onMounted } from 'vue';
 
 
 import TabelaPromotoriaEditor from '@/Components/EspelhoComponents/EditorComponents/TabelaPromotoriaEditor.vue';
@@ -12,23 +13,7 @@ type Evento = {
     end: Date | null;
   };
   titulo: string;
-  promotorDesignadoEvento: string;
-};
-
-type Municipios = {
-  nome: string;
-  promotorias: {
-    nome: string;
-    isEspecializada: boolean;
-    nomePromotor: string;
-    eventos: {
-      id: number;
-      tipo: string;
-      periodo: Date[];
-      titulo: string;
-      promotorDesignadoEvento: string;
-    }[];
-  }[];
+  promotor_designado_evento: string;
 };
 
 const emit = defineEmits([
@@ -39,19 +24,15 @@ const emit = defineEmits([
 
 const props = defineProps({
   promotoriasSantana: {
-    type: Array as () => Municipios[],
+    type: Array as () => GrupoPromotoria[],
     required: true,
   },
 });
 
-const promotoriasNaoEspecializadas = computed(() => {
-  return props.promotoriasSantana.filter((promotoria) => promotoria.promotorias[0].isEspecializada === false);
-});
-const promotoriasEspecializadas = computed(() => {
-  return props.promotoriasSantana.filter((promotoria) => promotoria.promotorias[0].isEspecializada === true);
-});
+const promotoriasNaoEspecializadas = ref<GrupoPromotoria[]>([]);
+const promotoriasEspecializadas = ref<GrupoPromotoria[]>([]);
 
-const dadosPromotoria = ref<Municipios>({
+const dadosPromotoria = ref<GrupoPromotoria>({
   nome: '',
   promotorias: [],
 });
@@ -63,15 +44,15 @@ const resetDadosPromotoria = () => {
   };
 };
 
-const adicionaEvento = (promotoriaId: number, municipio: Municipios, evento: Evento) => {
+const adicionaEvento = (promotoriaId: number, municipio: GrupoPromotoria, evento: Evento) => {
   //console.log(dadosPromotoria.value);
-  //console.log(evento.promotorDesignadoEvento);
+  //console.log(evento.promotor_designado_evento);
   
   dadosPromotoria.value.nome = municipio.nome;
   if (evento.periodo.start && evento.periodo.end) {
     dadosPromotoria.value.promotorias.push({
       nome: municipio.promotorias[promotoriaId].nome,
-      isEspecializada: municipio.promotorias[promotoriaId].isEspecializada,
+      is_especializada: municipio.promotorias[promotoriaId].is_especializada,
       nomePromotor: municipio.promotorias[promotoriaId].nomePromotor,
       eventos: [
         {
@@ -79,7 +60,7 @@ const adicionaEvento = (promotoriaId: number, municipio: Municipios, evento: Eve
           tipo: evento.tipo,
           periodo: [evento.periodo.start, evento.periodo.end],
           titulo: evento.titulo,
-          promotorDesignadoEvento: evento.promotorDesignadoEvento,
+          promotor_designado_evento: evento.promotor_designado_evento,
         },
       ],
     });
@@ -97,6 +78,21 @@ const deleteEventoInterior = (eventoId: number, nomePromotoria: string) => {
 const EditaEvento = (nomePromotoria: string, evento: Evento) => {
   emit('update:editaEvento', nomePromotoria, evento);
 };
+
+onMounted(() => {
+  console.log(props.promotoriasSantana);
+  props.promotoriasSantana.forEach((grupoPromotoria) => {
+    grupoPromotoria.promotorias.forEach((promotoria) => {
+      if (promotoria.is_especializada) {
+        console.log('especializada -> ' + grupoPromotoria);
+      } else {
+        console.log('não especializada -> ' + grupoPromotoria);
+      }
+    });
+  });
+  //console.log(promotoriasNaoEspecializadas.value);
+  //console.log(promotoriasEspecializadas.value);
+});
 </script>
 
 <template>

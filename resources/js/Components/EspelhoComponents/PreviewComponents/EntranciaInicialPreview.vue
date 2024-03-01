@@ -1,26 +1,12 @@
 <script setup lang="ts">
+import { GrupoPromotoria } from '@/types';
 import { onMounted } from 'vue';
 
 import TabelaPromotoriaPreview from '@/Components/EspelhoComponents/PreviewComponents/TabelaPromotoriaPreview.vue';
 
-type Municipios = {
-  nome: string;
-  promotorias: {
-    nome: string;
-    nomePromotor: string;
-    eventos: {
-      id: number;
-      tipo: string;
-      periodo: string[];
-      titulo: string;
-      promotorDesignadoEvento: string;
-    }[];
-  }[];
-};
-
 const props = defineProps({
   municipiosDados: {
-    type: Array as () => Municipios[],
+    type: Array as () => GrupoPromotoria[],
     required: true,
   },
 });

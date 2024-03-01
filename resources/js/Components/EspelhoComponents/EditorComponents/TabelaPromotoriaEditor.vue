@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { GrupoPromotoria } from '@/types';
 import { onMounted, ref } from 'vue';
 import { usePage } from '@inertiajs/vue3';
 
@@ -27,22 +28,7 @@ type Evento = {
     end: Date | null;
   };
   titulo: string;
-  promotorDesignadoEvento: string;
-};
-
-type Municipios = {
-  nome: string;
-  promotorias: {
-    nome: string;
-    nomePromotor: string;
-    eventos: {
-      id: number;
-      tipo: string;
-      periodo: Date[];
-      titulo: string;
-      promotorDesignadoEvento: string;
-    }[];
-  }[];
+  promotor_designado_evento: string;
 };
 
 const promotores = usePage().props.promotores;
@@ -56,12 +42,12 @@ const emit = defineEmits([
 /* TENHO QUE GARANTIR QUE RECEBAM UM VALOR COM O ID */
 const props = defineProps({
   municipios: {
-    type: Array as () => Municipios[],
+    type: Array as () => GrupoPromotoria[],
     required: true,
   },
 });
 
-const municipiosReativos = ref<Municipios[]>(props.municipios);
+const municipiosReativos = ref<GrupoPromotoria[]>(props.municipios);
 
 const evento = ref<Evento>({
   id: 0,
@@ -71,14 +57,14 @@ const evento = ref<Evento>({
     end: null,
   },
   titulo: '',
-  promotorDesignadoEvento: '',
+  promotor_designado_evento: '',
 });
 
 const adicionaEvento = (nomePromotoria: String, nomeMunicipio: String, eventoSelelcionado: Evento) => {
   //console.log(nomePromotoria);
   //console.log(nomeMunicipio);
   //console.log(eventoSelelcionado);
-  //console.log(eventoSelelcionado.promotorDesignadoEvento);
+  //console.log(eventoSelelcionado.promotor_designado_evento);
   const municipioSelecionado = municipiosReativos.value.find((municipio) => municipio.nome === nomeMunicipio);
   const promotoriaId = municipioSelecionado?.promotorias.findIndex((promotoria) => promotoria.nome === nomePromotoria);
 
@@ -94,7 +80,7 @@ const adicionaEvento = (nomePromotoria: String, nomeMunicipio: String, eventoSel
             end: eventoSelelcionado.periodo.end,
           },
           titulo: eventoSelelcionado.titulo,
-          promotorDesignadoEvento: eventoSelelcionado.promotorDesignadoEvento,
+          promotor_designado_evento: eventoSelelcionado.promotor_designado_evento,
         };
         if (evento.value.periodo.start && evento.value.periodo.end) {
           promotoria.eventos.push({
@@ -102,7 +88,7 @@ const adicionaEvento = (nomePromotoria: String, nomeMunicipio: String, eventoSel
             tipo: evento.value.tipo,
             periodo: [evento.value.periodo.start, evento.value.periodo.end],
             titulo: evento.value.titulo,
-            promotorDesignadoEvento: evento.value.promotorDesignadoEvento,
+            promotor_designado_evento: evento.value.promotor_designado_evento,
           });
         }
       }
@@ -115,7 +101,7 @@ const adicionaEvento = (nomePromotoria: String, nomeMunicipio: String, eventoSel
 };
 
 const EditaEvento = (nomePromotoria: string, evento: Evento) => {
-  //console.log(evento.promotorDesignadoEvento);
+  //console.log(evento.promotor_designado_evento);
   
   municipiosReativos.value.forEach((municipio) => {
     municipio.promotorias.forEach((promotoria) => {
@@ -126,7 +112,7 @@ const EditaEvento = (nomePromotoria: string, evento: Evento) => {
               eventoPromotoria.tipo = evento.tipo;
               eventoPromotoria.periodo = [evento.periodo.start, evento.periodo.end];
               eventoPromotoria.titulo = evento.titulo;
-              eventoPromotoria.promotorDesignadoEvento = evento.promotorDesignadoEvento;
+              eventoPromotoria.promotor_designado_evento = evento.promotor_designado_evento;
             }
           }
         });
@@ -196,7 +182,7 @@ onMounted(() => {
                     :tipo="evento.tipo"
                     :periodo="evento.periodo"
                     :titulo="evento.titulo"
-                    :promotorDesignadoEvento="evento.promotorDesignadoEvento"
+                    :promotor_designado_evento="evento.promotor_designado_evento"
                     @update:editaEvento="EditaEvento"
                   />
                   <AlertDialog>
@@ -280,7 +266,7 @@ onMounted(() => {
                     :tipo="evento.tipo"
                     :periodo="evento.periodo"
                     :titulo="evento.titulo"
-                    :promotorDesignadoEvento="evento.promotorDesignadoEvento"
+                    :promotor_designado_evento="evento.promotor_designado_evento"
                     @update:editaEvento="EditaEvento"
                   />
                   <AlertDialog>

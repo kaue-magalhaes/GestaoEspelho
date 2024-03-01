@@ -15,6 +15,7 @@ export interface Promotor {
 
 export interface Promotoria {
     id: number;
+    nome_grupo: string;
     nome: string;
     municipio: string;
     is_especializada: boolean;
@@ -23,6 +24,34 @@ export interface Promotoria {
     updated_at: string;
     promotor: Promotor;
 }
+
+export interface GrupoPromotoria {
+    nome: string;
+    promotorias: {
+        nome: string;
+        is_especializada: boolean;
+        nomePromotor: string;
+        eventos: {
+        id: number;
+        tipo: string;
+        periodo: any;
+        titulo: string;
+        promotor_designado_evento: string;
+        }[];
+    }[];
+}
+
+export interface Atribuicoes {
+    id: number;
+    nome_promotor: string;
+    atribuicoes: {
+        id: number;
+        tipo: string;
+        periodo: string[];
+        titulo: string;
+        promotor_designado_evento: string;
+    }[]
+};
 
 export type PageProps<T extends Record<string, unknown> = Record<string, unknown>> = T & {
     auth: {
