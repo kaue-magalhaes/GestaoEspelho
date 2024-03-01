@@ -59,6 +59,7 @@ class PromotoriaFactory extends Factory
         } else {
             $is_especializada = \App\Models\Promotoria::where('nome_grupo', $nomeGrupo)->first()->is_especializada;
         }
+
         return [
             'nome'             => $numeroPromotoria . 'ª ' . $prefixosPromotoria[0] . $nomeGrupo,
             'nome_grupo'       => $nomeGrupo,
