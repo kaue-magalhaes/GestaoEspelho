@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Promotor, Promotoria, GrupoPromotoria } from '@/types';
-import { ref, onMounted, computed } from 'vue';
+import { ref, onBeforeMount, computed } from 'vue';
 import { usePage } from '@inertiajs/vue3';
 
 import { Label } from '@/Components/ui/label';
@@ -18,16 +18,12 @@ const emit = defineEmits([
   'update:promotorUrgencia',
   'update:periodoUrgencia',
   'remove:promotorUrgenciaItem',
-  'update:municipiosDados',
+  'update:promotoriasDados',
 ]);
 
 const props = defineProps({
   promotorias: {
     type: Array as () => Promotoria[],
-    required: true,
-  },
-  promotores: {
-    type: Array as () => Promotor[],
     required: true,
   },
 });
@@ -44,7 +40,7 @@ const periodoEspelho = ref({
   start: new Date(),
   end: new Date(),
 });
-const municipiosDados = ref<GrupoPromotoria[]>([]);
+const promotoriasDados = ref<GrupoPromotoria[]>([]);
 const municipiosInterior = ref<GrupoPromotoria[]>([]);
 const promotoriasSantana = ref<GrupoPromotoria[]>([]);
 
@@ -81,37 +77,37 @@ const removePromotorUrgenciaItem = (index: number) => {
   emit('remove:promotorUrgenciaItem', index);
 };
 
-const adicionaMunicipiosDados = (municipio: GrupoPromotoria) => {
-  //console.log(municipiosDados.value);
+const adicionaPromotoriasDados = (municipio: GrupoPromotoria) => {
+  //console.log(promotoriasDados.value);
   const municipiosConvertidos = convertMunicipios(municipio);
 
-  if (municipiosDados.value.length === 0) {
-    municipiosDados.value.push({
+  if (promotoriasDados.value.length === 0) {
+    promotoriasDados.value.push({
       nome: municipiosConvertidos.nome,
       promotorias: municipiosConvertidos.promotorias,
     }); 
   } else {
-    const indexMunicipio = municipiosDados.value.findIndex((m) => m.nome === municipio.nome);
+    const indexMunicipio = promotoriasDados.value.findIndex((m) => m.nome === municipio.nome);
     if (indexMunicipio === -1) {
-      municipiosDados.value.push({
+      promotoriasDados.value.push({
         nome: municipiosConvertidos.nome,
         promotorias: municipiosConvertidos.promotorias,
       });
     } else {
-      const indexPromotoria = municipiosDados.value[indexMunicipio].promotorias.findIndex((p) => p.nome === municipio.promotorias[0].nome);
+      const indexPromotoria = promotoriasDados.value[indexMunicipio].promotorias.findIndex((p) => p.nome === municipio.promotorias[0].nome);
       if (indexPromotoria === -1) {
-        municipiosDados.value[indexMunicipio].promotorias.push(municipiosConvertidos.promotorias[0]);
+        promotoriasDados.value[indexMunicipio].promotorias.push(municipiosConvertidos.promotorias[0]);
       } else {
-        municipiosDados.value[indexMunicipio].promotorias[indexPromotoria].eventos.push(municipiosConvertidos.promotorias[0].eventos[0]);
+        promotoriasDados.value[indexMunicipio].promotorias[indexPromotoria].eventos.push(municipiosConvertidos.promotorias[0].eventos[0]);
       }
     }
   }
-  //console.log(municipiosDados.value);
-  emit('update:municipiosDados', municipiosDados.value);
+  //console.log(promotoriasDados.value);
+  emit('update:promotoriasDados', promotoriasDados.value);
 };
 
 const editaEvento = (nomePromotoria: string, evento: { id: number; tipo: string; periodo: { start: Date; end: Date }; titulo: string; promotor_designado_evento: string }) => {
-  municipiosDados.value.forEach((municipio) => {
+  promotoriasDados.value.forEach((municipio) => {
     municipio.promotorias.forEach((promotoria) => {
       if (promotoria.nome === nomePromotoria) {
         promotoria.eventos = promotoria.eventos.map((e) => {
@@ -130,11 +126,11 @@ const editaEvento = (nomePromotoria: string, evento: { id: number; tipo: string;
     });
   });
 
-  emit('update:municipiosDados', municipiosDados.value);
+  emit('update:promotoriasDados', promotoriasDados.value);
 };
 
 const deleteEventoInterior = (eventoId: number, nomePromotoria: string) => {
-  municipiosDados.value.forEach((municipio) => {
+  promotoriasDados.value.forEach((municipio) => {
     municipio.promotorias.forEach((promotoria) => {
       if (promotoria.nome === nomePromotoria) {
         promotoria.eventos = promotoria.eventos.filter((evento) => evento.id !== eventoId);
@@ -144,11 +140,11 @@ const deleteEventoInterior = (eventoId: number, nomePromotoria: string) => {
       }
     });
     if (municipio.promotorias.length === 0) {
-      municipiosDados.value = municipiosDados.value.filter((m) => m.nome !== municipio.nome);
+      promotoriasDados.value = promotoriasDados.value.filter((m) => m.nome !== municipio.nome);
     }
   });
 
-  emit('update:municipiosDados', municipiosDados.value)
+  emit('update:promotoriasDados', promotoriasDados.value)
 };
 
 const convertMunicipios = (municipio: GrupoPromotoria) => {
@@ -165,6 +161,7 @@ const convertMunicipios = (municipio: GrupoPromotoria) => {
 
     return {
       nome: promotoria.nome,
+      municipio: promotoria.municipio,
       is_especializada: promotoria.is_especializada,
       nomePromotor: promotoria.nomePromotor,
       eventos: eventosConvertidos,
@@ -176,7 +173,7 @@ const convertMunicipios = (municipio: GrupoPromotoria) => {
     promotorias: municipiosConvertidos,
   };
 };
-onMounted(() => {
+onBeforeMount(() => {
   //console.log(props.promotorias);
   //console.log(promotoriasSantanaFiltro.value);
   promotoriasSantanaFiltro.value.forEach((promotoria) => {
@@ -186,6 +183,7 @@ onMounted(() => {
         promotorias: [
           {
             nome: promotoria.nome,
+            municipio: promotoria.municipio,
             is_especializada: promotoria.is_especializada,
             nomePromotor: promotoria.promotor.nome,
             eventos: [],
@@ -200,6 +198,7 @@ onMounted(() => {
           promotorias: [
             {
               nome: promotoria.nome,
+              municipio: promotoria.municipio,
               is_especializada: promotoria.is_especializada,
               nomePromotor: promotoria.promotor.nome,
               eventos: [],
@@ -211,6 +210,7 @@ onMounted(() => {
         if (indexPromotoria === -1) {
           promotoriasSantana.value[indexNomeGrupo].promotorias.push({
             nome: promotoria.nome,
+            municipio: promotoria.municipio,
             is_especializada: promotoria.is_especializada,
             nomePromotor: promotoria.promotor.nome,
             eventos: [],
@@ -226,6 +226,7 @@ onMounted(() => {
         promotorias: [
           {
             nome: promotoria.nome,
+            municipio: promotoria.municipio,
             is_especializada: promotoria.is_especializada,
             nomePromotor: promotoria.promotor.nome,
             eventos: [],
@@ -240,6 +241,7 @@ onMounted(() => {
           promotorias: [
             {
               nome: promotoria.nome,
+              municipio: promotoria.municipio,
               is_especializada: promotoria.is_especializada,
               nomePromotor: promotoria.promotor.nome,
               eventos: [],
@@ -251,6 +253,7 @@ onMounted(() => {
         if (indexPromotoria === -1) {
           municipiosInterior.value[indexNomeGrupo].promotorias.push({
             nome: promotoria.nome,
+            municipio: promotoria.municipio,
             is_especializada: promotoria.is_especializada,
             nomePromotor: promotoria.promotor.nome,
             eventos: [],
@@ -259,10 +262,9 @@ onMounted(() => {
       }
     }
   });
-  //console.log(promotoriasSantana.value);
   //console.log(props.promotorias);
-  //console.log(municipiosInterior.value);
   //console.log(promotoriasSantana.value);
+  //console.log(municipiosInterior.value);
 });
 </script>
 
@@ -291,14 +293,14 @@ onMounted(() => {
           :promotorias="promotorias"
         /> -->
         <EntranciaFinalSantanaEditor
-          :promotoriasSantana="promotoriasSantana"
-          @update:adicionaDados="adicionaMunicipiosDados"
+          :promotorias="promotoriasSantana"
+          @update:adicionaDados="adicionaPromotoriasDados"
           @delete:deleteEvento="deleteEventoInterior"
           @update:editaEvento="editaEvento"
         />
         <EntranciaInicialEditor
           :municipiosInterior="municipiosInterior"
-          @update:adicionaMunicipiosDados="adicionaMunicipiosDados"
+          @update:adicionaDados="adicionaPromotoriasDados"
           @delete:deleteEventoInterior="deleteEventoInterior"
           @update:editaEvento="editaEvento"
         />

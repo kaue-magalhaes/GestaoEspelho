@@ -17,7 +17,7 @@ type Evento = {
 };
 
 const emit = defineEmits([
-  'update:adicionaMunicipiosDados',
+  'update:adicionaDados',
   'delete:deleteEventoInterior',
   'update:editaEvento',
 ]);
@@ -49,6 +49,7 @@ const adicionaEvento = (promotoriaId: number, municipio: GrupoPromotoria, evento
   if (evento.periodo.start && evento.periodo.end) {
     municipiosDados.value.promotorias.push({
       nome: municipio.promotorias[promotoriaId].nome,
+      municipio: municipio.promotorias[promotoriaId].municipio,
       is_especializada: municipio.promotorias[promotoriaId].is_especializada,
       nomePromotor: municipio.promotorias[promotoriaId].nomePromotor,
       eventos: [
@@ -63,7 +64,7 @@ const adicionaEvento = (promotoriaId: number, municipio: GrupoPromotoria, evento
     });
   }
   //console.log(municipiosDados.value);  
-  emit('update:adicionaMunicipiosDados', municipiosDados.value);
+  emit('update:adicionaDados', municipiosDados.value);
 
   resetMunicipiosDados();
 };
@@ -79,7 +80,7 @@ const EditaEvento = (nomePromotoria: string, evento: Evento) => {
 
 <template>
   <div class="max-w-5xl w-full mx-auto flex flex-col items-center space-y-4">
-    <h1 class="text-2xl font-bold text-gray-700 dark:text-gray-200">
+    <h1 class="text-2xl font-bold text-gray-700 dark:text-gray-200 mt-4">
       Entrância Inicial
     </h1>
     <TabelaPromotoriaEditor

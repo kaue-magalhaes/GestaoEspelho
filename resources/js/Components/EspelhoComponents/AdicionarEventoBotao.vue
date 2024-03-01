@@ -84,7 +84,7 @@ const updatePeriodo = (periodo: { start: Date; end: Date } | any, alterado: bool
 
 const enviaDadosDoEvento = (evento: { tipo: string; periodo: { start: Date; end: Date }; titulo: string; promotor_designado_evento: string }) => {
     //console.log(evento);
-    if (verificaSeDadosDoEventoSaoValidos()) {
+    if (!verificaSeDadosDoEventoSaoValidos()) {
         emit('update:adicionaEvento',props.nomePromotoria , props.nomeMunicipio, evento);
         resetarInformacoes();
         dialogOpen.value = false;

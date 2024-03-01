@@ -29,6 +29,7 @@ export interface GrupoPromotoria {
     nome: string;
     promotorias: {
         nome: string;
+        municipio: string;
         is_especializada: boolean;
         nomePromotor: string;
         eventos: {

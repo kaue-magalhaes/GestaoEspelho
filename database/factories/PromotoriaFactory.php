@@ -54,11 +54,16 @@ class PromotoriaFactory extends Factory
             $numeroPromotoria = \App\Models\Promotoria::where('nome_grupo', $nomeGrupo)->count() + 1;
         }
 
+        if ($numeroPromotoria == 1) {
+            $is_especializada = $this->faker->boolean();
+        } else {
+            $is_especializada = \App\Models\Promotoria::where('nome_grupo', $nomeGrupo)->first()->is_especializada;
+        }
         return [
             'nome'             => $numeroPromotoria . 'ª ' . $prefixosPromotoria[0] . $nomeGrupo,
             'nome_grupo'       => $nomeGrupo,
             'municipio'        => $municipio,
-            'is_especializada' => $this->faker->boolean(),
+            'is_especializada' => $is_especializada,
             'promotor_id'      => \App\Models\Promotor::factory(),
         ];
     }

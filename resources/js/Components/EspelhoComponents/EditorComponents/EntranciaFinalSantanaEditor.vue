@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { GrupoPromotoria } from '@/types';
-import { ref, onMounted } from 'vue';
+import { usePage } from '@inertiajs/vue3';
+import { ref, onBeforeMount } from 'vue';
 
-
+import PlantaoCaraterUrgenciaEditor from '@/Components/EspelhoComponents/EditorComponents/PlantaoCaraterUrgenciaEditor.vue';
 import TabelaPromotoriaEditor from '@/Components/EspelhoComponents/EditorComponents/TabelaPromotoriaEditor.vue';
 
 type Evento = {
@@ -16,6 +17,8 @@ type Evento = {
   promotor_designado_evento: string;
 };
 
+const promotores = usePage().props.promotores;
+
 const emit = defineEmits([
   'update:adicionaDados',
   'delete:deleteEvento',
@@ -23,7 +26,7 @@ const emit = defineEmits([
 ]);
 
 const props = defineProps({
-  promotoriasSantana: {
+  promotorias: {
     type: Array as () => GrupoPromotoria[],
     required: true,
   },
@@ -52,6 +55,7 @@ const adicionaEvento = (promotoriaId: number, municipio: GrupoPromotoria, evento
   if (evento.periodo.start && evento.periodo.end) {
     dadosPromotoria.value.promotorias.push({
       nome: municipio.promotorias[promotoriaId].nome,
+      municipio: municipio.promotorias[promotoriaId].municipio,
       is_especializada: municipio.promotorias[promotoriaId].is_especializada,
       nomePromotor: municipio.promotorias[promotoriaId].nomePromotor,
       eventos: [
@@ -71,53 +75,66 @@ const adicionaEvento = (promotoriaId: number, municipio: GrupoPromotoria, evento
   resetDadosPromotoria();
 };
 
-const deleteEventoInterior = (eventoId: number, nomePromotoria: string) => {
+const deletaEvento = (eventoId: number, nomePromotoria: string) => {
   emit('delete:deleteEvento', eventoId, nomePromotoria);
 };
 
-const EditaEvento = (nomePromotoria: string, evento: Evento) => {
+const editaEvento = (nomePromotoria: string, evento: Evento) => {
   emit('update:editaEvento', nomePromotoria, evento);
 };
 
-onMounted(() => {
-  console.log(props.promotoriasSantana);
-  props.promotoriasSantana.forEach((grupoPromotoria) => {
+onBeforeMount(() => {
+  props.promotorias.forEach((grupoPromotoria) => {
     grupoPromotoria.promotorias.forEach((promotoria) => {
       if (promotoria.is_especializada) {
-        console.log('especializada -> ' + grupoPromotoria);
+        if (promotoriasEspecializadas.value.length === 0) {
+          promotoriasEspecializadas.value.push(grupoPromotoria);
+        } else {
+          const index = promotoriasEspecializadas.value.findIndex((promotoriaEspecializada) => promotoriaEspecializada.nome === grupoPromotoria.nome);
+          if (index === -1) {
+            promotoriasEspecializadas.value.push(grupoPromotoria);
+          }
+        }
       } else {
-        console.log('não especializada -> ' + grupoPromotoria);
+        if (promotoriasNaoEspecializadas.value.length === 0) {
+          promotoriasNaoEspecializadas.value.push(grupoPromotoria);
+        } else {
+          const index = promotoriasNaoEspecializadas.value.findIndex((promotoriaNaoEspecializada) => promotoriaNaoEspecializada.nome === grupoPromotoria.nome);
+          if (index === -1) {
+            promotoriasNaoEspecializadas.value.push(grupoPromotoria);
+          }
+        }
       }
     });
   });
-  //console.log(promotoriasNaoEspecializadas.value);
-  //console.log(promotoriasEspecializadas.value);
 });
 </script>
 
 <template>
   <div>
     <div class="max-w-5xl w-full mx-auto flex flex-col items-center space-y-4">
-      <h1 class="text-2xl font-bold text-gray-700 dark:text-gray-200">
+      <h1 class="text-2xl font-bold text-gray-700 dark:text-gray-200 mt-4">
         Entrância Final – Santana
       </h1>
-      <PlantaoCaraterUrgenciaEditor />
+      <PlantaoCaraterUrgenciaEditor 
+        :promotores="promotores"
+      />
       <TabelaPromotoriaEditor
         :municipios="promotoriasNaoEspecializadas"
         @update:adicionaEvento="adicionaEvento"
-        @delete:deleteEvento="deleteEventoInterior"
-        @update:editaEvento="EditaEvento"
+        @delete:deleteEvento="deletaEvento"
+        @update:editaEvento="editaEvento"
       />
     </div>
     <div class="max-w-5xl w-full mx-auto flex flex-col items-center space-y-4">
-      <h1 class="text-2xl font-bold text-gray-700 dark:text-gray-200">
+      <h1 class="text-2xl font-bold text-gray-700 dark:text-gray-200 mt-4">
         Entrância Final – Santana (Especializadas) 
       </h1>
       <TabelaPromotoriaEditor
         :municipios="promotoriasEspecializadas"
         @update:adicionaEvento="adicionaEvento"
-        @delete:deleteEvento="deleteEventoInterior"
-        @update:editaEvento="EditaEvento"
+        @delete:deleteEvento="deletaEvento"
+        @update:editaEvento="editaEvento"
       />
     </div>
   </div>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Promotor, Promotoria, GrupoPromotoria, Atribuicoes } from '@/types';
+import { Promotoria, GrupoPromotoria, Atribuicoes } from '@/types';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { ref, onMounted } from 'vue';
 import { Head } from '@inertiajs/vue3';
@@ -12,14 +12,10 @@ const props = defineProps({
         type: Object as () => { all: Promotoria[] },
         required: true,
     },
-    promotores: {
-        type: Array as () => Promotor[],
-        required: true,
-    },
 });
 
 const periodoEspelho = ref<string[]>([]);
-const municipiosDados = ref<GrupoPromotoria[]>([]);
+const promotoriasDados = ref<GrupoPromotoria[]>([]);
 const atendimentosUrgenciaMacapa = ref<any[]>([]);
 const promotoriasUpdate = ref<Promotoria[]>([]);
 const listaAtribuicoes = ref<Atribuicoes[]>([]);
@@ -54,11 +50,11 @@ const removePromotorUrgenciaItem = (index: number) => {
     atendimentosUrgenciaMacapa.value.splice(index, 1);
 };
 
-const updateMunicipiosDados = (value: GrupoPromotoria[]) => {
+const updatePromotoriasDados = (value: GrupoPromotoria[]) => {
     //console.log(value);
-    municipiosDados.value = value;
+    promotoriasDados.value = value;
     listaAtribuicoes.value = [];
-    updateNovaAtribuicao(municipiosDados.value);
+    updateNovaAtribuicao(promotoriasDados.value);
     //console.log(listaAtribuicoes.value);
     
 }
@@ -129,16 +125,14 @@ onMounted(() => {
                         <CarouselItem>
                             <Editor
                                 :promotorias="promotorias.all"
-                                :promotores="promotores"
                                 @update:periodoEspelho="updatePeriodoEspelho"
-                                @update:municipiosDados="updateMunicipiosDados"
+                                @update:promotoriasDados="updatePromotoriasDados"
                             />
                         </CarouselItem>
                         <CarouselItem>
                             <Preview
-                                :promotorias="promotorias.all"
                                 :periodoEspelho="periodoEspelho"
-                                :municipiosDados="municipiosDados"
+                                :promotoriasDados="promotoriasDados"
                                 :listaAtribuicoes="listaAtribuicoes"
                                 :atendimentos-urgencia-macapa="atendimentosUrgenciaMacapa"
                             />
