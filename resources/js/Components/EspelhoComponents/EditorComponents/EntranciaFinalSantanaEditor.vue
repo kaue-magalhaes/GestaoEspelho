@@ -1,9 +1,7 @@
 <script setup lang="ts">
 import { GrupoPromotoria } from '@/types';
-import { usePage } from '@inertiajs/vue3';
 import { ref, onBeforeMount } from 'vue';
 
-import PlantaoCaraterUrgenciaEditor from '@/Components/EspelhoComponents/EditorComponents/PlantaoCaraterUrgenciaEditor.vue';
 import TabelaPromotoriaEditor from '@/Components/EspelhoComponents/EditorComponents/TabelaPromotoriaEditor.vue';
 
 type Evento = {
@@ -16,8 +14,6 @@ type Evento = {
   titulo: string;
   promotor_designado_evento: string;
 };
-
-const promotores = usePage().props.promotores;
 
 const emit = defineEmits([
   'update:adicionaDados',
@@ -116,9 +112,6 @@ onBeforeMount(() => {
       <h1 class="text-2xl font-bold text-gray-700 dark:text-gray-200 mt-4">
         Entrância Final – Santana
       </h1>
-      <PlantaoCaraterUrgenciaEditor 
-        :promotores="promotores"
-      />
       <TabelaPromotoriaEditor
         :municipios="promotoriasNaoEspecializadas"
         @update:adicionaEvento="adicionaEvento"
