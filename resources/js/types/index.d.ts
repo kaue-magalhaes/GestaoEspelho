@@ -54,6 +54,12 @@ export interface Atribuicoes {
     }[]
 };
 
+export interface AtendimentoUrgencia {
+    id: number;
+    nome_promotor: string;
+    periodo: any;
+};
+
 export type PageProps<T extends Record<string, unknown> = Record<string, unknown>> = T & {
     auth: {
         user: User;
