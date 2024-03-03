@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import { Promotor, Promotoria, GrupoPromotoria } from '@/types';
+import {Promotoria, GrupoPromotoria, AtendimentoUrgencia} from '@/types';
 import { ref, onBeforeMount, computed } from 'vue';
-import { usePage } from '@inertiajs/vue3';
 
 import { Label } from '@/Components/ui/label';
 import DatePicker from '@/Components/DatePicker.vue';
@@ -15,9 +14,7 @@ import EntranciaInicialEditor from './EditorComponents/EntranciaInicialEditor.vu
 const emit = defineEmits([
   'update:promotorias',
   'update:periodoEspelho',
-  'update:promotorUrgencia',
-  'update:periodoUrgencia',
-  'remove:promotorUrgenciaItem',
+  'update:atendimentosUrgenciaDados',
   'update:promotoriasDados',
 ]);
 
@@ -47,6 +44,7 @@ const promotoriasDados = ref<GrupoPromotoria[]>([]);
 const promotoriasMacapa = ref<GrupoPromotoria[]>([]);
 const promotoriasSantana = ref<GrupoPromotoria[]>([]);
 const municipiosInterior = ref<GrupoPromotoria[]>([]);
+const atendimentosUrgenciaDados = ref<AtendimentoUrgencia[]>([]);
 
 const updatePeriodoEspelho = (value: any) => {
   //console.log(typeof value);
@@ -63,22 +61,6 @@ const updatePeriodoEspelho = (value: any) => {
     
     emit('update:periodoEspelho', format(value, 'dd/MM/yyyy'));
   }
-};
-
-const updatePromotorias = (value: { all: Promotoria[] }) => {
-  emit('update:promotorias', value);
-};
-
-const promotorUrgencia = (index: number, value: string) => {
-  emit('update:promotorUrgencia', index, value);
-};
-
-const periodoUrgencia = (index: number, value: Date) => {
-  emit('update:periodoUrgencia', index, format(value, 'dd/MM/yyyy'));
-};
-
-const removePromotorUrgenciaItem = (index: number) => {
-  emit('remove:promotorUrgenciaItem', index);
 };
 
 const adicionaPromotoriasDados = (municipio: GrupoPromotoria) => {
@@ -149,6 +131,24 @@ const deleteEventoInterior = (eventoId: number, nomePromotoria: string) => {
   });
 
   emit('update:promotoriasDados', promotoriasDados.value)
+};
+
+const updateAtendimentosUrgenciaArray = (value: AtendimentoUrgencia) => {
+  //console.log(atendimentosUrgenciaDados.value);
+  if (atendimentosUrgenciaDados.value.length === 0) {
+    atendimentosUrgenciaDados.value.push(value);
+  } else {
+    if (atendimentosUrgenciaDados.value[value.id]) {
+      if (atendimentosUrgenciaDados.value[value.id].nome_promotor === '') {
+        atendimentosUrgenciaDados.value[value.id].nome_promotor = value.nome_promotor;
+      } else if (atendimentosUrgenciaDados.value[value.id].periodo.length === 0) {
+        atendimentosUrgenciaDados.value[value.id].periodo = value.periodo;
+      }
+    } else {
+      atendimentosUrgenciaDados.value.push(value);
+    }
+  }
+  emit('update:atendimentosUrgenciaDados', atendimentosUrgenciaDados.value);
 };
 
 const convertMunicipios = (municipio: GrupoPromotoria) => {
@@ -337,6 +337,7 @@ onBeforeMount(() => {
       <CardContent>
         <EntranciaFinalMacapaEditor
           :promotorias="promotoriasMacapa"
+          @update:atendimentosUrgencia="updateAtendimentosUrgenciaArray"
           @update:adicionaDados="adicionaPromotoriasDados"
           @delete:deleteEvento="deleteEventoInterior"
           @update:editaEvento="editaEvento"

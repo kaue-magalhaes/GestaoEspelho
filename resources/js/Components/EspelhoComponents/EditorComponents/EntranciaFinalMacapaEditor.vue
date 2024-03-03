@@ -1,7 +1,9 @@
 <script setup lang="ts">
-import { GrupoPromotoria } from '@/types';
+import {AtendimentoUrgencia, GrupoPromotoria} from '@/types';
 import { usePage } from '@inertiajs/vue3';
 import { ref, onBeforeMount } from 'vue';
+import { format } from 'date-fns';
+
 
 import PlantaoCaraterUrgenciaEditor from '@/Components/EspelhoComponents/EditorComponents/PlantaoCaraterUrgenciaEditor.vue';
 import TabelaPromotoriaEditor from '@/Components/EspelhoComponents/EditorComponents/TabelaPromotoriaEditor.vue';
@@ -21,8 +23,9 @@ const promotores = usePage().props.promotores;
 
 const emit = defineEmits([
   'update:adicionaDados',
-  'delete:deleteEvento',
   'update:editaEvento',
+  'delete:deleteEvento',
+  'update:atendimentosUrgencia',
 ]);
 
 const props = defineProps({
@@ -34,6 +37,11 @@ const props = defineProps({
 
 const promotoriasNaoEspecializadas = ref<GrupoPromotoria[]>([]);
 const promotoriasEspecializadas = ref<GrupoPromotoria[]>([]);
+const atendimentosUrgenciaDados = ref<AtendimentoUrgencia>({
+  id: 0,
+  nome_promotor: '',
+  periodo: [],
+});
 
 const dadosPromotoria = ref<GrupoPromotoria>({
   nome: '',
@@ -83,6 +91,39 @@ const editaEvento = (nomePromotoria: string, evento: Evento) => {
   emit('update:editaEvento', nomePromotoria, evento);
 };
 
+const adicionaNomePromotor = (id: number, nome: string) => {
+  //console.log(id, nome);
+  atendimentosUrgenciaDados.value.id = id;
+  atendimentosUrgenciaDados.value.nome_promotor = nome;
+  emit('update:atendimentosUrgencia', atendimentosUrgenciaDados.value);
+  atendimentosUrgenciaDados.value = {
+    id: 0,
+    nome_promotor: '',
+    periodo: [],
+  };
+};
+
+const adicionaPeriodoAtendimento = (id : number, periodo: { start: Date ; end: Date }) => {
+  //console.log(id, periodo);
+  atendimentosUrgenciaDados.value.id = id;
+  const periodoFormatado = {
+    start: format(periodo.start, 'dd/MM/yyyy'),
+    end: format(periodo.end, 'dd/MM/yyyy'),
+  };
+  atendimentosUrgenciaDados.value.periodo = periodoFormatado;
+  emit('update:atendimentosUrgencia', atendimentosUrgenciaDados.value);
+  atendimentosUrgenciaDados.value = {
+    id: 0,
+    nome_promotor: '',
+    periodo: [],
+  };
+};
+
+const removeAtendimentoUrgencia = (index: number) => {
+  atendimentosUrgenciaDados.value.periodo.splice(index, 1);
+  emit('update:atendimentosUrgencia', atendimentosUrgenciaDados.value);
+};
+
 onBeforeMount(() => {
   props.promotorias.forEach((grupoPromotoria) => {
     grupoPromotoria.promotorias.forEach((promotoria) => {
@@ -116,8 +157,11 @@ onBeforeMount(() => {
       <h1 class="text-2xl font-bold text-gray-700 dark:text-gray-200 mt-4">
         Entrância Final – Macapá
       </h1>
-      <PlantaoCaraterUrgenciaEditor 
+      <PlantaoCaraterUrgenciaEditor
         :promotores="promotores"
+        @update:promotorNome="adicionaNomePromotor"
+        @update:periodoAtendimento="adicionaPeriodoAtendimento"
+        @remove:atendimentoUrgenciaValues="removeAtendimentoUrgencia"
       />
       <TabelaPromotoriaEditor
         :municipios="promotoriasNaoEspecializadas"

@@ -11,9 +11,9 @@ import DatePicker from '@/Components/DatePicker.vue';
 import { Plus, Trash2 } from 'lucide-vue-next';
 
 const emit = defineEmits([
-  'update:promotorUrgencia',
-  'update:periodoUrgencia',
-  'remove:promotorUrgenciaItem',
+  'update:promotorNome',
+  'update:periodoAtendimento',
+  'remove:atendimentoUrgenciaValues',
 ]);
 
 const props = defineProps({
@@ -26,24 +26,28 @@ const props = defineProps({
 const urgenciaInputComponent = ref<any[]>([]);
 
 const adicionarInput = () => {
-  urgenciaInputComponent.value.push({ 
+  urgenciaInputComponent.value.push({
     value: {
       promotorUrgencia: '',
       periodoUrgencia: { start: new Date, end: new Date },
     }
-  });  
+  });
 };
 
 const removeInput = (index: number) => {
   urgenciaInputComponent.value.splice(index, 1);
-  emit('remove:promotorUrgenciaItem', index);
+  emit('remove:atendimentoUrgenciaValues', index);
 };
+
+onMounted(() => {
+  //console.log(props.promotores);
+});
 </script>
 
 <template>
   <Card class="col-span-2 flex flex-col py-4 items-center space-y-2 w-full">
         <Label class="text-xl">
-          Plantão de Atendimentos em Caráter de Urgência - Macapá:
+          Plantão de Atendimentos em Caráter de Urgência - Macapá/Santana:
         </Label>
         <div v-for="(input, index) in urgenciaInputComponent" :key="index" class="w-full px-4 flex justify-center items-center space-x-4">
           <div class="flex flex-row items-center w-full space-x-4">
@@ -57,7 +61,7 @@ const removeInput = (index: number) => {
               <SelectContent>
                 <SelectGroup>
                   <SelectLabel>Promotores</SelectLabel>
-                  <SelectItem v-for="promotor in props.promotores" :key="promotor.id" :value="promotor.nome" @click="emit('update:promotorUrgencia', index, promotor.nome)">
+                  <SelectItem v-for="promotor in props.promotores" :key="promotor.id" :value="promotor.nome" @click="emit('update:promotorNome', index, promotor.nome)">
                     {{ promotor.nome }}
                   </SelectItem>
                 </SelectGroup>
@@ -71,7 +75,7 @@ const removeInput = (index: number) => {
             <DatePicker
               v-model="input.value.periodoUrgencia"
               :range="true"
-              @update:period="emit('update:periodoUrgencia', index, $event)"
+              @update:period="emit('update:periodoAtendimento', index, $event)"
             />
           </div>
           <div class="flex mb-2">

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Promotoria, GrupoPromotoria, Atribuicoes } from '@/types';
+import {Promotoria, GrupoPromotoria, Atribuicoes, Promotor, AtendimentoUrgencia} from '@/types';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { ref, onMounted } from 'vue';
 import { Head } from '@inertiajs/vue3';
@@ -16,13 +16,8 @@ const props = defineProps({
 
 const periodoEspelho = ref<string[]>([]);
 const promotoriasDados = ref<GrupoPromotoria[]>([]);
-const atendimentosUrgenciaMacapa = ref<any[]>([]);
-const promotoriasUpdate = ref<Promotoria[]>([]);
+const atendimentosUrgenciaDados = ref<AtendimentoUrgencia[]>([]);
 const listaAtribuicoes = ref<Atribuicoes[]>([]);
-
-const updatePromotorias = (value: { all: Promotoria[] }) => {
-    promotoriasUpdate.value = value.all;
-};
 
 const updatePeriodoEspelho = (value: string[] | string) => {
     if (Array.isArray(value)) {
@@ -30,24 +25,6 @@ const updatePeriodoEspelho = (value: string[] | string) => {
     } else {
         periodoEspelho.value.push(value);
     }
-};
-
-const updatePromotorUrgencia = (index: number, value: string) => {
-    if (!atendimentosUrgenciaMacapa.value[index]) {
-        atendimentosUrgenciaMacapa.value[index] = {};
-    }
-    atendimentosUrgenciaMacapa.value[index].promotor = value;
-};
-
-const updatePeriodoUrgencia = (index: number, value: string) => {
-    if (!atendimentosUrgenciaMacapa.value[index]) {
-        atendimentosUrgenciaMacapa.value[index] = {};
-    }
-    atendimentosUrgenciaMacapa.value[index].periodo = value;
-};
-
-const removePromotorUrgenciaItem = (index: number) => {
-    atendimentosUrgenciaMacapa.value.splice(index, 1);
 };
 
 const updatePromotoriasDados = (value: GrupoPromotoria[]) => {
@@ -112,6 +89,11 @@ const updateNovaAtribuicao = (value: GrupoPromotoria[] ) => {
     
 };
 
+const updateAtendimentosUrgencia = (value: AtendimentoUrgencia[]) => {
+  //console.log(value);
+  atendimentosUrgenciaDados.value = value;
+};
+
 onMounted(() => {
     //console.log(props.promotorias);
     //console.log(promotoriasInteriorEventos.value);
@@ -130,6 +112,8 @@ onMounted(() => {
                                 :promotorias="promotorias.all"
                                 @update:periodoEspelho="updatePeriodoEspelho"
                                 @update:promotoriasDados="updatePromotoriasDados"
+                                @update:atendimentosUrgencia="updateAtendimentosUrgencia"
+                                @update:atendimentosUrgenciaDados="updateAtendimentosUrgencia"
                             />
                         </CarouselItem>
                         <CarouselItem>
@@ -137,7 +121,7 @@ onMounted(() => {
                                 :periodoEspelho="periodoEspelho"
                                 :promotoriasDados="promotoriasDados"
                                 :listaAtribuicoes="listaAtribuicoes"
-                                :atendimentos-urgencia-macapa="atendimentosUrgenciaMacapa"
+                                :atendimentosUrgenciaDados="atendimentosUrgenciaDados"
                             />
                         </CarouselItem>
                     </CarouselContent>

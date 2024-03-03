@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { Promotor, Promotoria, GrupoPromotoria, Atribuicoes } from '@/types';
-import { ref, computed, watchEffect } from 'vue';
+import {GrupoPromotoria, Atribuicoes, AtendimentoUrgencia} from '@/types';
+import { ref, watchEffect } from 'vue';
 import { Card, CardContent, CardHeader } from '@/Components/ui/card';
 import EntranciaFinalMacapaPreview from '@/Components/EspelhoComponents/PreviewComponents/EntranciaFinalMacapaPreview.vue';
 import EntranciaFinalSantanaPreview from '@/Components/EspelhoComponents/PreviewComponents/EntranciaFinalSantanaPreview.vue';
@@ -20,8 +20,8 @@ const props = defineProps({
         type: Array as () => Atribuicoes[],
         required: true,
     },
-    atendimentosUrgenciaMacapa: {
-        type: Array as () => any[],
+    atendimentosUrgenciaDados: {
+        type: Array as () => AtendimentoUrgencia[],
         required: true,
     },
 });
@@ -69,7 +69,7 @@ watchEffect(() => {
                     <div class="flex flex-col items-center">
                         <a href="https://www.mpap.mp.br" target="_blank" class="flex flex-col items-center">
                             <div class="h-16 w-auto sm:h-20">
-                                <img
+                                <img alt="MPAP Logo"
                                 class="h-16 w-auto sm:h-20" 
                                 src="https://www.mpap.mp.br/templates/portal/images/logo-mpap.png"
                                 >
@@ -96,8 +96,9 @@ watchEffect(() => {
         </CardHeader>
         <CardContent class="flex flex-col items-center space-y-8 w-full">
             <EntranciaFinalMacapaPreview 
-                v-if="promotoriasMacapa.length > 0"
+                v-if="promotoriasMacapa.length > 0 || props.atendimentosUrgenciaDados.length > 0"
                 :promotorias="promotoriasMacapa"
+                :atendimentoUrgencia="props.atendimentosUrgenciaDados"
             />
             <EntranciaFinalSantanaPreview 
                 v-if="promotoriasSantana.length > 0"
