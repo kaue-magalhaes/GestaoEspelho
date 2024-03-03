@@ -1,49 +1,19 @@
 <script setup lang="ts">
-import { computed, onMounted } from 'vue';
-import { Promotor, Promotoria } from '@/types';
+import { Promotor, Promotoria, GrupoPromotoria, Atribuicoes } from '@/types';
+import { ref, computed, watchEffect } from 'vue';
 import { Card, CardContent, CardHeader } from '@/Components/ui/card';
 
+import EntranciaFinalSantanaPreview from '@/Components/EspelhoComponents/PreviewComponents/EntranciaFinalSantanaPreview.vue';
 import EntranciaInicialPreview from '@/Components/EspelhoComponents/PreviewComponents/EntranciaInicialPreview.vue'
 import TabelaPromotoresSubstitutosPreview from '@/Components/EspelhoComponents/PreviewComponents/TabelaPromotoresSubstitutosPreview.vue';
 
-type Atribuicoes = {
-    id: number;
-    nomePromotor: string;
-    atribuicoes: {
-        id: number;
-        tipo: string;
-        periodo: string[];
-        titulo: string;
-        promotorDesignadoEvento: string;
-    }[]
-};
-
-type Municipios = {
-  nome: string;
-  promotorias: {
-    nome: string;
-    nomePromotor: string;
-    eventos: {
-      id: number;
-      tipo: string;
-      periodo: string[];
-      titulo: string;
-      promotorDesignadoEvento: string;
-    }[];
-  }[];
-};
-
 const props = defineProps({
-    promotorias: {
-        type: Array as () => Promotoria[],
-        required: true,
-    },
     periodoEspelho: {
         type: Array as () => string[],
         required: true,
     },
-    municipiosDados: {
-        type: Array as () => Municipios[],
+    promotoriasDados: {
+        type: Array as () => GrupoPromotoria[],
         required: true,
     },
     listaAtribuicoes: {
@@ -56,7 +26,24 @@ const props = defineProps({
     },
 });
 
-onMounted(() => {
+const municipiosInterior = ref<GrupoPromotoria[]>([]);
+const promotoriasSantana = ref<GrupoPromotoria[]>([]);
+
+
+watchEffect(() => {
+    props.promotoriasDados.forEach((grupoPromotoria) => {
+        console.log(grupoPromotoria);
+        grupoPromotoria.promotorias.forEach((promotoria) => {
+            if (promotoria.municipio === 'Macapá') {
+                console.log('Macapá');
+                //promotoriasMacapa.value.push(grupoPromotoria);
+            } else if (promotoria.municipio === 'Santana') {
+                promotoriasSantana.value.push(grupoPromotoria);
+            } else {
+                municipiosInterior.value.push(grupoPromotoria);
+            }
+        });
+    });
 });
 
 </script>
@@ -98,10 +85,10 @@ onMounted(() => {
             <!-- <EntranciaFinalMacapaPreview /> -->
 
             <EntranciaFinalSantanaPreview 
-            
+                :promotorias="promotoriasSantana"
             /> 
             <EntranciaInicialPreview
-                :municipiosDados="municipiosDados"
+                :promotoriasDados="municipiosInterior"
             />
             <TabelaPromotoresSubstitutosPreview
                 :listaAtribuicoes="listaAtribuicoes"

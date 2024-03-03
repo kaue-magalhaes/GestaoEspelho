@@ -49,7 +49,7 @@ const props = defineProps({
         type: String,
         required: true,
     },
-    promotorDesignadoEvento: {
+    promotor_designado_evento: {
         type: String,
         required: true,
         default: '',
@@ -60,7 +60,7 @@ const props = defineProps({
 const tipoEvento = ref<string>(props.tipo);
 const periodoEvento = ref<{ start: Date; end: Date }>({ start: new Date(props.periodo[0]), end: new Date(props.periodo[1]) });
 const tituloEvento = ref<string>(props.titulo);
-const promotorDesignadoEventoEvento = ref<string>(props.promotorDesignadoEvento);
+const promotor_designado_evento_reativo = ref<string>(props.promotor_designado_evento);
 
 const eventos = [
     { id: 1, nome: 'Férias', selecionado: false },
@@ -74,11 +74,11 @@ const resetarInformacoes = () => {
     tipoEvento.value = '';
     periodoEvento.value = { start: new Date(), end: new Date() };
     tituloEvento.value = '';
-    promotorDesignadoEventoEvento.value = '';
+    promotor_designado_evento_reativo.value = '';
 };
 
-const enviaDadosDoEvento = (evento: { id: number; tipo: string; periodo: { start: Date; end: Date }; titulo: string; promotorDesignadoEventoEvento: string }) => {
-    //console.log(evento);
+const enviaDadosDoEvento = (evento: { id: number; tipo: string; periodo: { start: Date; end: Date }; titulo: string; promotor_designado_evento: string }) => {
+    console.log(evento);
     emit('update:editaEvento',props.nomePromotoria, evento);
 };
 
@@ -146,7 +146,7 @@ onMounted(() => {
                         <Label class="text-base">
                             Promotor designado:
                         </Label>
-                        <Select class="mb-2 w-full" v-model="promotorDesignadoEventoEvento">
+                        <Select class="mb-2 w-full" v-model="promotor_designado_evento_reativo">
                             <SelectTrigger>
                                 <SelectValue placeholder="Selecione o Promotor que foi designado" />
                             </SelectTrigger>
@@ -169,7 +169,7 @@ onMounted(() => {
                     </Button>
                 </DialogClose>
                 <DialogClose as-child>
-                    <Button variant="default" @click="enviaDadosDoEvento({id: props.id, tipo: tipoEvento, periodo: periodoEvento, titulo: tituloEvento, promotorDesignadoEventoEvento: promotorDesignadoEventoEvento })">
+                    <Button variant="default" @click="enviaDadosDoEvento({id: props.id, tipo: tipoEvento, periodo: periodoEvento, titulo: tituloEvento, promotor_designado_evento: promotor_designado_evento_reativo })">
                         Editar Evento
                     </Button>
                 </DialogClose>

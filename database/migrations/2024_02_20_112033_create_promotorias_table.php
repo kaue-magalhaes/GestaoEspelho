@@ -13,6 +13,7 @@ return new class extends Migration {
         Schema::create('promotorias', function (Blueprint $table) {
             $table->id();
             $table->string('nome');
+            $table->string('nome_grupo');
             $table->string('municipio');
             $table->boolean('is_especializada')->default(true);
             $table->foreignId('promotor_id')->references('id')->on('promotores');

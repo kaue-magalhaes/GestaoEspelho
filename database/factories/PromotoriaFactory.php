@@ -16,33 +16,55 @@ class PromotoriaFactory extends Factory
      */
     public function definition(): array
     {
-        $promotoriaWords = [
-            'Promotoria de Justiça',
-            'Promotoria de Defesa do Consumidor',
-            'Promotoria de Justiça de Família',
-            'Promotoria de Justiça de Meio Ambiente',
-            'Promotoria de Justiça de Direitos Humanos',
-            'Promotoria de Justiça de Cidadania',
-            'Promotoria de Justiça de Infância e Juventude',
-            'Promotoria de Justiça de Combate à Violência Doméstica',
-            'Promotoria de Justiça de Combate à Corrupção',
-            'Promotoria de Justiça de Combate ao Crime Organizado',
+        $prefixosPromotoria = [
+            'Promotoria de ',
+            'Promotorias de ',
+        ];
+        
+        $promotoriasNomeGrupoWords = [
+            'Justiça de Meio Ambiente',
+            'Justiça de Direitos Humanos',
+            'Justiça de Cidadania',
+            'Justiça de Infância e Juventude',
+            'Justiça de Combate à Violência Doméstica',
+            'Justiça de Direito Constitucional',
+            'Justiça de Direito do Consumidor',
         ];
 
         $municipioWords = [
             'Macapá',
+            'Macapá', // duplicado
+            'Macapá', // duplicado
             'Santana',
+            'Santana', // duplicado
+            'Santana', // duplicado
             'Laranjal do Jari',
             'Oiapoque',
             'Mazagão',
-            'Porto Grande',
             'Ferreira Gomes',
         ];
 
+        $municipio = $this->faker->randomElement($municipioWords);
+         
+        if ($municipio == 'Macapá' || $municipio == 'Santana') {
+            $nomeGrupo        = $prefixosPromotoria[1] . $this->faker->randomElement($promotoriasNomeGrupoWords);
+            $numeroPromotoria = \App\Models\Promotoria::where('nome_grupo', $nomeGrupo)->count() + 1;
+        } else {
+            $nomeGrupo        = $municipio;
+            $numeroPromotoria = \App\Models\Promotoria::where('nome_grupo', $nomeGrupo)->count() + 1;
+        }
+
+        if ($numeroPromotoria == 1) {
+            $is_especializada = $this->faker->boolean();
+        } else {
+            $is_especializada = \App\Models\Promotoria::where('nome_grupo', $nomeGrupo)->first()->is_especializada;
+        }
+
         return [
-            'nome'             => $this->faker->unique()->randomElement($promotoriaWords),
-            'municipio'        => $this->faker->randomElement($municipioWords),
-            'is_especializada' => $this->faker->boolean(),
+            'nome'             => $numeroPromotoria . 'ª ' . $prefixosPromotoria[0] . $nomeGrupo,
+            'nome_grupo'       => $nomeGrupo,
+            'municipio'        => $municipio,
+            'is_especializada' => $is_especializada,
             'promotor_id'      => \App\Models\Promotor::factory(),
         ];
     }

@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { Promotor, Promotoria } from '@/types';
-import { ref, onMounted, computed } from 'vue';
+import { Promotor, Promotoria, GrupoPromotoria } from '@/types';
+import { ref, onBeforeMount, computed } from 'vue';
 import { usePage } from '@inertiajs/vue3';
 
 import { Label } from '@/Components/ui/label';
@@ -12,53 +12,18 @@ import EntranciaFinalMacapaEditor from './EditorComponents/EntranciaFinalMacapaE
 import EntranciaFinalSantanaEditor from './EditorComponents/EntranciaFinalSantanaEditor.vue';
 import EntranciaInicialEditor from './EditorComponents/EntranciaInicialEditor.vue';
 
-type Municipios = {
-  nome: string;
-  promotorias: {
-    nome: string;
-    isEspecializada: boolean;
-    nomePromotor: string;
-    eventos: {
-      id: number;
-      tipo: string;
-      periodo: Date[];
-      titulo: string;
-      promotorDesignadoEvento: string;
-    }[];
-  }[];
-};
-
-type MunicipiosString = {
-  nome: string;
-  promotorias: {
-    nome: string;
-    nomePromotor: string;
-    eventos: {
-      id: number;
-      tipo: string;
-      periodo: string[];
-      titulo: string;
-      promotorDesignadoEvento: string;
-    }[];
-  }[];
-};
-
 const emit = defineEmits([
   'update:promotorias',
   'update:periodoEspelho',
   'update:promotorUrgencia',
   'update:periodoUrgencia',
   'remove:promotorUrgenciaItem',
-  'update:municipiosDados',
+  'update:promotoriasDados',
 ]);
 
 const props = defineProps({
   promotorias: {
     type: Array as () => Promotoria[],
-    required: true,
-  },
-  promotores: {
-    type: Array as () => Promotor[],
     required: true,
   },
 });
@@ -75,9 +40,9 @@ const periodoEspelho = ref({
   start: new Date(),
   end: new Date(),
 });
-const municipiosDados = ref<MunicipiosString[]>([]);
-const municipiosInterior = ref<Municipios[]>([]);
-const promotoriasSantana = ref<Municipios[]>([]);
+const promotoriasDados = ref<GrupoPromotoria[]>([]);
+const municipiosInterior = ref<GrupoPromotoria[]>([]);
+const promotoriasSantana = ref<GrupoPromotoria[]>([]);
 
 const updatePeriodoEspelho = (value: any) => {
   //console.log(typeof value);
@@ -112,37 +77,37 @@ const removePromotorUrgenciaItem = (index: number) => {
   emit('remove:promotorUrgenciaItem', index);
 };
 
-const adicionaMunicipiosDados = (municipio: Municipios) => {
-  //console.log(municipiosDados.value);
+const adicionaPromotoriasDados = (municipio: GrupoPromotoria) => {
+  //console.log(promotoriasDados.value);
   const municipiosConvertidos = convertMunicipios(municipio);
 
-  if (municipiosDados.value.length === 0) {
-    municipiosDados.value.push({
+  if (promotoriasDados.value.length === 0) {
+    promotoriasDados.value.push({
       nome: municipiosConvertidos.nome,
       promotorias: municipiosConvertidos.promotorias,
     }); 
   } else {
-    const indexMunicipio = municipiosDados.value.findIndex((m) => m.nome === municipio.nome);
+    const indexMunicipio = promotoriasDados.value.findIndex((m) => m.nome === municipio.nome);
     if (indexMunicipio === -1) {
-      municipiosDados.value.push({
+      promotoriasDados.value.push({
         nome: municipiosConvertidos.nome,
         promotorias: municipiosConvertidos.promotorias,
       });
     } else {
-      const indexPromotoria = municipiosDados.value[indexMunicipio].promotorias.findIndex((p) => p.nome === municipio.promotorias[0].nome);
+      const indexPromotoria = promotoriasDados.value[indexMunicipio].promotorias.findIndex((p) => p.nome === municipio.promotorias[0].nome);
       if (indexPromotoria === -1) {
-        municipiosDados.value[indexMunicipio].promotorias.push(municipiosConvertidos.promotorias[0]);
+        promotoriasDados.value[indexMunicipio].promotorias.push(municipiosConvertidos.promotorias[0]);
       } else {
-        municipiosDados.value[indexMunicipio].promotorias[indexPromotoria].eventos.push(municipiosConvertidos.promotorias[0].eventos[0]);
+        promotoriasDados.value[indexMunicipio].promotorias[indexPromotoria].eventos.push(municipiosConvertidos.promotorias[0].eventos[0]);
       }
     }
   }
-  //console.log(municipiosDados.value);
-  emit('update:municipiosDados', municipiosDados.value);
+  //console.log(promotoriasDados.value);
+  emit('update:promotoriasDados', promotoriasDados.value);
 };
 
-const editaEvento = (nomePromotoria: string, evento: { id: number; tipo: string; periodo: { start: Date; end: Date }; titulo: string; promotorDesignadoEventoEvento: string }) => {
-  municipiosDados.value.forEach((municipio) => {
+const editaEvento = (nomePromotoria: string, evento: { id: number; tipo: string; periodo: { start: Date; end: Date }; titulo: string; promotor_designado_evento: string }) => {
+  promotoriasDados.value.forEach((municipio) => {
     municipio.promotorias.forEach((promotoria) => {
       if (promotoria.nome === nomePromotoria) {
         promotoria.eventos = promotoria.eventos.map((e) => {
@@ -152,7 +117,7 @@ const editaEvento = (nomePromotoria: string, evento: { id: number; tipo: string;
               tipo: evento.tipo,
               periodo: [format(evento.periodo.start, 'dd/MM/yyyy'), format(evento.periodo.end, 'dd/MM/yyyy')],
               titulo: evento.titulo,
-              promotorDesignadoEvento: evento.promotorDesignadoEventoEvento,
+              promotor_designado_evento: evento.promotor_designado_evento,
             };
           }
           return e;
@@ -161,11 +126,11 @@ const editaEvento = (nomePromotoria: string, evento: { id: number; tipo: string;
     });
   });
 
-  emit('update:municipiosDados', municipiosDados.value);
+  emit('update:promotoriasDados', promotoriasDados.value);
 };
 
 const deleteEventoInterior = (eventoId: number, nomePromotoria: string) => {
-  municipiosDados.value.forEach((municipio) => {
+  promotoriasDados.value.forEach((municipio) => {
     municipio.promotorias.forEach((promotoria) => {
       if (promotoria.nome === nomePromotoria) {
         promotoria.eventos = promotoria.eventos.filter((evento) => evento.id !== eventoId);
@@ -175,14 +140,14 @@ const deleteEventoInterior = (eventoId: number, nomePromotoria: string) => {
       }
     });
     if (municipio.promotorias.length === 0) {
-      municipiosDados.value = municipiosDados.value.filter((m) => m.nome !== municipio.nome);
+      promotoriasDados.value = promotoriasDados.value.filter((m) => m.nome !== municipio.nome);
     }
   });
 
-  emit('update:municipiosDados', municipiosDados.value)
+  emit('update:promotoriasDados', promotoriasDados.value)
 };
 
-const convertMunicipios = (municipio: Municipios) => {
+const convertMunicipios = (municipio: GrupoPromotoria) => {
   const municipiosConvertidos = municipio.promotorias.map((promotoria) => {
     const eventosConvertidos = promotoria.eventos.map((evento) => {
       return {
@@ -190,12 +155,14 @@ const convertMunicipios = (municipio: Municipios) => {
         tipo: evento.tipo,
         periodo: [format(evento.periodo[0], 'dd/MM/yyyy'), format(evento.periodo[1], 'dd/MM/yyyy')],
         titulo: evento.titulo,
-        promotorDesignadoEvento: evento.promotorDesignadoEvento,
+        promotor_designado_evento: evento.promotor_designado_evento,
       };
     });
 
     return {
       nome: promotoria.nome,
+      municipio: promotoria.municipio,
+      is_especializada: promotoria.is_especializada,
       nomePromotor: promotoria.nomePromotor,
       eventos: eventosConvertidos,
     };
@@ -206,41 +173,45 @@ const convertMunicipios = (municipio: Municipios) => {
     promotorias: municipiosConvertidos,
   };
 };
-onMounted(() => {
-  //console.log(promotoriasInterior.value);
+onBeforeMount(() => {
+  //console.log(props.promotorias);
+  //console.log(promotoriasSantanaFiltro.value);
   promotoriasSantanaFiltro.value.forEach((promotoria) => {
     if (promotoriasSantana.value.length === 0) {
       promotoriasSantana.value.push({
-        nome: promotoria.municipio,
+        nome: promotoria.nome_grupo,
         promotorias: [
           {
             nome: promotoria.nome,
-            isEspecializada: promotoria.is_especializada,
+            municipio: promotoria.municipio,
+            is_especializada: promotoria.is_especializada,
             nomePromotor: promotoria.promotor.nome,
             eventos: [],
           },
         ],
       });
     } else {
-      const indexMunicipio = promotoriasSantana.value.findIndex((m) => m.nome === promotoria.municipio);
-      if (indexMunicipio === -1) {
+      const indexNomeGrupo = promotoriasSantana.value.findIndex((m) => m.nome === promotoria.nome_grupo);
+      if (indexNomeGrupo === -1) {
         promotoriasSantana.value.push({
-          nome: promotoria.municipio,
+          nome: promotoria.nome_grupo,
           promotorias: [
             {
               nome: promotoria.nome,
-              isEspecializada: promotoria.is_especializada,
+              municipio: promotoria.municipio,
+              is_especializada: promotoria.is_especializada,
               nomePromotor: promotoria.promotor.nome,
               eventos: [],
             },
           ],
         });
       } else {
-        const indexPromotoria = promotoriasSantana.value[indexMunicipio].promotorias.findIndex((p) => p.nome === promotoria.nome);
+        const indexPromotoria = promotoriasSantana.value[indexNomeGrupo].promotorias.findIndex((p) => p.nome === promotoria.nome);
         if (indexPromotoria === -1) {
-          promotoriasSantana.value[indexMunicipio].promotorias.push({
+          promotoriasSantana.value[indexNomeGrupo].promotorias.push({
             nome: promotoria.nome,
-            isEspecializada: promotoria.is_especializada,
+            municipio: promotoria.municipio,
+            is_especializada: promotoria.is_especializada,
             nomePromotor: promotoria.promotor.nome,
             eventos: [],
           });
@@ -251,36 +222,39 @@ onMounted(() => {
   promotoriasInterior.value.forEach((promotoria) => {
     if (municipiosInterior.value.length === 0) {
       municipiosInterior.value.push({
-        nome: promotoria.municipio,
+        nome: promotoria.nome_grupo,
         promotorias: [
           {
             nome: promotoria.nome,
-            isEspecializada: promotoria.is_especializada,
+            municipio: promotoria.municipio,
+            is_especializada: promotoria.is_especializada,
             nomePromotor: promotoria.promotor.nome,
             eventos: [],
           },
         ],
       });
     } else {
-      const indexMunicipio = municipiosInterior.value.findIndex((m) => m.nome === promotoria.municipio);
-      if (indexMunicipio === -1) {
+      const indexNomeGrupo = municipiosInterior.value.findIndex((m) => m.nome === promotoria.nome_grupo);
+      if (indexNomeGrupo === -1) {
         municipiosInterior.value.push({
-          nome: promotoria.municipio,
+          nome: promotoria.nome_grupo,
           promotorias: [
             {
               nome: promotoria.nome,
-              isEspecializada: promotoria.is_especializada,
+              municipio: promotoria.municipio,
+              is_especializada: promotoria.is_especializada,
               nomePromotor: promotoria.promotor.nome,
               eventos: [],
             },
           ],
         });
       } else {
-        const indexPromotoria = municipiosInterior.value[indexMunicipio].promotorias.findIndex((p) => p.nome === promotoria.nome);
+        const indexPromotoria = municipiosInterior.value[indexNomeGrupo].promotorias.findIndex((p) => p.nome === promotoria.nome);
         if (indexPromotoria === -1) {
-          municipiosInterior.value[indexMunicipio].promotorias.push({
+          municipiosInterior.value[indexNomeGrupo].promotorias.push({
             nome: promotoria.nome,
-            isEspecializada: promotoria.is_especializada,
+            municipio: promotoria.municipio,
+            is_especializada: promotoria.is_especializada,
             nomePromotor: promotoria.promotor.nome,
             eventos: [],
           });
@@ -288,6 +262,9 @@ onMounted(() => {
       }
     }
   });
+  //console.log(props.promotorias);
+  //console.log(promotoriasSantana.value);
+  //console.log(municipiosInterior.value);
 });
 </script>
 
@@ -316,14 +293,14 @@ onMounted(() => {
           :promotorias="promotorias"
         /> -->
         <EntranciaFinalSantanaEditor
-          :promotoriasSantana="promotoriasSantana"
-          @update:adicionaDados="adicionaMunicipiosDados"
+          :promotorias="promotoriasSantana"
+          @update:adicionaDados="adicionaPromotoriasDados"
           @delete:deleteEvento="deleteEventoInterior"
           @update:editaEvento="editaEvento"
         />
         <EntranciaInicialEditor
           :municipiosInterior="municipiosInterior"
-          @update:adicionaMunicipiosDados="adicionaMunicipiosDados"
+          @update:adicionaDados="adicionaPromotoriasDados"
           @delete:deleteEventoInterior="deleteEventoInterior"
           @update:editaEvento="editaEvento"
         />

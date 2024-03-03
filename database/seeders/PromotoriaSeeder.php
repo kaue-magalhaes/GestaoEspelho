@@ -12,8 +12,9 @@ class PromotoriaSeeder extends Seeder
      */
     public function run(): void
     {
-        Promotoria::factory()
-            ->count(10)
-            ->create();
+        for ($i = 0; $i < 30; $i++) {
+            $promotoria = Promotoria::factory()->make();
+            $promotoria->save();
+        }
     }
 }
