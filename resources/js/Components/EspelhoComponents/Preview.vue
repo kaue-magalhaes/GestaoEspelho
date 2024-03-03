@@ -50,9 +50,11 @@ watchEffect(() => {
             }
         });
     });
-    console.log(props.promotoriasDados);
     
-    console.log(municipiosInterior.value);
+    if (props.promotoriasDados.length === 0) {
+        promotoriasSantana.value = [];
+        municipiosInterior.value = [];
+    }
 });
 
 </script>

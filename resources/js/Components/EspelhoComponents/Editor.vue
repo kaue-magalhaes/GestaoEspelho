@@ -292,12 +292,12 @@ onBeforeMount(() => {
           :promotores="promotores"
           :promotorias="promotorias"
         /> -->
-        <!-- <EntranciaFinalSantanaEditor Está Funcionando
+        <EntranciaFinalSantanaEditor
           :promotorias="promotoriasSantana"
           @update:adicionaDados="adicionaPromotoriasDados"
           @delete:deleteEvento="deleteEventoInterior"
           @update:editaEvento="editaEvento"
-        /> -->
+        />
         <EntranciaInicialEditor
           :municipiosInterior="municipiosInterior"
           @update:adicionaDados="adicionaPromotoriasDados"
