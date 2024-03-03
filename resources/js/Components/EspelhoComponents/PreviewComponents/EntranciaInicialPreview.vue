@@ -4,7 +4,7 @@ import { onMounted } from 'vue';
 
 import TabelaPromotoriaPreview from '@/Components/EspelhoComponents/PreviewComponents/TabelaPromotoriaPreview.vue';
 
-const props = defineProps({
+defineProps({
   promotoriasDados: {
     type: Array as () => GrupoPromotoria[],
     required: true,
