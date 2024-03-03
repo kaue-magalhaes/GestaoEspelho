@@ -133,21 +133,51 @@ const deleteEventoInterior = (eventoId: number, nomePromotoria: string) => {
   emit('update:promotoriasDados', promotoriasDados.value)
 };
 
-const updateAtendimentosUrgenciaArray = (value: AtendimentoUrgencia) => {
+const updateNomePromotorNoArray = (id: number, nome: string) => {
   //console.log(atendimentosUrgenciaDados.value);
   if (atendimentosUrgenciaDados.value.length === 0) {
-    atendimentosUrgenciaDados.value.push(value);
+    atendimentosUrgenciaDados.value.push({
+      id: id,
+      nome_promotor: nome,
+      periodo: [],
+    });
   } else {
-    if (atendimentosUrgenciaDados.value[value.id]) {
-      if (atendimentosUrgenciaDados.value[value.id].nome_promotor === '') {
-        atendimentosUrgenciaDados.value[value.id].nome_promotor = value.nome_promotor;
-      } else if (atendimentosUrgenciaDados.value[value.id].periodo.length === 0) {
-        atendimentosUrgenciaDados.value[value.id].periodo = value.periodo;
-      }
+    const index = atendimentosUrgenciaDados.value.findIndex((a) => a.id === id);
+    if (index === -1) {
+      atendimentosUrgenciaDados.value.push({
+        id: id,
+        nome_promotor: nome,
+        periodo: [],
+      });
     } else {
-      atendimentosUrgenciaDados.value.push(value);
+      atendimentosUrgenciaDados.value[index].nome_promotor = nome;
     }
   }
+  //console.log(atendimentosUrgenciaDados.value);
+  emit('update:atendimentosUrgenciaDados', atendimentosUrgenciaDados.value);
+};
+
+const updatePeriodoNoArray = (id: number, periodo: string[]) => {
+  //console.log(atendimentosUrgenciaDados.value);
+  if (atendimentosUrgenciaDados.value.length === 0) {
+    atendimentosUrgenciaDados.value.push({
+      id: id,
+      nome_promotor: '',
+      periodo: periodo,
+    });
+  } else {
+    const index = atendimentosUrgenciaDados.value.findIndex((a) => a.id === id);
+    if (index === -1) {
+      atendimentosUrgenciaDados.value.push({
+        id: id,
+        nome_promotor: '',
+        periodo: periodo,
+      });
+    } else {
+      atendimentosUrgenciaDados.value[index].periodo = periodo;
+    }
+  }
+  console.log(atendimentosUrgenciaDados.value);
   emit('update:atendimentosUrgenciaDados', atendimentosUrgenciaDados.value);
 };
 
@@ -342,7 +372,8 @@ onBeforeMount(() => {
       <CardContent>
         <EntranciaFinalMacapaEditor
           :promotorias="promotoriasMacapa"
-          @update:atendimentosUrgencia="updateAtendimentosUrgenciaArray"
+          @update:NomePromotor="updateNomePromotorNoArray"
+          @update:Periodo="updatePeriodoNoArray"
           @delete:atendimentosUrgencia="removeAtendimentoUrgencia"
           @update:adicionaDados="adicionaPromotoriasDados"
           @delete:deleteEvento="deleteEventoInterior"

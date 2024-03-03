@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {AtendimentoUrgencia, GrupoPromotoria} from '@/types';
+import { GrupoPromotoria } from '@/types';
 import { usePage } from '@inertiajs/vue3';
 import { ref, onBeforeMount } from 'vue';
 import { format } from 'date-fns';
@@ -25,7 +25,8 @@ const emit = defineEmits([
   'update:adicionaDados',
   'update:editaEvento',
   'delete:deleteEvento',
-  'update:atendimentosUrgencia',
+  'update:NomePromotor',
+  'update:Periodo',
   'delete:atendimentosUrgencia',
 ]);
 
@@ -38,11 +39,6 @@ const props = defineProps({
 
 const promotoriasNaoEspecializadas = ref<GrupoPromotoria[]>([]);
 const promotoriasEspecializadas = ref<GrupoPromotoria[]>([]);
-const atendimentosUrgenciaDados = ref<AtendimentoUrgencia>({
-  id: 0,
-  nome_promotor: '',
-  periodo: [],
-});
 
 const dadosPromotoria = ref<GrupoPromotoria>({
   nome: '',
@@ -94,31 +90,16 @@ const editaEvento = (nomePromotoria: string, evento: Evento) => {
 
 const adicionaNomePromotor = (id: number, nome: string) => {
   //console.log(id, nome);
-  atendimentosUrgenciaDados.value.id = id;
-  atendimentosUrgenciaDados.value.nome_promotor = nome;
-  emit('update:atendimentosUrgencia', atendimentosUrgenciaDados.value);
-  atendimentosUrgenciaDados.value = {
-    id: 0,
-    nome_promotor: '',
-    periodo: [],
-  };
+  emit('update:NomePromotor', id , nome);
 };
 
 const adicionaPeriodoAtendimento = (id : number, periodo: { start: Date ; end: Date }) => {
   //console.log(id, periodo);
-  atendimentosUrgenciaDados.value.id = id;
-  let periodoFormatado: { start: string; end: string };
-  periodoFormatado = {
+  let periodoFormatado = {
     start: format(periodo.start, 'dd/MM/yyyy'),
     end: format(periodo.end, 'dd/MM/yyyy'),
   };
-  atendimentosUrgenciaDados.value.periodo = periodoFormatado;
-  emit('update:atendimentosUrgencia', atendimentosUrgenciaDados.value);
-  atendimentosUrgenciaDados.value = {
-    id: 0,
-    nome_promotor: '',
-    periodo: [],
-  };
+  emit('update:Periodo', id, periodoFormatado);
 };
 
 const removeAtendimentoUrgencia = (index: number) => {
