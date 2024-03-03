@@ -39,7 +39,6 @@ const emit = defineEmits([
   'update:editaEvento',
 ]);
 
-/* TENHO QUE GARANTIR QUE RECEBAM UM VALOR COM O ID */
 const props = defineProps({
   municipios: {
     type: Array as () => GrupoPromotoria[],
@@ -137,7 +136,6 @@ const deleteEvento = (eventoId: number, nomePromotoria: string) => {
 onMounted(() => {
   //console.log(promotores);
   //console.log(props.municipios);
-  
 });
 </script>
 
@@ -165,14 +163,14 @@ onMounted(() => {
           </td>
           <td class="border px-6 py-4">
             <span v-for="evento in dadosPromotoria.eventos" :key="evento.id">
-              <div class="flex items-center justify-between space-y-2">
-                <div v-if="evento.titulo !== ''">
+              <span class="flex items-center justify-between space-y-2">
+                <span v-if="evento.titulo !== ''">
                   {{ evento.tipo }} - {{ evento.titulo }}
-                </div>
-                <div v-else>
+                </span>
+                <span v-else>
                   {{ evento.tipo }}
-                </div>
-                <div class="flex space-x-2">
+                </span>
+                <span class="flex space-x-2">
                   <EditarEventoBotao
                     :promotores="promotores"
                     :nomePromotoria="dadosPromotoria.nome"
@@ -215,8 +213,8 @@ onMounted(() => {
                       </AlertDialogFooter>
                     </AlertDialogContent>
                   </AlertDialog>
-                </div>
-              </div>
+                </span>
+              </span>
             </span>
             <AdicionarEventoBotao
               :promotores="promotores"
@@ -249,14 +247,14 @@ onMounted(() => {
           </td>
           <td class="border px-6 py-4">
             <span v-for="evento in dadosPromotoria.eventos" :key="evento.id">
-              <div class="flex items-center justify-between space-y-2">
-                <div v-if="evento.titulo !== ''">
+              <span class="flex items-center justify-between space-y-2">
+                <span v-if="evento.titulo !== ''">
                   {{ evento.tipo }} - {{ evento.titulo }}
-                </div>
-                <div v-else>
+                </span>
+                <span v-else>
                   {{ evento.tipo }}
-                </div>
-                <div class="flex space-x-2">
+                </span>
+                <span class="flex space-x-2">
                   <EditarEventoBotao
                     :promotores="promotores"
                     :nomePromotoria="dadosPromotoria.nome"
@@ -299,8 +297,8 @@ onMounted(() => {
                       </AlertDialogFooter>
                     </AlertDialogContent>
                   </AlertDialog>
-                </div>
-              </div>
+                </span>
+              </span>
             </span>
             <AdicionarEventoBotao
               :promotores="promotores"
