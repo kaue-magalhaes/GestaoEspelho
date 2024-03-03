@@ -32,7 +32,6 @@ const promotoriasSantana = ref<GrupoPromotoria[]>([]);
 
 watchEffect(() => {
     props.promotoriasDados.forEach((grupoPromotoria) => {
-        console.log(grupoPromotoria);
         grupoPromotoria.promotorias.forEach((promotoria) => {
             if (promotoria.municipio === 'Macapá') {
                 console.log('Macapá');
@@ -40,10 +39,20 @@ watchEffect(() => {
             } else if (promotoria.municipio === 'Santana') {
                 promotoriasSantana.value.push(grupoPromotoria);
             } else {
-                municipiosInterior.value.push(grupoPromotoria);
+                if (municipiosInterior.value.length === 0) {
+                    municipiosInterior.value.push(grupoPromotoria);
+                } else {
+                    const index = municipiosInterior.value.findIndex((municipio) => municipio.nome === grupoPromotoria.nome);
+                    if (index === -1) {
+                        municipiosInterior.value.push(grupoPromotoria);
+                    }
+                }
             }
         });
     });
+    console.log(props.promotoriasDados);
+    
+    console.log(municipiosInterior.value);
 });
 
 </script>
@@ -85,9 +94,11 @@ watchEffect(() => {
             <!-- <EntranciaFinalMacapaPreview /> -->
 
             <EntranciaFinalSantanaPreview 
+                v-if="promotoriasSantana.length > 0"
                 :promotorias="promotoriasSantana"
             /> 
             <EntranciaInicialPreview
+                v-if="municipiosInterior.length > 0"
                 :promotoriasDados="municipiosInterior"
             />
             <TabelaPromotoresSubstitutosPreview

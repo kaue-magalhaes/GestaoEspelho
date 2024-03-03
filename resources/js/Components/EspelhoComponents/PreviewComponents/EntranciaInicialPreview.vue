@@ -12,7 +12,7 @@ const props = defineProps({
 });
 
 onMounted(() => {
-  console.log(props.promotoriasDados)
+  //console.log(props.promotoriasDados)
 });
 
 </script>

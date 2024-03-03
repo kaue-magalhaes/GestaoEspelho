@@ -53,6 +53,9 @@ const removePromotorUrgenciaItem = (index: number) => {
 const updatePromotoriasDados = (value: GrupoPromotoria[]) => {
     //console.log(value);
     promotoriasDados.value = value;
+    if (value.length === 0) {
+        promotoriasDados.value = [];
+    }
     listaAtribuicoes.value = [];
     updateNovaAtribuicao(promotoriasDados.value);
     //console.log(listaAtribuicoes.value);
