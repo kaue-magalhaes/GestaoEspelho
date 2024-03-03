@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {AtendimentoUrgencia, GrupoPromotoria, Promotor} from '@/types';
+import {AtendimentoUrgencia, GrupoPromotoria} from '@/types';
 import { ref, watchEffect } from 'vue';
 
 import TabelaPromotoriaPreview from '@/Components/EspelhoComponents/PreviewComponents/TabelaPromotoriaPreview.vue';

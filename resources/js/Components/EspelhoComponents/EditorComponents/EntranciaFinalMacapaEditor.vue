@@ -106,7 +106,8 @@ const adicionaNomePromotor = (id: number, nome: string) => {
 const adicionaPeriodoAtendimento = (id : number, periodo: { start: Date ; end: Date }) => {
   //console.log(id, periodo);
   atendimentosUrgenciaDados.value.id = id;
-  const periodoFormatado = {
+  let periodoFormatado: { start: string; end: string };
+  periodoFormatado = {
     start: format(periodo.start, 'dd/MM/yyyy'),
     end: format(periodo.end, 'dd/MM/yyyy'),
   };

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {Promotoria, GrupoPromotoria, Atribuicoes, Promotor, AtendimentoUrgencia} from '@/types';
+import {Promotoria, GrupoPromotoria, Atribuicoes, AtendimentoUrgencia} from '@/types';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { ref, onMounted } from 'vue';
 import { Head } from '@inertiajs/vue3';
