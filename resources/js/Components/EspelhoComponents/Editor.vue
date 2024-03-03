@@ -151,6 +151,11 @@ const updateAtendimentosUrgenciaArray = (value: AtendimentoUrgencia) => {
   emit('update:atendimentosUrgenciaDados', atendimentosUrgenciaDados.value);
 };
 
+const removeAtendimentoUrgencia = (index: number) => {
+  atendimentosUrgenciaDados.value.splice(index, 1);
+  emit('update:atendimentosUrgenciaDados', atendimentosUrgenciaDados.value);
+};
+
 const convertMunicipios = (municipio: GrupoPromotoria) => {
   const municipiosConvertidos = municipio.promotorias.map((promotoria) => {
     const eventosConvertidos = promotoria.eventos.map((evento) => {
@@ -338,6 +343,7 @@ onBeforeMount(() => {
         <EntranciaFinalMacapaEditor
           :promotorias="promotoriasMacapa"
           @update:atendimentosUrgencia="updateAtendimentosUrgenciaArray"
+          @delete:atendimentosUrgencia="removeAtendimentoUrgencia"
           @update:adicionaDados="adicionaPromotoriasDados"
           @delete:deleteEvento="deleteEventoInterior"
           @update:editaEvento="editaEvento"

@@ -26,6 +26,7 @@ const emit = defineEmits([
   'update:editaEvento',
   'delete:deleteEvento',
   'update:atendimentosUrgencia',
+  'delete:atendimentosUrgencia',
 ]);
 
 const props = defineProps({
@@ -121,8 +122,7 @@ const adicionaPeriodoAtendimento = (id : number, periodo: { start: Date ; end: D
 };
 
 const removeAtendimentoUrgencia = (index: number) => {
-  atendimentosUrgenciaDados.value.periodo.splice(index, 1);
-  emit('update:atendimentosUrgencia', atendimentosUrgenciaDados.value);
+  emit('delete:atendimentosUrgencia', index);
 };
 
 onBeforeMount(() => {
