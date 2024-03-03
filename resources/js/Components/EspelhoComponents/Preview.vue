@@ -2,7 +2,7 @@
 import { Promotor, Promotoria, GrupoPromotoria, Atribuicoes } from '@/types';
 import { ref, computed, watchEffect } from 'vue';
 import { Card, CardContent, CardHeader } from '@/Components/ui/card';
-
+import EntranciaFinalMacapaPreview from '@/Components/EspelhoComponents/PreviewComponents/EntranciaFinalMacapaPreview.vue';
 import EntranciaFinalSantanaPreview from '@/Components/EspelhoComponents/PreviewComponents/EntranciaFinalSantanaPreview.vue';
 import EntranciaInicialPreview from '@/Components/EspelhoComponents/PreviewComponents/EntranciaInicialPreview.vue'
 import TabelaPromotoresSubstitutosPreview from '@/Components/EspelhoComponents/PreviewComponents/TabelaPromotoresSubstitutosPreview.vue';
@@ -26,8 +26,9 @@ const props = defineProps({
     },
 });
 
-const municipiosInterior = ref<GrupoPromotoria[]>([]);
+const promotoriasMacapa = ref<GrupoPromotoria[]>([]);
 const promotoriasSantana = ref<GrupoPromotoria[]>([]);
+const municipiosInterior = ref<GrupoPromotoria[]>([]);
 
 
 watchEffect(() => {
@@ -35,7 +36,7 @@ watchEffect(() => {
         grupoPromotoria.promotorias.forEach((promotoria) => {
             if (promotoria.municipio === 'Macapá') {
                 console.log('Macapá');
-                //promotoriasMacapa.value.push(grupoPromotoria);
+                promotoriasMacapa.value.push(grupoPromotoria);
             } else if (promotoria.municipio === 'Santana') {
                 promotoriasSantana.value.push(grupoPromotoria);
             } else {
@@ -52,6 +53,7 @@ watchEffect(() => {
     });
     
     if (props.promotoriasDados.length === 0) {
+        promotoriasMacapa.value = [];
         promotoriasSantana.value = [];
         municipiosInterior.value = [];
     }
@@ -93,8 +95,10 @@ watchEffect(() => {
             </div>
         </CardHeader>
         <CardContent class="flex flex-col items-center space-y-8 w-full">
-            <!-- <EntranciaFinalMacapaPreview /> -->
-
+            <EntranciaFinalMacapaPreview 
+                v-if="promotoriasMacapa.length > 0"
+                :promotorias="promotoriasMacapa"
+            />
             <EntranciaFinalSantanaPreview 
                 v-if="promotoriasSantana.length > 0"
                 :promotorias="promotoriasSantana"

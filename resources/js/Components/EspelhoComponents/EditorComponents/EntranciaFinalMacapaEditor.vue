@@ -1,69 +1,141 @@
 <script setup lang="ts">
-import { Promotor, Promotoria } from '@/types';
-import { ref, onMounted } from 'vue';
+import { GrupoPromotoria } from '@/types';
+import { usePage } from '@inertiajs/vue3';
+import { ref, onBeforeMount } from 'vue';
 
-import { Button } from '@/Components/ui/button';
-import { Label } from '@/Components/ui/label';
-import { Input } from '@/Components/ui/input';
-import { Card } from '@/Components/ui/card';
+import PlantaoCaraterUrgenciaEditor from '@/Components/EspelhoComponents/EditorComponents/PlantaoCaraterUrgenciaEditor.vue';
+import TabelaPromotoriaEditor from '@/Components/EspelhoComponents/EditorComponents/TabelaPromotoriaEditor.vue';
 
-import PlantaoCaraterUrgenciaMacapa from '@/Components/EspelhoComponents/PlantaoCaraterUrgenciaMacapa.vue';
-import EntranciaFinalMacapaTabela from '@/Components/EspelhoComponents/EntranciaFinalMacapaTabela.vue';
+type Evento = {
+  id: number;
+  tipo: string;
+  periodo:{
+    start: Date | null;
+    end: Date | null;
+  };
+  titulo: string;
+  promotor_designado_evento: string;
+};
+
+const promotores = usePage().props.promotores;
 
 const emit = defineEmits([
-  'update:promotorUrgencia',
-  'update:periodoUrgencia',
-  'remove:promotorUrgenciaItem',
-  'update:promotorias',
+  'update:adicionaDados',
+  'delete:deleteEvento',
+  'update:editaEvento',
 ]);
 
-/* const props = defineProps({
-  promotores: {
-    type: Object as () => { all: Promotor[]; },
-    required: true,
-  },
+const props = defineProps({
   promotorias: {
-    type: Object as () => { all: Promotoria[]; },
+    type: Array as () => GrupoPromotoria[],
     required: true,
   },
-}); */
+});
 
-const updatePromotorUrgencia = (index: number, value: string) => {
-  emit('update:promotorUrgencia', index, value);
+const promotoriasNaoEspecializadas = ref<GrupoPromotoria[]>([]);
+const promotoriasEspecializadas = ref<GrupoPromotoria[]>([]);
+
+const dadosPromotoria = ref<GrupoPromotoria>({
+  nome: '',
+  promotorias: [],
+});
+
+const resetDadosPromotoria = () => {
+  dadosPromotoria.value = {
+    nome: '',
+    promotorias: [],
+  };
 };
 
-const updatePeriodoUrgencia = (index: number, value: Date) => {
-  emit('update:periodoUrgencia', index, value);
+const adicionaEvento = (promotoriaId: number, municipio: GrupoPromotoria, evento: Evento) => {
+  //console.log(dadosPromotoria.value);
+  //console.log(evento.promotor_designado_evento);
+  
+  dadosPromotoria.value.nome = municipio.nome;
+  if (evento.periodo.start && evento.periodo.end) {
+    dadosPromotoria.value.promotorias.push({
+      nome: municipio.promotorias[promotoriaId].nome,
+      municipio: municipio.promotorias[promotoriaId].municipio,
+      is_especializada: municipio.promotorias[promotoriaId].is_especializada,
+      nomePromotor: municipio.promotorias[promotoriaId].nomePromotor,
+      eventos: [
+        {
+          id: evento.id,
+          tipo: evento.tipo,
+          periodo: [evento.periodo.start, evento.periodo.end],
+          titulo: evento.titulo,
+          promotor_designado_evento: evento.promotor_designado_evento,
+        },
+      ],
+    });
+  }
+  //console.log(dadosPromotoria.value);  
+  emit('update:adicionaDados', dadosPromotoria.value);
+
+  resetDadosPromotoria();
 };
 
-const removePromotorUrgenciaItem = (index: number) => {
-  emit('remove:promotorUrgenciaItem', index);
+const deletaEvento = (eventoId: number, nomePromotoria: string) => {
+  emit('delete:deleteEvento', eventoId, nomePromotoria);
 };
 
-const updatePromotorias = (value: { all: Promotoria[] }) => {
-  emit('update:promotorias', value);
+const editaEvento = (nomePromotoria: string, evento: Evento) => {
+  emit('update:editaEvento', nomePromotoria, evento);
 };
+
+onBeforeMount(() => {
+  props.promotorias.forEach((grupoPromotoria) => {
+    grupoPromotoria.promotorias.forEach((promotoria) => {
+      if (promotoria.is_especializada) {
+        if (promotoriasEspecializadas.value.length === 0) {
+          promotoriasEspecializadas.value.push(grupoPromotoria);
+        } else {
+          const index = promotoriasEspecializadas.value.findIndex((promotoriaEspecializada) => promotoriaEspecializada.nome === grupoPromotoria.nome);
+          if (index === -1) {
+            promotoriasEspecializadas.value.push(grupoPromotoria);
+          }
+        }
+      } else {
+        if (promotoriasNaoEspecializadas.value.length === 0) {
+          promotoriasNaoEspecializadas.value.push(grupoPromotoria);
+        } else {
+          const index = promotoriasNaoEspecializadas.value.findIndex((promotoriaNaoEspecializada) => promotoriaNaoEspecializada.nome === grupoPromotoria.nome);
+          if (index === -1) {
+            promotoriasNaoEspecializadas.value.push(grupoPromotoria);
+          }
+        }
+      }
+    });
+  });
+});
 </script>
 
 <template>
-  <div class="grid grid-cols-2 gap-4">
-    <!-- <PlantaoCaraterUrgenciaMacapa 
-      :promotores="promotores"
-      @update:promotor-urgencia="updatePromotorUrgencia"
-      @update:periodo-urgencia="updatePeriodoUrgencia"
-      @remove:promotor-urgencia-item="removePromotorUrgenciaItem"
-    />
-    <div class="col-span-2 max-w-5xl w-full flex flex-col items-center space-y-4">
-      <EntranciaFinalMacapaTabela 
-        :promotorias="promotorias"
+  <div>
+    <div class="max-w-5xl w-full mx-auto flex flex-col items-center space-y-4">
+      <h1 class="text-2xl font-bold text-gray-700 dark:text-gray-200 mt-4">
+        Entrância Final – Macapá
+      </h1>
+      <PlantaoCaraterUrgenciaEditor 
         :promotores="promotores"
-        @update:promotorias="updatePromotorias"
       />
-    </div> -->
-    <!-- titulo PROMOTORIAS DE JUSTIÇA DE ENTRÂNCIA FINAL – MACAPÁ -->
-    <PlantaoCaraterUrgenciaEditor />
-    <TabelaPromotoriasEditor />
-    <!-- titulo PROMOTORIAS DE JUSTIÇA DE ENTRÂNCIA FINAL – MACAPÁ – PROMOTORIAS ESPECIALIZADAS -->
-    <TabelaPromotoriasEspecializadas />
+      <TabelaPromotoriaEditor
+        :municipios="promotoriasNaoEspecializadas"
+        @update:adicionaEvento="adicionaEvento"
+        @delete:deleteEvento="deletaEvento"
+        @update:editaEvento="editaEvento"
+      />
+    </div>
+    <div class="max-w-5xl w-full mx-auto flex flex-col items-center space-y-4">
+      <h1 class="text-2xl font-bold text-gray-700 dark:text-gray-200 mt-4">
+        Entrância Final – Macapá (Especializadas) 
+      </h1>
+      <TabelaPromotoriaEditor
+        :municipios="promotoriasEspecializadas"
+        @update:adicionaEvento="adicionaEvento"
+        @delete:deleteEvento="deletaEvento"
+        @update:editaEvento="editaEvento"
+      />
+    </div>
   </div>
 </template>
