@@ -112,7 +112,6 @@ onMounted(() => {
                                 :promotorias="promotorias.all"
                                 @update:periodoEspelho="updatePeriodoEspelho"
                                 @update:promotoriasDados="updatePromotoriasDados"
-                                @update:atendimentosUrgencia="updateAtendimentosUrgencia"
                                 @update:atendimentosUrgenciaDados="updateAtendimentosUrgencia"
                             />
                         </CarouselItem>

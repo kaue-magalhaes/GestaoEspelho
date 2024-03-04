@@ -12,10 +12,9 @@ import EntranciaFinalSantanaEditor from './EditorComponents/EntranciaFinalSantan
 import EntranciaInicialEditor from './EditorComponents/EntranciaInicialEditor.vue';
 
 const emit = defineEmits([
-  'update:promotorias',
   'update:periodoEspelho',
-  'update:atendimentosUrgenciaDados',
   'update:promotoriasDados',
+  'update:atendimentosUrgenciaDados',
 ]);
 
 const props = defineProps({
@@ -181,9 +180,12 @@ const updatePeriodoNoArray = (id: number, periodo: string[]) => {
   emit('update:atendimentosUrgenciaDados', atendimentosUrgenciaDados.value);
 };
 
-const removeAtendimentoUrgencia = (index: number) => {
-  atendimentosUrgenciaDados.value.splice(index, 1);
-  emit('update:atendimentosUrgenciaDados', atendimentosUrgenciaDados.value);
+const removeAtendimentoUrgencia = (id: number) => {
+  atendimentosUrgenciaDados.value.splice(id, 1);
+  atendimentosUrgenciaDados.value.forEach((item, index) => {
+    item.id = index;
+  });
+  //emit('update:atendimentosUrgenciaDados', atendimentosUrgenciaDados.value);
 };
 
 const convertMunicipios = (municipio: GrupoPromotoria) => {

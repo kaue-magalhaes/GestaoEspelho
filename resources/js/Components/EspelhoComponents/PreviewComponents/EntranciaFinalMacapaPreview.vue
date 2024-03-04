@@ -46,10 +46,11 @@ watchEffect(() => {
     });
   });
 });
+//console.log(props.atendimentoUrgencia);
 </script>
 
 <template>
-  
+
   <div class="max-w-5xl w-full mx-auto flex flex-col items-center space-y-4" v-if="props.promotorias.length > 0 || props.atendimentoUrgencia.length > 0">
     <div class="w-full mx-auto flex flex-col items-center space-y-4" v-if="promotoriasNaoEspecializadas.length > 0 || props.atendimentoUrgencia.length > 0">
       <h1 class="text-2xl font-bold text-gray-700 dark:text-gray-200 mt-4">

@@ -107,8 +107,8 @@ const adicionaPeriodoAtendimento = (id : number, periodo: any ) => {
     emit('update:Periodo', id, periodoFormatado);
 };
 
-const removeAtendimentoUrgencia = (index: number) => {
-  emit('delete:atendimentosUrgencia', index);
+const removeAtendimentoUrgencia = (id: number) => {
+  emit('delete:atendimentosUrgencia', id);
 };
 
 onBeforeMount(() => {

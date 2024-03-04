@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, PropType, onMounted } from 'vue'
+import { ref, PropType, watchEffect } from 'vue'
 
 import { cn } from '@/lib/utils'
 import { format } from 'date-fns';
@@ -36,16 +36,15 @@ const wasChanged = ref(props.wasChanged)
 
 const emitirMudanca = (value: any) => {
   //console.log(value);
-  
   wasChanged.value = true
-  localPeriod.value = value
   //console.log(localPeriod.value);
-  
+
   emit('update:period', value, wasChanged.value)
 }
 
-onMounted(() => {
-  //console.log(props.isValidation);
+watchEffect(() => {
+  // console.log(props.period);
+  // console.log(localPeriod.value);
 })
 
 </script>
