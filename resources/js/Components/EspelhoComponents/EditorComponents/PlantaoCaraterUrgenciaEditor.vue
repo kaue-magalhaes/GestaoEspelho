@@ -74,7 +74,7 @@ onMounted(() => {
             </Label>
             <DatePicker
               v-model="input.value.periodoUrgencia"
-              :range="true"
+              :range="false"
               @update:period="emit('update:periodoAtendimento', index, $event)"
             />
           </div>

@@ -14,7 +14,8 @@ const props = defineProps({
       <h2 class="text-xl font-bold mb-4">PLANTÃO DE ATENDIMENTOS EM CARÁTER DE URGÊNCIA - MACAPÁ/SANTANA</h2>
       <ul class="grid grid-cols-2 gap-4">
         <li class="mb-2 text-left" v-for="atendimento in atendimentosUrgencia" :key="atendimento.id">
-          <span class="font-semibold"> - {{ atendimento.nome_promotor }}</span> <span> ({{ atendimento.periodo.start }} - {{ atendimento.periodo.end }})</span>
+          <span class="font-semibold">
+              - {{ atendimento.nome_promotor }}</span> <span v-if="atendimento.periodo.start !== undefined && atendimento.periodo.end !== undefined"> ({{ atendimento.periodo.start }} - {{ atendimento.periodo.end }})</span> <span v-else> ({{ atendimento.periodo }})</span>
         </li>
       </ul>
     </div>

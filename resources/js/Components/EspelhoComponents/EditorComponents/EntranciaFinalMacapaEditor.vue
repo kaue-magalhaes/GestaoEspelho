@@ -55,7 +55,7 @@ const resetDadosPromotoria = () => {
 const adicionaEvento = (promotoriaId: number, municipio: GrupoPromotoria, evento: Evento) => {
   //console.log(dadosPromotoria.value);
   //console.log(evento.promotor_designado_evento);
-  
+
   dadosPromotoria.value.nome = municipio.nome;
   if (evento.periodo.start && evento.periodo.end) {
     dadosPromotoria.value.promotorias.push({
@@ -74,7 +74,7 @@ const adicionaEvento = (promotoriaId: number, municipio: GrupoPromotoria, evento
       ],
     });
   }
-  //console.log(dadosPromotoria.value);  
+  //console.log(dadosPromotoria.value);
   emit('update:adicionaDados', dadosPromotoria.value);
 
   resetDadosPromotoria();
@@ -93,13 +93,18 @@ const adicionaNomePromotor = (id: number, nome: string) => {
   emit('update:NomePromotor', id , nome);
 };
 
-const adicionaPeriodoAtendimento = (id : number, periodo: { start: Date ; end: Date }) => {
+const adicionaPeriodoAtendimento = (id : number, periodo: any ) => {
   //console.log(id, periodo);
-  let periodoFormatado = {
-    start: format(periodo.start, 'dd/MM/yyyy'),
-    end: format(periodo.end, 'dd/MM/yyyy'),
-  };
-  emit('update:Periodo', id, periodoFormatado);
+    let periodoFormatado;
+    if (periodo.start !== undefined) {
+        periodoFormatado = {
+            start: format(periodo.start, 'dd/MM/yyyy'),
+            end: format(periodo.end, 'dd/MM/yyyy'),
+        };
+    } else {
+        periodoFormatado = format(periodo, 'dd/MM/yyyy')
+    }
+    emit('update:Periodo', id, periodoFormatado);
 };
 
 const removeAtendimentoUrgencia = (index: number) => {
@@ -154,7 +159,7 @@ onBeforeMount(() => {
     </div>
     <div class="max-w-5xl w-full mx-auto flex flex-col items-center space-y-4">
       <h1 class="text-2xl font-bold text-gray-700 dark:text-gray-200 mt-4">
-        Entrância Final – Macapá (Especializadas) 
+        Entrância Final – Macapá (Especializadas)
       </h1>
       <TabelaPromotoriaEditor
         :municipios="promotoriasEspecializadas"

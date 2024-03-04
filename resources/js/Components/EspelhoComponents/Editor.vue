@@ -48,7 +48,7 @@ const atendimentosUrgenciaDados = ref<AtendimentoUrgencia[]>([]);
 
 const updatePeriodoEspelho = (value: any) => {
   //console.log(typeof value);
-  
+
   periodoEspelho.value.isChanged = true;
   if (value.start !== undefined) {
     periodoEspelho.value.start = value.start;
@@ -58,7 +58,7 @@ const updatePeriodoEspelho = (value: any) => {
   } else {
     periodoEspelho.value.start = new Date(value);
     //console.log(periodoEspelho.value);
-    
+
     emit('update:periodoEspelho', format(value, 'dd/MM/yyyy'));
   }
 };
@@ -71,7 +71,7 @@ const adicionaPromotoriasDados = (municipio: GrupoPromotoria) => {
     promotoriasDados.value.push({
       nome: municipiosConvertidos.nome,
       promotorias: municipiosConvertidos.promotorias,
-    }); 
+    });
   } else {
     const indexMunicipio = promotoriasDados.value.findIndex((m) => m.nome === municipio.nome);
     if (indexMunicipio === -1) {
@@ -177,7 +177,7 @@ const updatePeriodoNoArray = (id: number, periodo: string[]) => {
       atendimentosUrgenciaDados.value[index].periodo = periodo;
     }
   }
-  console.log(atendimentosUrgenciaDados.value);
+  //console.log(atendimentosUrgenciaDados.value);
   emit('update:atendimentosUrgenciaDados', atendimentosUrgenciaDados.value);
 };
 
@@ -361,14 +361,14 @@ onBeforeMount(() => {
           <Label for="period" class="text-base mr-4">
             Período:
           </Label>
-          <DatePicker 
+          <DatePicker
             v-model="periodoEspelho"
             :range="true"
             @update:period="updatePeriodoEspelho"
           />
         </span>
       </CardHeader>
-  
+
       <CardContent>
         <EntranciaFinalMacapaEditor
           :promotorias="promotoriasMacapa"
