@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { GrupoPromotoria } from '@/types';
+import {AtendimentoUrgencia, GrupoPromotoria} from '@/types';
 import { usePage } from '@inertiajs/vue3';
 import { ref, onBeforeMount } from 'vue';
 import { format } from 'date-fns';
@@ -37,6 +37,7 @@ const props = defineProps({
   },
 });
 
+const urgenciaInputComponent = ref<{ nome_promotor: string; periodo: any }[]>([]);
 const promotoriasNaoEspecializadas = ref<GrupoPromotoria[]>([]);
 const promotoriasEspecializadas = ref<GrupoPromotoria[]>([]);
 
@@ -88,23 +89,49 @@ const editaEvento = (nomePromotoria: string, evento: Evento) => {
   emit('update:editaEvento', nomePromotoria, evento);
 };
 
-const adicionaNomePromotor = (id: number, nome: string) => {
-  //console.log(id, nome);
-  emit('update:NomePromotor', id , nome);
+const adicionaNomePromotor = (index: number, nome: string) => {
+  //console.log(index, nome);
+  urgenciaInputComponent.value[index].nome_promotor = nome;
+  //console.log(urgenciaInputComponent.value);
+  emit('update:NomePromotor', index , nome);
 };
 
-const adicionaPeriodoAtendimento = (id : number, periodo: any ) => {
-  //console.log(id, periodo);
-    let periodoFormatado;
-    if (periodo.start !== undefined) {
-        periodoFormatado = {
-            start: format(periodo.start, 'dd/MM/yyyy'),
-            end: format(periodo.end, 'dd/MM/yyyy'),
-        };
+const adicionaPeriodoAtendimento = (index : number, periodo: any ) => {
+  //console.log(index, periodo);
+  urgenciaInputComponent.value[index].periodo = periodo;
+  //console.log(urgenciaInputComponent.value);
+  let periodoFormatado;
+  if (periodo.start !== undefined) {
+      periodoFormatado = {
+          start: format(periodo.start, 'dd/MM/yyyy'),
+          end: format(periodo.end, 'dd/MM/yyyy'),
+      };
+  } else {
+      periodoFormatado = format(periodo, 'dd/MM/yyyy')
+  }
+  emit('update:Periodo', index, periodoFormatado);
+};
+
+const adicionarInput = (atendimentoUrgencia: { nome_promotor: string; periodo: any }) => {
+  //console.log(atendimentoUrgencia);
+  //console.log(urgenciaInputComponent.value);
+
+  if (urgenciaInputComponent.value.length === 0) {
+    urgenciaInputComponent.value.push(atendimentoUrgencia);
+  } else {
+    const index = urgenciaInputComponent.value.findIndex((atendimentoUrgencia) => atendimentoUrgencia.nome_promotor === '' || atendimentoUrgencia.periodo.start === null || atendimentoUrgencia.periodo.end === null);
+    if (index === -1) {
+      urgenciaInputComponent.value.push(atendimentoUrgencia);
     } else {
-        periodoFormatado = format(periodo, 'dd/MM/yyyy')
+      console.log('Termine de preencher os campos existentes!');
     }
-    emit('update:Periodo', id, periodoFormatado);
+  }
+  //console.log(urgenciaInputComponent.value);
+};
+
+const removeInput = (index: number) => {
+  urgenciaInputComponent.value.splice(index, 1);
+  //console.log(urgenciaInputComponent.value);
 };
 
 const removeAtendimentoUrgencia = (id: number) => {
@@ -146,9 +173,12 @@ onBeforeMount(() => {
       </h1>
       <PlantaoCaraterUrgenciaEditor
         :promotores="promotores"
+        :urgenciaInputComponent="urgenciaInputComponent"
         @update:promotorNome="adicionaNomePromotor"
         @update:periodoAtendimento="adicionaPeriodoAtendimento"
-        @remove:atendimentoUrgenciaValues="removeAtendimentoUrgencia"
+        @update:adicionaInput="adicionarInput"
+        @delete:removeInput="removeInput"
+        @delete:atendimentoUrgenciaValues="removeAtendimentoUrgencia"
       />
       <TabelaPromotoriaEditor
         :municipios="promotoriasNaoEspecializadas"

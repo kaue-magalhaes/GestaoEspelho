@@ -43,8 +43,7 @@ const emitirMudanca = (value: any) => {
 }
 
 watchEffect(() => {
-  // console.log(props.period);
-  // console.log(localPeriod.value);
+  localPeriod.value = props.period
 })
 
 </script>

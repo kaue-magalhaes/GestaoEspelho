@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import {AtendimentoUrgencia, Promotor} from '@/types';
-import { ref, onMounted } from 'vue';
+import { Promotor} from '@/types';
+import { onMounted } from 'vue';
 
 import { Button } from '@/Components/ui/button';
 import { Label } from '@/Components/ui/label';
@@ -13,7 +13,9 @@ import { Plus, Trash2 } from 'lucide-vue-next';
 const emit = defineEmits([
   'update:promotorNome',
   'update:periodoAtendimento',
-  'remove:atendimentoUrgenciaValues',
+  'update:adicionaInput',
+  'delete:removeInput',
+  'delete:atendimentoUrgenciaValues',
 ]);
 
 const props = defineProps({
@@ -21,37 +23,39 @@ const props = defineProps({
     type: Array as () => Promotor[] ,
     required: true,
   },
+  urgenciaInputComponent: {
+    type: Array as () => { nome_promotor: string; periodo: any }[],
+    required: true,
+  },
 });
 
-const urgenciaInputComponent = ref<AtendimentoUrgencia[]>([]);
-
 const adicionarInput = () => {
-  urgenciaInputComponent.value.push({
-    id: urgenciaInputComponent.value.length,
+  //console.log('Adicionando input');
+  const novoAtendimentoUrgencia = {
     nome_promotor: '',
-    periodo: { start: new Date, end: new Date },
-  });
-  console.log(urgenciaInputComponent.value);
+    periodo: {
+      start: null,
+      end: null,
+    },
+  };
+  emit('update:adicionaInput', novoAtendimentoUrgencia);
 };
 
 const removeInput = (index: number) => {
-  //remove o valor com o index passado e atualiza o index dos demais valores
-  urgenciaInputComponent.value.splice(index, 1);
-  urgenciaInputComponent.value.forEach((item, index) => {
-    item.id = index;
-  });
-  emit('remove:atendimentoUrgenciaValues', index);
+  //console.log('Removendo input do index: ', index);
+  emit('delete:removeInput', index);
+  emit('delete:atendimentoUrgenciaValues', index);
   //console.log(urgenciaInputComponent.value);
 };
 
-const enviaNomePromotor = (id: number, nome: string) => {
-  urgenciaInputComponent.value[id].nome_promotor = nome;
-  emit('update:promotorNome', id, nome);
+const enviaNomePromotor = (index: number, nome: string) => {
+  //console.log(index, nome);
+  emit('update:promotorNome', index, nome);
 };
 
-const emitirPeriodo = (id: number, periodo: { start: Date; end: Date }) => {
-  urgenciaInputComponent.value[id].periodo = periodo;
-  emit('update:periodoAtendimento', id, periodo);
+const emitirPeriodo = (index: number, periodo: { start: Date; end: Date }) => {
+  //console.log(index, periodo);
+  emit('update:periodoAtendimento', index, periodo);
 };
 
 onMounted(() => {
@@ -64,7 +68,7 @@ onMounted(() => {
     <Label class="text-xl">
       Plantão de Atendimentos em Caráter de Urgência - Macapá/Santana:
     </Label>
-    <div v-for="input in urgenciaInputComponent" :key="input.id" class="w-full px-4 flex justify-center items-center space-x-4">
+    <div v-for="(input, index) in props.urgenciaInputComponent" :key="index" class="w-full px-4 flex justify-center items-center space-x-4">
       <div class="flex flex-row items-center w-full space-x-4">
         <Label class="text-base whitespace-nowrap">
           Nome do Promotor:
@@ -76,7 +80,7 @@ onMounted(() => {
           <SelectContent>
             <SelectGroup>
               <SelectLabel>Promotores</SelectLabel>
-              <SelectItem v-for="promotor in props.promotores" :key="promotor.id" :value="promotor.nome" @click="enviaNomePromotor(input.id, promotor.nome)">
+              <SelectItem v-for="promotor in props.promotores" :key="promotor.id" :value="promotor.nome" @click="enviaNomePromotor(index, promotor.nome)">
                 {{ promotor.nome }}
               </SelectItem>
             </SelectGroup>
@@ -88,19 +92,19 @@ onMounted(() => {
           Período:
         </Label>
         <DatePicker
-          v-model.range="input.periodo"
           :period="input.periodo"
           :range="true"
-          @update:period="emitirPeriodo(input.id, $event)"
+          :id="index"
+          @update:period="emitirPeriodo(index, $event)"
         />
       </div>
       <div class="flex mb-2">
-        <Button @click="removeInput(input.id)" variant="destructive" class="p-3">
+        <Button @click="removeInput(index)" variant="destructive" class="p-3">
           <Trash2 class="w-5 h-5 text-white" />
         </Button>
       </div>
     </div>
-    <Button variant="ghost" class="w-1/4" @click="adicionarInput">
+    <Button variant="ghost" class="w-1/4" @click="adicionarInput()">
       Adicionar <Plus class="ml-1 w-4 h-4" />
     </Button>
     </Card>
