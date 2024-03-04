@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {AtendimentoUrgencia} from "@/types";
 
-const props = defineProps({
+defineProps({
   atendimentosUrgencia: {
     type: Array as () => AtendimentoUrgencia[],
     required: true,
