@@ -7,7 +7,7 @@ import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious
 import Preview from '@/Components/EspelhoComponents/Preview.vue';
 import Editor from '@/Components/EspelhoComponents/Editor.vue';
 
-const props = defineProps({
+defineProps({
     promotorias: {
         type: Object as () => { all: Promotoria[] },
         required: true,
@@ -36,7 +36,7 @@ const updatePromotoriasDados = (value: GrupoPromotoria[]) => {
     listaAtribuicoes.value = [];
     updateNovaAtribuicao(promotoriasDados.value);
     //console.log(listaAtribuicoes.value);
-    
+
 }
 
 const updateNovaAtribuicao = (value: GrupoPromotoria[] ) => {
@@ -86,7 +86,7 @@ const updateNovaAtribuicao = (value: GrupoPromotoria[] ) => {
             });
         });
     });
-    
+
 };
 
 const updateAtendimentosUrgencia = (value: AtendimentoUrgencia[]) => {
