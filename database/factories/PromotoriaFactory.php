@@ -48,24 +48,27 @@ class PromotoriaFactory extends Factory
          
         if ($municipio == 'Macapá' || $municipio == 'Santana') {
             $nomeGrupo        = $prefixosPromotoria[1] . $this->faker->randomElement($promotoriasNomeGrupoWords);
-            $numeroPromotoria = \App\Models\Promotoria::where('nome_grupo', $nomeGrupo)->count() + 1;
+            $numeroPromotoria = \App\Models\Promotoria::where('nome_grupo_promotorias', $nomeGrupo)->count() + 1;
         } else {
             $nomeGrupo        = $municipio;
-            $numeroPromotoria = \App\Models\Promotoria::where('nome_grupo', $nomeGrupo)->count() + 1;
+            $numeroPromotoria = \App\Models\Promotoria::where('nome_grupo_promotorias', $nomeGrupo)->count() + 1;
         }
 
         if ($numeroPromotoria == 1) {
             $is_especializada = $this->faker->boolean();
         } else {
-            $is_especializada = \App\Models\Promotoria::where('nome_grupo', $nomeGrupo)->first()->is_especializada;
+            $is_especializada = \App\Models\Promotoria::where('nome_grupo_promotorias', $nomeGrupo)->first()->is_especializada;
         }
 
         return [
-            'nome'             => $numeroPromotoria . 'ª ' . $prefixosPromotoria[0] . $nomeGrupo,
-            'nome_grupo'       => $nomeGrupo,
-            'municipio'        => $municipio,
-            'is_especializada' => $is_especializada,
-            'promotor_id'      => \App\Models\Promotor::factory(),
+            'nome'                   => $numeroPromotoria . 'ª ' . $prefixosPromotoria[0] . $nomeGrupo,
+            'nome_grupo_promotorias' => $nomeGrupo,
+            'municipio'              => $municipio,
+            'is_especializada'       => $is_especializada,
+            'espelho_id'             => \App\Models\Espelho::all()->first(),
+            'promotor_titular_id'    => \App\Models\Promotor::inRandomOrder()->first()->id,
+            'created_at'             => now(),
+            'updated_at'             => now(),
         ];
     }
 }
