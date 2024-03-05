@@ -15,7 +15,7 @@ export interface Promotor {
 
 export interface Promotoria {
     id: number;
-    nome_grupo: string;
+    nome_grupo_promotorias: string;
     nome: string;
     municipio: string;
     is_especializada: boolean;
