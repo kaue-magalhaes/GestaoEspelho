@@ -12,10 +12,34 @@ class Promotor extends Model
 
     protected $fillable = [
         'nome',
+        'is_substituto',
+        'evento_id',
     ];
 
-    public function promotorias()
+    /**
+     * Busca as promotorias vinculadas ao promotor
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function promotorias(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(Promotoria::class);
+    }
+
+    /**
+     * Busca os eventos vinculados ao promotor
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function eventos(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Evento::class, 'promotor_designado_id');
+    }
+
+    /**
+     * Busca as urgências de atendimento vinculadas ao promotor
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function urgenciasAtendimento(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(UrgenciaAtendimento::class, 'promotor_designado_id');
     }
 }
