@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {AtendimentoUrgencia, GrupoPromotoria} from '@/types';
+import {GrupoPromotoria} from '@/types';
 import { usePage } from '@inertiajs/vue3';
 import { ref, onBeforeMount } from 'vue';
 import { format } from 'date-fns';
@@ -139,6 +139,8 @@ const removeAtendimentoUrgencia = (id: number) => {
 };
 
 onBeforeMount(() => {
+  //console.log(props.promotorias);
+  
   props.promotorias.forEach((grupoPromotoria) => {
     grupoPromotoria.promotorias.forEach((promotoria) => {
       if (promotoria.is_especializada) {
