@@ -12,15 +12,28 @@ class Promotoria extends Model
 
     protected $fillable = [
         'nome',
-        'promotor_id',
+        'nome_grupo_promotorias',
+        'municipio',
+        'is_especializada',
+        'espelho_id',
+        'promotor_titular_id',
     ];
 
     /**
-     * Get the promotor that owns the Promotoria
+     * Busca o promotor titular da promotoria
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function promotor(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
-        return $this->belongsTo(Promotor::class);
+        return $this->belongsTo(Promotor::class, 'promotor_titular_id');
+    }
+
+    /**
+     * busca o espelho que a promotoria está vinculada
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function espelho(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(Espelho::class);
     }
 }
