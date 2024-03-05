@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Espelho;
 use App\Models\Promotor;
 use App\Models\Promotoria;
 use Illuminate\Http\Request;
@@ -14,10 +15,11 @@ class EspelhoController extends Controller
      */
     public function index()
     {
+        $espelho    = Espelho::with('promotorias.promotor.eventos', 'promotorias.promotor.urgenciasAtendimento')->get()->toArray();
         $promotores = Promotor::all();
         $promotoria = Promotoria::with('promotor')->get()->toArray();
 
-        //dd($promotoria);
+        //dd($espelho);
 
         return Inertia::render('Espelho', [
             'promotores' => $promotores,
