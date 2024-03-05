@@ -13,10 +13,11 @@ return new class extends Migration {
         Schema::create('promotorias', function (Blueprint $table) {
             $table->id();
             $table->string('nome');
-            $table->string('nome_grupo');
+            $table->string('nome_grupo_promotorias');
             $table->string('municipio');
             $table->boolean('is_especializada')->default(true);
-            $table->foreignId('promotor_id')->references('id')->on('promotores');
+            $table->foreignId('espelho_id')->references('id')->on('espelhos');
+            $table->foreignId('promotor_titular_id')->references('id')->on('promotores');
             $table->timestamps();
         });
     }
