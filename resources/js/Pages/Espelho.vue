@@ -7,9 +7,13 @@ import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious
 import Preview from '@/Components/EspelhoComponents/Preview.vue';
 import Editor from '@/Components/EspelhoComponents/Editor.vue';
 
-defineProps({
+const props = defineProps({
     promotorias: {
         type: Object as () => { all: Promotoria[] },
+        required: true,
+    },
+    espelho: {
+        type: Object,
         required: true,
     },
 });
@@ -95,6 +99,8 @@ const updateAtendimentosUrgencia = (value: AtendimentoUrgencia[]) => {
 };
 
 onMounted(() => {
+    //console.log(props.espelho);
+    
     //console.log(props.promotorias);
     //console.log(promotoriasInteriorEventos.value);
 });
