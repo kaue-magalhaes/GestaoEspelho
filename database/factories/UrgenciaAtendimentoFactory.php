@@ -17,9 +17,9 @@ class UrgenciaAtendimentoFactory extends Factory
     public function definition(): array
     {
         return [
-            'periodo_inicio' => $this->faker->date(),
-            'periodo_fim'    => $this->faker->date(),
-            'promotor_designado_id'    => \App\Models\Promotor::inRandomOrder()->first()->id,
+            'periodo_inicio'        => $this->faker->date(),
+            'periodo_fim'           => $this->faker->date(),
+            'promotor_designado_id' => \App\Models\Promotor::inRandomOrder()->first()->id,
         ];
     }
 }

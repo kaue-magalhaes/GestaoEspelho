@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
-use Illuminate\Console\Scheduling\Event;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
