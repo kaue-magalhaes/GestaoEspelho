@@ -10,6 +10,7 @@ import { format } from 'date-fns';
 import EntranciaFinalMacapaEditor from './EditorComponents/EntranciaFinalMacapaEditor.vue';
 import EntranciaFinalSantanaEditor from './EditorComponents/EntranciaFinalSantanaEditor.vue';
 import EntranciaInicialEditor from './EditorComponents/EntranciaInicialEditor.vue';
+import { useForm } from "@inertiajs/vue3";
 
 const emit = defineEmits([
   'update:periodoEspelho',
@@ -47,7 +48,6 @@ const atendimentosUrgenciaDados = ref<AtendimentoUrgencia[]>([]);
 
 const updatePeriodoEspelho = (value: any) => {
   //console.log(typeof value);
-
   periodoEspelho.value.isChanged = true;
   if (value.start !== undefined) {
     periodoEspelho.value.start = value.start;
@@ -220,7 +220,7 @@ onBeforeMount(() => {
   promotoriasMacapaFiltro.value.forEach((promotoria) => {
     if (promotoriasMacapa.value.length === 0) {
       promotoriasMacapa.value.push({
-        nome: promotoria.nome_grupo,
+        nome: promotoria.nome_grupo_promotorias,
         promotorias: [
           {
             nome: promotoria.nome,
@@ -232,10 +232,10 @@ onBeforeMount(() => {
         ],
       });
     } else {
-      const indexNomeGrupo = promotoriasMacapa.value.findIndex((m) => m.nome === promotoria.nome_grupo);
+      const indexNomeGrupo = promotoriasMacapa.value.findIndex((m) => m.nome === promotoria.nome_grupo_promotorias);
       if (indexNomeGrupo === -1) {
         promotoriasMacapa.value.push({
-          nome: promotoria.nome_grupo,
+          nome: promotoria.nome_grupo_promotorias,
           promotorias: [
             {
               nome: promotoria.nome,
@@ -263,7 +263,7 @@ onBeforeMount(() => {
   promotoriasSantanaFiltro.value.forEach((promotoria) => {
     if (promotoriasSantana.value.length === 0) {
       promotoriasSantana.value.push({
-        nome: promotoria.nome_grupo,
+        nome: promotoria.nome_grupo_promotorias,
         promotorias: [
           {
             nome: promotoria.nome,
@@ -275,10 +275,10 @@ onBeforeMount(() => {
         ],
       });
     } else {
-      const indexNomeGrupo = promotoriasSantana.value.findIndex((m) => m.nome === promotoria.nome_grupo);
+      const indexNomeGrupo = promotoriasSantana.value.findIndex((m) => m.nome === promotoria.nome_grupo_promotorias);
       if (indexNomeGrupo === -1) {
         promotoriasSantana.value.push({
-          nome: promotoria.nome_grupo,
+          nome: promotoria.nome_grupo_promotorias,
           promotorias: [
             {
               nome: promotoria.nome,
@@ -306,7 +306,7 @@ onBeforeMount(() => {
   promotoriasInterior.value.forEach((promotoria) => {
     if (municipiosInterior.value.length === 0) {
       municipiosInterior.value.push({
-        nome: promotoria.nome_grupo,
+        nome: promotoria.nome_grupo_promotorias,
         promotorias: [
           {
             nome: promotoria.nome,
@@ -318,10 +318,10 @@ onBeforeMount(() => {
         ],
       });
     } else {
-      const indexNomeGrupo = municipiosInterior.value.findIndex((m) => m.nome === promotoria.nome_grupo);
+      const indexNomeGrupo = municipiosInterior.value.findIndex((m) => m.nome === promotoria.nome_grupo_promotorias);
       if (indexNomeGrupo === -1) {
         municipiosInterior.value.push({
-          nome: promotoria.nome_grupo,
+          nome: promotoria.nome_grupo_promotorias,
           promotorias: [
             {
               nome: promotoria.nome,
@@ -347,14 +347,20 @@ onBeforeMount(() => {
     }
   });
   //console.log(props.promotorias);
+  //console.log(promotoriasMacapa.value);
   //console.log(promotoriasSantana.value);
   //console.log(municipiosInterior.value);
 });
+
+const form = useForm({
+
+})
 </script>
 
 <template>
   <Card>
-    <div class="max-w-5xl mx-auto">
+    <form>
+      <div class="max-w-5xl mx-auto">
       <CardHeader class="flex flex-row items-center justify-between">
         <CardTitle class="font-semibold">
           Espelho do Ministério Público
@@ -395,5 +401,6 @@ onBeforeMount(() => {
         />
       </CardContent>
     </div>
+    </form>
   </Card>
 </template>
