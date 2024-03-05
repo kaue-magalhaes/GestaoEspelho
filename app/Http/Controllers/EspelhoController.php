@@ -23,7 +23,8 @@ class EspelhoController extends Controller
 
         return Inertia::render('Espelho', [
             'promotores' => $promotores,
-            'promotoria' => $promotoria
+            'promotoria' => $promotoria,
+            'espelho'    => $espelho
         ]);
     }
 
