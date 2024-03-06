@@ -5,7 +5,6 @@ import { format } from 'date-fns';
 import {
     GrupoPromotoria,
     Atribuicoes,
-    AtendimentoUrgencia,
     Espelho,
     Promotor,
     Evento,
@@ -39,11 +38,11 @@ const periodoEspelho = ref<string[]>([
     format(new Date(props.espelho?.periodo_inicio), 'dd/MM/yyyy'),
     format(new Date(props.espelho?.periodo_fim), 'dd/MM/yyyy'),
 ]);
-const promotoriasDados = ref<GrupoPromotoria[]>([]);
-const atendimentosUrgenciaDados = ref<AtendimentoUrgencia[]>([]);
+const grupoDeTodasAsPromotoriasDados = ref<GrupoPromotoria[]>([]);
+const atendimentosUrgenciaDados = ref([]);
 const listaAtribuicoes = ref<Atribuicoes[]>([]);
 
-const updatePeriodoEspelho = (value: string[] | string) => {
+const updatePeriodoEspelho = (value: string[]) => {
     if (Array.isArray(value)) {
         periodoEspelho.value = value;
     } else {
@@ -51,78 +50,27 @@ const updatePeriodoEspelho = (value: string[] | string) => {
     }
 };
 
-const updatePromotoriasDados = (value: GrupoPromotoria[]) => {
-    //console.log(value);
-    promotoriasDados.value = value;
+const updateGrupoDeTodasAsPromotorias = (value: GrupoPromotoria[]) => {
+    grupoDeTodasAsPromotoriasDados.value = value;
     if (value.length === 0) {
-        promotoriasDados.value = [];
+        grupoDeTodasAsPromotoriasDados.value = [];
     }
-    listaAtribuicoes.value = [];
-    updateNovaAtribuicao(promotoriasDados.value);
-    //console.log(listaAtribuicoes.value);
-
 }
 
-const updateNovaAtribuicao = (value: GrupoPromotoria[] ) => {
-    value.forEach((municipio) => {
-        municipio.promotorias.forEach((promotoria) => {
-            promotoria.eventos.forEach((evento) => {
-                if (listaAtribuicoes.value.length === 0) {
-                    listaAtribuicoes.value.push({
-                        id: listaAtribuicoes.value.length,
-                        nome_promotor: evento.promotor_designado_evento,
-                        atribuicoes: [
-                            {
-                                id: evento.id,
-                                tipo: evento.tipo,
-                                periodo: evento.periodo,
-                                titulo: evento.titulo,
-                                promotor_designado_evento: evento.promotor_designado_evento,
-                            },
-                        ],
-                    });
-                } else {
-                    const index = listaAtribuicoes.value.findIndex((atribuicao) => atribuicao.nome_promotor === evento.promotor_designado_evento);
-                    if (index === -1) {
-                        listaAtribuicoes.value.push({
-                            id: listaAtribuicoes.value.length,
-                            nome_promotor: evento.promotor_designado_evento,
-                            atribuicoes: [
-                                {
-                                    id: evento.id,
-                                    tipo: evento.tipo,
-                                    periodo: evento.periodo,
-                                    titulo: evento.titulo,
-                                    promotor_designado_evento: evento.promotor_designado_evento,
-                                },
-                            ],
-                        });
-                    } else {
-                        listaAtribuicoes.value[index].atribuicoes.push({
-                            id: evento.id,
-                            tipo: evento.tipo,
-                            periodo: evento.periodo,
-                            titulo: evento.titulo,
-                            promotor_designado_evento: evento.promotor_designado_evento,
-                        });
-                    }
-                }
-            });
-        });
-    });
-
+const updateAtribuicao = (value: Atribuicoes[]) => {
+    listaAtribuicoes.value = value;
 };
 
-const updateAtendimentosUrgencia = (value: AtendimentoUrgencia[]) => {
+const updateAtendimentosUrgencia = (value: []) => {
   //console.log(value);
   atendimentosUrgenciaDados.value = value;
 };
 
 onMounted(() => {
-    // console.log(props.espelho);
+    //console.log(props.espelho);
     // console.log(props.promotores);
     // console.log(props.eventos);
-    // console.log(props.urgenciaAtendimentos);
+    //console.log(props.urgenciaAtendimentos);
 });
 </script>
 
@@ -141,14 +89,15 @@ onMounted(() => {
                                 :eventos="props.eventos"
                                 :urgenciaAtendimentos="props.urgenciaAtendimentos"
                                 @update:periodoEspelho="updatePeriodoEspelho"
-                                @update:promotoriasDados="updatePromotoriasDados"
-                                @update:atendimentosUrgenciaDados="updateAtendimentosUrgencia"
+                                @update:grupoDeTodasAsPromotorias="updateGrupoDeTodasAsPromotorias"
+                                @update:dadosDosAtendimentosUrgencia="updateAtendimentosUrgencia"
+                                @update:atribuicao="updateAtribuicao"
                             />
                         </CarouselItem>
                         <CarouselItem>
                             <Preview
                                 :periodoEspelho="periodoEspelho"
-                                :promotoriasDados="promotoriasDados"
+                                :grupoPromotoriaDeTodasAsPromotorias="grupoDeTodasAsPromotoriasDados"
                                 :listaAtribuicoes="listaAtribuicoes"
                                 :atendimentosUrgenciaDados="atendimentosUrgenciaDados"
                             />

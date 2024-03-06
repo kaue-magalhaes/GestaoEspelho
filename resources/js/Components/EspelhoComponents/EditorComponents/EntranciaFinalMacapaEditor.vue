@@ -1,38 +1,22 @@
 <script setup lang="ts">
-import {GrupoPromotoria, Promotor, UrgenciaAtendimento} from '@/types';
-import { usePage } from '@inertiajs/vue3';
-import { ref, onBeforeMount } from 'vue';
-import { format } from 'date-fns';
-
+import {Evento, Promotor, Promotoria, UrgenciaAtendimento} from '@/types';
+import { ref } from 'vue';
 
 import PlantaoCaraterUrgenciaEditor from '@/Components/EspelhoComponents/EditorComponents/PlantaoCaraterUrgenciaEditor.vue';
 import TabelaPromotoriaEditor from '@/Components/EspelhoComponents/EditorComponents/TabelaPromotoriaEditor.vue';
 
-type Evento = {
-  id: number;
-  tipo: string;
-  periodo:{
-    start: Date | null;
-    end: Date | null;
-  };
-  titulo: string;
-  promotor_designado_evento: string;
-};
-
-const promotores = usePage().props.promotores;
-
 const emit = defineEmits([
-  'update:adicionaDados',
-  'update:editaEvento',
-  'delete:deleteEvento',
-  'update:nomePromotor',
-  'update:periodo',
-  'delete:atendimentosUrgencia',
+  'update:novoEventoAdicionado',
+  'update:umEventoFoiAlterado',
+  'delete:umEventoFoiDeletado',
+  'update:nomeFoiSelecionado',
+  'update:periodoDoAtendimentoFoiSelecionado',
+  'delete:inputDeDadosFoiDeletado',
 ]);
 
 const props = defineProps({
-  promotorias: {
-    type: Array as () => GrupoPromotoria[],
+  promotoriasMacapa: {
+    type: Array as () => Promotoria[],
     required: true,
   },
   promotores: {
@@ -45,143 +29,32 @@ const props = defineProps({
   },
 });
 
-const urgenciaInputComponent = ref<{ nome_promotor: string; periodo: any }[]>([]);
-const promotoriasNaoEspecializadas = ref<GrupoPromotoria[]>([]);
-const promotoriasEspecializadas = ref<GrupoPromotoria[]>([]);
+const promotoriasNaoEspecializadas = ref<Promotoria[]>(props.promotoriasMacapa?.filter((promotoria) => !promotoria.is_especializada));
+const promotoriasEspecializadas = ref<Promotoria[]>(props.promotoriasMacapa?.filter((promotoria) => promotoria.is_especializada));
 
-const dadosPromotoria = ref<GrupoPromotoria>({
-  nome: '',
-  promotorias: [],
-});
-
-const resetDadosPromotoria = () => {
-  dadosPromotoria.value = {
-    nome: '',
-    promotorias: [],
-  };
+const enviaDadosDoNovoEvento = (nomeDoGrupoDePromotorias: string, novoEvento: Evento) => {
+  emit('update:novoEventoAdicionado', nomeDoGrupoDePromotorias, novoEvento);
 };
 
-const adicionaEvento = (promotoriaId: number, municipio: GrupoPromotoria, evento: Evento) => {
-  //console.log(dadosPromotoria.value);
-  //console.log(evento.promotor_designado_evento);
-
-  dadosPromotoria.value.nome = municipio.nome;
-  if (evento.periodo.start && evento.periodo.end) {
-    dadosPromotoria.value.promotorias.push({
-      nome: municipio.promotorias[promotoriaId].nome,
-      municipio: municipio.promotorias[promotoriaId].municipio,
-      is_especializada: municipio.promotorias[promotoriaId].is_especializada,
-      nomePromotor: municipio.promotorias[promotoriaId].nomePromotor,
-      eventos: [
-        {
-          id: evento.id,
-          tipo: evento.tipo,
-          periodo: [evento.periodo.start, evento.periodo.end],
-          titulo: evento.titulo,
-          promotor_designado_evento: evento.promotor_designado_evento,
-        },
-      ],
-    });
-  }
-  //console.log(dadosPromotoria.value);
-  emit('update:adicionaDados', dadosPromotoria.value);
-
-  resetDadosPromotoria();
+const enviaDadosDoEventoAlterado = (eventoAlterado: Evento) => {
+  emit('update:umEventoFoiAlterado', eventoAlterado);
 };
 
-const deletaEvento = (eventoId: number, nomePromotoria: string) => {
-  emit('delete:deleteEvento', eventoId, nomePromotoria);
+const enviaDadosDoEventoDeletado = (eventoDeletadoId: number) => {
+  emit('delete:umEventoFoiDeletado', eventoDeletadoId);
 };
 
-const editaEvento = (nomePromotoria: string, evento: Evento) => {
-  emit('update:editaEvento', nomePromotoria, evento);
+const enviaNomeDoPromotorSelecionado = (index: number, nomePromotor: string, idPromotor: string) => {
+  emit('update:nomeFoiSelecionado', index , nomePromotor, idPromotor);
 };
 
-const adicionaNomePromotor = (index: number, nome: string) => {
-  //console.log(index, nome);
-  urgenciaInputComponent.value[index].nome_promotor = nome;
-  //console.log(urgenciaInputComponent.value);
-  emit('update:nomePromotor', index , nome);
+const enviaPeriodoDoAtendimentoSelecionado = (index : number, periodo_start: string, periodo_end: string) => {
+  emit('update:periodoDoAtendimentoFoiSelecionado', index, periodo_start, periodo_end);
 };
 
-const adicionaPeriodoAtendimento = (index : number, periodo: any ) => {
-  //console.log(index, periodo);
-  urgenciaInputComponent.value[index].periodo = periodo;
-  //console.log(urgenciaInputComponent.value);
-  let periodoFormatado;
-  if (periodo.start !== undefined) {
-      periodoFormatado = {
-          start: format(periodo.start, 'dd/MM/yyyy'),
-          end: format(periodo.end, 'dd/MM/yyyy'),
-      };
-  } else {
-      periodoFormatado = format(periodo, 'dd/MM/yyyy')
-  }
-  emit('update:periodo', index, periodoFormatado);
+const enviaIndexInputDeDadosDeletado = (index: number) => {
+  emit('delete:inputDeDadosFoiDeletado', index);
 };
-
-const adicionarInput = (atendimentoUrgencia: { nome_promotor: string; periodo: any }) => {
-  //console.log(atendimentoUrgencia);
-  //console.log(urgenciaInputComponent.value);
-
-  if (urgenciaInputComponent.value.length === 0) {
-    urgenciaInputComponent.value.push(atendimentoUrgencia);
-  } else {
-    const index = urgenciaInputComponent.value.findIndex((atendimentoUrgencia) => atendimentoUrgencia.nome_promotor === '' || atendimentoUrgencia.periodo.start === null || atendimentoUrgencia.periodo.end === null);
-    if (index === -1) {
-      urgenciaInputComponent.value.push(atendimentoUrgencia);
-    } else {
-      console.log('Termine de preencher os campos existentes!');
-    }
-  }
-  //console.log(urgenciaInputComponent.value);
-};
-
-const removeInput = (index: number) => {
-  urgenciaInputComponent.value.splice(index, 1);
-  //console.log(urgenciaInputComponent.value);
-};
-
-const removeAtendimentoUrgencia = (id: number) => {
-  emit('delete:atendimentosUrgencia', id);
-};
-
-onBeforeMount(() => {
-  //console.log(props.promotorias);
-  props.urgenciaAtendimentos?.forEach((atendimentoUrgencia) => {
-    urgenciaInputComponent.value.push({
-      nome_promotor: props.promotores.find((promotor) => promotor.id === atendimentoUrgencia.promotor_designado_id)?.nome || '',
-      periodo: {
-        start: new Date(atendimentoUrgencia.periodo_inicio),
-        end: new Date(atendimentoUrgencia.periodo_fim),
-      },
-    });
-  });
-  
-  props.promotorias.forEach((grupoPromotoria) => {
-    grupoPromotoria.promotorias.forEach((promotoria) => {
-      if (promotoria.is_especializada) {
-        if (promotoriasEspecializadas.value.length === 0) {
-          promotoriasEspecializadas.value.push(grupoPromotoria);
-        } else {
-          const index = promotoriasEspecializadas.value.findIndex((promotoriaEspecializada) => promotoriaEspecializada.nome === grupoPromotoria.nome);
-          if (index === -1) {
-            promotoriasEspecializadas.value.push(grupoPromotoria);
-          }
-        }
-      } else {
-        if (promotoriasNaoEspecializadas.value.length === 0) {
-          promotoriasNaoEspecializadas.value.push(grupoPromotoria);
-        } else {
-          const index = promotoriasNaoEspecializadas.value.findIndex((promotoriaNaoEspecializada) => promotoriaNaoEspecializada.nome === grupoPromotoria.nome);
-          if (index === -1) {
-            promotoriasNaoEspecializadas.value.push(grupoPromotoria);
-          }
-        }
-      }
-    });
-  });
-});
 </script>
 
 <template>
@@ -191,19 +64,15 @@ onBeforeMount(() => {
         Entrância Final – Macapá
       </h1>
       <PlantaoCaraterUrgenciaEditor
-        :promotores="promotores"
-        :urgenciaInputComponent="urgenciaInputComponent"
-        @update:promotorNome="adicionaNomePromotor"
-        @update:periodoAtendimento="adicionaPeriodoAtendimento"
-        @update:adicionaInput="adicionarInput"
-        @delete:removeInput="removeInput"
-        @delete:atendimentoUrgenciaValues="removeAtendimentoUrgencia"
+        @delete:inputDeDadosFoiDeletado="enviaIndexInputDeDadosDeletado"
+        @update:nomeFoiSelecionado="enviaNomeDoPromotorSelecionado"
+        @update:periodoDoAtendimentoFoiSelecionado="enviaPeriodoDoAtendimentoSelecionado"
       />
       <TabelaPromotoriaEditor
-        :municipios="promotoriasNaoEspecializadas"
-        @update:adicionaEvento="adicionaEvento"
-        @delete:deleteEvento="deletaEvento"
-        @update:editaEvento="editaEvento"
+        :promotorias="promotoriasNaoEspecializadas"
+        @update:novoEventoAdicionado="enviaDadosDoNovoEvento"
+        @update:UmEventoFoiAlterado="enviaDadosDoEventoAlterado"
+        @delete:umEventoFoiDeletado="enviaDadosDoEventoDeletado"
       />
     </div>
     <div class="max-w-5xl w-full mx-auto flex flex-col items-center space-y-4">
@@ -211,10 +80,10 @@ onBeforeMount(() => {
         Entrância Final – Macapá (Especializadas)
       </h1>
       <TabelaPromotoriaEditor
-        :municipios="promotoriasEspecializadas"
-        @update:adicionaEvento="adicionaEvento"
-        @delete:deleteEvento="deletaEvento"
-        @update:editaEvento="editaEvento"
+        :promotorias="promotoriasEspecializadas"
+        @update:novoEventoAdicionado="enviaDadosDoNovoEvento"
+        @update:UmEventoFoiAlterado="enviaDadosDoEventoAlterado"
+        @delete:umEventoFoiDeletado="enviaDadosDoEventoDeletado"
       />
     </div>
   </div>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {GrupoPromotoria, Atribuicoes, AtendimentoUrgencia} from '@/types';
+import {GrupoPromotoria, Atribuicoes, UrgenciaAtendimento} from '@/types';
 import { ref, watchEffect } from 'vue';
 import { Card, CardContent, CardHeader } from '@/Components/ui/card';
 import EntranciaFinalMacapaPreview from '@/Components/EspelhoComponents/PreviewComponents/EntranciaFinalMacapaPreview.vue';
@@ -12,7 +12,7 @@ const props = defineProps({
         type: Array as () => string[],
         required: true,
     },
-    promotoriasDados: {
+    grupoPromotoriaDeTodasAsPromotorias: {
         type: Array as () => GrupoPromotoria[],
         required: true,
     },
@@ -21,41 +21,40 @@ const props = defineProps({
         required: true,
     },
     atendimentosUrgenciaDados: {
-        type: Array as () => AtendimentoUrgencia[],
+        type: Array as () => UrgenciaAtendimento[],
         required: true,
     },
 });
 
 const promotoriasMacapa = ref<GrupoPromotoria[]>([]);
 const promotoriasSantana = ref<GrupoPromotoria[]>([]);
-const municipiosInterior = ref<GrupoPromotoria[]>([]);
+const promotoriasInterior = ref<GrupoPromotoria[]>([]);
 
 
 watchEffect(() => {
-    props.promotoriasDados.forEach((grupoPromotoria) => {
+    props.grupoPromotoriaDeTodasAsPromotorias.forEach((grupoPromotoria) => {
         grupoPromotoria.promotorias.forEach((promotoria) => {
             if (promotoria.municipio === 'Macapá') {
-                console.log('Macapá');
                 promotoriasMacapa.value.push(grupoPromotoria);
             } else if (promotoria.municipio === 'Santana') {
                 promotoriasSantana.value.push(grupoPromotoria);
             } else {
-                if (municipiosInterior.value.length === 0) {
-                    municipiosInterior.value.push(grupoPromotoria);
+                if (promotoriasInterior.value.length === 0) {
+                    promotoriasInterior.value.push(grupoPromotoria);
                 } else {
-                    const index = municipiosInterior.value.findIndex((municipio) => municipio.nome === grupoPromotoria.nome);
+                    const index = promotoriasInterior.value.findIndex((grupoPromotoriaInterior) => grupoPromotoriaInterior.nome_grupo_promotorias === grupoPromotoria.nome_grupo_promotorias);
                     if (index === -1) {
-                        municipiosInterior.value.push(grupoPromotoria);
+                        promotoriasInterior.value.push(grupoPromotoria);
                     }
                 }
             }
         });
     });
     
-    if (props.promotoriasDados.length === 0) {
+    if (props.grupoPromotoriaDeTodasAsPromotorias.length === 0) {
         promotoriasMacapa.value = [];
         promotoriasSantana.value = [];
-        municipiosInterior.value = [];
+        promotoriasInterior.value = [];
     }
 });
 
@@ -83,11 +82,11 @@ watchEffect(() => {
                             Procuradorias de Justiça do Estado do Amapá
                         </div>
                         <div v-if="periodoEspelho.length > 0" class="text-sm text-gray-500 dark:text-gray-400">
-                            <span v-if="periodoEspelho[0] !== undefined && periodoEspelho[1] !== undefined">
-                                Espelho de {{ periodoEspelho[0] }} a {{ periodoEspelho[1] }}
+                            <span v-if="periodoEspelho[0] === periodoEspelho[1]">
+                                Espelho de {{ periodoEspelho[0] }}
                             </span>
                             <span v-else>
-                                Espelho do dia {{ periodoEspelho[0] }}
+                                Espelho de {{ periodoEspelho[0] }} a {{ periodoEspelho[1] }}
                             </span>
                         </div>
                     </div>
@@ -97,16 +96,16 @@ watchEffect(() => {
         <CardContent class="flex flex-col items-center space-y-8 w-full">
             <EntranciaFinalMacapaPreview 
                 v-if="promotoriasMacapa.length > 0 || props.atendimentosUrgenciaDados.length > 0"
-                :promotorias="promotoriasMacapa"
-                :atendimentoUrgencia="props.atendimentosUrgenciaDados"
+                :grupoPromotorias="promotoriasMacapa"
+                :urgenciaAtendimentos="props.atendimentosUrgenciaDados"
             />
             <EntranciaFinalSantanaPreview 
                 v-if="promotoriasSantana.length > 0"
                 :promotorias="promotoriasSantana"
             /> 
             <EntranciaInicialPreview
-                v-if="municipiosInterior.length > 0"
-                :promotoriasDados="municipiosInterior"
+                v-if="promotoriasInterior.length > 0"
+                :promotoriasDados="promotoriasInterior"
             />
             <TabelaPromotoresSubstitutosPreview
                 :listaAtribuicoes="listaAtribuicoes"

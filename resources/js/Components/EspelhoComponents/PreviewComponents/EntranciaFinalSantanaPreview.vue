@@ -22,7 +22,7 @@ watchEffect(() => {
         if (promotoriasEspecializadas.value.length === 0) {
           promotoriasEspecializadas.value.push(grupoPromotoria);
         } else {
-          const index = promotoriasEspecializadas.value.findIndex((promotoriaEspecializada) => promotoriaEspecializada.nome === grupoPromotoria.nome);
+          const index = promotoriasEspecializadas.value.findIndex((promotoriaEspecializada) => promotoriaEspecializada.nome_grupo_promotorias === grupoPromotoria.nome_grupo_promotorias);
           if (index === -1) {
             promotoriasEspecializadas.value.push(grupoPromotoria);
           }
@@ -31,7 +31,7 @@ watchEffect(() => {
         if (promotoriasNaoEspecializadas.value.length === 0) {
           promotoriasNaoEspecializadas.value.push(grupoPromotoria);
         } else {
-          const index = promotoriasNaoEspecializadas.value.findIndex((promotoriaNaoEspecializada) => promotoriaNaoEspecializada.nome === grupoPromotoria.nome);
+          const index = promotoriasNaoEspecializadas.value.findIndex((promotoriaNaoEspecializada) => promotoriaNaoEspecializada.nome_grupo_promotorias === grupoPromotoria.nome_grupo_promotorias);
           if (index === -1) {
             promotoriasNaoEspecializadas.value.push(grupoPromotoria);
           }
@@ -49,7 +49,7 @@ watchEffect(() => {
         Entrância Final – Santana
       </h1>
       <TabelaPromotoriaPreview
-      :municipios="promotoriasNaoEspecializadas"
+      :grupoPromotorias="promotoriasNaoEspecializadas"
       />
     </div>
     <div class="w-full mx-auto flex flex-col items-center space-y-4" v-if="promotoriasEspecializadas.length > 0">
@@ -57,7 +57,7 @@ watchEffect(() => {
         Entrância Final – Santana (Especializadas)
       </h1>
       <TabelaPromotoriaPreview
-      :municipios="promotoriasEspecializadas"
+      :grupoPromotorias="promotoriasEspecializadas"
       />
     </div>
   </div>

@@ -139,7 +139,8 @@ onMounted(() => {
                         </Label>
                         <DatePicker 
                             :range="true"
-                            :period="periodoEvento"
+                            :period_start="periodoEvento.start"
+                            :period_end="periodoEvento.end"
                             :is-validation="periodoEventoInvalido"
                             @update:period="updatePeriodo"
                         />

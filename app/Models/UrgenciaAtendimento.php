@@ -18,6 +18,26 @@ class UrgenciaAtendimento extends Model
     ];
 
     /**
+     * Converte o id para string
+     * @param $value
+     * @return string
+     */
+    public function getIdAttribute($value)
+    {
+        return (string)$value;
+    }
+
+    /**
+     * Converte o id do promotor designado para string
+     * @param $value
+     * @return string
+     */
+    public function getPromotorDesignadoIdAttribute($value)
+    {
+        return (string)$value;
+    }
+
+    /**
      * Busca o promotor designado para a urgência
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */

@@ -1,16 +1,14 @@
 <script setup lang="ts">
 import { Atribuicoes } from '@/types';
 import { onMounted } from 'vue';
+import { format } from 'date-fns';
+
 
 const props = defineProps({
   listaAtribuicoes: {
     type: Array as () => Atribuicoes[],
     required: true,
   },
-});
-
-onMounted(() => {
-  //console.log(props.listaAtribuicoes);
 });
 </script>
 
@@ -31,7 +29,7 @@ onMounted(() => {
         </tr>
       </thead>
       <tbody class="text-center">
-        <tr class="bg-white hover:bg-gray-50 border" v-for="atribuicoes in props.listaAtribuicoes" :key="atribuicoes.id">
+        <tr class="bg-white hover:bg-gray-50 border" v-for="atribuicoes in props.listaAtribuicoes" :key="atribuicoes.nome_promotor">
           <td class="border px-6 py-4 font-medium">
             {{ atribuicoes.nome_promotor }}
           </td>
@@ -46,7 +44,7 @@ onMounted(() => {
                 </span>
               </span>
               <p class="text-xs">
-                ({{ atribuicao.periodo[0] }} - {{ atribuicao.periodo[1] }})
+                ({{ format(new Date(atribuicao.periodo_inicio), 'dd/MM/yyyy') }} - {{ format(new Date(atribuicao.periodo_fim), 'dd/MM/yyyy') }})
               </p>
             </span>
           </td>

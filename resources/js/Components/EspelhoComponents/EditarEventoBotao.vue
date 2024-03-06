@@ -25,7 +25,7 @@ const props = defineProps({
         type: String,
         required: true,
     },
-    nomeMunicipio: {
+    nomeComarca: {
         type: String,
         required: true,
     },
@@ -34,15 +34,19 @@ const props = defineProps({
         required: true,
     },
     id: {
-        type: Number,
+        type: String,
         required: true,
     },
     tipo: {
         type: String,
         required: true,
     },
-    periodo: {
-        type: Array as () => Date[],
+    periodo_inicio: {
+        type: String,
+        required: true,
+    },
+    periodo_fim: {
+        type: String,
         required: true,
     },
     titulo: {
@@ -58,7 +62,7 @@ const props = defineProps({
 
 /* Variaveis Reativas */
 const tipoEvento = ref<string>(props.tipo);
-const periodoEvento = ref<{ start: Date; end: Date }>({ start: new Date(props.periodo[0]), end: new Date(props.periodo[1]) });
+const periodoEvento = ref<{ start: Date; end: Date }>({ start: new Date(props.periodo_inicio), end: new Date(props.periodo_fim) });
 const tituloEvento = ref<string>(props.titulo);
 const promotor_designado_evento_reativo = ref<string>(props.promotor_designado_evento);
 
@@ -70,14 +74,7 @@ const eventos = [
     { id: 5, nome: 'Outros', selecionado: false },
 ];
 
-const resetarInformacoes = () => {
-    tipoEvento.value = '';
-    periodoEvento.value = { start: new Date(), end: new Date() };
-    tituloEvento.value = '';
-    promotor_designado_evento_reativo.value = '';
-};
-
-const enviaDadosDoEvento = (evento: { id: number; tipo: string; periodo: { start: Date; end: Date }; titulo: string; promotor_designado_evento: string }) => {
+const enviaDadosDoEvento = (evento: { id: string; tipo: string; periodo: { start: Date; end: Date }; titulo: string; promotor_designado_evento: string }) => {
     console.log(evento);
     emit('update:editaEvento',props.nomePromotoria, evento);
 };
@@ -130,7 +127,8 @@ onMounted(() => {
                         <DatePicker
                             :was-changed="true"
                             :range="true"
-                            :period="periodoEvento"
+                            :period_start="periodoEvento.start"
+                            :period_end="periodoEvento.end"
                             @update:period="periodoEvento = $event"
                         />
                     </div>

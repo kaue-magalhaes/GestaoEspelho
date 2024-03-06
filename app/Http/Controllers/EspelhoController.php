@@ -17,17 +17,17 @@ class EspelhoController extends Controller
      */
     public function index(): Response
     {
-        $espelho              = Espelho::with('promotorias')->first();
+        $espelho              = Espelho::with('promotorias')->first()->toArray();
         $promotores           = Promotor::all()->toArray();
         $eventos              = Evento::all()->toArray();
         $urgenciaAtendimentos = UrgenciaAtendimento::all()->toArray();
 
-        //dd($espelho);
+        //dd($espelho, $promotores, $eventos, $urgenciaAtendimentos);
 
         return Inertia::render('Espelho', [
             'espelho'              => $espelho,
             'promotores'           => $promotores,
-            'promotoria'           => $espelho->promotorias,
+            'promotoria'           => $espelho['promotorias'],
             'eventos'              => $eventos,
             'urgenciaAtendimentos' => $urgenciaAtendimentos
         ]);

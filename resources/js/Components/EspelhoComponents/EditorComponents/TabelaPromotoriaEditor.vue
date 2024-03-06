@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { GrupoPromotoria } from '@/types';
+import {Evento, GrupoPromotoria, Promotor, Promotoria} from '@/types';
 import { onMounted, ref } from 'vue';
 import { usePage } from '@inertiajs/vue3';
 
@@ -20,132 +20,115 @@ import {
 
 import { Trash } from 'lucide-vue-next';
 
-type Evento = {
-  id: number;
-  tipo: string;
-  periodo:{
-    start: Date | null;
-    end: Date | null;
-  };
-  titulo: string;
-  promotor_designado_evento: string;
-};
-
-const promotores = usePage().props.promotores;
-
+const page = usePage();
 const emit = defineEmits([
-  'update:adicionaEvento',
-  'delete:deleteEvento',
-  'update:editaEvento',
+  'update:novoEventoAdicionado',
+  'update:UmEventoFoiAlterado',
+  'delete:umEventoFoiDeletado',
 ]);
 
 const props = defineProps({
-  municipios: {
-    type: Array as () => GrupoPromotoria[],
-    required: true,
-  },
+  promotorias: Array as () => Promotoria[],
 });
 
-const municipiosReativos = ref<GrupoPromotoria[]>(props.municipios);
+const promotores = ref<Promotor[]>(page.props.promotores || []);
+const eventos = ref<Evento[]>(page.props.eventos || []);
+const grupoPromotorias = ref<GrupoPromotoria[]>([]);
 
-const evento = ref<Evento>({
-  id: 0,
-  tipo: '',
-  periodo:{
-    start: null,
-    end: null,
-  },
-  titulo: '',
-  promotor_designado_evento: '',
-});
-
-const adicionaEvento = (nomePromotoria: String, nomeMunicipio: String, eventoSelelcionado: Evento) => {
-  //console.log(nomePromotoria);
-  //console.log(nomeMunicipio);
-  //console.log(eventoSelelcionado);
-  //console.log(eventoSelelcionado.promotor_designado_evento);
-  const municipioSelecionado = municipiosReativos.value.find((municipio) => municipio.nome === nomeMunicipio);
-  const promotoriaId = municipioSelecionado?.promotorias.findIndex((promotoria) => promotoria.nome === nomePromotoria);
-
-  //console.log(promotoriaId);
-  municipiosReativos.value.forEach((municipio) => {
-    municipio.promotorias.forEach((promotoria) => {
-      if (promotoria.nome === nomePromotoria) {
-        evento.value = {
-          id: promotoria.eventos.length,
-          tipo: eventoSelelcionado.tipo,
-          periodo: {
-            start: eventoSelelcionado.periodo.start,
-            end: eventoSelelcionado.periodo.end,
-          },
-          titulo: eventoSelelcionado.titulo,
-          promotor_designado_evento: eventoSelelcionado.promotor_designado_evento,
-        };
-        if (evento.value.periodo.start && evento.value.periodo.end) {
-          promotoria.eventos.push({
-            id: promotoria.eventos.length,
-            tipo: evento.value.tipo,
-            periodo: [evento.value.periodo.start, evento.value.periodo.end],
-            titulo: evento.value.titulo,
-            promotor_designado_evento: evento.value.promotor_designado_evento,
-          });
-        }
-      }
-    });
+const adicionaEvento = (nomeDoGrupoDePromotorias: String, novoEvento: Evento) => {
+  grupoPromotorias.value.forEach((grupoPromotoria) => {
+    if (grupoPromotoria.nome_grupo_promotorias === nomeDoGrupoDePromotorias) {
+      grupoPromotoria.eventos.push(novoEvento);
+    }
   });
-
-  //console.log(municipiosReativos.value);
-  
-  emit('update:adicionaEvento', promotoriaId, municipioSelecionado, evento.value);
+  emit('update:novoEventoAdicionado', nomeDoGrupoDePromotorias, novoEvento);
 };
 
-const EditaEvento = (nomePromotoria: string, evento: Evento) => {
-  //console.log(evento.promotor_designado_evento);
-  
-  municipiosReativos.value.forEach((municipio) => {
-    municipio.promotorias.forEach((promotoria) => {
-      if (promotoria.nome === nomePromotoria) {
-        promotoria.eventos.forEach((eventoPromotoria) => {
-          if (eventoPromotoria.id === evento.id) {
-            if (evento.periodo.start && evento.periodo.end) {
-              eventoPromotoria.tipo = evento.tipo;
-              eventoPromotoria.periodo = [evento.periodo.start, evento.periodo.end];
-              eventoPromotoria.titulo = evento.titulo;
-              eventoPromotoria.promotor_designado_evento = evento.promotor_designado_evento;
-            }
-          }
-        });
+const EditaEvento = (eventoAlterado: Evento) => {
+  grupoPromotorias.value.forEach((grupoPromotoria) => {
+    grupoPromotoria.eventos.forEach((evento) => {
+      if (evento.id === eventoAlterado.id) {
+        evento.id = eventoAlterado.id;
+        evento.tipo = eventoAlterado.tipo;
+        evento.periodo_inicio = eventoAlterado.periodo_inicio;
+        evento.periodo_fim = eventoAlterado.periodo_fim;
+        evento.titulo = eventoAlterado.titulo;
+        evento.promotor_designado_id = eventoAlterado.promotor_designado_id;
       }
     });
   });
-
-  emit('update:editaEvento', nomePromotoria, evento);
+  emit('update:UmEventoFoiAlterado', eventoAlterado);
 };
 
-const deleteEvento = (eventoId: number, nomePromotoria: string) => {
-  municipiosReativos.value.forEach((municipio) => {
-    municipio.promotorias.forEach((promotoria) => {
-      if (promotoria.nome === nomePromotoria) {
-        promotoria.eventos = promotoria.eventos.filter((evento) => evento.id !== eventoId);
-      }
-    });
+const deleteEvento = (eventoId: string) => {
+  grupoPromotorias.value.forEach((grupoPromotoria) => {
+    grupoPromotoria.eventos = grupoPromotoria.eventos.filter((evento) => evento.id !== eventoId);
   });
-  emit('delete:deleteEvento', eventoId, nomePromotoria);
+  emit('delete:umEventoFoiDeletado', eventoId);
 };
 
 onMounted(() => {
-  //console.log(promotores);
-  //console.log(props.municipios);
+  props.promotorias?.forEach((promotoria) => {
+    if (grupoPromotorias.value.length === 0) {
+      grupoPromotorias.value.push({
+        nome_grupo_promotorias: promotoria.nome_grupo_promotorias,
+        promotorias: [{
+          id: promotoria.id,
+          nome: promotoria.nome,
+          nome_grupo_promotorias: promotoria.nome_grupo_promotorias,
+          municipio: promotoria.municipio,
+          is_especializada: promotoria.is_especializada,
+          espelho_id: promotoria.espelho_id,
+          promotor_titular_id: promotoria.promotor_titular_id,
+          created_at: promotoria.created_at,
+          updated_at: promotoria.updated_at,
+        }],
+        eventos: eventos.value.filter((evento) => evento.promotor_titular_id === promotoria.promotor_titular_id) || [],
+      });
+    } else {
+      const grupoPromotoria = grupoPromotorias.value.find((grupoPromotoria) => grupoPromotoria.nome_grupo_promotorias === promotoria.nome_grupo_promotorias);
+      if (grupoPromotoria) {
+        grupoPromotoria.promotorias.push({
+          id: promotoria.id,
+          nome: promotoria.nome,
+          nome_grupo_promotorias: promotoria.nome_grupo_promotorias,
+          municipio: promotoria.municipio,
+          is_especializada: promotoria.is_especializada,
+          espelho_id: promotoria.espelho_id,
+          promotor_titular_id: promotoria.promotor_titular_id,
+          created_at: promotoria.created_at,
+          updated_at: promotoria.updated_at,
+        });
+        grupoPromotoria.eventos = eventos.value.filter((evento) => evento.promotor_titular_id === promotoria.promotor_titular_id) || [];
+      } else {
+        grupoPromotorias.value.push({
+          nome_grupo_promotorias: promotoria.nome_grupo_promotorias,
+          promotorias: [{
+            id: promotoria.id,
+            nome: promotoria.nome,
+            nome_grupo_promotorias: promotoria.nome_grupo_promotorias,
+            municipio: promotoria.municipio,
+            is_especializada: promotoria.is_especializada,
+            espelho_id: promotoria.espelho_id,
+            promotor_titular_id: promotoria.promotor_titular_id,
+            created_at: promotoria.created_at,
+            updated_at: promotoria.updated_at,
+          }],
+          eventos: eventos.value.filter((evento) => evento.promotor_titular_id === promotoria.promotor_titular_id) || [],
+        });
+      }
+    }
+  });
 });
 </script>
 
 <template>
-  <div class="w-full" v-for="municipio in municipiosReativos" :key="municipio.nome">
-    <table class="w-full text-black" v-if="municipio.promotorias.length > 1">
+  <div class="w-full" v-for="comarca in grupoPromotorias" :key="comarca.nome_grupo_promotorias">
+    <table class="w-full text-black" v-if="comarca.promotorias.length > 1">
       <tbody class="text-center">
         <tr class="text-black uppercase bg-gray-300 border border-gray-400 text-center text-base">
           <th class="w-1/3 px-6 py-4 border border-gray-400">
-            {{ municipio.nome }}
+            {{ comarca.nome_grupo_promotorias }}
           </th>
           <th class="w-1/3 px-6 py-4 border border-gray-400">
             Promotor
@@ -154,33 +137,34 @@ onMounted(() => {
             Periodo
           </th>
         </tr>
-        <tr class="bg-white" v-for="dadosPromotoria in municipio.promotorias" :key="dadosPromotoria.nome">
+        <tr class="bg-white" v-for="promotoria in comarca.promotorias" :key="promotoria.id">
           <td class="border px-6 py-4 font-medium">
-            {{ dadosPromotoria.nome }}
+            {{ promotoria.nome }}
           </td>
           <td class="border px-6 py-4 font-medium">
-            {{ dadosPromotoria.nomePromotor }}
+            {{ promotores.find((promotor) => promotor.id === promotoria.promotor_titular_id)?.nome }}
           </td>
           <td class="border px-6 py-4">
-            <span v-for="evento in dadosPromotoria.eventos" :key="evento.id">
+            <span v-for="evento_da_promotoria in comarca.eventos.filter((evento) => evento.promotor_titular_id === promotoria.promotor_titular_id)" :key="evento_da_promotoria.id">
               <span class="flex items-center justify-between space-y-2">
-                <span v-if="evento.titulo !== ''">
-                  {{ evento.tipo }} - {{ evento.titulo }}
+                <span v-if="evento_da_promotoria.titulo !== ''">
+                  {{ evento_da_promotoria.tipo }} - {{ evento_da_promotoria.titulo }}
                 </span>
                 <span v-else>
-                  {{ evento.tipo }}
+                  {{ evento_da_promotoria.tipo }}
                 </span>
                 <span class="flex space-x-2">
                   <EditarEventoBotao
                     :promotores="promotores"
-                    :nomePromotoria="dadosPromotoria.nome"
-                    :nomeMunicipio="municipio.nome"
-                    :nomePromotor="dadosPromotoria.nomePromotor"
-                    :id = "evento.id"
-                    :tipo="evento.tipo"
-                    :periodo="evento.periodo"
-                    :titulo="evento.titulo"
-                    :promotor_designado_evento="evento.promotor_designado_evento"
+                    :nomePromotoria="promotoria.nome"
+                    :nomeComarca="comarca.nome_grupo_promotorias"
+                    :nomePromotor="promotores.find((promotor) => promotor.id === promotoria.promotor_titular_id)?.nome || ''"
+                    :id = "evento_da_promotoria.id"
+                    :tipo="evento_da_promotoria.tipo"
+                    :periodo_inicio="evento_da_promotoria.periodo_inicio"
+                    :periodo_fim="evento_da_promotoria.periodo_fim"
+                    :titulo="evento_da_promotoria.titulo"
+                    :promotor_designado_evento="promotores.find((promotor) => promotor.id === evento_da_promotoria.promotor_designado_id)?.nome"
                     @update:editaEvento="EditaEvento"
                   />
                   <AlertDialog>
@@ -192,11 +176,11 @@ onMounted(() => {
                     <AlertDialogContent>
                       <AlertDialogHeader>
                         <AlertDialogTitle>
-                          <span v-if="evento.titulo !== ''">
-                            Tem certeza que deseja excluir o evento "{{ evento.tipo }} - {{ evento.titulo }}"?
+                          <span v-if="evento_da_promotoria.titulo !== ''">
+                            Tem certeza que deseja excluir o evento "{{ evento_da_promotoria.tipo }} - {{ evento_da_promotoria.titulo }}"?
                           </span>
                           <span v-else>
-                            Tem certeza que deseja excluir o evento "{{ evento.tipo }}"?
+                            Tem certeza que deseja excluir o evento "{{ evento_da_promotoria.tipo }}"?
                           </span>
                         </AlertDialogTitle>
                         <AlertDialogDescription>
@@ -207,7 +191,7 @@ onMounted(() => {
                         <AlertDialogCancel class="bg-red-500 hover:bg-red-400 text-white hover:text-white">
                           Cancelar
                         </AlertDialogCancel>
-                        <AlertDialogAction @click="deleteEvento(evento.id, dadosPromotoria.nome)">
+                        <AlertDialogAction @click="deleteEvento(evento_da_promotoria.id)">
                           Excluir evento
                         </AlertDialogAction>
                       </AlertDialogFooter>
@@ -218,9 +202,9 @@ onMounted(() => {
             </span>
             <AdicionarEventoBotao
               :promotores="promotores"
-              :nomeMunicipio="municipio.nome"
-              :nomePromotoria="dadosPromotoria.nome"
-              :nomePromotor="dadosPromotoria.nomePromotor"
+              :nomeMunicipio="comarca.nome_grupo_promotorias"
+              :nomePromotoria="promotoria.nome"
+              :nomePromotor="promotores.find((promotor) => promotor.id === promotoria.promotor_titular_id)?.nome || ''"
               @update:adicionaEvento="adicionaEvento"
             />
           </td>
@@ -228,11 +212,11 @@ onMounted(() => {
       </tbody>
     </table>
   
-    <table class="w-full text-black" v-else-if="municipio.promotorias.length === 1">
+    <table class="w-full text-black" v-else-if="comarca.promotorias.length === 1">
       <tbody class="text-center">
         <tr class="text-black uppercase bg-gray-300 border-gray-400 border text-center text-base">
           <th class="w-1/3 px-6 py-4 border border-gray-400" rowspan="2">
-            {{ municipio.nome }}
+            {{ comarca.nome_grupo_promotorias }}
           </th>
           <th class="w-1/3 px-6 py-4 border border-gray-400">
             Promotor
@@ -241,30 +225,31 @@ onMounted(() => {
             Periodo
           </th>
         </tr>
-        <tr class="bg-white" v-for="dadosPromotoria in municipio.promotorias" :key="dadosPromotoria.nome">
+        <tr class="bg-white" v-for="promotoria in comarca.promotorias" :key="promotoria.nome">
           <td class="border px-6 py-4 font-medium">
-            {{ dadosPromotoria.nomePromotor }}
+            {{ promotores.find((promotor) => promotor.id === promotoria.promotor_titular_id)?.nome }}
           </td>
           <td class="border px-6 py-4">
-            <span v-for="evento in dadosPromotoria.eventos" :key="evento.id">
+            <span v-for="evento_da_promotoria in comarca.eventos.filter((evento) => evento.promotor_titular_id === promotoria.promotor_titular_id)" :key="evento_da_promotoria.id">
               <span class="flex items-center justify-between space-y-2">
-                <span v-if="evento.titulo !== ''">
-                  {{ evento.tipo }} - {{ evento.titulo }}
+                <span v-if="evento_da_promotoria.titulo !== ''">
+                  {{ evento_da_promotoria.tipo }} - {{ evento_da_promotoria.titulo }}
                 </span>
                 <span v-else>
-                  {{ evento.tipo }}
+                  {{ evento_da_promotoria.tipo }}
                 </span>
                 <span class="flex space-x-2">
                   <EditarEventoBotao
                     :promotores="promotores"
-                    :nomePromotoria="dadosPromotoria.nome"
-                    :nomeMunicipio="municipio.nome"
-                    :nomePromotor="dadosPromotoria.nomePromotor"
-                    :id = "evento.id"
-                    :tipo="evento.tipo"
-                    :periodo="evento.periodo"
-                    :titulo="evento.titulo"
-                    :promotor_designado_evento="evento.promotor_designado_evento"
+                    :nomePromotoria="promotoria.nome"
+                    :nomeComarca="comarca.nome_grupo_promotorias"
+                    :nomePromotor="promotores.find((promotor) => promotor.id === promotoria.promotor_titular_id)?.nome || ''"
+                    :id = "evento_da_promotoria.id"
+                    :tipo="evento_da_promotoria.tipo"
+                    :periodo_inicio="evento_da_promotoria.periodo_inicio"
+                    :periodo_fim="evento_da_promotoria.periodo_fim"
+                    :titulo="evento_da_promotoria.titulo"
+                    :promotor_designado_evento="promotores.find((promotor) => promotor.id === evento_da_promotoria.promotor_designado_id)?.nome"
                     @update:editaEvento="EditaEvento"
                   />
                   <AlertDialog>
@@ -276,11 +261,11 @@ onMounted(() => {
                     <AlertDialogContent>
                       <AlertDialogHeader>
                         <AlertDialogTitle>
-                          <span v-if="evento.titulo !== ''">
-                            Tem certeza que deseja excluir o evento "{{ evento.tipo }} - {{ evento.titulo }}"?
+                          <span v-if="evento_da_promotoria.titulo !== ''">
+                            Tem certeza que deseja excluir o evento "{{ evento_da_promotoria.tipo }} - {{ evento_da_promotoria.titulo }}"?
                           </span>
                           <span v-else>
-                            Tem certeza que deseja excluir o evento "{{ evento.tipo }}"?
+                            Tem certeza que deseja excluir o evento "{{ evento_da_promotoria.tipo }}"?
                           </span>
                         </AlertDialogTitle>
                         <AlertDialogDescription>
@@ -291,7 +276,7 @@ onMounted(() => {
                         <AlertDialogCancel class="bg-red-500 hover:bg-red-400 text-white hover:text-white">
                           Cancelar
                         </AlertDialogCancel>
-                        <AlertDialogAction @click="deleteEvento(evento.id, dadosPromotoria.nome)">
+                        <AlertDialogAction @click="deleteEvento(evento_da_promotoria.id)">
                           Excluir evento
                         </AlertDialogAction>
                       </AlertDialogFooter>
@@ -302,9 +287,9 @@ onMounted(() => {
             </span>
             <AdicionarEventoBotao
               :promotores="promotores"
-              :nomePromotoria="dadosPromotoria.nome"
-              :nomeMunicipio="municipio.nome"
-              :nomePromotor="dadosPromotoria.nomePromotor"
+              :nomePromotoria="promotoria.nome"
+              :nomeMunicipio="comarca.nome_grupo_promotorias"
+              :nomePromotor="promotores.find((promotor) => promotor.id === promotoria.promotor_titular_id)?.nome || ''"
               @update:adicionaEvento="adicionaEvento"
             />
           </td>

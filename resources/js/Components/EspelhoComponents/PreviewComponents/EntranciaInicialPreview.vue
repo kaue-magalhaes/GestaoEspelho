@@ -1,20 +1,13 @@
 <script setup lang="ts">
 import { GrupoPromotoria } from '@/types';
-import { onMounted } from 'vue';
-
 import TabelaPromotoriaPreview from '@/Components/EspelhoComponents/PreviewComponents/TabelaPromotoriaPreview.vue';
 
-const props = defineProps({
+defineProps({
   promotoriasDados: {
     type: Array as () => GrupoPromotoria[],
     required: true,
   },
 });
-
-onMounted(() => {
-  //console.log(props.promotoriasDados)
-});
-
 </script>
 
 <template>
@@ -23,7 +16,7 @@ onMounted(() => {
       Entrância Inicial
     </h1>
     <TabelaPromotoriaPreview
-     :municipios="promotoriasDados"
+     :grupoPromotorias="promotoriasDados"
     />
   </div>
 </template>

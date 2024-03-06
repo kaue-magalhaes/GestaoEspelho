@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { Promotor} from '@/types';
-import { onMounted } from 'vue';
+import {Promotor, UrgenciaAtendimento} from '@/types';
+import {onMounted, ref} from 'vue';
+import { format } from 'date-fns';
 
 import { Button } from '@/Components/ui/button';
 import { Label } from '@/Components/ui/label';
@@ -9,57 +10,47 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrig
 import DatePicker from '@/Components/DatePicker.vue';
 
 import { Plus, Trash2 } from 'lucide-vue-next';
+import {usePage} from "@inertiajs/vue3";
 
+const page = usePage();
 const emit = defineEmits([
-  'update:promotorNome',
-  'update:periodoAtendimento',
-  'update:adicionaInput',
-  'delete:removeInput',
-  'delete:atendimentoUrgenciaValues',
+  'delete:inputDeDadosFoiDeletado',
+  'update:nomeFoiSelecionado',
+  'update:periodoDoAtendimentoFoiSelecionado',
 ]);
 
-const props = defineProps({
-  promotores: {
-    type: Array as () => Promotor[] ,
-    required: true,
-  },
-  urgenciaInputComponent: {
-    type: Array as () => { nome_promotor: string; periodo: any }[],
-    required: true,
-  },
-});
+const promotoresQuePodemAtender = ref<Promotor[]>(page.props.promotores || []);
+const plantaoDeAtendimentos = ref<UrgenciaAtendimento[]>(page.props.urgenciaAtendimentos || []);
 
-const adicionarInput = () => {
-  //console.log('Adicionando input');
-  const novoAtendimentoUrgencia = {
-    nome_promotor: '',
-    periodo: {
-      start: null,
-      end: null,
-    },
-  };
-  emit('update:adicionaInput', novoAtendimentoUrgencia);
+const adicionarInputDeDados = () => {
+  plantaoDeAtendimentos.value.push({
+    id: String(Number(plantaoDeAtendimentos.value[plantaoDeAtendimentos.value.length - 1].id) + 1),
+    periodo_inicio: '',
+    periodo_fim: '',
+    promotor_designado_id: '',
+  });
 };
 
-const removeInput = (index: number) => {
-  //console.log('Removendo input do index: ', index);
-  emit('delete:removeInput', index);
-  emit('delete:atendimentoUrgenciaValues', index);
-  //console.log(urgenciaInputComponent.value);
+const adicionaNomeDoPromotorSelecionado = (index: number, nomePromotor: string, idPromotor: string) => {
+  plantaoDeAtendimentos.value[index].promotor_designado_id = idPromotor;
+  emit('update:nomeFoiSelecionado', index, nomePromotor, idPromotor);
 };
 
-const enviaNomePromotor = (index: number, nome: string) => {
-  //console.log(index, nome);
-  emit('update:promotorNome', index, nome);
+const adicionaPeriodoDeAtendimentoSelecionado = (index: number, periodo: { start: Date; end: Date }) => {
+  const periodo_inicio = format(periodo.start, 'yyyy-MM-dd');
+  const periodo_fim = format(periodo.end, 'yyyy-MM-dd');
+  plantaoDeAtendimentos.value[index].periodo_inicio = periodo_inicio;
+  plantaoDeAtendimentos.value[index].periodo_fim = periodo_fim;
+  emit('update:periodoDoAtendimentoFoiSelecionado', index, periodo_inicio, periodo_fim);
 };
 
-const emitirPeriodo = (index: number, periodo: { start: Date; end: Date }) => {
-  //console.log(index, periodo);
-  emit('update:periodoAtendimento', index, periodo);
+const removeInputDeDados = (index: number) => {
+  plantaoDeAtendimentos.value.splice(index, 1);
+  emit('delete:inputDeDadosFoiDeletado', index);
 };
 
 onMounted(() => {
-  //console.log(props.promotores);
+  //console.log(plantaoDeAtendimentos.value);
 });
 </script>
 
@@ -68,19 +59,19 @@ onMounted(() => {
     <Label class="text-xl">
       Plantão de Atendimentos em Caráter de Urgência - Macapá/Santana:
     </Label>
-    <div v-for="(input, index) in props.urgenciaInputComponent" :key="index" class="w-full px-4 flex justify-center items-center space-x-4">
+    <div v-for="(input, index) in plantaoDeAtendimentos" :key="index" class="w-full px-4 flex justify-center items-center space-x-4">
       <div class="flex flex-row items-center w-full space-x-4">
         <Label class="text-base whitespace-nowrap">
           Nome do Promotor:
         </Label>
-        <Select v-model="input.nome_promotor" class="mb-2 w-full">
+        <Select v-model="input.promotor_designado_id" class="w-1/2">
           <SelectTrigger>
             <SelectValue placeholder="Selecione o promotor" />
           </SelectTrigger>
           <SelectContent>
             <SelectGroup>
               <SelectLabel>Promotores</SelectLabel>
-              <SelectItem v-for="promotor in props.promotores" :key="promotor.id" :value="promotor.nome" @click="enviaNomePromotor(index, promotor.nome)">
+              <SelectItem v-for="promotor in promotoresQuePodemAtender" :key="promotor.id" :value="promotor.id" @click="adicionaNomeDoPromotorSelecionado(index, promotor.nome, promotor.id)">
                 {{ promotor.nome }}
               </SelectItem>
             </SelectGroup>
@@ -92,19 +83,27 @@ onMounted(() => {
           Período:
         </Label>
         <DatePicker
-          :period="input.periodo"
+          v-if="input.periodo_fim !== '' && input.periodo_inicio !== ''"
+          :period_start="new Date(input.periodo_inicio)"
+          :period_end="new Date (input.periodo_fim)"
           :range="true"
           :was-changed="true"
-          @update:period="emitirPeriodo(index, $event)"
+          @update:period="adicionaPeriodoDeAtendimentoSelecionado(index, $event)"
+        />
+        <DatePicker
+          v-else
+          :range="true"
+          :was-changed="false"
+          @update:period="adicionaPeriodoDeAtendimentoSelecionado(index, $event)"
         />
       </div>
       <div class="flex mb-2">
-        <Button @click="removeInput(index)" variant="destructive" class="p-3">
+        <Button @click="removeInputDeDados(index)" variant="destructive" class="p-3">
           <Trash2 class="w-5 h-5 text-white" />
         </Button>
       </div>
     </div>
-    <Button variant="ghost" class="w-1/4" @click="adicionarInput()">
+    <Button variant="ghost" class="w-1/4" @click="adicionarInputDeDados()">
       Adicionar <Plus class="ml-1 w-4 h-4" />
     </Button>
     </Card>

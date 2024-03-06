@@ -17,6 +17,16 @@ class Espelho extends Model
     ];
 
     /**
+     * Converte o id para string
+     * @param $value
+     * @return string
+     */
+    public function getIdAttribute($value)
+    {
+        return (string)$value;
+    }
+
+    /**
      * Busca as promotorias vinculadas ao espelho
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */

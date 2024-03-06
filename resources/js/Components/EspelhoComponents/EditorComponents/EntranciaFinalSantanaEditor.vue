@@ -1,109 +1,35 @@
 <script setup lang="ts">
-import { GrupoPromotoria } from '@/types';
-import { ref, onBeforeMount } from 'vue';
-
+import { Evento, Promotoria } from '@/types';
+import { ref } from 'vue';
 import TabelaPromotoriaEditor from '@/Components/EspelhoComponents/EditorComponents/TabelaPromotoriaEditor.vue';
 
-type Evento = {
-  id: number;
-  tipo: string;
-  periodo:{
-    start: Date | null;
-    end: Date | null;
-  };
-  titulo: string;
-  promotor_designado_evento: string;
-};
-
 const emit = defineEmits([
-  'update:adicionaDados',
-  'delete:deleteEvento',
-  'update:editaEvento',
+  'update:novoEventoAdicionado',
+  'update:umEventoFoiAlterado',
+  'delete:umEventoFoiDeletado',
 ]);
 
 const props = defineProps({
-  promotorias: {
-    type: Array as () => GrupoPromotoria[],
+  promotoriasSantana: {
+    type: Array as () => Promotoria[],
     required: true,
   },
 });
 
-const promotoriasNaoEspecializadas = ref<GrupoPromotoria[]>([]);
-const promotoriasEspecializadas = ref<GrupoPromotoria[]>([]);
+const promotoriasNaoEspecializadas = ref<Promotoria[]>(props.promotoriasSantana?.filter((promotoria) => !promotoria.is_especializada));
+const promotoriasEspecializadas = ref<Promotoria[]>(props.promotoriasSantana?.filter((promotoria) => promotoria.is_especializada));
 
-const dadosPromotoria = ref<GrupoPromotoria>({
-  nome: '',
-  promotorias: [],
-});
-
-const resetDadosPromotoria = () => {
-  dadosPromotoria.value = {
-    nome: '',
-    promotorias: [],
-  };
+const enviaDadosDoNovoEvento = (nomeDoGrupoDePromotorias: string, novoEvento: Evento) => {
+  emit('update:novoEventoAdicionado', nomeDoGrupoDePromotorias, novoEvento);
 };
 
-const adicionaEvento = (promotoriaId: number, municipio: GrupoPromotoria, evento: Evento) => {
-  //console.log(dadosPromotoria.value);
-  //console.log(evento.promotor_designado_evento);
-  
-  dadosPromotoria.value.nome = municipio.nome;
-  if (evento.periodo.start && evento.periodo.end) {
-    dadosPromotoria.value.promotorias.push({
-      nome: municipio.promotorias[promotoriaId].nome,
-      municipio: municipio.promotorias[promotoriaId].municipio,
-      is_especializada: municipio.promotorias[promotoriaId].is_especializada,
-      nomePromotor: municipio.promotorias[promotoriaId].nomePromotor,
-      eventos: [
-        {
-          id: evento.id,
-          tipo: evento.tipo,
-          periodo: [evento.periodo.start, evento.periodo.end],
-          titulo: evento.titulo,
-          promotor_designado_evento: evento.promotor_designado_evento,
-        },
-      ],
-    });
-  }
-  //console.log(dadosPromotoria.value);  
-  emit('update:adicionaDados', dadosPromotoria.value);
-
-  resetDadosPromotoria();
+const enviaDadosDoEventoAlterado = (eventoAlterado: Evento) => {
+  emit('update:umEventoFoiAlterado', eventoAlterado);
 };
 
-const deletaEvento = (eventoId: number, nomePromotoria: string) => {
-  emit('delete:deleteEvento', eventoId, nomePromotoria);
+const enviaDadosDoEventoDeletado = (eventoDeletadoId: number, ) => {
+  emit('delete:umEventoFoiDeletado', eventoDeletadoId);
 };
-
-const editaEvento = (nomePromotoria: string, evento: Evento) => {
-  emit('update:editaEvento', nomePromotoria, evento);
-};
-
-onBeforeMount(() => {
-  props.promotorias.forEach((grupoPromotoria) => {
-    grupoPromotoria.promotorias.forEach((promotoria) => {
-      if (promotoria.is_especializada) {
-        if (promotoriasEspecializadas.value.length === 0) {
-          promotoriasEspecializadas.value.push(grupoPromotoria);
-        } else {
-          const index = promotoriasEspecializadas.value.findIndex((promotoriaEspecializada) => promotoriaEspecializada.nome === grupoPromotoria.nome);
-          if (index === -1) {
-            promotoriasEspecializadas.value.push(grupoPromotoria);
-          }
-        }
-      } else {
-        if (promotoriasNaoEspecializadas.value.length === 0) {
-          promotoriasNaoEspecializadas.value.push(grupoPromotoria);
-        } else {
-          const index = promotoriasNaoEspecializadas.value.findIndex((promotoriaNaoEspecializada) => promotoriaNaoEspecializada.nome === grupoPromotoria.nome);
-          if (index === -1) {
-            promotoriasNaoEspecializadas.value.push(grupoPromotoria);
-          }
-        }
-      }
-    });
-  });
-});
 </script>
 
 <template>
@@ -113,10 +39,10 @@ onBeforeMount(() => {
         Entrância Final – Santana
       </h1>
       <TabelaPromotoriaEditor
-        :municipios="promotoriasNaoEspecializadas"
-        @update:adicionaEvento="adicionaEvento"
-        @delete:deleteEvento="deletaEvento"
-        @update:editaEvento="editaEvento"
+        :promotorias="promotoriasNaoEspecializadas"
+        @update:novoEventoAdicionado="enviaDadosDoNovoEvento"
+        @update:UmEventoFoiAlterado="enviaDadosDoEventoAlterado"
+        @delete:umEventoFoiDeletado="enviaDadosDoEventoDeletado"
       />
     </div>
     <div class="max-w-5xl w-full mx-auto flex flex-col items-center space-y-4">
@@ -124,10 +50,10 @@ onBeforeMount(() => {
         Entrância Final – Santana (Especializadas) 
       </h1>
       <TabelaPromotoriaEditor
-        :municipios="promotoriasEspecializadas"
-        @update:adicionaEvento="adicionaEvento"
-        @delete:deleteEvento="deletaEvento"
-        @update:editaEvento="editaEvento"
+        :promotorias="promotoriasEspecializadas"
+        @update:novoEventoAdicionado="enviaDadosDoNovoEvento"
+        @update:UmEventoFoiAlterado="enviaDadosDoEventoAlterado"
+        @delete:umEventoFoiDeletado="enviaDadosDoEventoDeletado"
       />
     </div>
   </div>

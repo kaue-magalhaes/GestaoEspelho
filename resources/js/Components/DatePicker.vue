@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {ref, PropType, watchEffect, onMounted} from 'vue'
+import {ref, watchEffect, onMounted} from 'vue'
 
 import { cn } from '@/lib/utils'
 import { format } from 'date-fns';
@@ -13,9 +13,13 @@ import { Calendar as CalendarIcon } from 'lucide-vue-next';
 const emit = defineEmits(['update:period'])
 
 const props = defineProps({
-  period: {
-    type: Object,
-    default: () => ({ start: null, end: null }),
+  period_start: {
+    type: Date,
+    default: new Date(),
+  },
+  period_end: {
+    type: Date,
+    default: new Date(),
   },
   range: {
     type: Boolean,
@@ -31,23 +35,25 @@ const props = defineProps({
   },
 })
 
-const localPeriod = ref(props.period)
+const localPeriod = ref({
+  start: props.period_start,
+  end: props.period_end,
+})
 const wasChanged = ref(props.wasChanged)
 
 const emitirMudanca = (value: any) => {
-  //console.log(value);
   wasChanged.value = true
-  //console.log(localPeriod.value);
-
   emit('update:period', value, wasChanged.value)
 }
 
 onMounted(() => {
-  // console.log('period', props.period)
 })
 
 watchEffect(() => {
-  localPeriod.value = props.period
+  localPeriod.value = {
+    start: props.period_start,
+    end: props.period_end,
+  }
 })
 
 </script>
@@ -75,22 +81,6 @@ watchEffect(() => {
             ) : 'Selecione o periodo' }}
           </span>
         </Button>
-        <Button
-          v-else
-          id="date"
-          :variant="'outline'"
-          :class="cn(
-            'w-[300px] justify-start text-left font-normal',
-            !localPeriod && 'text-muted-foreground',
-            props.isValidation && 'border-2 border-red-500 text-red-500',
-          )"
-        >
-          <CalendarIcon class="mr-2 h-4 w-4" />
-
-          <span>
-            {{ localPeriod && wasChanged ? format(localPeriod, 'LLL dd, y') : 'Selecione a data' }}
-          </span>
-        </Button>
         <span v-if="props.isValidation" class="text-red-500 text-sm">Selecione o periodo</span>
       </PopoverTrigger>
       <PopoverContent class="w-auto p-0" align="start">
@@ -98,12 +88,6 @@ watchEffect(() => {
           v-if="props.range"
           v-model.range="localPeriod"
           :columns="2"
-          @update:model-value="emitirMudanca($event)"
-        />
-        <Calendar
-          v-else
-          v-model="localPeriod.start"
-          :columns="1"
           @update:model-value="emitirMudanca($event)"
         />
       </PopoverContent>
