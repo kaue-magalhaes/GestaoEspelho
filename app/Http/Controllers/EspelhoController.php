@@ -3,28 +3,33 @@
 namespace App\Http\Controllers;
 
 use App\Models\Espelho;
+use App\Models\Evento;
 use App\Models\Promotor;
-use App\Models\Promotoria;
+use App\Models\UrgenciaAtendimento;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class EspelhoController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): Response
     {
-        $espelho    = Espelho::with('promotorias.promotor.eventos', 'promotorias.promotor.urgenciasAtendimento')->get()->toArray();
-        $promotores = Promotor::all();
-        $promotoria = Promotoria::with('promotor')->get()->toArray();
+        $espelho              = Espelho::with('promotorias')->first();
+        $promotores           = Promotor::all()->toArray();
+        $eventos              = Evento::all()->toArray();
+        $urgenciaAtendimentos = UrgenciaAtendimento::all()->toArray();
 
         //dd($espelho);
 
         return Inertia::render('Espelho', [
-            'promotores' => $promotores,
-            'promotoria' => $promotoria,
-            'espelho'    => $espelho
+            'espelho'              => $espelho,
+            'promotores'           => $promotores,
+            'promotoria'           => $espelho->promotorias,
+            'eventos'              => $eventos,
+            'urgenciaAtendimentos' => $urgenciaAtendimentos
         ]);
     }
 
