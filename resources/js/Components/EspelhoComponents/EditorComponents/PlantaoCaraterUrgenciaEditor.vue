@@ -94,7 +94,7 @@ onMounted(() => {
         <DatePicker
           :period="input.periodo"
           :range="true"
-          :id="index"
+          :was-changed="true"
           @update:period="emitirPeriodo(index, $event)"
         />
       </div>
