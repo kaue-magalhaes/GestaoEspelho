@@ -1,5 +1,13 @@
 <script setup lang="ts">
-import {Promotoria, GrupoPromotoria, AtendimentoUrgencia} from '@/types';
+import {
+  Promotoria,
+  GrupoPromotoria,
+  AtendimentoUrgencia,
+  Espelho,
+  Promotor,
+  Evento,
+  UrgenciaAtendimento
+} from '@/types';
 import { ref, onBeforeMount, computed } from 'vue';
 
 import { Label } from '@/Components/ui/label';
@@ -19,8 +27,24 @@ const emit = defineEmits([
 ]);
 
 const props = defineProps({
+  espelho: {
+    type: Object as () => Espelho,
+    required: true,
+  },
+  promotores: {
+    type: Array as () => Promotor[],
+    required: true,
+  },
   promotorias: {
     type: Array as () => Promotoria[],
+    required: true,
+  },
+  eventos: {
+    type: Array as () => Evento[],
+    required: true,
+  },
+  urgenciaAtendimentos: {
+    type: Array as () => UrgenciaAtendimento[],
     required: true,
   },
 });
@@ -36,9 +60,9 @@ const promotoriasInterior = computed(() => {
 });
 
 const periodoEspelho = ref({
-  isChanged: false,
-  start: new Date(),
-  end: new Date(),
+  isChanged: !(!props.espelho?.periodo_inicio && !props.espelho?.periodo_fim),
+  start: props.espelho?.periodo_inicio ? new Date(props.espelho.periodo_inicio) : new Date(),
+  end: props.espelho?.periodo_fim ? new Date(props.espelho.periodo_fim) : new Date(),
 });
 const promotoriasDados = ref<GrupoPromotoria[]>([]);
 const promotoriasMacapa = ref<GrupoPromotoria[]>([]);
@@ -215,8 +239,12 @@ const convertMunicipios = (municipio: GrupoPromotoria) => {
   };
 };
 onBeforeMount(() => {
-  //console.log(props.promotorias);
-  //console.log(promotoriasSantanaFiltro.value);
+  // console.log(periodoEspelho.value);
+  // console.log('espelho', props.espelho);
+  // console.log('promotores', props.promotores);
+  // console.log('promotorias', props.promotorias);
+  // console.log('eventos', props.eventos);
+  // console.log('urgenciaAtendimentos', props.urgenciaAtendimentos);
   promotoriasMacapaFiltro.value.forEach((promotoria) => {
     if (promotoriasMacapa.value.length === 0) {
       promotoriasMacapa.value.push({
@@ -226,7 +254,7 @@ onBeforeMount(() => {
             nome: promotoria.nome,
             municipio: promotoria.municipio,
             is_especializada: promotoria.is_especializada,
-            nomePromotor: promotoria.promotor.nome,
+            nomePromotor: props.promotores?.find((promotor) => promotor.id === promotoria.promotor_titular_id)?.nome || '',
             eventos: [],
           },
         ],
@@ -241,7 +269,7 @@ onBeforeMount(() => {
               nome: promotoria.nome,
               municipio: promotoria.municipio,
               is_especializada: promotoria.is_especializada,
-              nomePromotor: promotoria.promotor.nome,
+              nomePromotor: props.promotores?.find((promotor) => promotor.id === promotoria.promotor_titular_id)?.nome || '',
               eventos: [],
             },
           ],
@@ -253,7 +281,7 @@ onBeforeMount(() => {
             nome: promotoria.nome,
             municipio: promotoria.municipio,
             is_especializada: promotoria.is_especializada,
-            nomePromotor: promotoria.promotor.nome,
+            nomePromotor: props.promotores?.find((promotor) => promotor.id === promotoria.promotor_titular_id)?.nome || '',
             eventos: [],
           });
         }
@@ -269,7 +297,7 @@ onBeforeMount(() => {
             nome: promotoria.nome,
             municipio: promotoria.municipio,
             is_especializada: promotoria.is_especializada,
-            nomePromotor: promotoria.promotor.nome,
+            nomePromotor: props.promotores?.find((promotor) => promotor.id === promotoria.promotor_titular_id)?.nome || '',
             eventos: [],
           },
         ],
@@ -284,7 +312,7 @@ onBeforeMount(() => {
               nome: promotoria.nome,
               municipio: promotoria.municipio,
               is_especializada: promotoria.is_especializada,
-              nomePromotor: promotoria.promotor.nome,
+              nomePromotor: props.promotores?.find((promotor) => promotor.id === promotoria.promotor_titular_id)?.nome || '',
               eventos: [],
             },
           ],
@@ -296,7 +324,7 @@ onBeforeMount(() => {
             nome: promotoria.nome,
             municipio: promotoria.municipio,
             is_especializada: promotoria.is_especializada,
-            nomePromotor: promotoria.promotor.nome,
+            nomePromotor: props.promotores?.find((promotor) => promotor.id === promotoria.promotor_titular_id)?.nome || '',
             eventos: [],
           });
         }
@@ -312,7 +340,7 @@ onBeforeMount(() => {
             nome: promotoria.nome,
             municipio: promotoria.municipio,
             is_especializada: promotoria.is_especializada,
-            nomePromotor: promotoria.promotor.nome,
+            nomePromotor: props.promotores?.find((promotor) => promotor.id === promotoria.promotor_titular_id)?.nome || '',
             eventos: [],
           },
         ],
@@ -327,7 +355,7 @@ onBeforeMount(() => {
               nome: promotoria.nome,
               municipio: promotoria.municipio,
               is_especializada: promotoria.is_especializada,
-              nomePromotor: promotoria.promotor.nome,
+              nomePromotor: props.promotores?.find((promotor) => promotor.id === promotoria.promotor_titular_id)?.nome || '',
               eventos: [],
             },
           ],
@@ -339,7 +367,7 @@ onBeforeMount(() => {
             nome: promotoria.nome,
             municipio: promotoria.municipio,
             is_especializada: promotoria.is_especializada,
-            nomePromotor: promotoria.promotor.nome,
+            nomePromotor: props.promotores?.find((promotor) => promotor.id === promotoria.promotor_titular_id)?.nome || '',
             eventos: [],
           });
         }
@@ -370,7 +398,8 @@ const form = useForm({
             Período:
           </Label>
           <DatePicker
-            v-model="periodoEspelho"
+            :period="periodoEspelho"
+                :wasChanged="periodoEspelho.isChanged"
             :range="true"
             @update:period="updatePeriodoEspelho"
           />
