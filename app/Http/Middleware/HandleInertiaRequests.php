@@ -40,7 +40,7 @@ class HandleInertiaRequests extends Middleware
                 'user' => $request->user(),
             ],
             'espelho' => [
-                'all' => Espelho::with('promotorias')->first()->toArray(),
+                'all' => optional(Espelho::with('promotorias')->first())->toArray(),
             ],
             'promotores' => [
                 'all' => Promotor::all()->toArray(),
