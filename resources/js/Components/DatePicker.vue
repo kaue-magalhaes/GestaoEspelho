@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, PropType, watchEffect } from 'vue'
+import {ref, PropType, watchEffect, onMounted} from 'vue'
 
 import { cn } from '@/lib/utils'
 import { format } from 'date-fns';
@@ -14,7 +14,7 @@ const emit = defineEmits(['update:period'])
 
 const props = defineProps({
   period: {
-    type: Object as PropType<{ start: Date; end: Date } | any>,
+    type: Object,
     default: () => ({ start: null, end: null }),
   },
   range: {
@@ -41,6 +41,10 @@ const emitirMudanca = (value: any) => {
 
   emit('update:period', value, wasChanged.value)
 }
+
+onMounted(() => {
+    console.log('period', props.period)
+})
 
 watchEffect(() => {
   localPeriod.value = props.period
