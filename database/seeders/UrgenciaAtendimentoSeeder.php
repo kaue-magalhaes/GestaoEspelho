@@ -12,7 +12,7 @@ class UrgenciaAtendimentoSeeder extends Seeder
      */
     public function run(): void
     {
-        for ($i = 0; $i < 20; $i++) {
+        for ($i = 0; $i < 5; $i++) {
             $urgenciaAtendimento = UrgenciaAtendimento::factory()->make();
             $urgenciaAtendimento->save();
         }
