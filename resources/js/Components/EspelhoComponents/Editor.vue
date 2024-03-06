@@ -378,6 +378,18 @@ onBeforeMount(() => {
   //console.log(promotoriasMacapa.value);
   //console.log(promotoriasSantana.value);
   //console.log(municipiosInterior.value);
+  props.urgenciaAtendimentos?.forEach((atendimentoUrgencia) => {
+    atendimentosUrgenciaDados.value.push({
+      id: atendimentoUrgencia.id,
+      nome_promotor: props.promotores.find((promotor) => promotor.id === atendimentoUrgencia.promotor_designado_id)?.nome || '',
+      periodo: {
+        start: atendimentoUrgencia.periodo_inicio ? format(new Date(atendimentoUrgencia.periodo_inicio), 'dd/MM/yyyy') : '',
+        end: atendimentoUrgencia.periodo_fim ? format(new Date(atendimentoUrgencia.periodo_fim), 'dd/MM/yyyy') : '',
+      },
+    });
+  });
+  emit('update:atendimentosUrgenciaDados', atendimentosUrgenciaDados.value);
+  console.log(atendimentosUrgenciaDados.value);
 });
 
 const form = useForm({
@@ -399,7 +411,7 @@ const form = useForm({
           </Label>
           <DatePicker
             :period="periodoEspelho"
-                :wasChanged="periodoEspelho.isChanged"
+            :wasChanged="periodoEspelho.isChanged"
             :range="true"
             @update:period="updatePeriodoEspelho"
           />
@@ -409,8 +421,10 @@ const form = useForm({
       <CardContent>
         <EntranciaFinalMacapaEditor
           :promotorias="promotoriasMacapa"
-          @update:NomePromotor="updateNomePromotorNoArray"
-          @update:Periodo="updatePeriodoNoArray"
+          :promotores="props.promotores"
+          :urgenciaAtendimentos="props.urgenciaAtendimentos"
+          @update:nomePromotor="updateNomePromotorNoArray"
+          @update:periodo="updatePeriodoNoArray"
           @delete:atendimentosUrgencia="removeAtendimentoUrgencia"
           @update:adicionaDados="adicionaPromotoriasDados"
           @delete:deleteEvento="deleteEventoInterior"
