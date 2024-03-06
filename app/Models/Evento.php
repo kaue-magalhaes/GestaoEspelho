@@ -16,14 +16,24 @@ class Evento extends Model
         'tipo',
         'periodo_inicio',
         'periodo_fim',
+        'promotor_titular_id',
         'promotor_designado_id',
     ];
+
+    /**
+     * Busca o promotor titular do evento
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function promotorTitular(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(Promotor::class);
+    }
 
     /**
      * Busca o promotor designado para o evento
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function promotor(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function promotorDesignado(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(Promotor::class);
     }

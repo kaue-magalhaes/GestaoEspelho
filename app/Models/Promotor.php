@@ -31,7 +31,7 @@ class Promotor extends Model
      */
     public function eventos(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
-        return $this->hasMany(Evento::class, 'promotor_designado_id');
+        return $this->hasMany(Evento::class, 'promotor_titular_id');
     }
 
     /**

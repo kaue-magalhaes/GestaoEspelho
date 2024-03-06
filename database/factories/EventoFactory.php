@@ -21,6 +21,7 @@ class EventoFactory extends Factory
             'tipo'                  => $this->faker->randomElement(['Férias', 'Licença', 'Plantão', 'Reunião', 'Outros']),
             'periodo_inicio'        => $this->faker->date(),
             'periodo_fim'           => $this->faker->date(),
+            'promotor_titular_id'   => \App\Models\Promotor::inRandomOrder()->first()->id,
             'promotor_designado_id' => \App\Models\Promotor::inRandomOrder()->first()->id,
             'created_at'            => now(),
             'updated_at'            => now(),
