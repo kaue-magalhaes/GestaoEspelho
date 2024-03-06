@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {GrupoPromotoria} from '@/types';
+import {GrupoPromotoria, Promotor, UrgenciaAtendimento} from '@/types';
 import { usePage } from '@inertiajs/vue3';
 import { ref, onBeforeMount } from 'vue';
 import { format } from 'date-fns';
@@ -25,14 +25,22 @@ const emit = defineEmits([
   'update:adicionaDados',
   'update:editaEvento',
   'delete:deleteEvento',
-  'update:NomePromotor',
-  'update:Periodo',
+  'update:nomePromotor',
+  'update:periodo',
   'delete:atendimentosUrgencia',
 ]);
 
 const props = defineProps({
   promotorias: {
     type: Array as () => GrupoPromotoria[],
+    required: true,
+  },
+  promotores: {
+    type: Array as () => Promotor[],
+    required: true,
+  },
+  urgenciaAtendimentos: {
+    type: Array as () => UrgenciaAtendimento[],
     required: true,
   },
 });
@@ -93,7 +101,7 @@ const adicionaNomePromotor = (index: number, nome: string) => {
   //console.log(index, nome);
   urgenciaInputComponent.value[index].nome_promotor = nome;
   //console.log(urgenciaInputComponent.value);
-  emit('update:NomePromotor', index , nome);
+  emit('update:nomePromotor', index , nome);
 };
 
 const adicionaPeriodoAtendimento = (index : number, periodo: any ) => {
@@ -109,7 +117,7 @@ const adicionaPeriodoAtendimento = (index : number, periodo: any ) => {
   } else {
       periodoFormatado = format(periodo, 'dd/MM/yyyy')
   }
-  emit('update:Periodo', index, periodoFormatado);
+  emit('update:periodo', index, periodoFormatado);
 };
 
 const adicionarInput = (atendimentoUrgencia: { nome_promotor: string; periodo: any }) => {
@@ -140,6 +148,15 @@ const removeAtendimentoUrgencia = (id: number) => {
 
 onBeforeMount(() => {
   //console.log(props.promotorias);
+  props.urgenciaAtendimentos?.forEach((atendimentoUrgencia) => {
+    urgenciaInputComponent.value.push({
+      nome_promotor: props.promotores.find((promotor) => promotor.id === atendimentoUrgencia.promotor_designado_id)?.nome || '',
+      periodo: {
+        start: new Date(atendimentoUrgencia.periodo_inicio),
+        end: new Date(atendimentoUrgencia.periodo_fim),
+      },
+    });
+  });
   
   props.promotorias.forEach((grupoPromotoria) => {
     grupoPromotoria.promotorias.forEach((promotoria) => {
