@@ -1,24 +1,44 @@
 <script setup lang="ts">
-import {Promotoria, GrupoPromotoria, Atribuicoes, AtendimentoUrgencia} from '@/types';
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { ref, onMounted } from 'vue';
 import { Head } from '@inertiajs/vue3';
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/Components/ui/carousel';
+import { format } from 'date-fns';
+import {
+    GrupoPromotoria,
+    Atribuicoes,
+    AtendimentoUrgencia,
+    Espelho,
+    Promotor,
+    Evento,
+    UrgenciaAtendimento
+} from '@/types';
+import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import Preview from '@/Components/EspelhoComponents/Preview.vue';
 import Editor from '@/Components/EspelhoComponents/Editor.vue';
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/Components/ui/carousel';
 
 const props = defineProps({
-    promotorias: {
-        type: Object as () => { all: Promotoria[] },
+    espelho: {
+        type: Object as () => Espelho,
         required: true,
     },
-    espelho: {
-        type: Object,
+    promotores: {
+        type: Array as () => Promotor[],
+        required: true,
+    },
+    eventos: {
+        type: Array as () => Evento[],
+        required: true,
+    },
+    urgenciaAtendimentos: {
+        type: Array as () => UrgenciaAtendimento[],
         required: true,
     },
 });
 
-const periodoEspelho = ref<string[]>([]);
+const periodoEspelho = ref<string[]>([
+    format(new Date(props.espelho?.periodo_inicio), 'dd/MM/yyyy'),
+    format(new Date(props.espelho?.periodo_fim), 'dd/MM/yyyy'),
+]);
 const promotoriasDados = ref<GrupoPromotoria[]>([]);
 const atendimentosUrgenciaDados = ref<AtendimentoUrgencia[]>([]);
 const listaAtribuicoes = ref<Atribuicoes[]>([]);
@@ -99,10 +119,10 @@ const updateAtendimentosUrgencia = (value: AtendimentoUrgencia[]) => {
 };
 
 onMounted(() => {
-    //console.log(props.espelho);
-    
-    //console.log(props.promotorias);
-    //console.log(promotoriasInteriorEventos.value);
+    // console.log(props.espelho);
+    // console.log(props.promotores);
+    // console.log(props.eventos);
+    // console.log(props.urgenciaAtendimentos);
 });
 </script>
 
@@ -115,7 +135,11 @@ onMounted(() => {
                     <CarouselContent>
                         <CarouselItem>
                             <Editor
-                                :promotorias="promotorias.all"
+                                :espelho="espelho"
+                                :promotorias="espelho.promotorias"
+                                :promotores="props.promotores"
+                                :eventos="props.eventos"
+                                :urgenciaAtendimentos="props.urgenciaAtendimentos"
                                 @update:periodoEspelho="updatePeriodoEspelho"
                                 @update:promotoriasDados="updatePromotoriasDados"
                                 @update:atendimentosUrgenciaDados="updateAtendimentosUrgencia"
