@@ -43,7 +43,7 @@ const emitirMudanca = (value: any) => {
 }
 
 onMounted(() => {
-    console.log('period', props.period)
+  // console.log('period', props.period)
 })
 
 watchEffect(() => {
