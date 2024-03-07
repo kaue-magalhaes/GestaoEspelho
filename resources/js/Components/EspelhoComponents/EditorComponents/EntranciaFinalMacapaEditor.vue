@@ -20,6 +20,10 @@ const props = defineProps({
     type: Array as () => Promotoria[],
     required: true,
   },
+  eventos: {
+    type: Array as () => Evento[],
+    required: true,
+  },
   promotores: {
     type: Array as () => Promotor[],
     required: true,
@@ -34,8 +38,6 @@ const promotoriasNaoEspecializadas = ref<Promotoria[]>(props.promotoriasMacapa?.
 const promotoriasEspecializadas = ref<Promotoria[]>(props.promotoriasMacapa?.filter((promotoria) => promotoria.is_especializada));
 
 const enviaDadosDoNovoEvento = (nomeDoGrupoDePromotorias: string, novoEvento: Evento) => {
-  console.log('enviaDadosDoNovoEvento', nomeDoGrupoDePromotorias, novoEvento);
-  
   emit('update:novoEventoAdicionado', nomeDoGrupoDePromotorias, novoEvento);
 };
 
@@ -43,8 +45,8 @@ const enviaDadosDoEventoAlterado = (eventoAlterado: Evento) => {
   emit('update:umEventoFoiAlterado', eventoAlterado);
 };
 
-const enviaDadosDoEventoDeletado = (eventoDeletadoId: number) => {
-  emit('delete:umEventoFoiDeletado', eventoDeletadoId);
+const enviaDadosDoEventoDeletado = (uuid: string) => {
+  emit('delete:umEventoFoiDeletado', uuid);
 };
 
 const enviaNomeDoPromotorSelecionado = (index: number, idPromotor: string) => {  
@@ -77,6 +79,7 @@ const enviaDadosDoGrupoDePromotorias = (grupoPromotorias: GrupoPromotoria[]) => 
       />
       <TabelaPromotoriaEditor
         :promotorias="promotoriasNaoEspecializadas"
+        :eventos="props.eventos"
         @update:novoEventoAdicionado="enviaDadosDoNovoEvento"
         @update:UmEventoFoiAlterado="enviaDadosDoEventoAlterado"
         @delete:umEventoFoiDeletado="enviaDadosDoEventoDeletado"
@@ -89,6 +92,7 @@ const enviaDadosDoGrupoDePromotorias = (grupoPromotorias: GrupoPromotoria[]) => 
       </h1>
       <TabelaPromotoriaEditor
         :promotorias="promotoriasEspecializadas"
+        :eventos="props.eventos"
         @update:novoEventoAdicionado="enviaDadosDoNovoEvento"
         @update:UmEventoFoiAlterado="enviaDadosDoEventoAlterado"
         @delete:umEventoFoiDeletado="enviaDadosDoEventoDeletado"
