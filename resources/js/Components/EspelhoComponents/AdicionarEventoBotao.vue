@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { Promotor } from '@/types';
+import { usePage } from '@inertiajs/vue3';
 import { ref, onMounted } from 'vue';
+import { format } from 'date-fns';
 
 import { Input } from '@/Components/ui/input';
 import { Label } from '@/Components/ui/label';
@@ -13,13 +15,11 @@ const emit = defineEmits([
     'update:adicionaEvento',
 ]);
 
+const page = usePage();
+
 const props = defineProps({
     promotores: {
         type: Array as () => Promotor[] ,
-        required: true,
-    },
-    nomePromotoria: {
-        type: String,
         required: true,
     },
     nomeMunicipio: {
@@ -37,6 +37,7 @@ const tipoEvento = ref<string>('');
 const periodoEvento = ref<{ start: Date; end: Date }>({ start: new Date(), end: new Date() });
 const tituloEvento = ref<string>('');
 const promotor_designado_evento = ref<string>('');
+
 const tipoEventoInvalido = ref<boolean>(false);
 const periodoEventoInvalido = ref<boolean>(false);
 const periodoEventoAlterado = ref<boolean>(false);
@@ -73,19 +74,21 @@ const resetarInformacoes = () => {
 };
 
 const updatePeriodo = (periodo: { start: Date; end: Date } | any, alterado: boolean) => {
-    //console.log(periodo.start);
-    if (periodo.start === undefined) {
-        periodoEvento.value = periodo;
-    } else {
-        periodoEvento.value = { start: periodo.start, end: periodo.end };
-    }
+    periodoEvento.value = { start: periodo.start, end: periodo.end };
     periodoEventoAlterado.value = alterado;
 };
 
-const enviaDadosDoEvento = (evento: { tipo: string; periodo: { start: Date; end: Date }; titulo: string; promotor_designado_evento: string }) => {
-    //console.log(evento);
+const enviaDadosDoEvento = (evento: { titulo: string; tipo: string; periodo: { start: Date; end: Date }; promotor_titular_id: string; promotor_designado_id: string }) => {
     if (verificaSeDadosDoEventoSaoValidos()) {
-        emit('update:adicionaEvento',props.nomePromotoria , props.nomeMunicipio, evento);
+        const novoEvento = {
+            titulo: evento.titulo,
+            tipo: evento.tipo,
+            periodo_inicio: format(evento.periodo.start, 'dd/MM/yyyy'),
+            periodo_fim: format(evento.periodo.end, 'dd/MM/yyyy'),
+            promotor_titular_id: evento.promotor_titular_id,
+            promotor_designado_id: evento.promotor_designado_id,
+        };
+        emit('update:adicionaEvento', props.nomeMunicipio, novoEvento);
         resetarInformacoes();
         dialogOpen.value = false;
     }
@@ -178,7 +181,13 @@ onMounted(() => {
                 <Button variant="destructive" @click="resetarInformacoes">
                     Cancelar
                 </Button>
-                <Button variant="default" @click="enviaDadosDoEvento({ tipo: tipoEvento, periodo: periodoEvento, titulo: tituloEvento, promotor_designado_evento: promotor_designado_evento })">
+                <Button variant="default" @click="enviaDadosDoEvento({ 
+                    tipo: tipoEvento, 
+                    periodo: periodoEvento, 
+                    titulo: tituloEvento, 
+                    promotor_titular_id: props.promotores.find(promotor => promotor.nome === props.nomePromotor)?.id || '',
+                    promotor_designado_id: props.promotores.find(promotor => promotor.nome === promotor_designado_evento)?.id || ''
+                })">
                     Adicionar Evento
                 </Button>
             </DialogFooter>

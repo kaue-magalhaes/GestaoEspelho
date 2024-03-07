@@ -205,7 +205,6 @@ onMounted(() => {
             <AdicionarEventoBotao
               :promotores="promotores"
               :nomeMunicipio="comarca.nome_grupo_promotorias"
-              :nomePromotoria="promotoria.nome"
               :nomePromotor="promotores.find((promotor) => promotor.id === promotoria.promotor_titular_id)?.nome || ''"
               @update:adicionaEvento="adicionaEvento"
             />
@@ -289,7 +288,6 @@ onMounted(() => {
             </span>
             <AdicionarEventoBotao
               :promotores="promotores"
-              :nomePromotoria="promotoria.nome"
               :nomeMunicipio="comarca.nome_grupo_promotorias"
               :nomePromotor="promotores.find((promotor) => promotor.id === promotoria.promotor_titular_id)?.nome || ''"
               @update:adicionaEvento="adicionaEvento"

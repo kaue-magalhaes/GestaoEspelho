@@ -15,7 +15,7 @@ const props = defineProps({
 const promotores = ref<Promotor[]>(page.props.promotores || []);
 
 onMounted(() => {
-  //console.log(props.grupoPromotorias);
+  //console.log(props.grupoPromotorias.filter((grupo) => grupo.eventos.length > 0));
 });
 
 </script>
@@ -43,18 +43,25 @@ onMounted(() => {
             {{ promotores.find((promotor) => promotor.id === promotoria.promotor_titular_id)?.nome }}
           </td>
           <td class="border px-6 py-4">
-            <span class="flex flex-col space-y-2" v-for="evento_da_promotoria in comarca.eventos.filter((evento) => evento.promotor_titular_id === promotoria.promotor_titular_id)" :key="evento_da_promotoria.tipo">
-              <span v-if="evento_da_promotoria.titulo !== ''">
+            <span v-if="comarca.eventos.filter((evento) => evento.promotor_titular_id === promotoria.promotor_titular_id).length === 0">
+              <p class="text-center">
+                Sem eventos
+              </p>
+            </span>
+            <span v-else>
+              <span class="flex flex-col space-y-2" v-for="evento_da_promotoria in comarca.eventos.filter((evento) => evento.promotor_titular_id === promotoria.promotor_titular_id)" :key="evento_da_promotoria.tipo">
+                <span v-if="evento_da_promotoria.titulo !== ''">
                   {{ evento_da_promotoria.tipo }} - {{ evento_da_promotoria.titulo }}
                 </span>
                 <span v-else>
                   {{ evento_da_promotoria.tipo }}
                 </span>
-              <span>
-                {{ format(new Date(evento_da_promotoria.periodo_inicio), 'dd/MM/yyyy') }} a {{ format(new Date(evento_da_promotoria.periodo_fim), 'dd/MM/yyyy') }}
-              </span>
-              <span>
-                Promotor designado: {{ promotores.find((promotor) => promotor.id === evento_da_promotoria.promotor_designado_id)?.nome }}
+                <span>
+                  {{ evento_da_promotoria.periodo_inicio }} a {{ evento_da_promotoria.periodo_fim }}
+                </span>
+                <span>
+                  Promotor designado: {{ promotores.find((promotor) => promotor.id === evento_da_promotoria.promotor_designado_id)?.nome }}
+                </span>
               </span>
             </span>
           </td>
@@ -80,18 +87,25 @@ onMounted(() => {
               {{ promotores.find((promotor) => promotor.id === promotoria.promotor_titular_id)?.nome }}
           </td>
           <td class="border px-6 py-4">
-            <span class="flex flex-col space-y-2" v-for="evento_da_promotoria in comarca.eventos.filter((evento) => evento.promotor_titular_id === promotoria.promotor_titular_id)" :key="evento_da_promotoria.tipo">
-              <span v-if="evento_da_promotoria.titulo !== ''">
-                {{ evento_da_promotoria.tipo }} - {{ evento_da_promotoria.titulo }}
-              </span>
-              <span v-else>
-                {{ evento_da_promotoria.tipo }}
-              </span>
-              <span>
-                {{ format(new Date(evento_da_promotoria.periodo_inicio), 'dd/MM/yyyy') }} a {{ format(new Date(evento_da_promotoria.periodo_fim), 'dd/MM/yyyy') }}
-              </span>
-              <span>
-                Promotor designado: {{ promotores.find((promotor) => promotor.id === evento_da_promotoria.promotor_designado_id)?.nome }}
+            <span v-if="comarca.eventos.filter((evento) => evento.promotor_titular_id === promotoria.promotor_titular_id).length === 0">
+              <p class="text-center">
+                Sem eventos
+              </p>
+            </span>
+            <span v-else>
+              <span class="flex flex-col space-y-2" v-for="evento_da_promotoria in comarca.eventos.filter((evento) => evento.promotor_titular_id === promotoria.promotor_titular_id)" :key="evento_da_promotoria.tipo">
+                <span v-if="evento_da_promotoria.titulo !== ''">
+                  {{ evento_da_promotoria.tipo }} - {{ evento_da_promotoria.titulo }}
+                </span>
+                <span v-else>
+                  {{ evento_da_promotoria.tipo }}
+                </span>
+                <span>
+                  {{ evento_da_promotoria.periodo_inicio }} a {{ evento_da_promotoria.periodo_fim }}
+                </span>
+                <span>
+                  Promotor designado: {{ promotores.find((promotor) => promotor.id === evento_da_promotoria.promotor_designado_id)?.nome }}
+                </span>
               </span>
             </span>
           </td>
