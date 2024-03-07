@@ -70,7 +70,7 @@ onMounted(() => {
     //console.log(props.espelho);
     // console.log(props.promotores);
     // console.log(props.eventos);
-    console.log(props.urgenciaAtendimentos);
+    //console.log(props.urgenciaAtendimentos);
 });
 </script>
 

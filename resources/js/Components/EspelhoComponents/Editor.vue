@@ -99,13 +99,31 @@ const deletaEventoNoGrupoDePromotorias = (eventoId: string) => {
 };
 
 const atualizaPromotorDesignadoParaAtendimentosDeUrgencia = (index: number, idPromotor: string) => {
-  dadosDosAtendimentosUrgencia.value[index].promotor_designado_id = idPromotor;  
+  if (dadosDosAtendimentosUrgencia.value[index]){
+    dadosDosAtendimentosUrgencia.value[index].promotor_designado_id = idPromotor;
+  } else {
+    dadosDosAtendimentosUrgencia.value.push({
+      id: '1',
+      periodo_inicio: '',
+      periodo_fim: '',
+      promotor_designado_id: idPromotor,
+    });
+  }
   emit('update:dadosDosAtendimentosUrgencia', dadosDosAtendimentosUrgencia.value);
 };
 
 const atualizaPeriodoQueOPromotorVaiEstarDesignadoParaAtendimentosDeUrgencia = (index : number, periodo_start: string, periodo_end: string) => {
-  dadosDosAtendimentosUrgencia.value[index].periodo_inicio = periodo_start;
-  dadosDosAtendimentosUrgencia.value[index].periodo_fim = periodo_end;
+  if (dadosDosAtendimentosUrgencia.value[index]){
+    dadosDosAtendimentosUrgencia.value[index].periodo_inicio = periodo_start;
+    dadosDosAtendimentosUrgencia.value[index].periodo_fim = periodo_end;
+  } else {
+    dadosDosAtendimentosUrgencia.value.push({
+      id: '1',
+      periodo_inicio: periodo_start,
+      periodo_fim: periodo_end,
+      promotor_designado_id: '',
+    });
+  }
   emit('update:dadosDosAtendimentosUrgencia', dadosDosAtendimentosUrgencia.value);
 };
 

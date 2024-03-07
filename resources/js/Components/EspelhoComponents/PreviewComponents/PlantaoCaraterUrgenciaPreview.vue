@@ -4,7 +4,6 @@ import { usePage } from "@inertiajs/vue3";
 import { ref } from "vue";
 import { format } from 'date-fns';
 
-
 const page = usePage();
 defineProps({
     plantaoDeAtendimentos: {
@@ -26,14 +25,16 @@ function stringToDate(dateString: string) {
             <h2 class="text-xl font-bold mb-4">PLANTÃO DE ATENDIMENTOS EM CARÁTER DE URGÊNCIA - MACAPÁ/SANTANA</h2>
             <ul class="grid grid-cols-2 gap-4">
                 <li class="mb-2 text-left" v-for="atendimento in plantaoDeAtendimentos" :key="atendimento.id">
-                    <span class="font-semibold">
-                          - {{ promotoresQuePodemAtender.find((promotor) => promotor.id === atendimento.promotor_designado_id)?.nome }}:
-                    </span>
-                    <span v-if="atendimento.periodo_inicio === atendimento.periodo_fim">
-                        ({{ format(stringToDate(atendimento.periodo_inicio), 'dd/MM/yyyy') }})
-                    </span>
-                    <span v-else>
-                        ({{ format(stringToDate(atendimento.periodo_inicio), 'dd/MM/yyyy') }} - {{ format(stringToDate(atendimento.periodo_fim), 'dd/MM/yyyy') }})
+                    <span v-if="atendimento.periodo_inicio !== ''">
+                        <span class="font-semibold">
+                            - {{ promotoresQuePodemAtender.find((promotor) => promotor.id === atendimento.promotor_designado_id)?.nome }}:
+                        </span>
+                        <span v-if="atendimento.periodo_inicio === atendimento.periodo_fim">
+                            ({{ format(stringToDate(atendimento.periodo_inicio), 'dd/MM/yyyy') }})
+                        </span>
+                        <span v-else>
+                            ({{ format(stringToDate(atendimento.periodo_inicio), 'dd/MM/yyyy') }} - {{ format(stringToDate(atendimento.periodo_fim), 'dd/MM/yyyy') }})
+                        </span>
                     </span>
                 </li>
             </ul>

@@ -23,12 +23,21 @@ const promotoresQuePodemAtender = ref<Promotor[]>(page.props.promotores || []);
 const plantaoDeAtendimentos = ref<UrgenciaAtendimento[]>(page.props.urgenciaAtendimentos || []);
 
 const adicionarInputDeDados = () => {
-  plantaoDeAtendimentos.value.push({
-    id: String(Number(plantaoDeAtendimentos.value[plantaoDeAtendimentos.value.length - 1].id) + 1),
-    periodo_inicio: '',
-    periodo_fim: '',
-    promotor_designado_id: '',
-  });
+  if (plantaoDeAtendimentos.value.length === 0) {
+    plantaoDeAtendimentos.value.push({
+      id: '1',
+      periodo_inicio: '',
+      periodo_fim: '',
+      promotor_designado_id: '',
+    });
+  } else {
+    plantaoDeAtendimentos.value.push({
+      id: String(Number(plantaoDeAtendimentos.value[plantaoDeAtendimentos.value.length - 1].id) + 1),
+      periodo_inicio: '',
+      periodo_fim: '',
+      promotor_designado_id: '',
+    });
+  }
 };
 
 const adicionaNomeDoPromotorSelecionado = (index: number, idPromotor: string) => {
