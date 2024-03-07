@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {GrupoPromotoria, Atribuicoes, UrgenciaAtendimento} from '@/types';
-import { ref, watch, watchEffect } from 'vue';
+import { ref, watchEffect } from 'vue';
 import { Card, CardContent, CardHeader } from '@/Components/ui/card';
 import EntranciaFinalMacapaPreview from '@/Components/EspelhoComponents/PreviewComponents/EntranciaFinalMacapaPreview.vue';
 import EntranciaFinalSantanaPreview from '@/Components/EspelhoComponents/PreviewComponents/EntranciaFinalSantanaPreview.vue';

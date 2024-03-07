@@ -46,9 +46,6 @@ const emitirMudanca = (value: any) => {
   emit('update:period', value, wasChanged.value)
 }
 
-onMounted(() => {
-})
-
 watchEffect(() => {
   localPeriod.value = {
     start: props.period_start,

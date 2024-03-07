@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { Promotor, UrgenciaAtendimento } from "@/types";
-import { ref } from "vue";
 import { usePage } from "@inertiajs/vue3";
+import { ref } from "vue";
+import { format } from 'date-fns';
+
 
 const page = usePage();
 defineProps({
@@ -13,6 +15,10 @@ defineProps({
 
 const promotoresQuePodemAtender = ref<Promotor[]>(page.props.promotores || []);
 
+function stringToDate(dateString: string) {
+  const [year, month, day] = dateString.split('-').map(Number);
+  return new Date(year, month - 1, day);
+}
 </script>
 <template>
     <div v-if="plantaoDeAtendimentos.length > 0" class="w-full border-2 border-black p-4 rounded-md">
@@ -24,10 +30,10 @@ const promotoresQuePodemAtender = ref<Promotor[]>(page.props.promotores || []);
                           - {{ promotoresQuePodemAtender.find((promotor) => promotor.id === atendimento.promotor_designado_id)?.nome }}:
                     </span>
                     <span v-if="atendimento.periodo_inicio === atendimento.periodo_fim">
-                        ({{ atendimento.periodo_inicio }})
+                        ({{ format(stringToDate(atendimento.periodo_inicio), 'dd/MM/yyyy') }})
                     </span>
                     <span v-else>
-                        ({{ atendimento.periodo_inicio }} - {{ atendimento.periodo_fim }})
+                        ({{ format(stringToDate(atendimento.periodo_inicio), 'dd/MM/yyyy') }} - {{ format(stringToDate(atendimento.periodo_fim), 'dd/MM/yyyy') }})
                     </span>
                 </li>
             </ul>

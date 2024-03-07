@@ -7,7 +7,7 @@ import {
   Evento,
   UrgenciaAtendimento, Atribuicoes
 } from '@/types';
-import { ref, onBeforeMount } from 'vue';
+import { ref, onBeforeMount, onMounted } from 'vue';
 
 import { Label } from '@/Components/ui/label';
 import DatePicker from '@/Components/DatePicker.vue';
@@ -51,8 +51,8 @@ const props = defineProps({
 
 const periodoEspelho = ref({
   isChanged: !(!props.espelho?.periodo_inicio && !props.espelho?.periodo_fim),
-  start: props.espelho?.periodo_inicio ? new Date(props.espelho.periodo_inicio) : new Date(),
-  end: props.espelho?.periodo_fim ? new Date(props.espelho.periodo_fim) : new Date(),
+  start: props.espelho?.periodo_inicio ? stringToDate(props.espelho.periodo_inicio) : new Date(),
+  end: props.espelho?.periodo_fim ? stringToDate(props.espelho.periodo_fim) : new Date(),
 });
 const grupoDeTodasAsPromotorias = ref<GrupoPromotoria[]>([]);
 const dadosDosAtendimentosUrgencia = ref<UrgenciaAtendimento[]>([]);
@@ -60,15 +60,10 @@ const atribuicao = ref<Atribuicoes[]>([]);
 
 const updatePeriodoEspelho = (value: any) => {
   periodoEspelho.value.isChanged = true;
-  if (value.start !== undefined) {
-    periodoEspelho.value.start = value.start;
-    periodoEspelho.value.end = value.end;
+  periodoEspelho.value.start = value.start;
+  periodoEspelho.value.end = value.end;
 
-    emit('update:periodoEspelho', [format(periodoEspelho.value.start, 'dd/MM/yyyy'), format(periodoEspelho.value.end, 'dd/MM/yyyy')]);
-  } else {
-    periodoEspelho.value.start = new Date(value);
-    emit('update:periodoEspelho', format(value, 'dd/MM/yyyy'));
-  }
+  emit('update:periodoEspelho', [format(periodoEspelho.value.start, 'dd/MM/yyyy'), format(periodoEspelho.value.end, 'dd/MM/yyyy')]);
 };
 
 const adicionaEventoNoGrupoDePromotorias = (nomeDoGrupoDePromotorias: string, novoEvento: Evento) => {
@@ -118,6 +113,11 @@ const deletaInputDeDadosDeAtendimentoUrgencia = (index: number) => {
   dadosDosAtendimentosUrgencia.value.splice(index, 1);
   emit('update:dadosDosAtendimentosUrgencia', dadosDosAtendimentosUrgencia.value);
 };
+
+function stringToDate(dateString: string) {
+  const [year, month, day] = dateString.split('-').map(Number);
+  return new Date(year, month - 1, day);
+}
 
 onBeforeMount(() => {
   props.urgenciaAtendimentos?.forEach((atendimentoUrgencia) => {
@@ -181,6 +181,11 @@ onBeforeMount(() => {
   });
 
   emit('update:atribuicao', atribuicao.value);
+});
+
+onMounted(() => {
+  //console.log(periodoEspelho.value);
+  
 });
 
 const form = useForm({

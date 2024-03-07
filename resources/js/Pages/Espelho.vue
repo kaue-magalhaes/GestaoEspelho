@@ -35,19 +35,15 @@ const props = defineProps({
 });
 
 const periodoEspelho = ref<string[]>([
-    format(new Date(props.espelho?.periodo_inicio), 'dd/MM/yyyy'),
-    format(new Date(props.espelho?.periodo_fim), 'dd/MM/yyyy'),
+    format(stringToDate(props.espelho?.periodo_inicio), 'dd/MM/yyyy'),
+    format(stringToDate(props.espelho?.periodo_fim), 'dd/MM/yyyy'),
 ]);
 const grupoDeTodasAsPromotoriasDados = ref<GrupoPromotoria[]>([]);
 const atendimentosUrgenciaDados = ref([]);
 const listaAtribuicoes = ref<Atribuicoes[]>([]);
 
 const updatePeriodoEspelho = (value: string[]) => {
-    if (Array.isArray(value)) {
-        periodoEspelho.value = value;
-    } else {
-        periodoEspelho.value.push(value);
-    }
+    periodoEspelho.value = value;
 };
 
 const updateGrupoDeTodasAsPromotorias = (value: GrupoPromotoria[]) => {
@@ -65,11 +61,16 @@ const updateAtendimentosUrgencia = (value: []) => {
   atendimentosUrgenciaDados.value = value;
 };
 
+function stringToDate(dateString: string) {
+  const [year, month, day] = dateString.split('-').map(Number);
+  return new Date(year, month - 1, day);
+}
+
 onMounted(() => {
     //console.log(props.espelho);
     // console.log(props.promotores);
     // console.log(props.eventos);
-    //console.log(props.urgenciaAtendimentos);
+    console.log(props.urgenciaAtendimentos);
 });
 </script>
 
