@@ -10,6 +10,12 @@ const props = defineProps({
     required: true,
   },
 });
+
+function stringToDate(dateString: string) {
+  const [year, month, day] = dateString.split('-').map(Number);
+  return new Date(year, month - 1, day);
+}
+
 </script>
 
 <template>
@@ -34,7 +40,7 @@ const props = defineProps({
             {{ atribuicoes.nome_promotor }}
           </td>
           <td class="border px-6 py-4 font-medium">
-            <span class="flex items-center justify-center space-x-2" v-for="atribuicao in atribuicoes.atribuicoes" :key="atribuicao.id">
+            <span class="flex items-center justify-center space-x-2" v-for="atribuicao in atribuicoes.atribuicoes" :key="atribuicao.uuid">
               <span>
                 <span v-if="atribuicao.titulo !== ''">
                 {{ atribuicao.tipo }} - {{ atribuicao.titulo }}
@@ -44,7 +50,7 @@ const props = defineProps({
                 </span>
               </span>
               <p class="text-xs">
-                ({{ format(new Date(atribuicao.periodo_inicio), 'dd/MM/yyyy') }} - {{ format(new Date(atribuicao.periodo_fim), 'dd/MM/yyyy') }})
+                ({{ format(stringToDate(atribuicao.periodo_inicio), 'dd/MM/yyyy') }} - {{ format(stringToDate(atribuicao.periodo_fim), 'dd/MM/yyyy') }})
               </p>
             </span>
           </td>
