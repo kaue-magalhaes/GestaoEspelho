@@ -67,8 +67,8 @@ function stringToDate(dateString: string) {
 }
 
 onMounted(() => {
-    //console.log(props.espelho);
-    // console.log(props.promotores);
+    console.log(props.espelho);
+    console.log(props.promotores);
     // console.log(props.eventos);
     //console.log(props.urgenciaAtendimentos);
 });

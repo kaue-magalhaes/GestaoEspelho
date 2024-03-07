@@ -30,6 +30,16 @@ class Promotoria extends Model
     }
 
     /**
+     * Converte o id do promotor titular para string
+     * @param $value
+     * @return string
+     */
+    public function getPromotorTitularIdAttribute($value)
+    {
+        return (string)$value;
+    }
+
+    /**
      * Busca o promotor titular da promotoria
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
