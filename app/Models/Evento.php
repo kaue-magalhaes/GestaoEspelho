@@ -41,6 +41,16 @@ class Evento extends Model
     }
 
     /**
+     * Converte o id do promotor designado para string
+     * @param $value
+     * @return string
+     */
+    public function getPromotorDesignadoIdAttribute($value)
+    {
+        return (string)$value;
+    }
+
+    /**
      * Busca o promotor titular do evento
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
