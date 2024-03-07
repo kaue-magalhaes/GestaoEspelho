@@ -2,6 +2,7 @@
 import {Evento, GrupoPromotoria, Promotor, Promotoria} from '@/types';
 import { onMounted, ref } from 'vue';
 import { usePage } from '@inertiajs/vue3';
+import { v4 as uuidv4 } from 'uuid';
 
 import Button from '@/Components/ui/button/Button.vue';
 import EditarEventoBotao from '@/Components/EspelhoComponents/EditarEventoBotao.vue';
@@ -30,44 +31,23 @@ const emit = defineEmits([
 
 const props = defineProps({
   promotorias: Array as () => Promotoria[],
+  eventos: Array as () => Evento[],
 });
 
 const promotores = ref<Promotor[]>(page.props.promotores || []);
-const eventos = ref<Evento[]>(page.props.eventos || []);
+const eventos = ref<Evento[]>(props.eventos || []);
 const grupoPromotorias = ref<GrupoPromotoria[]>([]);
 
 const adicionaEvento = (nomeDoGrupoDePromotorias: String, novoEvento: Evento) => {
-  grupoPromotorias.value.forEach((grupoPromotoria) => {
-    if (grupoPromotoria.nome_grupo_promotorias === nomeDoGrupoDePromotorias) {
-      grupoPromotoria.eventos.push(novoEvento);
-    }
-    console.log(grupoPromotoria.eventos);
-    
-  });
   emit('update:novoEventoAdicionado', nomeDoGrupoDePromotorias, novoEvento);
 };
 
-const EditaEvento = (eventoAlterado: Evento) => {
-  grupoPromotorias.value.forEach((grupoPromotoria) => {
-    grupoPromotoria.eventos.forEach((evento) => {
-      if (evento.id === eventoAlterado.id) {
-        evento.id = eventoAlterado.id;
-        evento.tipo = eventoAlterado.tipo;
-        evento.periodo_inicio = eventoAlterado.periodo_inicio;
-        evento.periodo_fim = eventoAlterado.periodo_fim;
-        evento.titulo = eventoAlterado.titulo;
-        evento.promotor_designado_id = eventoAlterado.promotor_designado_id;
-      }
-    });
-  });
+const EditaEvento = (eventoAlterado: Evento) => {  
   emit('update:UmEventoFoiAlterado', eventoAlterado);
 };
 
-const deleteEvento = (eventoId: string) => {
-  grupoPromotorias.value.forEach((grupoPromotoria) => {
-    grupoPromotoria.eventos = grupoPromotoria.eventos.filter((evento) => evento.id !== eventoId);
-  });
-  emit('delete:umEventoFoiDeletado', eventoId);
+const deleteEvento = (uuid: string) => {
+  emit('delete:umEventoFoiDeletado', uuid);
 };
 
 onMounted(() => {
@@ -149,7 +129,7 @@ onMounted(() => {
             {{ promotores.find((promotor) => promotor.id === promotoria.promotor_titular_id)?.nome }}
           </td>
           <td class="border px-6 py-4">
-            <span v-for="evento_da_promotoria in comarca.eventos.filter((evento) => evento.promotor_titular_id === promotoria.promotor_titular_id)" :key="evento_da_promotoria.id">
+            <span v-for="(evento_da_promotoria,index) in comarca.eventos.filter((evento) => evento.promotor_titular_id === promotoria.promotor_titular_id)" :key="index">
               <span class="flex items-center justify-between space-y-2">
                 <span v-if="evento_da_promotoria.titulo !== ''">
                   {{ evento_da_promotoria.tipo }} - {{ evento_da_promotoria.titulo }}
@@ -162,13 +142,13 @@ onMounted(() => {
                     :promotores="promotores"
                     :nomePromotoria="promotoria.nome"
                     :nomeComarca="comarca.nome_grupo_promotorias"
-                    :nomePromotor="promotores.find((promotor) => promotor.id === promotoria.promotor_titular_id)?.nome || ''"
-                    :id = "evento_da_promotoria.id"
+                    :uuid = "evento_da_promotoria.uuid"
                     :tipo="evento_da_promotoria.tipo"
                     :periodo_inicio="evento_da_promotoria.periodo_inicio"
                     :periodo_fim="evento_da_promotoria.periodo_fim"
                     :titulo="evento_da_promotoria.titulo"
-                    :promotor_designado_evento="promotores.find((promotor) => promotor.id === evento_da_promotoria.promotor_designado_id)?.nome"
+                    :promotor_titular_id="evento_da_promotoria.promotor_titular_id"
+                    :promotor_designado_id="evento_da_promotoria.promotor_designado_id"
                     @update:editaEvento="EditaEvento"
                   />
                   <AlertDialog>
@@ -195,7 +175,7 @@ onMounted(() => {
                         <AlertDialogCancel class="bg-red-500 hover:bg-red-400 text-white hover:text-white">
                           Cancelar
                         </AlertDialogCancel>
-                        <AlertDialogAction @click="deleteEvento(evento_da_promotoria.id)">
+                        <AlertDialogAction @click="deleteEvento(evento_da_promotoria.uuid)">
                           Excluir evento
                         </AlertDialogAction>
                       </AlertDialogFooter>
@@ -233,7 +213,7 @@ onMounted(() => {
             {{ promotores.find((promotor) => promotor.id === promotoria.promotor_titular_id)?.nome }}
           </td>
           <td class="border px-6 py-4">
-            <span v-for="evento_da_promotoria in comarca.eventos.filter((evento) => evento.promotor_titular_id === promotoria.promotor_titular_id)" :key="evento_da_promotoria.id">
+            <span v-for="(evento_da_promotoria,index) in comarca.eventos.filter((evento) => evento.promotor_titular_id === promotoria.promotor_titular_id)" :key="index">
               <span class="flex items-center justify-between space-y-2">
                 <span v-if="evento_da_promotoria.titulo !== ''">
                   {{ evento_da_promotoria.tipo }} - {{ evento_da_promotoria.titulo }}
@@ -246,13 +226,13 @@ onMounted(() => {
                     :promotores="promotores"
                     :nomePromotoria="promotoria.nome"
                     :nomeComarca="comarca.nome_grupo_promotorias"
-                    :nomePromotor="promotores.find((promotor) => promotor.id === promotoria.promotor_titular_id)?.nome || ''"
-                    :id = "evento_da_promotoria.id"
+                    :uuid = "evento_da_promotoria.uuid"
                     :tipo="evento_da_promotoria.tipo"
                     :periodo_inicio="evento_da_promotoria.periodo_inicio"
                     :periodo_fim="evento_da_promotoria.periodo_fim"
                     :titulo="evento_da_promotoria.titulo"
-                    :promotor_designado_evento="promotores.find((promotor) => promotor.id === evento_da_promotoria.promotor_designado_id)?.nome"
+                    :promotor_titular_id="evento_da_promotoria.promotor_titular_id"
+                    :promotor_designado_id="evento_da_promotoria.promotor_designado_id"
                     @update:editaEvento="EditaEvento"
                   />
                   <AlertDialog>
@@ -279,7 +259,7 @@ onMounted(() => {
                         <AlertDialogCancel class="bg-red-500 hover:bg-red-400 text-white hover:text-white">
                           Cancelar
                         </AlertDialogCancel>
-                        <AlertDialogAction @click="deleteEvento(evento_da_promotoria.id)">
+                        <AlertDialogAction @click="deleteEvento(evento_da_promotoria.uuid)">
                           Excluir evento
                         </AlertDialogAction>
                       </AlertDialogFooter>
