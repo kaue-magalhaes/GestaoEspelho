@@ -31,12 +31,14 @@ const adicionarInputDeDados = () => {
       promotor_designado_id: '',
     });
   } else {
-    plantaoDeAtendimentos.value.push({
-      id: String(Number(plantaoDeAtendimentos.value[plantaoDeAtendimentos.value.length - 1].id) + 1),
-      periodo_inicio: '',
-      periodo_fim: '',
-      promotor_designado_id: '',
-    });
+    if(plantaoDeAtendimentos.value[plantaoDeAtendimentos.value.length - 1].periodo_inicio !== '' && plantaoDeAtendimentos.value[plantaoDeAtendimentos.value.length - 1].periodo_fim !== '' && plantaoDeAtendimentos.value[plantaoDeAtendimentos.value.length - 1].promotor_designado_id !== '') {
+      plantaoDeAtendimentos.value.push({
+        id: (parseInt(plantaoDeAtendimentos.value[plantaoDeAtendimentos.value.length - 1].id) + 1).toString(),
+        periodo_inicio: '',
+        periodo_fim: '',
+        promotor_designado_id: '',
+      });
+    }
   }
 };
 
