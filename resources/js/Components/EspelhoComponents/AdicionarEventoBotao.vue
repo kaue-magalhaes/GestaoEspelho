@@ -3,6 +3,7 @@ import { Promotor } from '@/types';
 import { usePage } from '@inertiajs/vue3';
 import { ref, onMounted } from 'vue';
 import { format } from 'date-fns';
+import { v4 as uuidv4 } from 'uuid';
 
 import { Input } from '@/Components/ui/input';
 import { Label } from '@/Components/ui/label';
@@ -81,14 +82,14 @@ const updatePeriodo = (periodo: { start: Date; end: Date } | any, alterado: bool
 const enviaDadosDoEvento = (evento: { titulo: string; tipo: string; periodo: { start: Date; end: Date }; promotor_titular_id: string; promotor_designado_id: string }) => {
     if (verificaSeDadosDoEventoSaoValidos()) {
         const novoEvento = {
+            uuid: uuidv4(),
             titulo: evento.titulo,
             tipo: evento.tipo,
-            periodo_inicio: format(evento.periodo.start, 'dd/MM/yyyy'),
-            periodo_fim: format(evento.periodo.end, 'dd/MM/yyyy'),
+            periodo_inicio: format(evento.periodo.start, 'yyyy-MM-dd'),
+            periodo_fim: format(evento.periodo.end, 'yyyy-MM-dd'),
             promotor_titular_id: evento.promotor_titular_id,
             promotor_designado_id: evento.promotor_designado_id,
         };
-        console.log(novoEvento);
         
         emit('update:adicionaEvento', props.nomeMunicipio, novoEvento);
         resetarInformacoes();
