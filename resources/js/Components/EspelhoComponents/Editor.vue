@@ -67,6 +67,8 @@ const updatePeriodoEspelho = (value: any) => {
 };
 
 const adicionaEventoNoGrupoDePromotorias = (nomeDoGrupoDePromotorias: string, novoEvento: Evento) => {
+  console.log('adicionaEventoNoGrupoDePromotorias', nomeDoGrupoDePromotorias, novoEvento);
+  
   grupoDeTodasAsPromotorias.value.forEach((grupoPromotoria) => {
     if (grupoPromotoria.nome_grupo_promotorias === nomeDoGrupoDePromotorias) {
       grupoPromotoria.eventos.push(novoEvento);

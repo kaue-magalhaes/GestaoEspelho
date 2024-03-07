@@ -88,6 +88,8 @@ const enviaDadosDoEvento = (evento: { titulo: string; tipo: string; periodo: { s
             promotor_titular_id: evento.promotor_titular_id,
             promotor_designado_id: evento.promotor_designado_id,
         };
+        console.log(novoEvento);
+        
         emit('update:adicionaEvento', props.nomeMunicipio, novoEvento);
         resetarInformacoes();
         dialogOpen.value = false;

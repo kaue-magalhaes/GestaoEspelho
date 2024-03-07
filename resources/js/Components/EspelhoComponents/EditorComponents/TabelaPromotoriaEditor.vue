@@ -41,6 +41,8 @@ const adicionaEvento = (nomeDoGrupoDePromotorias: String, novoEvento: Evento) =>
     if (grupoPromotoria.nome_grupo_promotorias === nomeDoGrupoDePromotorias) {
       grupoPromotoria.eventos.push(novoEvento);
     }
+    console.log(grupoPromotoria.eventos);
+    
   });
   emit('update:novoEventoAdicionado', nomeDoGrupoDePromotorias, novoEvento);
 };

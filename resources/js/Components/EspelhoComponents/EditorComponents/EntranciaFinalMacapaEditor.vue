@@ -34,6 +34,8 @@ const promotoriasNaoEspecializadas = ref<Promotoria[]>(props.promotoriasMacapa?.
 const promotoriasEspecializadas = ref<Promotoria[]>(props.promotoriasMacapa?.filter((promotoria) => promotoria.is_especializada));
 
 const enviaDadosDoNovoEvento = (nomeDoGrupoDePromotorias: string, novoEvento: Evento) => {
+  console.log('enviaDadosDoNovoEvento', nomeDoGrupoDePromotorias, novoEvento);
+  
   emit('update:novoEventoAdicionado', nomeDoGrupoDePromotorias, novoEvento);
 };
 
