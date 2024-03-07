@@ -14,6 +14,10 @@ defineProps({
     type: Array as () => Promotoria[],
     required: true,
   },
+  eventos: {
+    type: Array as () => Evento[],
+    required: true,
+  },
   promotores: {
     type: Array as () => Promotor[],
     required: true,
@@ -28,12 +32,12 @@ const enviaDadosDoEventoAlterado = (eventoAlterado: Evento) => {
   emit('update:umEventoFoiAlterado', eventoAlterado);
 };
 
-const enviaDadosDoEventoDeletado = (eventoDeletadoId: number) => {
-  emit('delete:umEventoFoiDeletado', eventoDeletadoId);
+const enviaDadosDoEventoDeletado = (uuid: string) => {
+  emit('delete:umEventoFoiDeletado', uuid);
 };
 
-const enviaDadosDoGrupoDePromotorias = (grupoPromotorias: GrupoPromotoria[]) => {
-  emit('update:grupoPromotorias', grupoPromotorias);
+const enviaDadosDoGrupoDePromotorias = (grupoPromotorias: GrupoPromotoria[], eventos: Evento[]) => {
+  emit('update:grupoPromotorias', grupoPromotorias, eventos);
 };
 </script>
 
@@ -44,6 +48,7 @@ const enviaDadosDoGrupoDePromotorias = (grupoPromotorias: GrupoPromotoria[]) => 
     </h1>
     <TabelaPromotoriaEditor
       :promotorias="promotoriasInterior"
+      :eventos="eventos"
       @update:novoEventoAdicionado="enviaDadosDoNovoEvento"
       @update:UmEventoFoiAlterado="enviaDadosDoEventoAlterado"
       @delete:umEventoFoiDeletado="enviaDadosDoEventoDeletado"
