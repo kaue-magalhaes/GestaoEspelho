@@ -2,7 +2,7 @@
 import { GrupoPromotoria, Promotor } from '@/types';
 import {format} from "date-fns";
 import {usePage} from "@inertiajs/vue3";
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 
 const page = usePage();
 const props = defineProps({
@@ -13,6 +13,10 @@ const props = defineProps({
 });
 
 const promotores = ref<Promotor[]>(page.props.promotores || []);
+
+onMounted(() => {
+  //console.log(props.grupoPromotorias);
+});
 
 </script>
 

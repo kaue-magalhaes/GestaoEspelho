@@ -21,7 +21,7 @@ const promotoriasNaoEspecializadas = ref<GrupoPromotoria[]>([]);
 const promotoriasEspecializadas = ref<GrupoPromotoria[]>([]);
 
 watchEffect(() => {
-  //console.log(props.promotorias);
+  //console.log(props.grupoPromotorias);
   props.grupoPromotorias.forEach((grupoPromotoria) => {
     grupoPromotoria.promotorias.forEach((promotoria) => {
       if (promotoria.is_especializada) {

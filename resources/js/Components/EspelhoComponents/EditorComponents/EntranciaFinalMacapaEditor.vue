@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {Evento, Promotor, Promotoria, UrgenciaAtendimento} from '@/types';
+import {Evento, GrupoPromotoria, Promotor, Promotoria, UrgenciaAtendimento} from '@/types';
 import { ref } from 'vue';
 
 import PlantaoCaraterUrgenciaEditor from '@/Components/EspelhoComponents/EditorComponents/PlantaoCaraterUrgenciaEditor.vue';
@@ -12,6 +12,7 @@ const emit = defineEmits([
   'update:nomeFoiSelecionado',
   'update:periodoDoAtendimentoFoiSelecionado',
   'delete:inputDeDadosFoiDeletado',
+  'update:grupoPromotorias'
 ]);
 
 const props = defineProps({
@@ -55,6 +56,10 @@ const enviaPeriodoDoAtendimentoSelecionado = (index : number, periodo_start: str
 const enviaIndexInputDeDadosDeletado = (index: number) => {
   emit('delete:inputDeDadosFoiDeletado', index);
 };
+
+const enviaDadosDoGrupoDePromotorias = (grupoPromotorias: GrupoPromotoria[]) => {
+  emit('update:grupoPromotorias', grupoPromotorias);
+};
 </script>
 
 <template>
@@ -73,6 +78,7 @@ const enviaIndexInputDeDadosDeletado = (index: number) => {
         @update:novoEventoAdicionado="enviaDadosDoNovoEvento"
         @update:UmEventoFoiAlterado="enviaDadosDoEventoAlterado"
         @delete:umEventoFoiDeletado="enviaDadosDoEventoDeletado"
+        @update:grupoPromotorias="enviaDadosDoGrupoDePromotorias"
       />
     </div>
     <div class="max-w-5xl w-full mx-auto flex flex-col items-center space-y-4">
@@ -84,6 +90,7 @@ const enviaIndexInputDeDadosDeletado = (index: number) => {
         @update:novoEventoAdicionado="enviaDadosDoNovoEvento"
         @update:UmEventoFoiAlterado="enviaDadosDoEventoAlterado"
         @delete:umEventoFoiDeletado="enviaDadosDoEventoDeletado"
+        @update:grupoPromotorias="enviaDadosDoGrupoDePromotorias"
       />
     </div>
   </div>

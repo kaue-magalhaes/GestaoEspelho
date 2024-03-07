@@ -132,6 +132,11 @@ const deletaInputDeDadosDeAtendimentoUrgencia = (index: number) => {
   emit('update:dadosDosAtendimentosUrgencia', dadosDosAtendimentosUrgencia.value);
 };
 
+const AdicionaDadosNoGrupoDePromotorias = (grupoPromotorias: GrupoPromotoria[]) => {
+  grupoDeTodasAsPromotorias.value = grupoDeTodasAsPromotorias.value.concat(grupoPromotorias);
+  emit('update:grupoDeTodasAsPromotorias', grupoDeTodasAsPromotorias.value);
+};
+
 function stringToDate(dateString: string) {
   const [year, month, day] = dateString.split('-').map(Number);
   return new Date(year, month - 1, day);
@@ -244,6 +249,7 @@ const form = useForm({
           @update:nomeFoiSelecionado="atualizaPromotorDesignadoParaAtendimentosDeUrgencia"
           @update:periodoDoAtendimentoFoiSelecionado="atualizaPeriodoQueOPromotorVaiEstarDesignadoParaAtendimentosDeUrgencia"
           @delete:inputDeDadosFoiDeletado="deletaInputDeDadosDeAtendimentoUrgencia"
+          @update:grupoPromotorias="AdicionaDadosNoGrupoDePromotorias"
         />
         <EntranciaFinalSantanaEditor
           :promotoriasSantana="props.promotorias?.filter((promotoria) => promotoria.municipio === 'Santana')"
@@ -251,6 +257,7 @@ const form = useForm({
           @update:novoEventoAdicionado="adicionaEventoNoGrupoDePromotorias"
           @update:UmEventoFoiAlterado="alteraEventoNoGrupoDePromotorias"
           @delete:umEventoFoiDeletado="deletaEventoNoGrupoDePromotorias"
+          @update:grupoPromotorias="AdicionaDadosNoGrupoDePromotorias"
         />
         <EntranciaInicialEditor
           :promotoriasInterior="props.promotorias?.filter((promotoria) => promotoria.municipio !== 'Macapá' && promotoria.municipio !== 'Santana')"
@@ -258,6 +265,7 @@ const form = useForm({
           @update:novoEventoAdicionado="adicionaEventoNoGrupoDePromotorias"
           @update:UmEventoFoiAlterado="alteraEventoNoGrupoDePromotorias"
           @delete:umEventoFoiDeletado="deletaEventoNoGrupoDePromotorias"
+          @update:grupoPromotorias="AdicionaDadosNoGrupoDePromotorias"
         />
       </CardContent>
     </div>

@@ -25,6 +25,7 @@ const emit = defineEmits([
   'update:novoEventoAdicionado',
   'update:UmEventoFoiAlterado',
   'delete:umEventoFoiDeletado',
+  'update:grupoPromotorias',
 ]);
 
 const props = defineProps({
@@ -119,6 +120,7 @@ onMounted(() => {
       }
     }
   });
+  emit('update:grupoPromotorias', grupoPromotorias.value);
 });
 </script>
 

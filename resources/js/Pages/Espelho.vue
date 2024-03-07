@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, watch } from 'vue';
+import { ref, onMounted } from 'vue';
 import { Head } from '@inertiajs/vue3';
 import { format } from 'date-fns';
 import {
@@ -67,8 +67,8 @@ function stringToDate(dateString: string) {
 }
 
 onMounted(() => {
-    console.log(props.espelho);
-    console.log(props.promotores);
+    //console.log(props.espelho);
+    //console.log(props.promotores);
     // console.log(props.eventos);
     //console.log(props.urgenciaAtendimentos);
 });

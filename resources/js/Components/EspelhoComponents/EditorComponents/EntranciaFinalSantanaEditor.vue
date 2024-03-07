@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Evento, Promotoria } from '@/types';
+import { Evento, GrupoPromotoria, Promotoria } from '@/types';
 import { ref } from 'vue';
 import TabelaPromotoriaEditor from '@/Components/EspelhoComponents/EditorComponents/TabelaPromotoriaEditor.vue';
 
@@ -7,6 +7,7 @@ const emit = defineEmits([
   'update:novoEventoAdicionado',
   'update:umEventoFoiAlterado',
   'delete:umEventoFoiDeletado',
+  'update:grupoPromotorias'
 ]);
 
 const props = defineProps({
@@ -30,6 +31,10 @@ const enviaDadosDoEventoAlterado = (eventoAlterado: Evento) => {
 const enviaDadosDoEventoDeletado = (eventoDeletadoId: number, ) => {
   emit('delete:umEventoFoiDeletado', eventoDeletadoId);
 };
+
+const enviaDadosDoGrupoDePromotorias = (grupoPromotorias: GrupoPromotoria[]) => {
+  emit('update:grupoPromotorias', grupoPromotorias);
+};
 </script>
 
 <template>
@@ -43,6 +48,7 @@ const enviaDadosDoEventoDeletado = (eventoDeletadoId: number, ) => {
         @update:novoEventoAdicionado="enviaDadosDoNovoEvento"
         @update:UmEventoFoiAlterado="enviaDadosDoEventoAlterado"
         @delete:umEventoFoiDeletado="enviaDadosDoEventoDeletado"
+        @update:grupoPromotorias="enviaDadosDoGrupoDePromotorias"
       />
     </div>
     <div class="max-w-5xl w-full mx-auto flex flex-col items-center space-y-4">
@@ -54,6 +60,7 @@ const enviaDadosDoEventoDeletado = (eventoDeletadoId: number, ) => {
         @update:novoEventoAdicionado="enviaDadosDoNovoEvento"
         @update:UmEventoFoiAlterado="enviaDadosDoEventoAlterado"
         @delete:umEventoFoiDeletado="enviaDadosDoEventoDeletado"
+        @update:grupoPromotorias="enviaDadosDoGrupoDePromotorias"
       />
     </div>
   </div>
