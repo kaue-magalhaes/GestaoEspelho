@@ -35,7 +35,7 @@ export interface Promotoria {
 }
 
 export interface Evento {
-    id: string;
+    uuid: string;
     titulo: string;
     tipo: string;
     periodo_inicio: string;
