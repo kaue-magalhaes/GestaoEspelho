@@ -9,7 +9,7 @@ import { Card } from '@/Components/ui/card';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue} from '@/Components/ui/select'
 import DatePicker from '@/Components/DatePicker.vue';
 
-import { Plus, Trash2 } from 'lucide-vue-next';
+import { Plus, Trash } from 'lucide-vue-next';
 import {usePage} from "@inertiajs/vue3";
 
 const page = usePage();
@@ -113,9 +113,9 @@ onMounted(() => {
           @update:period="adicionaPeriodoDeAtendimentoSelecionado(index, $event)"
         />
       </div>
-      <div class="flex mb-2">
-        <Button @click="removeInputDeDados(index)" variant="destructive" class="p-3">
-          <Trash2 class="w-5 h-5 text-white" />
+      <div class="flex">
+        <Button @click="removeInputDeDados(index)" variant="destructive" size="icon">
+          <Trash class="w-4 h-4" />
         </Button>
       </div>
     </div>
