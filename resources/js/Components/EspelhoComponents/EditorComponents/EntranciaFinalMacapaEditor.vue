@@ -44,8 +44,8 @@ const enviaDadosDoEventoDeletado = (eventoDeletadoId: number) => {
   emit('delete:umEventoFoiDeletado', eventoDeletadoId);
 };
 
-const enviaNomeDoPromotorSelecionado = (index: number, nomePromotor: string, idPromotor: string) => {
-  emit('update:nomeFoiSelecionado', index , nomePromotor, idPromotor);
+const enviaNomeDoPromotorSelecionado = (index: number, idPromotor: string) => {  
+  emit('update:nomeFoiSelecionado', index, idPromotor);
 };
 
 const enviaPeriodoDoAtendimentoSelecionado = (index : number, periodo_start: string, periodo_end: string) => {

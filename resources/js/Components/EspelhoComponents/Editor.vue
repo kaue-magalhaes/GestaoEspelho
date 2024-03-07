@@ -104,7 +104,7 @@ const deletaEventoNoGrupoDePromotorias = (eventoId: string) => {
 };
 
 const atualizaPromotorDesignadoParaAtendimentosDeUrgencia = (index: number, idPromotor: string) => {
-  dadosDosAtendimentosUrgencia.value[index].promotor_designado_id = idPromotor;
+  dadosDosAtendimentosUrgencia.value[index].promotor_designado_id = idPromotor;  
   emit('update:dadosDosAtendimentosUrgencia', dadosDosAtendimentosUrgencia.value);
 };
 
