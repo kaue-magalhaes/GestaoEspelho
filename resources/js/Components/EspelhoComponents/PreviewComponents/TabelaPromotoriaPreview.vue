@@ -14,6 +14,11 @@ const props = defineProps({
 
 const promotores = ref<Promotor[]>(page.props.promotores || []);
 
+function stringToDate(dateString: string) {
+  const [year, month, day] = dateString.split('-').map(Number);
+  return new Date(year, month - 1, day);
+}
+
 onMounted(() => {
   //console.log(props.grupoPromotorias.filter((grupo) => grupo.eventos.length > 0));
 });
@@ -57,7 +62,7 @@ onMounted(() => {
                   {{ evento_da_promotoria.tipo }}
                 </span>
                 <span>
-                  {{ evento_da_promotoria.periodo_inicio }} a {{ evento_da_promotoria.periodo_fim }}
+                  {{ format(stringToDate(evento_da_promotoria.periodo_inicio), 'dd/MM/yyyy') }} - {{ format(stringToDate(evento_da_promotoria.periodo_fim), 'dd/MM/yyyy') }}
                 </span>
                 <span>
                   Promotor designado: {{ promotores.find((promotor) => promotor.id === evento_da_promotoria.promotor_designado_id)?.nome }}
@@ -101,7 +106,7 @@ onMounted(() => {
                   {{ evento_da_promotoria.tipo }}
                 </span>
                 <span>
-                  {{ evento_da_promotoria.periodo_inicio }} a {{ evento_da_promotoria.periodo_fim }}
+                  {{ format(stringToDate(evento_da_promotoria.periodo_inicio), 'dd/MM/yyyy') }} - {{ format(stringToDate(evento_da_promotoria.periodo_fim), 'dd/MM/yyyy') }}
                 </span>
                 <span>
                   Promotor designado: {{ promotores.find((promotor) => promotor.id === evento_da_promotoria.promotor_designado_id)?.nome }}
