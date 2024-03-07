@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import { Head } from '@inertiajs/vue3';
 import { format } from 'date-fns';
 import {
@@ -62,7 +62,6 @@ const updateAtribuicao = (value: Atribuicoes[]) => {
 };
 
 const updateAtendimentosUrgencia = (value: []) => {
-  //console.log(value);
   atendimentosUrgenciaDados.value = value;
 };
 
