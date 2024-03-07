@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, onBeforeMount } from 'vue';
 import { Head } from '@inertiajs/vue3';
 import { format } from 'date-fns';
+import { v4 as uuidv4 } from 'uuid';
 import {
     GrupoPromotoria,
     Atribuicoes,
@@ -33,6 +34,7 @@ const props = defineProps({
         required: true,
     },
 });
+const eventosComUUID = ref<Evento[]>([]);
 
 const periodoEspelho = ref<string[]>([
     format(stringToDate(props.espelho?.periodo_inicio), 'dd/MM/yyyy'),
@@ -66,7 +68,12 @@ function stringToDate(dateString: string) {
   return new Date(year, month - 1, day);
 }
 
-onMounted(() => {
+onBeforeMount(() => {
+    eventosComUUID.value = props.eventos.map(evento => ({
+      ...evento,
+      uuid: uuidv4(),
+    }));
+    
     //console.log(props.espelho);
     //console.log(props.promotores);
     //console.log(props.eventos);
@@ -86,7 +93,7 @@ onMounted(() => {
                                 :espelho="espelho"
                                 :promotorias="espelho.promotorias"
                                 :promotores="props.promotores"
-                                :eventos="props.eventos"
+                                :eventos="eventosComUUID"
                                 :urgenciaAtendimentos="props.urgenciaAtendimentos"
                                 @update:periodoEspelho="updatePeriodoEspelho"
                                 @update:grupoDeTodasAsPromotorias="updateGrupoDeTodasAsPromotorias"
