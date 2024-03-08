@@ -82,7 +82,13 @@ onMounted(() => {
           created_at: promotoria.created_at,
           updated_at: promotoria.updated_at,
         });
-        grupoPromotoria.eventos.push(...eventos.value.filter((evento) => evento.promotor_titular_id === promotoria.promotor_titular_id) || []);
+        const novosEventos = eventos.value.filter((evento) => evento.promotor_titular_id === promotoria.promotor_titular_id);
+        novosEventos.forEach((novoEvento) => {
+          const eventoExiste = grupoPromotoria.eventos.some((eventoExistente) => eventoExistente.uuid === novoEvento.uuid);
+          if (!eventoExiste) {
+            grupoPromotoria.eventos.push(novoEvento);
+          }
+        });
       } else {
         grupoPromotorias.value.push({
           nome_grupo_promotorias: promotoria.nome_grupo_promotorias,
