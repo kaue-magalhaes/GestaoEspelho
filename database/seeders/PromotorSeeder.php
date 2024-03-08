@@ -13,7 +13,7 @@ class PromotorSeeder extends Seeder
     public function run(): void
     {
         Promotor::factory()
-            ->count(10)
+            ->count(20)
             ->create();
     }
 }
