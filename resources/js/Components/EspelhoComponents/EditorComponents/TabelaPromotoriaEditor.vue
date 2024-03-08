@@ -82,7 +82,7 @@ onMounted(() => {
           created_at: promotoria.created_at,
           updated_at: promotoria.updated_at,
         });
-        grupoPromotoria.eventos = eventos.value.filter((evento) => evento.promotor_titular_id === promotoria.promotor_titular_id) || [];
+        grupoPromotoria.eventos.push(...eventos.value.filter((evento) => evento.promotor_titular_id === promotoria.promotor_titular_id) || []);
       } else {
         grupoPromotorias.value.push({
           nome_grupo_promotorias: promotoria.nome_grupo_promotorias,
