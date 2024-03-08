@@ -2,7 +2,7 @@
 import { GrupoPromotoria, Promotor } from '@/types';
 import {format} from "date-fns";
 import {usePage} from "@inertiajs/vue3";
-import { onMounted, ref } from 'vue';
+import { ref } from 'vue';
 
 const page = usePage();
 const props = defineProps({
@@ -18,11 +18,6 @@ function stringToDate(dateString: string) {
   const [year, month, day] = dateString.split('-').map(Number);
   return new Date(year, month - 1, day);
 }
-
-onMounted(() => {
-  //console.log(props.grupoPromotorias.filter((grupo) => grupo.eventos.length > 0));
-});
-
 </script>
 
 <template>
