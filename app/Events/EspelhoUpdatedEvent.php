@@ -41,6 +41,13 @@ class EspelhoUpdatedEvent
     }
 
     /**
+     * get the atendimentosUrgenciaDados from request
+     */
+    public function getAtendimentosUrgenciaDados(): array
+    {
+        return $this->request->input('atendimentosUrgenciaDados');
+    }
+    /**
      * Get the channels the event should broadcast on.
      *
      * @return array<int, \Illuminate\Broadcasting\Channel>
