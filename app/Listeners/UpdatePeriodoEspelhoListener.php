@@ -4,6 +4,7 @@ namespace App\Listeners;
 
 use App\Events\EspelhoUpdatedEvent;
 use App\Models\Espelho;
+use App\Utils\ChecksArray;
 use App\Utils\DateConverter;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -20,10 +21,8 @@ class UpdatePeriodoEspelhoListener
         $id             = $event->getId();
         $periodoEspelho = $event->getPeriodoEspelho();
 
-        // Valida se o período do espelho é um array com 2 posições
-        if (!is_array($periodoEspelho) || count($periodoEspelho) !== 2) {
-            throw new \InvalidArgumentException('Invalid periodoEspelho data');
-        }
+        ChecksArray::is_array($periodoEspelho);
+        ChecksArray::checkArraySizeEquals($periodoEspelho, 2);
 
         try {
             $periodoEspelhoConvertido = DateConverter::convertDateFormat($periodoEspelho);
