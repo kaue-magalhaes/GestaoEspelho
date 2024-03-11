@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\EspelhoUpdatedEvent;
 use App\Models\Espelho;
 use App\Models\Evento;
 use App\Models\Promotor;
@@ -70,7 +71,7 @@ class EspelhoController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        EspelhoUpdatedEvent::dispatch($request, $id);
     }
 
     /**
