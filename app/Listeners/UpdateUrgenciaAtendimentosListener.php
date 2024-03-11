@@ -40,8 +40,8 @@ class UpdateUrgenciaAtendimentosListener
                         'periodo_fim'           => $atendimentoUrgencia['periodo_fim'],
                         'promotor_designado_id' => $atendimentoUrgencia['promotor_designado_id']
                     ]);
-                } 
-                if (!$urgenciaAtendimento){
+                }
+                if (!$urgenciaAtendimento) {
                     UrgenciaAtendimento::create([
                         'periodo_inicio'        => $atendimentoUrgencia['periodo_inicio'],
                         'periodo_fim'           => $atendimentoUrgencia['periodo_fim'],
@@ -54,6 +54,7 @@ class UpdateUrgenciaAtendimentosListener
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error('Erro ao atualizar os atendimentos de urgência: ' . $e->getMessage());
+
             throw new \Exception('Erro ao atualizar os atendimentos de urgência');
         }
     }
