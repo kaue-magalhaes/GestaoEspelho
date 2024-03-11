@@ -2,6 +2,7 @@
 import { ref, onBeforeMount } from 'vue';
 import { Head } from '@inertiajs/vue3';
 import { format } from 'date-fns';
+import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
 import {
     GrupoPromotoria,
@@ -11,10 +12,11 @@ import {
     Evento,
     UrgenciaAtendimento
 } from '@/types';
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/Components/ui/carousel';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import Preview from '@/Components/EspelhoComponents/Preview.vue';
 import Editor from '@/Components/EspelhoComponents/Editor.vue';
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/Components/ui/carousel';
+import Button from '@/Components/ui/button/Button.vue';
 
 const props = defineProps({
     espelho: {
@@ -68,6 +70,22 @@ function stringToDate(dateString: string) {
   return new Date(year, month - 1, day);
 }
 
+const salvarEspelho = async () => {
+    const data = {
+        periodoEspelho: periodoEspelho.value,
+        grupoPromotoriaDeTodasAsPromotorias: grupoDeTodasAsPromotoriasDados.value,
+        listaAtribuicoes: listaAtribuicoes.value,
+        atendimentosUrgenciaDados: atendimentosUrgenciaDados.value,
+    };
+
+    try {
+        const response = await axios.put(`/espelho${props.espelho.id}`, data);
+        console.log(response.data);
+    } catch (error) {
+        console.error(error);
+    }
+};
+
 onBeforeMount(() => {
     eventosComUUID.value = props.eventos.map(evento => ({
       ...evento,
@@ -111,4 +129,7 @@ onBeforeMount(() => {
             </div>
         </div>
     </AuthenticatedLayout>
+    <Button variant="default" class="fixed bottom-5 right-5 z-50" @click="salvarEspelho">
+        Salvar as alterações
+    </Button>
 </template>
