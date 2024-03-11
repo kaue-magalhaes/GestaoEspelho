@@ -225,7 +225,6 @@ const form = useForm({
 
 <template>
   <Card>
-<!--    <form>-->
       <div class="max-w-5xl mx-auto">
       <CardHeader class="flex flex-row items-center justify-between">
         <CardTitle class="font-semibold">
@@ -279,6 +278,5 @@ const form = useForm({
         />
       </CardContent>
     </div>
-<!--    </form>-->
   </Card>
 </template>
