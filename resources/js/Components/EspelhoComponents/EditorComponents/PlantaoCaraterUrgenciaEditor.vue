@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {Promotor, UrgenciaAtendimento} from '@/types';
+import {Promotor, UrgenciaAtendimentoServeSide} from '@/types';
 import {onMounted, ref} from 'vue';
 import { format } from 'date-fns';
 
@@ -20,7 +20,7 @@ const emit = defineEmits([
 ]);
 
 const promotoresQuePodemAtender = ref<Promotor[]>(page.props.promotores || []);
-const plantaoDeAtendimentos = ref<UrgenciaAtendimento[]>(page.props.urgenciaAtendimentos || []);
+const plantaoDeAtendimentos = ref<UrgenciaAtendimentoServeSide[]>(page.props.urgenciaAtendimentos || []);
 
 const adicionarInputDeDados = () => {
   if (plantaoDeAtendimentos.value.length === 0) {
