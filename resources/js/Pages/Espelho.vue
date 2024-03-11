@@ -3,7 +3,6 @@ import { ref, onBeforeMount } from 'vue';
 import { Head } from '@inertiajs/vue3';
 import { format } from 'date-fns';
 import axios from 'axios';
-import { v4 as uuidv4 } from 'uuid';
 import {
     GrupoPromotoria,
     Atribuicoes,
@@ -28,7 +27,7 @@ const props = defineProps({
         required: true,
     },
     eventos: {
-        type: Array as () => Evento[],
+        type: Array as () => { id : string, titulo: string, tipo: string, periodo_inicio: string, periodo_fim: string, promotor_titular_id: string, promotor_designado_id: string }[],
         required: true,
     },
     urgenciaAtendimentos: {
@@ -45,6 +44,7 @@ const periodoEspelho = ref<string[]>([
 const grupoDeTodasAsPromotoriasDados = ref<GrupoPromotoria[]>([]);
 const atendimentosUrgenciaDados = ref([]);
 const listaAtribuicoes = ref<Atribuicoes[]>([]);
+const listaEventos = ref<Evento[]>([]);
 
 const updatePeriodoEspelho = (value: string[]) => {
     periodoEspelho.value = value;
@@ -62,19 +62,22 @@ const updateAtribuicao = (value: Atribuicoes[]) => {
 };
 
 const updateAtendimentosUrgencia = (value: []) => {
-  atendimentosUrgenciaDados.value = value;
+    atendimentosUrgenciaDados.value = value;
+};
+
+const updateListaEventos = (value: Evento[]) => {
+    listaEventos.value = value;
 };
 
 function stringToDate(dateString: string) {
-  const [year, month, day] = dateString.split('-').map(Number);
-  return new Date(year, month - 1, day);
+    const [year, month, day] = dateString.split('-').map(Number);
+    return new Date(year, month - 1, day);
 }
 
 const salvarEspelho = async () => {
     const data = {
         periodoEspelho: periodoEspelho.value,
-        grupoPromotoriaDeTodasAsPromotorias: grupoDeTodasAsPromotoriasDados.value,
-        listaAtribuicoes: listaAtribuicoes.value,
+        listaEventos: listaEventos.value,
         atendimentosUrgenciaDados: atendimentosUrgenciaDados.value,
     };
 
@@ -88,8 +91,13 @@ const salvarEspelho = async () => {
 
 onBeforeMount(() => {
     eventosComUUID.value = props.eventos.map(evento => ({
-      ...evento,
-      uuid: uuidv4(),
+        uuid: evento.id,
+        titulo: evento.titulo,
+        tipo: evento.tipo,
+        periodo_inicio: evento.periodo_inicio,
+        periodo_fim: evento.periodo_fim,
+        promotor_titular_id: evento.promotor_titular_id,
+        promotor_designado_id: evento.promotor_designado_id,
     }));
 });
 </script>
@@ -112,6 +120,7 @@ onBeforeMount(() => {
                                 @update:grupoDeTodasAsPromotorias="updateGrupoDeTodasAsPromotorias"
                                 @update:dadosDosAtendimentosUrgencia="updateAtendimentosUrgencia"
                                 @update:atribuicao="updateAtribuicao"
+                                @update:ListaEventos="updateListaEventos"
                             />
                         </CarouselItem>
                         <CarouselItem>

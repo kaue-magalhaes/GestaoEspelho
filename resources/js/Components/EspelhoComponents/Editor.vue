@@ -24,6 +24,7 @@ const emit = defineEmits([
   'update:grupoDeTodasAsPromotorias',
   'update:dadosDosAtendimentosUrgencia',
   'update:atribuicao',
+  'update:ListaEventos'
 ]);
 
 const props = defineProps({
@@ -57,6 +58,7 @@ const periodoEspelho = ref({
 const grupoDeTodasAsPromotorias = ref<GrupoPromotoria[]>([]);
 const dadosDosAtendimentosUrgencia = ref<UrgenciaAtendimentoClientSide[]>([]);
 const atribuicao = ref<Atribuicoes[]>([]);
+const eventosReativos = ref<Evento[]>(props.eventos);
 
 const updatePeriodoEspelho = (value: any) => {
   periodoEspelho.value.isChanged = true;
@@ -75,6 +77,7 @@ const adicionaEventoNoGrupoDePromotorias = (nomeDoGrupoDePromotorias: string, no
   
   emit('update:grupoDeTodasAsPromotorias', grupoDeTodasAsPromotorias.value);
   adicionaAtribuicao(novoEvento);
+  adicionaEventoNoArrayReativoDeEventos(novoEvento);
 };
 
 const alteraEventoNoGrupoDePromotorias = (eventoAlterado: Evento) => {
@@ -91,6 +94,7 @@ const alteraEventoNoGrupoDePromotorias = (eventoAlterado: Evento) => {
   });
   emit('update:grupoDeTodasAsPromotorias', grupoDeTodasAsPromotorias.value);
   alteraAtribuicao(eventoAlterado);
+  alteraEventoNoArrayReativoDeEventos(eventoAlterado);
 };
 
 const deletaEventoNoGrupoDePromotorias = (uuid: string) => {
@@ -99,6 +103,7 @@ const deletaEventoNoGrupoDePromotorias = (uuid: string) => {
   });
   emit('update:grupoDeTodasAsPromotorias', grupoDeTodasAsPromotorias.value)
   deletaAtribuicao(uuid);
+  deletaEventoNoArrayReativoDeEventos(uuid);
 };
 
 const atualizaPromotorDesignadoParaAtendimentosDeUrgencia = (index: number, idPromotor: string) => {
@@ -198,6 +203,24 @@ const atualizaAsAtribuicoes = (eventos: Evento[]) => {
   });
   emit('update:atribuicao', atribuicao.value);
 }
+
+const adicionaEventoNoArrayReativoDeEventos = (evento: Evento) => {
+  eventosReativos.value.push(evento);
+  emit('update:ListaEventos', eventosReativos.value);
+};
+
+const alteraEventoNoArrayReativoDeEventos = (evento: Evento) => {
+  const index = eventosReativos.value.findIndex((e) => e.uuid === evento.uuid);
+  if (index !== -1) {
+    eventosReativos.value[index] = evento;
+  }
+  emit('update:ListaEventos', eventosReativos.value);
+};
+
+const deletaEventoNoArrayReativoDeEventos = (uuid: string) => {
+  eventosReativos.value = eventosReativos.value.filter((evento) => evento.uuid !== uuid);
+  emit('update:ListaEventos', eventosReativos.value);
+};
 
 function stringToDate(dateString: string) {
   const [year, month, day] = dateString.split('-').map(Number);
