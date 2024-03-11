@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {Evento, GrupoPromotoria, Promotor, Promotoria, UrgenciaAtendimento} from '@/types';
+import {Evento, GrupoPromotoria, Promotor, Promotoria} from '@/types';
 import { ref } from 'vue';
 
 import PlantaoCaraterUrgenciaEditor from '@/Components/EspelhoComponents/EditorComponents/PlantaoCaraterUrgenciaEditor.vue';
@@ -26,10 +26,6 @@ const props = defineProps({
   },
   promotores: {
     type: Array as () => Promotor[],
-    required: true,
-  },
-  urgenciaAtendimentos: {
-    type: Array as () => UrgenciaAtendimento[],
     required: true,
   },
 });
