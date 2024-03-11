@@ -27,6 +27,8 @@ class UpdateUrgenciaAtendimentosListener
             $atendimentosUrgenciaDados = $event->getAtendimentosUrgenciaDados();
 
             ChecksArray::is_array($atendimentosUrgenciaDados);
+            
+            $atendimentosUrgenciaIds = UrgenciaAtendimento::all()->pluck('id')->toArray();
 
             DB::beginTransaction();
             foreach ($atendimentosUrgenciaDados as $atendimentoUrgencia) {
@@ -40,6 +42,7 @@ class UpdateUrgenciaAtendimentosListener
                         'periodo_fim'           => $atendimentoUrgencia['periodo_fim'],
                         'promotor_designado_id' => $atendimentoUrgencia['promotor_designado_id']
                     ]);
+                    $atendimentosUrgenciaIds = array_diff($atendimentosUrgenciaIds, [$atendimentoUrgencia['uuid']]);
                 }
                 if (!$urgenciaAtendimento) {
                     UrgenciaAtendimento::create([
@@ -49,6 +52,7 @@ class UpdateUrgenciaAtendimentosListener
                     ]);
                 }
             }
+            UrgenciaAtendimento::destroy($atendimentosUrgenciaIds);
             DB::commit();
             Log::info('Atendimentos de urgência atualizados com sucesso');
         } catch (\Exception $e) {
