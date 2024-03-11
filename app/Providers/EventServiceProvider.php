@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Events\EspelhoUpdatedEvent;
 use App\Listeners\UpdatePeriodoEspelhoListener;
+use App\Listeners\UpdateUrgenciaAtendimentosListener;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -22,6 +23,7 @@ class EventServiceProvider extends ServiceProvider
         ],
         EspelhoUpdatedEvent::class => [
             UpdatePeriodoEspelhoListener::class,
+            UpdateUrgenciaAtendimentosListener::class,
         ],
     ];
 
