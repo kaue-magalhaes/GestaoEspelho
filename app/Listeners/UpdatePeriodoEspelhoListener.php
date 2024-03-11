@@ -8,7 +8,7 @@ use App\Utils\DateConverter;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
-class UpadatePeriodoEspelhoListener
+class UpdatePeriodoEspelhoListener
 {
     public function __construct()
     {
