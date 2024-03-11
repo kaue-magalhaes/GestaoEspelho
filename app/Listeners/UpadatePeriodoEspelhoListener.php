@@ -33,6 +33,7 @@ class UpadatePeriodoEspelhoListener
             Log::info('Período do espelho atualizado com sucesso para: ' . $periodoEspelhoConvertido['inicio'] . ' - ' . $periodoEspelhoConvertido['fim']);
         } catch (\Exception $e) {
             Log::error('Erro ao atualizar o período do espelho: ' . $e->getMessage());
+
             throw new \Exception('Erro ao atualizar o período do espelho');
         }
     }

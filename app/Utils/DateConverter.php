@@ -14,7 +14,8 @@ class DateConverter
     private static function convertDate(string $date): string
     {
         $dateParts = explode('/', $date);
-        $date = $dateParts[2] . '-' . $dateParts[1] . '-' . $dateParts[0];
+        $date      = $dateParts[2] . '-' . $dateParts[1] . '-' . $dateParts[0];
+
         return date('Y-m-d', strtotime($date));
     }
 }
