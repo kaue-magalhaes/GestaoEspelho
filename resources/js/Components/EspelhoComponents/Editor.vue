@@ -5,19 +5,19 @@ import {
   Espelho,
   Promotor,
   Evento,
-  UrgenciaAtendimento, Atribuicoes
+  UrgenciaAtendimentoClientSide, Atribuicoes, UrgenciaAtendimentoServeSide
 } from '@/types';
-import { ref, onBeforeMount, onMounted } from 'vue';
+import { ref, onBeforeMount } from 'vue';
 
 import { Label } from '@/Components/ui/label';
 import DatePicker from '@/Components/DatePicker.vue';
 import { Card, CardContent, CardHeader, CardTitle } from '@/Components/ui/card';
 
 import { format } from 'date-fns';
+import { v4 as uuidv4 } from 'uuid';
 import EntranciaFinalMacapaEditor from './EditorComponents/EntranciaFinalMacapaEditor.vue';
 import EntranciaFinalSantanaEditor from './EditorComponents/EntranciaFinalSantanaEditor.vue';
 import EntranciaInicialEditor from './EditorComponents/EntranciaInicialEditor.vue';
-import { useForm } from "@inertiajs/vue3";
 
 const emit = defineEmits([
   'update:periodoEspelho',
@@ -44,7 +44,7 @@ const props = defineProps({
     required: true,
   },
   urgenciaAtendimentos: {
-    type: Array as () => UrgenciaAtendimento[],
+    type: Array as () => UrgenciaAtendimentoServeSide[],
     required: true,
   },
 });
@@ -55,7 +55,7 @@ const periodoEspelho = ref({
   end: props.espelho?.periodo_fim ? stringToDate(props.espelho.periodo_fim) : new Date(),
 });
 const grupoDeTodasAsPromotorias = ref<GrupoPromotoria[]>([]);
-const dadosDosAtendimentosUrgencia = ref<UrgenciaAtendimento[]>([]);
+const dadosDosAtendimentosUrgencia = ref<UrgenciaAtendimentoClientSide[]>([]);
 const atribuicao = ref<Atribuicoes[]>([]);
 
 const updatePeriodoEspelho = (value: any) => {
@@ -106,7 +106,7 @@ const atualizaPromotorDesignadoParaAtendimentosDeUrgencia = (index: number, idPr
     dadosDosAtendimentosUrgencia.value[index].promotor_designado_id = idPromotor;
   } else {
     dadosDosAtendimentosUrgencia.value.push({
-      id: '1',
+      uuid: uuidv4(),
       periodo_inicio: '',
       periodo_fim: '',
       promotor_designado_id: idPromotor,
@@ -121,7 +121,7 @@ const atualizaPeriodoQueOPromotorVaiEstarDesignadoParaAtendimentosDeUrgencia = (
     dadosDosAtendimentosUrgencia.value[index].periodo_fim = periodo_end;
   } else {
     dadosDosAtendimentosUrgencia.value.push({
-      id: '1',
+      uuid: uuidv4(),
       periodo_inicio: periodo_start,
       periodo_fim: periodo_end,
       promotor_designado_id: '',
@@ -207,7 +207,7 @@ function stringToDate(dateString: string) {
 onBeforeMount(() => {
   props.urgenciaAtendimentos?.forEach((atendimentoUrgencia) => {
     dadosDosAtendimentosUrgencia.value.push({
-      id: atendimentoUrgencia.id,
+      uuid: atendimentoUrgencia.id,
       periodo_inicio: atendimentoUrgencia.periodo_inicio,
       periodo_fim: atendimentoUrgencia.periodo_fim,
       promotor_designado_id: atendimentoUrgencia.promotor_designado_id,
@@ -217,10 +217,6 @@ onBeforeMount(() => {
 
   atualizaAsAtribuicoes(props.eventos);
 });
-
-const form = useForm({
-
-})
 </script>
 
 <template>
