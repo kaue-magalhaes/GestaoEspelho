@@ -10,7 +10,7 @@ import {
     Espelho,
     Promotor,
     Evento,
-    UrgenciaAtendimento
+    UrgenciaAtendimentoServeSide
 } from '@/types';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/Components/ui/carousel';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
@@ -32,7 +32,7 @@ const props = defineProps({
         required: true,
     },
     urgenciaAtendimentos: {
-        type: Array as () => UrgenciaAtendimento[],
+        type: Array as () => UrgenciaAtendimentoServeSide[],
         required: true,
     },
 });
