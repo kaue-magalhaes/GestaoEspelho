@@ -70,6 +70,6 @@ class UpdateListaEventosListener
 
     private function isEventoValid(array $evento): bool
     {
-        return isset($evento['tipo']) && isset($evento['periodo_inicio']) && isset($evento['periodo_fim']) && isset($evento['promotor_titular_id']) && isset($evento['promotor_designado_id'])  ;
+        return isset($evento['tipo']) && isset($evento['periodo_inicio']) && isset($evento['periodo_fim']) && isset($evento['promotor_titular_id']) && isset($evento['promotor_designado_id']);
     }
 }
