@@ -12,7 +12,7 @@ return new class extends Migration {
     {
         Schema::create('eventos', function (Blueprint $table) {
             $table->id();
-            $table->string('titulo');
+            $table->string('titulo')->nullable();
             $table->string('tipo');
             $table->date('periodo_inicio');
             $table->date('periodo_fim');
