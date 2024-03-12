@@ -239,6 +239,7 @@ onBeforeMount(() => {
   emit('update:dadosDosAtendimentosUrgencia', dadosDosAtendimentosUrgencia.value);
 
   atualizaAsAtribuicoes(props.eventos);
+  emit('update:ListaEventos', eventosReativos.value);
 });
 </script>
 
