@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Events\EspelhoUpdatedEvent;
+use App\Listeners\UpdateListaEventosListener;
 use App\Listeners\UpdatePeriodoEspelhoListener;
 use App\Listeners\UpdateUrgenciaAtendimentosListener;
 use Illuminate\Auth\Events\Registered;
@@ -24,6 +25,7 @@ class EventServiceProvider extends ServiceProvider
         EspelhoUpdatedEvent::class => [
             UpdatePeriodoEspelhoListener::class,
             UpdateUrgenciaAtendimentosListener::class,
+            UpdateListaEventosListener::class,
         ],
     ];
 

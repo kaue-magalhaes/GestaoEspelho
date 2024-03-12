@@ -41,6 +41,14 @@ class EspelhoUpdatedEvent
     }
 
     /**
+     * get the listaEventos from request
+     */
+    public function getListaEventos(): array
+    {
+        return $this->request->input('listaEventos');
+    }
+    
+    /**
      * get the atendimentosUrgenciaDados from request
      */
     public function getAtendimentosUrgenciaDados(): array
