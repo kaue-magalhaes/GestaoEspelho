@@ -71,7 +71,7 @@ class EspelhoController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //dd($request);
+        //dd($request->listaEventos, $request->atendimentosUrgenciaDados);
         EspelhoUpdatedEvent::dispatch($request, $id);
     }
 
