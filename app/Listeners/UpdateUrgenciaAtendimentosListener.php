@@ -35,16 +35,15 @@ class UpdateUrgenciaAtendimentosListener
                 if (!$this->isUrgenciaAtendimentoValid($atendimentoUrgencia)) {
                     continue;
                 }
-                $urgenciaAtendimento = UrgenciaAtendimento::find($atendimentoUrgencia['uuid']);
-                if ($urgenciaAtendimento) {
+                if (in_array($atendimentoUrgencia['uuid'], $atendimentosUrgenciaIds)) {
+                    $urgenciaAtendimento = UrgenciaAtendimento::find($atendimentoUrgencia['uuid']);
                     $urgenciaAtendimento->update([
                         'periodo_inicio'        => $atendimentoUrgencia['periodo_inicio'],
                         'periodo_fim'           => $atendimentoUrgencia['periodo_fim'],
                         'promotor_designado_id' => $atendimentoUrgencia['promotor_designado_id']
                     ]);
                     $atendimentosUrgenciaIds = array_diff($atendimentosUrgenciaIds, [$atendimentoUrgencia['uuid']]);
-                }
-                if (!$urgenciaAtendimento) {
+                } else {
                     UrgenciaAtendimento::create([
                         'periodo_inicio'        => $atendimentoUrgencia['periodo_inicio'],
                         'periodo_fim'           => $atendimentoUrgencia['periodo_fim'],
