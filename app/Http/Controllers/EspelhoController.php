@@ -16,6 +16,24 @@ class EspelhoController extends Controller
     /**
      * Display a listing of the resource.
      */
+    public function editor(): Response
+    {
+        $espelho              = Espelho::with('promotorias')->first()->toArray();
+        $promotores           = Promotor::all()->toArray();
+        $eventos              = Evento::all()->toArray();
+        $urgenciaAtendimentos = UrgenciaAtendimento::all()->toArray();
+
+        //dd($espelho, $promotores, $eventos, $urgenciaAtendimentos);
+
+        return Inertia::render('EspelhoEditor', [
+            'espelho'              => $espelho,
+            'promotores'           => $promotores,
+            'promotoria'           => $espelho['promotorias'],
+            'eventos'              => $eventos,
+            'urgenciaAtendimentos' => $urgenciaAtendimentos
+        ]);
+    }
+
     public function index(): Response
     {
         $espelho              = Espelho::with('promotorias')->first()->toArray();
@@ -25,7 +43,7 @@ class EspelhoController extends Controller
 
         //dd($espelho, $promotores, $eventos, $urgenciaAtendimentos);
 
-        return Inertia::render('Espelho', [
+        return Inertia::render('EspelhoIndex', [
             'espelho'              => $espelho,
             'promotores'           => $promotores,
             'promotoria'           => $espelho['promotorias'],

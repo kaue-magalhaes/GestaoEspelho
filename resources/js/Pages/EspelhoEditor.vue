@@ -11,11 +11,6 @@ import {
     Evento,
     UrgenciaAtendimentoServeSide
 } from '@/types';
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/Components/ui/carousel';
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import Preview from '@/Components/EspelhoComponents/Preview.vue';
-import Editor from '@/Components/EspelhoComponents/Editor.vue';
-import Button from '@/Components/ui/button/Button.vue';
 
 const props = defineProps({
     espelho: {

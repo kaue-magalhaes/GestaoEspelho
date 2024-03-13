@@ -17,9 +17,9 @@ use Inertia\Inertia;
 |
 */
 
-Route::get('/', [EspelhoController::class, 'index'])
-        ->middleware('auth', 'verified')
-        ->name('espelho');
+Route::get('/', [EspelhoController::class, 'editor'])
+    ->middleware('auth', 'verified')
+    ->name('espelho.editor');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -28,6 +28,8 @@ Route::middleware('auth')->group(function () {
 
     Route::put('/espelho{id}', [EspelhoController::class, 'update'])->name('espelho.update');
 });
+
+Route::get('/espelho', [EspelhoController::class, 'index'])->name('espelho.index');
 
 Route::get('/test', function () {
     return Inertia::render('VerifyEmail');
