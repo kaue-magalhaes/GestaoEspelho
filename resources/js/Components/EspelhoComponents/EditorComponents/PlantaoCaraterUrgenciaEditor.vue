@@ -3,12 +3,6 @@ import {Promotor, UrgenciaAtendimentoServeSide} from '@/types';
 import {onMounted, ref} from 'vue';
 import { format } from 'date-fns';
 
-import { Button } from '@/Components/ui/button';
-import { Label } from '@/Components/ui/label';
-import { Card } from '@/Components/ui/card';
-import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue} from '@/Components/ui/select'
-import DatePicker from '@/Components/DatePicker.vue';
-
 import { Plus, Trash } from 'lucide-vue-next';
 import {usePage} from "@inertiajs/vue3";
 

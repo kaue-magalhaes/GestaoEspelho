@@ -1,8 +1,6 @@
 <script setup lang="ts">
 import { Atribuicoes } from '@/types';
-import { onMounted } from 'vue';
 import { format } from 'date-fns';
-
 
 const props = defineProps({
   listaAtribuicoes: {

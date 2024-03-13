@@ -1,11 +1,6 @@
 <script setup lang="ts">
-import {GrupoPromotoria, Atribuicoes, UrgenciaAtendimento} from '@/types';
+import {GrupoPromotoria, Atribuicoes, UrgenciaAtendimentoServeSide} from '@/types';
 import { ref, watchEffect } from 'vue';
-import { Card, CardContent, CardHeader } from '@/Components/ui/card';
-import EntranciaFinalMacapaPreview from '@/Components/EspelhoComponents/PreviewComponents/EntranciaFinalMacapaPreview.vue';
-import EntranciaFinalSantanaPreview from '@/Components/EspelhoComponents/PreviewComponents/EntranciaFinalSantanaPreview.vue';
-import EntranciaInicialPreview from '@/Components/EspelhoComponents/PreviewComponents/EntranciaInicialPreview.vue'
-import TabelaPromotoresSubstitutosPreview from '@/Components/EspelhoComponents/PreviewComponents/TabelaPromotoresSubstitutosPreview.vue';
 
 const props = defineProps({
     periodoEspelho: {
@@ -21,7 +16,7 @@ const props = defineProps({
         required: true,
     },
     atendimentosUrgenciaDados: {
-        type: Array as () => UrgenciaAtendimento[],
+        type: Array as () => UrgenciaAtendimentoServeSide[],
         required: true,
     },
 });

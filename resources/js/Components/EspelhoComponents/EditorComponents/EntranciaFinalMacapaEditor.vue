@@ -2,9 +2,6 @@
 import {Evento, GrupoPromotoria, Promotor, Promotoria} from '@/types';
 import { ref } from 'vue';
 
-import PlantaoCaraterUrgenciaEditor from '@/Components/EspelhoComponents/EditorComponents/PlantaoCaraterUrgenciaEditor.vue';
-import TabelaPromotoriaEditor from '@/Components/EspelhoComponents/EditorComponents/TabelaPromotoriaEditor.vue';
-
 const emit = defineEmits([
   'update:novoEventoAdicionado',
   'update:umEventoFoiAlterado',

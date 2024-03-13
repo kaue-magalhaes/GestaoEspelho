@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { Evento, GrupoPromotoria, Promotoria } from '@/types';
 import { ref } from 'vue';
-import TabelaPromotoriaEditor from '@/Components/EspelhoComponents/EditorComponents/TabelaPromotoriaEditor.vue';
 
 const emit = defineEmits([
   'update:novoEventoAdicionado',

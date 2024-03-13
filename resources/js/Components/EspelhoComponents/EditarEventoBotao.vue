@@ -3,15 +3,7 @@ import { Promotor } from '@/types';
 import { ref } from 'vue';
 import { format } from 'date-fns';
 
-import { Input } from '@/Components/ui/input';
-import { Label } from '@/Components/ui/label';
-import { Button } from '@/Components/ui/button';
-import DatePicker from '@/Components/DatePicker.vue';
-import { Dialog, DialogContent, DialogTrigger, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogClose } from '@/Components/ui/dialog';
-import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue} from '@/Components/ui/select';
-
 import { Edit } from 'lucide-vue-next';
-
 
 const emit = defineEmits([
     'update:editaEvento',

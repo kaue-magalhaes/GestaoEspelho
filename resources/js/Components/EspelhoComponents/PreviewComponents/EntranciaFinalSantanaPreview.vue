@@ -2,8 +2,6 @@
 import { GrupoPromotoria } from '@/types';
 import { ref, watchEffect } from 'vue';
 
-import TabelaPromotoriaPreview from '@/Components/EspelhoComponents/PreviewComponents/TabelaPromotoriaPreview.vue';
-
 const props = defineProps({
   promotorias: {
     type: Array as () => GrupoPromotoria[],

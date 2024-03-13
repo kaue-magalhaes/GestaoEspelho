@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { GrupoPromotoria } from '@/types';
-import TabelaPromotoriaPreview from '@/Components/EspelhoComponents/PreviewComponents/TabelaPromotoriaPreview.vue';
 
 defineProps({
   promotoriasDados: {

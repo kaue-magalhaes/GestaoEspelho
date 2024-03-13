@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import { ref, onBeforeMount } from 'vue';
+import { v4 as uuidv4 } from 'uuid';
+import { format } from 'date-fns';
 import {
   Promotoria,
   GrupoPromotoria,
@@ -7,17 +10,6 @@ import {
   Evento,
   UrgenciaAtendimentoClientSide, Atribuicoes, UrgenciaAtendimentoServeSide
 } from '@/types';
-import { ref, onBeforeMount } from 'vue';
-
-import { Label } from '@/Components/ui/label';
-import DatePicker from '@/Components/DatePicker.vue';
-import { Card, CardContent, CardHeader, CardTitle } from '@/Components/ui/card';
-
-import { format } from 'date-fns';
-import { v4 as uuidv4 } from 'uuid';
-import EntranciaFinalMacapaEditor from './EditorComponents/EntranciaFinalMacapaEditor.vue';
-import EntranciaFinalSantanaEditor from './EditorComponents/EntranciaFinalSantanaEditor.vue';
-import EntranciaInicialEditor from './EditorComponents/EntranciaInicialEditor.vue';
 
 const emit = defineEmits([
   'update:periodoEspelho',

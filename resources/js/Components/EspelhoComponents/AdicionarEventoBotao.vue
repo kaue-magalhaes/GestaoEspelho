@@ -5,13 +5,6 @@ import { ref, onMounted } from 'vue';
 import { format } from 'date-fns';
 import { v4 as uuidv4 } from 'uuid';
 
-import { Input } from '@/Components/ui/input';
-import { Label } from '@/Components/ui/label';
-import { Button } from '@/Components/ui/button';
-import DatePicker from '@/Components/DatePicker.vue';
-import { Dialog, DialogContent, DialogTrigger, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/Components/ui/dialog';
-import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue} from '@/Components/ui/select';
-
 const emit = defineEmits([
     'update:adicionaEvento',
 ]);

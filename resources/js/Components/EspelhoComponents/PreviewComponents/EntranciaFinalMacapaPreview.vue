@@ -1,10 +1,6 @@
 <script setup lang="ts">
-import {GrupoPromotoria, UrgenciaAtendimento} from '@/types';
+import {GrupoPromotoria, UrgenciaAtendimentoServeSide} from '@/types';
 import { ref, watchEffect } from 'vue';
-
-import TabelaPromotoriaPreview from '@/Components/EspelhoComponents/PreviewComponents/TabelaPromotoriaPreview.vue';
-import PlantaoCaraterUrgenciaPreview
-  from "@/Components/EspelhoComponents/PreviewComponents/PlantaoCaraterUrgenciaPreview.vue";
 
 const props = defineProps({
   grupoPromotorias: {
@@ -12,7 +8,7 @@ const props = defineProps({
     required: true,
   },
   urgenciaAtendimentos: {
-    type: Array as () => UrgenciaAtendimento[],
+    type: Array as () => UrgenciaAtendimentoServeSide[],
     required: true,
   },
 });

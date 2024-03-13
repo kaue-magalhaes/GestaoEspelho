@@ -2,8 +2,6 @@
 import {Evento, GrupoPromotoria, Promotor, Promotoria} from '@/types';
 import { onMounted, ref } from 'vue';
 import { usePage } from '@inertiajs/vue3';
-
-import Button from '@/Components/ui/button/Button.vue';
 import EditarEventoBotao from '@/Components/EspelhoComponents/EditarEventoBotao.vue';
 import AdicionarEventoBotao from '@/Components/EspelhoComponents/AdicionarEventoBotao.vue';
 import {
