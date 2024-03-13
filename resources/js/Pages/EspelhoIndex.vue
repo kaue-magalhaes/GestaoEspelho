@@ -1,8 +1,158 @@
 <script setup lang="ts">
+import { Atribuicoes, Espelho, Evento, GrupoPromotoria, Promotor, Promotoria, UrgenciaAtendimentoServeSide } from '@/types';
+import { Head } from '@inertiajs/vue3';
+import { format } from 'date-fns';
+import { watchEffect, ref } from 'vue';
+
+const props = defineProps({
+    espelho: {
+        type: Object as () => Espelho,
+        required: true,
+    },
+    promotorias: {
+        type: Array as () => Promotoria[],
+        required: true,
+    },
+    promotores: {
+        type: Array as () => Promotor[],
+        required: true,
+    },
+    eventos: {
+        type: Array as () => Evento[],
+        required: true,
+    },
+    urgenciaAtendimentos: {
+        type: Array as () => UrgenciaAtendimentoServeSide[],
+        required: true,
+    },
+});
+
+const grupoDeTodasAsPromotoriasDados = ref<GrupoPromotoria[]>([]);
+const listaAtribuicoes = ref<Atribuicoes[]>([]);
+const periodoEspelhoFormatado = ref<string[]>([]);
+const atendimentosUrgenciaDados = ref<any>([]);
+
+const processarPromotorias = (promotorias: Promotoria[]) => {
+    promotorias?.forEach((promotoria) => {
+        if (grupoDeTodasAsPromotoriasDados.value.length === 0) {
+        grupoDeTodasAsPromotoriasDados.value.push({
+            nome_grupo_promotorias: promotoria.nome_grupo_promotorias,
+            promotorias: [{
+            id: promotoria.id,
+            nome: promotoria.nome,
+            nome_grupo_promotorias: promotoria.nome_grupo_promotorias,
+            municipio: promotoria.municipio,
+            is_especializada: promotoria.is_especializada,
+            espelho_id: promotoria.espelho_id,
+            promotor_titular_id: promotoria.promotor_titular_id,
+            created_at: promotoria.created_at,
+            updated_at: promotoria.updated_at,
+            }],
+            eventos: props.eventos.filter((evento) => evento.promotor_titular_id === promotoria.promotor_titular_id) || [],
+        });
+        } else {
+        const grupoPromotoria = grupoDeTodasAsPromotoriasDados.value.find((grupoPromotoria) => grupoPromotoria.nome_grupo_promotorias === promotoria.nome_grupo_promotorias);
+        if (grupoPromotoria) {
+            grupoPromotoria.promotorias.push({
+            id: promotoria.id,
+            nome: promotoria.nome,
+            nome_grupo_promotorias: promotoria.nome_grupo_promotorias,
+            municipio: promotoria.municipio,
+            is_especializada: promotoria.is_especializada,
+            espelho_id: promotoria.espelho_id,
+            promotor_titular_id: promotoria.promotor_titular_id,
+            created_at: promotoria.created_at,
+            updated_at: promotoria.updated_at,
+            });
+            const novosEventos = props.eventos.filter((evento) => evento.promotor_titular_id === promotoria.promotor_titular_id);
+            novosEventos.forEach((novoEvento) => {
+            const eventoExiste = grupoPromotoria.eventos.some((eventoExistente) => eventoExistente.uuid === novoEvento.uuid);
+            if (!eventoExiste) {
+                grupoPromotoria.eventos.push(novoEvento);
+            }
+            });
+        } else {
+            grupoDeTodasAsPromotoriasDados.value.push({
+            nome_grupo_promotorias: promotoria.nome_grupo_promotorias,
+            promotorias: [{
+                id: promotoria.id,
+                nome: promotoria.nome,
+                nome_grupo_promotorias: promotoria.nome_grupo_promotorias,
+                municipio: promotoria.municipio,
+                is_especializada: promotoria.is_especializada,
+                espelho_id: promotoria.espelho_id,
+                promotor_titular_id: promotoria.promotor_titular_id,
+                created_at: promotoria.created_at,
+                updated_at: promotoria.updated_at,
+            }],
+            eventos: props.eventos.filter((evento) => evento.promotor_titular_id === promotoria.promotor_titular_id) || [],
+            });
+        }
+        }
+    });
+};
+
+const atualizaAsAtribuicoes = (eventos: Evento[]) => {
+  eventos.forEach((evento) => {
+    if (listaAtribuicoes.value.length === 0) {
+      listaAtribuicoes.value.push({
+        nome_promotor: props.promotores.find((promotor) => promotor.id === evento.promotor_designado_id)?.nome || '',
+        atribuicoes: evento ? [evento] : [],
+      })
+    } else {
+      const index = listaAtribuicoes.value.findIndex((a) => a.nome_promotor === props.promotores.find((promotor) => promotor.id === evento.promotor_designado_id)?.nome);
+      if (index === -1) {
+        listaAtribuicoes.value.push({
+          nome_promotor: props.promotores.find((promotor) => promotor.id === evento.promotor_designado_id)?.nome || '',
+          atribuicoes: evento ? [evento] : [],
+        });
+      } else {
+        listaAtribuicoes.value[index].atribuicoes.push(evento);
+      }
+    }
+  });
+}
+
+const processaAtendimentosUrgenciaDados = (urgenciaAtendimentos: UrgenciaAtendimentoServeSide[]) => {
+    urgenciaAtendimentos?.forEach((atendimentoUrgencia) => {
+    atendimentosUrgenciaDados.value.push({
+      uuid: atendimentoUrgencia.id,
+      periodo_inicio: atendimentoUrgencia.periodo_inicio,
+      periodo_fim: atendimentoUrgencia.periodo_fim,
+      promotor_designado_id: atendimentoUrgencia.promotor_designado_id,
+    });
+  });
+}
+    
+
+function stringToDate(dateString: string) {
+    const [year, month, day] = dateString.split('-').map(Number);
+    return new Date(year, month - 1, day);
+}
+
+const formatarPeriodo = (periodoInicio: string, periodoFim: string) => {
+    return [
+        format(stringToDate(periodoInicio), 'dd/MM/yyyy'),
+        format(stringToDate(periodoFim), 'dd/MM/yyyy'),
+    ];
+};
+
+watchEffect(() => {
+    periodoEspelhoFormatado.value = formatarPeriodo(props.espelho.periodo_inicio, props.espelho.periodo_fim);
+    processarPromotorias(props.promotorias);
+    atualizaAsAtribuicoes(props.eventos);
+    processaAtendimentosUrgenciaDados(props.urgenciaAtendimentos);
+    console.log('periodoEspelhoFormatado', periodoEspelhoFormatado.value);
+    
+});
 </script>
 
 <template>
+    <Head title="Espelho" />
     <Preview 
-        
+        :periodoEspelho="periodoEspelhoFormatado"
+        :grupoPromotoriaDeTodasAsPromotorias="grupoDeTodasAsPromotoriasDados"
+        :listaAtribuicoes="listaAtribuicoes"
+        :atendimentosUrgenciaDados="atendimentosUrgenciaDados"
     />
 </template>
