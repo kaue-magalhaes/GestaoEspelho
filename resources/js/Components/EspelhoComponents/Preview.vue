@@ -51,7 +51,6 @@ watchEffect(() => {
         promotoriasInterior.value = [];
     }
 });
-
 </script>
 
 <template>
