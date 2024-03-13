@@ -28,7 +28,7 @@ class EspelhoController extends Controller
         return Inertia::render('EspelhoEditor', [
             'espelho'              => $espelho,
             'promotores'           => $promotores,
-            'promotoria'           => $espelho['promotorias'],
+            'promotorias'          => $espelho['promotorias'],
             'eventos'              => $eventos,
             'urgenciaAtendimentos' => $urgenciaAtendimentos
         ]);
@@ -46,7 +46,7 @@ class EspelhoController extends Controller
         return Inertia::render('EspelhoIndex', [
             'espelho'              => $espelho,
             'promotores'           => $promotores,
-            'promotoria'           => $espelho['promotorias'],
+            'promotorias'          => $espelho['promotorias'],
             'eventos'              => $eventos,
             'urgenciaAtendimentos' => $urgenciaAtendimentos
         ]);
