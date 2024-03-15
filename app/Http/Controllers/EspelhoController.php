@@ -107,7 +107,7 @@ class EspelhoController extends Controller
      */
     public function publish(Request $request, string $id)
     {
-        PublicarEspelhoEvent::dispatch($request, $id);
+        PublicarEspelhoEvent::dispatch();
     }
 
     /**
