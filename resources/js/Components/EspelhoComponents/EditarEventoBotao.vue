@@ -164,25 +164,21 @@ function stringToDate(dateString: string) {
                 </div>
             </div>
             <DialogFooter>
-                <DialogClose as-child>
-                    <Button variant="destructive" @click="dialogOpen = false">
-                        Cancelar
-                    </Button>
-                </DialogClose>
-                <DialogClose as-child>
-                    <Button variant="default" @click="enviaDadosDoEvento(
-                        {
-                            uuid: props.uuid,
-                            titulo: tituloEvento, 
-                            tipo: tipoEvento, 
-                            periodo: periodoEvento, 
-                            promotor_titular_id: props.promotor_titular_id,
-                            promotor_designado_id: promotor_designado_id_reativo
-                        }
-                    )">
-                        Editar Evento
-                    </Button>
-                </DialogClose>
+                <Button variant="destructive" @click="dialogOpen = false">
+                    Cancelar
+                </Button>
+                <Button variant="default" @click="enviaDadosDoEvento(
+                    {
+                        uuid: props.uuid,
+                        titulo: tituloEvento, 
+                        tipo: tipoEvento, 
+                        periodo: periodoEvento, 
+                        promotor_titular_id: props.promotor_titular_id,
+                        promotor_designado_id: promotor_designado_id_reativo
+                    }
+                )">
+                    Editar Evento
+                </Button>
             </DialogFooter>
         </DialogContent>
     </Dialog>
