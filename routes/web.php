@@ -27,6 +27,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::put('/espelho{id}', [EspelhoController::class, 'update'])->name('espelho.update');
+    Route::put('/espelho', [EspelhoController::class, 'publish'])->name('espelho.publish');
 });
 
 Route::get('/espelho', [EspelhoController::class, 'index'])->name('espelho.index');

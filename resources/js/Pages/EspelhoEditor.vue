@@ -11,6 +11,7 @@ import {
     Evento,
     UrgenciaAtendimentoServeSide
 } from '@/types';
+import { Loader2 } from 'lucide-vue-next'
 
 const props = defineProps({
     espelho: {
@@ -40,9 +41,15 @@ const grupoDeTodasAsPromotoriasDados = ref<GrupoPromotoria[]>([]);
 const atendimentosUrgenciaDados = ref([]);
 const listaAtribuicoes = ref<Atribuicoes[]>([]);
 const listaEventos = ref<Evento[]>([]);
+const exibirBotaoSalvar = ref(false);
+const exibirBotaoPublicar = ref(false);
+const carregandoSalvamento = ref(false);
+const carregandoPublicacao = ref(false);
 
 const updatePeriodoEspelho = (value: string[]) => {
     periodoEspelho.value = value;
+    exibirBotaoSalvar.value = true;
+    exibirBotaoPublicar.value = true;
 };
 
 const updateGrupoDeTodasAsPromotorias = (value: GrupoPromotoria[]) => {
@@ -70,6 +77,7 @@ function stringToDate(dateString: string) {
 }
 
 const salvarEspelho = async () => {
+    carregandoSalvamento.value = true;
     const data = {
         periodoEspelho: periodoEspelho.value,
         listaEventos: listaEventos.value,
@@ -78,7 +86,23 @@ const salvarEspelho = async () => {
 
     try {
         const response = await axios.put(`/espelho${props.espelho.id}`, data);
-        console.log(response.data);
+        exibirBotaoSalvar.value = false;
+    } catch (error) {
+        console.error(error);
+    }
+};
+
+const publicarEspelho = async () => {
+    carregandoPublicacao.value = true;
+    const data = {
+        periodoEspelho: periodoEspelho.value,
+        listaEventos: listaEventos.value,
+        atendimentosUrgenciaDados: atendimentosUrgenciaDados.value,
+    };
+
+    try {
+        const response = await axios.put(`/espelho/publicar/${props.espelho.id}`, data);
+        exibirBotaoPublicar.value = false;
     } catch (error) {
         console.error(error);
     }
@@ -133,7 +157,24 @@ onBeforeMount(() => {
             </div>
         </div>
     </AuthenticatedLayout>
-    <Button variant="default" class="fixed bottom-5 right-5 z-50" @click="salvarEspelho">
-        Salvar as alterações
-    </Button>
+    <span class="fixed bottom-5 right-5 z-50 space-x-2">
+        <span v-if="exibirBotaoSalvar">
+            <Button v-if="!carregandoSalvamento" variant="outline" @click="salvarEspelho">
+                Salvar as alterações
+            </Button>
+            <Button v-else variant="outline" disabled>
+                <Loader2 class="w-4 h-4 mr-2 animate-spin" />
+                Enviando
+            </Button>
+        </span>
+        <span v-if="exibirBotaoPublicar">
+            <Button v-if="!carregandoPublicacao" variant="default" @click="publicarEspelho">
+                Publicar Espelho
+            </Button>
+            <Button v-else variant="default" @click="publicarEspelho">
+                <Loader2 class="w-4 h-4 mr-2 animate-spin" />
+                Enviando
+            </Button>
+        </span>
+    </span>
 </template>
