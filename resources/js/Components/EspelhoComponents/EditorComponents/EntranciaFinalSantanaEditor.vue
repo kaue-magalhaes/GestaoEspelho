@@ -6,7 +6,6 @@ const emit = defineEmits([
   'update:novoEventoAdicionado',
   'update:umEventoFoiAlterado',
   'delete:umEventoFoiDeletado',
-  'update:grupoPromotorias'
 ]);
 
 const props = defineProps({
@@ -34,10 +33,6 @@ const enviaDadosDoEventoAlterado = (eventoAlterado: Evento) => {
 const enviaDadosDoEventoDeletado = (uuid: string) => {
   emit('delete:umEventoFoiDeletado', uuid);
 };
-
-const enviaDadosDoGrupoDePromotorias = (grupoPromotorias: GrupoPromotoria[]) => {
-  emit('update:grupoPromotorias', grupoPromotorias);
-};
 </script>
 
 <template>
@@ -52,7 +47,6 @@ const enviaDadosDoGrupoDePromotorias = (grupoPromotorias: GrupoPromotoria[]) => 
         @update:novoEventoAdicionado="enviaDadosDoNovoEvento"
         @update:UmEventoFoiAlterado="enviaDadosDoEventoAlterado"
         @delete:umEventoFoiDeletado="enviaDadosDoEventoDeletado"
-        @update:grupoPromotorias="enviaDadosDoGrupoDePromotorias"
       />
     </div>
     <div class="max-w-5xl w-full mx-auto flex flex-col items-center space-y-4">
@@ -65,7 +59,6 @@ const enviaDadosDoGrupoDePromotorias = (grupoPromotorias: GrupoPromotoria[]) => 
         @update:novoEventoAdicionado="enviaDadosDoNovoEvento"
         @update:UmEventoFoiAlterado="enviaDadosDoEventoAlterado"
         @delete:umEventoFoiDeletado="enviaDadosDoEventoDeletado"
-        @update:grupoPromotorias="enviaDadosDoGrupoDePromotorias"
       />
     </div>
   </div>

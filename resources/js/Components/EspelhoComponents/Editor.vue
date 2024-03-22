@@ -132,11 +132,6 @@ const deletaInputDeDadosDeAtendimentoUrgencia = (index: number) => {
   emit('update:dadosDosAtendimentosUrgencia', dadosDosAtendimentosUrgencia.value);
 };
 
-const adicionaDadosNoGrupoDePromotorias = (grupoPromotorias: GrupoPromotoria[]) => {
-  grupoDeTodasAsPromotorias.value = grupoDeTodasAsPromotorias.value.concat(grupoPromotorias);
-  emit('update:grupoDeTodasAsPromotorias', grupoDeTodasAsPromotorias.value);
-};
-
 const adicionaAtribuicao = (evento: Evento) => {
   const nome_promotor = props.promotores.find((promotor) => promotor.id === evento.promotor_designado_id)?.nome || '';
   const index = atribuicao.value.findIndex((a) => a.nome_promotor === nome_promotor);
@@ -228,10 +223,7 @@ onBeforeMount(() => {
       promotor_designado_id: atendimentoUrgencia.promotor_designado_id,
     });
   });
-  emit('update:dadosDosAtendimentosUrgencia', dadosDosAtendimentosUrgencia.value);
-
   atualizaAsAtribuicoes(props.eventos);
-  emit('update:ListaEventos', eventosReativos.value);
 });
 </script>
 
@@ -268,7 +260,6 @@ onBeforeMount(() => {
           @update:nomeFoiSelecionado="atualizaPromotorDesignadoParaAtendimentosDeUrgencia"
           @update:periodoDoAtendimentoFoiSelecionado="atualizaPeriodoQueOPromotorVaiEstarDesignadoParaAtendimentosDeUrgencia"
           @delete:inputDeDadosFoiDeletado="deletaInputDeDadosDeAtendimentoUrgencia"
-          @update:grupoPromotorias="adicionaDadosNoGrupoDePromotorias"
         />
         <EntranciaFinalSantanaEditor
           :promotoriasSantana="props.promotorias?.filter((promotoria) => promotoria.municipio === 'Santana')"
@@ -277,7 +268,6 @@ onBeforeMount(() => {
           @update:novoEventoAdicionado="adicionaEventoNoGrupoDePromotorias"
           @update:umEventoFoiAlterado="alteraEventoNoGrupoDePromotorias"
           @delete:umEventoFoiDeletado="deletaEventoNoGrupoDePromotorias"
-          @update:grupoPromotorias="adicionaDadosNoGrupoDePromotorias"
         />
         <EntranciaInicialEditor
           :promotoriasInterior="props.promotorias?.filter((promotoria) => promotoria.municipio !== 'Macapá' && promotoria.municipio !== 'Santana')"
@@ -286,7 +276,6 @@ onBeforeMount(() => {
           @update:novoEventoAdicionado="adicionaEventoNoGrupoDePromotorias"
           @update:umEventoFoiAlterado="alteraEventoNoGrupoDePromotorias"
           @delete:umEventoFoiDeletado="deletaEventoNoGrupoDePromotorias"
-          @update:grupoPromotorias="adicionaDadosNoGrupoDePromotorias"
         />
       </CardContent>
     </div>

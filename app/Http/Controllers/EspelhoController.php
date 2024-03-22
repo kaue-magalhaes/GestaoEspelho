@@ -30,6 +30,7 @@ class EspelhoController extends Controller
         $eventos              = Evento::all()->toArray();
         $urgenciaAtendimentos = UrgenciaAtendimento::all()->toArray();
 
+        //dd($grupoPromotoriasArray);
         //dd($espelho, $promotores, $eventos, $urgenciaAtendimentos);
 
         return Inertia::render('EspelhoEditor', [

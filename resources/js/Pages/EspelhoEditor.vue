@@ -8,8 +8,10 @@ import {
     Atribuicoes,
     Espelho,
     Promotor,
+    EventoServerSide,
     Evento,
-    UrgenciaAtendimentoServeSide
+    UrgenciaAtendimentoServeSide,
+    UrgenciaAtendimentoClientSide
 } from '@/types';
 import { Loader2 } from 'lucide-vue-next'
 
@@ -23,7 +25,7 @@ const props = defineProps({
         required: true,
     },
     eventos: {
-        type: Array as () => { id : string, titulo: string, tipo: string, periodo_inicio: string, periodo_fim: string, promotor_titular_id: string, promotor_designado_id: string }[],
+        type: Array as () => EventoServerSide[],
         required: true,
     },
     urgenciaAtendimentos: {
@@ -38,7 +40,7 @@ const periodoEspelho = ref<string[]>([
     format(stringToDate(props.espelho?.periodo_fim), 'dd/MM/yyyy'),
 ]);
 const grupoDeTodasAsPromotoriasDados = ref<GrupoPromotoria[]>([]);
-const atendimentosUrgenciaDados = ref([]);
+const atendimentosUrgenciaDados = ref<UrgenciaAtendimentoClientSide[]>([]);
 const listaAtribuicoes = ref<Atribuicoes[]>([]);
 const listaEventos = ref<Evento[]>([]);
 const salvo = ref(false);
@@ -58,6 +60,8 @@ const updateGrupoDeTodasAsPromotorias = (value: GrupoPromotoria[]) => {
     if (value.length === 0) {
         grupoDeTodasAsPromotoriasDados.value = [];
     }
+    exibirBotaoSalvar.value = true;
+    exibirBotaoPublicar.value = true;
 }
 
 const updateAtribuicao = (value: Atribuicoes[]) => {
@@ -66,10 +70,14 @@ const updateAtribuicao = (value: Atribuicoes[]) => {
 
 const updateAtendimentosUrgencia = (value: []) => {
     atendimentosUrgenciaDados.value = value;
+    exibirBotaoSalvar.value = true;
+    exibirBotaoPublicar.value = true;
 };
 
 const updateListaEventos = (value: Evento[]) => {
     listaEventos.value = value;
+    exibirBotaoSalvar.value = true;
+    exibirBotaoPublicar.value = true;
 };
 
 function stringToDate(dateString: string) {
@@ -112,8 +120,8 @@ const publicarEspelho = async () => {
     }
 };
 
-onBeforeMount(() => {
-    eventosComUUID.value = props.eventos.map(evento => ({
+const processaEventos = (eventos: EventoServerSide[]) => {
+    return eventos.map(evento => ({
         uuid: evento.id,
         titulo: evento.titulo,
         tipo: evento.tipo,
@@ -122,6 +130,22 @@ onBeforeMount(() => {
         promotor_titular_id: evento.promotor_titular_id,
         promotor_designado_id: evento.promotor_designado_id,
     }));
+};
+
+const processaUrgenciaAtendimentos = (urgenciaAtendimentos: UrgenciaAtendimentoServeSide[]) => {
+    return urgenciaAtendimentos.map(atendimentoUrgencia => ({
+        uuid: atendimentoUrgencia.id,
+        periodo_inicio: atendimentoUrgencia.periodo_inicio,
+        periodo_fim: atendimentoUrgencia.periodo_fim,
+        promotor_designado_id: atendimentoUrgencia.promotor_designado_id,
+    }));    
+};
+
+onBeforeMount(() => {
+    eventosComUUID.value = processaEventos(props.eventos);
+    listaEventos.value = eventosComUUID.value;
+
+    atendimentosUrgenciaDados.value = processaUrgenciaAtendimentos(props.urgenciaAtendimentos);
 });
 </script>
 
