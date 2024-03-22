@@ -41,6 +41,7 @@ const grupoDeTodasAsPromotoriasDados = ref<GrupoPromotoria[]>([]);
 const atendimentosUrgenciaDados = ref([]);
 const listaAtribuicoes = ref<Atribuicoes[]>([]);
 const listaEventos = ref<Evento[]>([]);
+const salvo = ref(false);
 const exibirBotaoSalvar = ref(false);
 const exibirBotaoPublicar = ref(false);
 const carregandoSalvamento = ref(false);
@@ -87,6 +88,9 @@ const salvarEspelho = async () => {
     try {
         const response = await axios.put(`/espelho${props.espelho.id}`, data);
         exibirBotaoSalvar.value = false;
+        carregandoSalvamento.value = false;
+        salvo.value = true;
+
     } catch (error) {
         console.error(error);
     }
@@ -167,14 +171,36 @@ onBeforeMount(() => {
                 Enviando
             </Button>
         </span>
-        <span v-if="exibirBotaoPublicar">
-            <Button v-if="!carregandoPublicacao" variant="default" @click="publicarEspelho">
-                Publicar Espelho
-            </Button>
-            <Button v-else variant="default" @click="publicarEspelho">
-                <Loader2 class="w-4 h-4 mr-2 animate-spin" />
-                Enviando
-            </Button>
+        <span v-if="exibirBotaoPublicar && salvo">
+            <AlertDialog>
+                <AlertDialogTrigger>
+                    <Button variant="default">
+                        Publicar Espelho
+                    </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>
+                            Publicar Espelho
+                        </AlertDialogTitle>
+                        <AlertDialogDescription>
+                            Você tem certeza que deseja publicar o espelho?
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel class="bg-red-500 hover:bg-red-400 text-white hover:text-white">
+                            Cancelar
+                        </AlertDialogCancel>
+                        <Button v-if="!carregandoPublicacao" variant="default" @click="publicarEspelho">
+                            Publicar Espelho
+                        </Button>
+                        <Button v-else variant="default" disabled>
+                            <Loader2 class="w-4 h-4 mr-2 animate-spin" />
+                            Publicando
+                        </Button>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
         </span>
     </span>
 </template>

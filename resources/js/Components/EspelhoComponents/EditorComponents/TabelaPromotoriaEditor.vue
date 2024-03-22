@@ -4,17 +4,6 @@ import { onMounted, ref } from 'vue';
 import { usePage } from '@inertiajs/vue3';
 import EditarEventoBotao from '@/Components/EspelhoComponents/EditarEventoBotao.vue';
 import AdicionarEventoBotao from '@/Components/EspelhoComponents/AdicionarEventoBotao.vue';
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from '@/Components/ui/alert-dialog'
 
 import { Trash } from 'lucide-vue-next';
 

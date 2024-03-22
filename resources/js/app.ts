@@ -25,6 +25,7 @@ import TabelaPromotoresSubstitutosPreview from '@/Components/EspelhoComponents/P
 import PlantaoCaraterUrgenciaPreview from "@/Components/EspelhoComponents/PreviewComponents/PlantaoCaraterUrgenciaPreview.vue";
 import TabelaPromotoriaPreview from '@/Components/EspelhoComponents/PreviewComponents/TabelaPromotoriaPreview.vue';
 
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger} from '@/Components/ui/alert-dialog'
 import { Dialog, DialogContent, DialogTrigger, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/Components/ui/dialog';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue} from '@/Components/ui/select';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/Components/ui/carousel';
@@ -56,6 +57,15 @@ createInertiaApp({
             .component('TabelaPromotoresSubstitutosPreview', TabelaPromotoresSubstitutosPreview)
             .component('PlantaoCaraterUrgenciaPreview', PlantaoCaraterUrgenciaPreview)
             .component('TabelaPromotoriaPreview', TabelaPromotoriaPreview)
+            .component('AlertDialog', AlertDialog)
+            .component('AlertDialogAction', AlertDialogAction)
+            .component('AlertDialogCancel', AlertDialogCancel)
+            .component('AlertDialogContent', AlertDialogContent)
+            .component('AlertDialogDescription', AlertDialogDescription)
+            .component('AlertDialogFooter', AlertDialogFooter)
+            .component('AlertDialogHeader', AlertDialogHeader)
+            .component('AlertDialogTitle', AlertDialogTitle)
+            .component('AlertDialogTrigger', AlertDialogTrigger)
             .component('Dialog', Dialog)
             .component('DialogContent', DialogContent)
             .component('DialogTrigger', DialogTrigger)
