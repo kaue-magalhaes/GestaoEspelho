@@ -12,7 +12,7 @@ class HistoricoUrgenciaAtendimento extends Model
     protected $table = 'historico_urgencia_atendimentos';
 
     protected $fillable = [
-        'periodo_inicio', 
+        'periodo_inicio',
         'periodo_fim',
         'promotor_designado_id',
         'historico_id',

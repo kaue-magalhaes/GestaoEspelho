@@ -12,7 +12,7 @@ class Historico extends Model
     protected $table = 'historicos';
 
     protected $fillable = [
-        'periodo_inicio', 
+        'periodo_inicio',
         'periodo_fim'
     ];
 }

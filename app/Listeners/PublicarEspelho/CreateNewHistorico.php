@@ -46,13 +46,13 @@ class CreateNewHistorico
         ]);
         foreach ($promotorias as $promotoria) {
             HistoricoPromotoria::query()->create([
-                'nome'                  => $promotoria->nome,
+                'nome'                   => $promotoria->nome,
                 'nome_grupo_promotorias' => $promotoria->nome_grupo_promotorias,
-                'municipio'             => $promotoria->municipio,
-                'is_especializada'      => $promotoria->is_especializada,
-                'espelho_id'            => $promotoria->espelho_id,
-                'promotor_titular_id'   => $promotoria->promotor_titular_id,
-                'historico_id'          => $historico->id,
+                'municipio'              => $promotoria->municipio,
+                'is_especializada'       => $promotoria->is_especializada,
+                'espelho_id'             => $promotoria->espelho_id,
+                'promotor_titular_id'    => $promotoria->promotor_titular_id,
+                'historico_id'           => $historico->id,
             ]);
         }
         foreach ($promotores as $promotor) {

@@ -4,10 +4,10 @@ namespace App\Providers;
 
 use App\Events\EspelhoUpdatedEvent;
 use App\Events\PublicarEspelhoEvent;
-use App\Listeners\PublicarEspelho\CreateNewHistorico;
 use App\Listeners\EspelhoUpdated\UpdateListaEventosListener;
 use App\Listeners\EspelhoUpdated\UpdatePeriodoEspelhoListener;
 use App\Listeners\EspelhoUpdated\UpdateUrgenciaAtendimentosListener;
+use App\Listeners\PublicarEspelho\CreateNewHistorico;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
