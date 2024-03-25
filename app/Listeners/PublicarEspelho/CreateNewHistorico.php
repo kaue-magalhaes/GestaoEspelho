@@ -44,6 +44,13 @@ class CreateNewHistorico
             'periodo_fim'    => $periodoEspelho['periodo_fim'],
             'historico_id'   => $historico->id,
         ]);
+        foreach ($promotores as $promotor) {
+            HistoricoPromotor::query()->create([
+                'nome'          => $promotor->nome,
+                'is_substituto' => $promotor->is_substituto,
+                'historico_id'  => $historico->id,
+            ]);
+        }
         foreach ($promotorias as $promotoria) {
             HistoricoPromotoria::query()->create([
                 'nome'                   => $promotoria->nome,
@@ -53,13 +60,6 @@ class CreateNewHistorico
                 'espelho_id'             => $promotoria->espelho_id,
                 'promotor_titular_id'    => $promotoria->promotor_titular_id,
                 'historico_id'           => $historico->id,
-            ]);
-        }
-        foreach ($promotores as $promotor) {
-            HistoricoPromotor::query()->create([
-                'nome'          => $promotor->nome,
-                'is_substituto' => $promotor->is_substituto,
-                'historico_id'  => $historico->id,
             ]);
         }
         foreach ($urgenciaAtendimentos as $urgenciaAtendimento) {
