@@ -5,6 +5,7 @@ const emit = defineEmits([
   'update:novoEventoAdicionado',
   'update:umEventoFoiAlterado',
   'delete:umEventoFoiDeletado',
+  'update:grupoPromotorias'
 ]);
 
 defineProps({
@@ -33,6 +34,10 @@ const enviaDadosDoEventoAlterado = (eventoAlterado: Evento) => {
 const enviaDadosDoEventoDeletado = (uuid: string) => {
   emit('delete:umEventoFoiDeletado', uuid);
 };
+
+const enviaDadosDoGrupoDePromotorias = (grupoPromotorias: GrupoPromotoria[], eventos: Evento[]) => {
+  emit('update:grupoPromotorias', grupoPromotorias, eventos);
+};
 </script>
 
 <template>
@@ -46,6 +51,7 @@ const enviaDadosDoEventoDeletado = (uuid: string) => {
       @update:novoEventoAdicionado="enviaDadosDoNovoEvento"
       @update:UmEventoFoiAlterado="enviaDadosDoEventoAlterado"
       @delete:umEventoFoiDeletado="enviaDadosDoEventoDeletado"
+      @update:grupoPromotorias="enviaDadosDoGrupoDePromotorias"
     />
   </div>
 </template>
