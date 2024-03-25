@@ -14,6 +14,7 @@ import {
 const emit = defineEmits([
   'update:periodoEspelho',
   'update:grupoDeTodasAsPromotorias',
+  'update:dadosIniciais',
   'update:dadosDosAtendimentosUrgencia',
   'update:atribuicao',
   'update:ListaEventos'
@@ -171,7 +172,7 @@ const deletaAtribuicao = (uuid: string) => {
 
 const adicionaDadosNoGrupoDePromotorias = (grupoPromotorias: GrupoPromotoria[]) => {
   grupoDeTodasAsPromotorias.value = grupoDeTodasAsPromotorias.value.concat(grupoPromotorias);
-  emit('update:grupoDeTodasAsPromotorias', grupoDeTodasAsPromotorias.value);
+  emit('update:dadosIniciais', grupoDeTodasAsPromotorias.value);
 };
 
 const atualizaAsAtribuicoes = (eventos: Evento[]) => {

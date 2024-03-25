@@ -64,6 +64,10 @@ const updateGrupoDeTodasAsPromotorias = (value: GrupoPromotoria[]) => {
     exibirBotaoPublicar.value = true;
 }
 
+const updateDadosIniciais = (value: GrupoPromotoria[]) => {
+    grupoDeTodasAsPromotoriasDados.value = value;
+};
+
 const updateAtribuicao = (value: Atribuicoes[]) => {
     listaAtribuicoes.value = value;
 };
@@ -113,8 +117,9 @@ const publicarEspelho = async () => {
     };
 
     try {
-        const response = await axios.put(`/espelho/publicar/${props.espelho.id}`, data);
+        const response = await axios.post(`/espelho/publicar/${props.espelho.id}`, data);
         exibirBotaoPublicar.value = false;
+        carregandoPublicacao.value = false;
     } catch (error) {
         console.error(error);
     }
@@ -165,6 +170,7 @@ onBeforeMount(() => {
                                 :urgenciaAtendimentos="props.urgenciaAtendimentos"
                                 @update:periodoEspelho="updatePeriodoEspelho"
                                 @update:grupoDeTodasAsPromotorias="updateGrupoDeTodasAsPromotorias"
+                                @update:dadosIniciais="updateDadosIniciais"
                                 @update:dadosDosAtendimentosUrgencia="updateAtendimentosUrgencia"
                                 @update:atribuicao="updateAtribuicao"
                                 @update:ListaEventos="updateListaEventos"

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Listeners;
+namespace App\Listeners\EspelhoUpdated;
 
 use App\Events\EspelhoUpdatedEvent;
 use App\Models\UrgenciaAtendimento;

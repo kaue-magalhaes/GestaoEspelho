@@ -45,59 +45,27 @@ class EspelhoController extends Controller
     public function index(): Response
     {
         $historicoId                   = Historico::orderBy('id', 'desc')->first();
-        $historicoEspelho              = HistoricoEspelho::where('historico_id', $historicoId->id)->first();
-        $historicoPromotores           = HistoricoPromotor::where('historico_id', $historicoId->id)->get();
-        $historicoPromotorias          = HistoricoPromotoria::where('historico_id', $historicoId->id)->get();
-        $historicoEventos              = HistoricoEvento::where('historico_id', $historicoId->id)->get();
-        $historicoUrgenciaAtendimentos = HistoricoUrgenciaAtendimento::where('historico_id', $historicoId->id)->get();
+        $historicoEspelho              = HistoricoEspelho::where('historico_id', $historicoId->id)->first()->toArray();
+        $historicoPromotores           = HistoricoPromotor::where('historico_id', $historicoId->id)->get()->toArray();
+        $historicoPromotorias          = HistoricoPromotoria::where('historico_id', $historicoId->id)->get()->toArray();
+        $historicoEventos              = HistoricoEvento::where('historico_id', $historicoId->id)->get()->toArray();
+        $historicoUrgenciaAtendimentos = HistoricoUrgenciaAtendimento::where('historico_id', $historicoId->id)->get()->toArray();
 
-        //dd($espelho, $promotores, $eventos, $urgenciaAtendimentos);
+        //dd($historicoEspelho, $historicoPromotores, $historicoPromotorias, $historicoEventos, $historicoUrgenciaAtendimentos);
 
         return Inertia::render('EspelhoIndex', [
             'espelho'              => $historicoEspelho,
             'promotores'           => $historicoPromotores,
-            'promotorias'          => $historicoPromotorias['promotorias'],
+            'promotorias'          => $historicoPromotorias,
             'eventos'              => $historicoEventos,
             'urgenciaAtendimentos' => $historicoUrgenciaAtendimentos
         ]);
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, string $id): void
     {
         //dd($request->listaEventos, $request->atendimentosUrgenciaDados);
         EspelhoUpdatedEvent::dispatch($request, $id);
@@ -106,16 +74,8 @@ class EspelhoController extends Controller
     /**
      * Publish the specified resource in storage.
      */
-    public function publish(Request $request, string $id)
+    public function publish(Request $request, string $id): void
     {
         PublicarEspelhoEvent::dispatch();
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
     }
 }

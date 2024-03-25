@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { Promotor, UrgenciaAtendimentoServeSide } from "@/types";
 import { usePage } from "@inertiajs/vue3";
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import { format } from 'date-fns';
 
 const page = usePage();
-defineProps({
+const props = defineProps({
     plantaoDeAtendimentos: {
     type: Array as () => UrgenciaAtendimentoServeSide[],
     required: true,
@@ -18,6 +18,12 @@ function stringToDate(dateString: string) {
   const [year, month, day] = dateString.split('-').map(Number);
   return new Date(year, month - 1, day);
 }
+
+onMounted(() => {
+  console.log('plantaoDeAtendimentos', props.plantaoDeAtendimentos);
+  console.log('promotoresQuePodemAtender', promotoresQuePodemAtender.value);
+});
+
 </script>
 <template>
     <div v-if="plantaoDeAtendimentos.length > 0" class="w-full border-2 border-black p-4 rounded-md">

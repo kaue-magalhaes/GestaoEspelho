@@ -2,6 +2,7 @@
 
 namespace App\Events;
 
+use App\Models\Espelho;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Foundation\Events\Dispatchable;
@@ -19,6 +20,16 @@ class PublicarEspelhoEvent
         //
     }
 
+    /**
+     * Busca o periodo_inicio e periodo_fim do espelho
+     */
+    public function getPeriodoEspelho(): array
+    {
+        return [
+            'periodo_inicio' => Espelho::first()->periodo_inicio,
+            'periodo_fim'    => Espelho::first()->periodo_fim,
+        ];
+    }
     /**
      * Get the channels the event should broadcast on.
      *
