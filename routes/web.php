@@ -18,7 +18,6 @@ use Inertia\Inertia;
 */
 
 Route::get('/', [EspelhoController::class, 'editor'])
-    ->middleware('auth', 'verified')
     ->name('espelho.editor');
 
 Route::middleware('auth')->group(function () {
