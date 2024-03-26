@@ -120,6 +120,7 @@ const publicarEspelho = async () => {
         const response = await axios.post(`/espelho/publicar/${props.espelho.id}`, data);
         exibirBotaoPublicar.value = false;
         carregandoPublicacao.value = false;
+        salvo.value = false;
     } catch (error) {
         console.error(error);
     }

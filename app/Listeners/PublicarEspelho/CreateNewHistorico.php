@@ -13,6 +13,7 @@ use App\Models\Historico\HistoricoUrgenciaAtendimento;
 use App\Models\Promotor;
 use App\Models\Promotoria;
 use App\Models\UrgenciaAtendimento;
+use Illuminate\Support\Facades\Log;
 
 class CreateNewHistorico
 {
@@ -39,46 +40,47 @@ class CreateNewHistorico
             'periodo_inicio' => $periodoEspelho['periodo_inicio'],
             'periodo_fim'    => $periodoEspelho['periodo_fim'],
         ]);
-        HistoricoEspelho::query()->create([
+        $historicoEspelho = HistoricoEspelho::query()->create([
             'periodo_inicio' => $periodoEspelho['periodo_inicio'],
             'periodo_fim'    => $periodoEspelho['periodo_fim'],
             'historico_id'   => $historico->id,
         ]);
+        $idNovoHistoricoPromotores = [];
         foreach ($promotores as $promotor) {
-            HistoricoPromotor::query()->create([
+            $idNovoHistoricoPromotores[$promotor->id] = HistoricoPromotor::query()->create([
                 'nome'          => $promotor->nome,
                 'is_substituto' => $promotor->is_substituto,
                 'historico_id'  => $historico->id,
-            ]);
+            ])->id;
         }
         foreach ($promotorias as $promotoria) {
             HistoricoPromotoria::query()->create([
-                'nome'                   => $promotoria->nome,
-                'nome_grupo_promotorias' => $promotoria->nome_grupo_promotorias,
-                'municipio'              => $promotoria->municipio,
-                'is_especializada'       => $promotoria->is_especializada,
-                'espelho_id'             => $promotoria->espelho_id,
-                'promotor_titular_id'    => $promotoria->promotor_titular_id,
-                'historico_id'           => $historico->id,
+                'nome'                          => $promotoria->nome,
+                'nome_grupo_promotorias'        => $promotoria->nome_grupo_promotorias,
+                'municipio'                     => $promotoria->municipio,
+                'is_especializada'              => $promotoria->is_especializada,
+                'historico_espelho_id'          => $historicoEspelho->id,
+                'historico_promotor_titular_id' => $idNovoHistoricoPromotores[$promotoria->promotor_titular_id],
+                'historico_id'                  => $historico->id,
             ]);
         }
         foreach ($urgenciaAtendimentos as $urgenciaAtendimento) {
             HistoricoUrgenciaAtendimento::query()->create([
-                'periodo_inicio'        => $urgenciaAtendimento->periodo_inicio,
-                'periodo_fim'           => $urgenciaAtendimento->periodo_fim,
-                'promotor_designado_id' => $urgenciaAtendimento->promotor_designado_id,
-                'historico_id'          => $historico->id,
+                'periodo_inicio'                  => $urgenciaAtendimento->periodo_inicio,
+                'periodo_fim'                     => $urgenciaAtendimento->periodo_fim,
+                'historico_promotor_designado_id' => $idNovoHistoricoPromotores[$urgenciaAtendimento->promotor_designado_id],
+                'historico_id'                    => $historico->id,
             ]);
         }
         foreach ($eventos as $evento) {
             HistoricoEvento::query()->create([
-                'titulo'                => $evento->titulo,
-                'tipo'                  => $evento->tipo,
-                'periodo_inicio'        => $evento->periodo_inicio,
-                'periodo_fim'           => $evento->periodo_fim,
-                'promotor_titular_id'   => $evento->promotor_titular_id,
-                'promotor_designado_id' => $evento->promotor_designado_id,
-                'historico_id'          => $historico->id,
+                'titulo'                          => $evento->titulo,
+                'tipo'                            => $evento->tipo,
+                'periodo_inicio'                  => $evento->periodo_inicio,
+                'periodo_fim'                     => $evento->periodo_fim,
+                'historico_promotor_titular_id'   => $idNovoHistoricoPromotores[$evento->promotor_titular_id],
+                'historico_promotor_designado_id' => $idNovoHistoricoPromotores[$evento->promotor_designado_id],
+                'historico_id'                    => $historico->id,
             ]);
         }
     }

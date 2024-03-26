@@ -16,8 +16,8 @@ return new class extends Migration {
             $table->string('nome_grupo_promotorias');
             $table->string('municipio');
             $table->boolean('is_especializada')->default(true);
-            $table->foreignId('espelho_id')->references('id')->on('espelhos');
-            $table->foreignId('promotor_titular_id')->references('id')->on('promotores');
+            $table->foreignId('historico_espelho_id')->references('id')->on('historico_espelhos');
+            $table->foreignId('historico_promotor_titular_id')->references('id')->on('historico_promotores');
             $table->foreignId('historico_id')->constrained('historicos');
             $table->timestamps();
         });

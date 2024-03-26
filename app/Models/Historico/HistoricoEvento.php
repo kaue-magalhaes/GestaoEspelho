@@ -16,8 +16,8 @@ class HistoricoEvento extends Model
         'tipo',
         'periodo_inicio',
         'periodo_fim',
-        'promotor_titular_id',
-        'promotor_designado_id',
+        'historico_promotor_titular_id',
+        'historico_promotor_designado_id',
         'historico_id',
     ];
 }

@@ -34,6 +34,18 @@ export interface Promotoria {
     updated_at: string;
 }
 
+export interface HistoricoPromotoria {
+    id: string;
+    nome: string;
+    nome_grupo_promotorias: string;
+    municipio: string;
+    is_especializada: boolean;
+    historico_espelho_id: string;
+    historico_promotor_titular_id: string;
+    created_at: string;
+    updated_at: string;
+}
+
 export interface EventoServerSide {
     id: string;
     titulo: string;
@@ -42,6 +54,16 @@ export interface EventoServerSide {
     periodo_fim: string;
     promotor_titular_id: string;
     promotor_designado_id: string;
+}
+
+export interface HistoricoEventoServerSide {
+    id: string;
+    titulo: string;
+    tipo: string;
+    periodo_inicio: string;
+    periodo_fim: string;
+    historico_promotor_titular_id: string;
+    historico_promotor_designado_id: string;
 }
 
 export interface Evento {
@@ -66,6 +88,13 @@ export interface UrgenciaAtendimentoServeSide {
     periodo_inicio: string;
     periodo_fim: string;
     promotor_designado_id: string;
+}
+
+export interface HistoricoUrgenciaAtendimentoServeSide {
+    id: string;
+    periodo_inicio: string;
+    periodo_fim: string;
+    historico_promotor_designado_id: string;
 }
 
 export interface GrupoPromotoria {

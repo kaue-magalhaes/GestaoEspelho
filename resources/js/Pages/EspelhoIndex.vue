@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Atribuicoes, Espelho, Evento, EventoServerSide, GrupoPromotoria, Promotor, Promotoria, UrgenciaAtendimentoServeSide } from '@/types';
+import { Atribuicoes, Espelho, Evento, HistoricoEventoServerSide, HistoricoUrgenciaAtendimentoServeSide, GrupoPromotoria, HistoricoPromotoria, Promotor } from '@/types';
 import { Head } from '@inertiajs/vue3';
 import { format } from 'date-fns';
 import { watchEffect, ref } from 'vue';
@@ -10,7 +10,7 @@ const props = defineProps({
         required: true,
     },
     promotorias: {
-        type: Array as () => Promotoria[],
+        type: Array as () => HistoricoPromotoria[],
         required: true,
     },
     promotores: {
@@ -18,11 +18,11 @@ const props = defineProps({
         required: true,
     },
     eventos: {
-        type: Array as () => EventoServerSide[],
+        type: Array as () => HistoricoEventoServerSide[],
         required: true,
     },
     urgenciaAtendimentos: {
-        type: Array as () => UrgenciaAtendimentoServeSide[],
+        type: Array as () => HistoricoUrgenciaAtendimentoServeSide[],
         required: true,
     },
 });
@@ -33,7 +33,7 @@ const listaAtribuicoes = ref<Atribuicoes[]>([]);
 const atendimentosUrgenciaDados = ref<any>([]);
 const eventosComUUID = ref<Evento[]>([]);
 
-const processarPromotorias = (promotorias: Promotoria[]) => {
+const processarPromotorias = (promotorias: HistoricoPromotoria[]) => {
     promotorias.forEach((promotoria) => {
         if (grupoDeTodasAsPromotoriasDados.value.length === 0) {
             grupoDeTodasAsPromotoriasDados.value.push({
@@ -44,12 +44,12 @@ const processarPromotorias = (promotorias: Promotoria[]) => {
                     nome_grupo_promotorias: promotoria.nome_grupo_promotorias,
                     municipio: promotoria.municipio,
                     is_especializada: promotoria.is_especializada,
-                    espelho_id: promotoria.espelho_id,
-                    promotor_titular_id: promotoria.promotor_titular_id,
+                    espelho_id: promotoria.historico_espelho_id,
+                    promotor_titular_id: promotoria.historico_promotor_titular_id,
                     created_at: promotoria.created_at,
                     updated_at: promotoria.updated_at,
                 }],
-                eventos: eventosComUUID.value.filter((evento) => evento.promotor_titular_id === promotoria.promotor_titular_id) || [],
+                eventos: eventosComUUID.value.filter((evento) => evento.promotor_titular_id === promotoria.historico_promotor_titular_id) || [],
             });
         } else {
             const grupoPromotoria = grupoDeTodasAsPromotoriasDados.value.find((grupoPromotoria) => grupoPromotoria.nome_grupo_promotorias === promotoria.nome_grupo_promotorias);
@@ -60,12 +60,12 @@ const processarPromotorias = (promotorias: Promotoria[]) => {
                     nome_grupo_promotorias: promotoria.nome_grupo_promotorias,
                     municipio: promotoria.municipio,
                     is_especializada: promotoria.is_especializada,
-                    espelho_id: promotoria.espelho_id,
-                    promotor_titular_id: promotoria.promotor_titular_id,
+                    espelho_id: promotoria.historico_espelho_id,
+                    promotor_titular_id: promotoria.historico_promotor_titular_id,
                     created_at: promotoria.created_at,
                     updated_at: promotoria.updated_at,
                 });
-                const novosEventos = eventosComUUID.value.filter((evento) => evento.promotor_titular_id === promotoria.promotor_titular_id);
+                const novosEventos = eventosComUUID.value.filter((evento) => evento.promotor_titular_id === promotoria.historico_promotor_titular_id);
                 novosEventos.forEach((novoEvento) => {
                     const eventoExiste = grupoPromotoria.eventos.some((eventoExistente) => eventoExistente.uuid === novoEvento.uuid);
                     if (!eventoExiste) {
@@ -81,12 +81,12 @@ const processarPromotorias = (promotorias: Promotoria[]) => {
                         nome_grupo_promotorias: promotoria.nome_grupo_promotorias,
                         municipio: promotoria.municipio,
                         is_especializada: promotoria.is_especializada,
-                        espelho_id: promotoria.espelho_id,
-                        promotor_titular_id: promotoria.promotor_titular_id,
+                        espelho_id: promotoria.historico_espelho_id,
+                        promotor_titular_id: promotoria.historico_promotor_titular_id,
                         created_at: promotoria.created_at,
                         updated_at: promotoria.updated_at,
                     }],
-                    eventos: eventosComUUID.value.filter((evento) => evento.promotor_titular_id === promotoria.promotor_titular_id) || [],
+                    eventos: eventosComUUID.value.filter((evento) => evento.promotor_titular_id === promotoria.historico_promotor_titular_id) || [],
                 });
             }
         }
@@ -114,25 +114,25 @@ const atualizaAsAtribuicoes = (eventos: Evento[]) => {
   });
 }
 
-const processaAtendimentosUrgenciaDados = (urgenciaAtendimentos: UrgenciaAtendimentoServeSide[]) => {
+const processaAtendimentosUrgenciaDados = (urgenciaAtendimentos: HistoricoUrgenciaAtendimentoServeSide[]) => {
     urgenciaAtendimentos?.forEach((atendimentoUrgencia) => {
         atendimentosUrgenciaDados.value.push({
         uuid: atendimentoUrgencia.id,
         periodo_inicio: atendimentoUrgencia.periodo_inicio,
         periodo_fim: atendimentoUrgencia.periodo_fim,
-        promotor_designado_id: atendimentoUrgencia.promotor_designado_id,
+        promotor_designado_id: atendimentoUrgencia.historico_promotor_designado_id,
         });
     });
 }
-const processaEventos = (eventos: EventoServerSide[]) => {
+const processaEventos = (eventos: HistoricoEventoServerSide[]) => {
     return eventos.map(evento => ({
         uuid: evento.id,
         titulo: evento.titulo,
         tipo: evento.tipo,
         periodo_inicio: evento.periodo_inicio,
         periodo_fim: evento.periodo_fim,
-        promotor_titular_id: evento.promotor_titular_id,
-        promotor_designado_id: evento.promotor_designado_id,
+        promotor_titular_id: evento.historico_promotor_titular_id,
+        promotor_designado_id: evento.historico_promotor_designado_id,
     }));
 };
 
@@ -154,9 +154,6 @@ watchEffect(() => {
     processarPromotorias(props.promotorias);
     atualizaAsAtribuicoes(eventosComUUID.value);
     processaAtendimentosUrgenciaDados(props.urgenciaAtendimentos);
-
-    console.log(atendimentosUrgenciaDados.value);
-    
 });
 </script>
 

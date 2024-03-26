@@ -14,7 +14,7 @@ class HistoricoUrgenciaAtendimento extends Model
     protected $fillable = [
         'periodo_inicio',
         'periodo_fim',
-        'promotor_designado_id',
+        'historico_promotor_designado_id',
         'historico_id',
     ];
 }
