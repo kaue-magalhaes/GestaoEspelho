@@ -13,7 +13,6 @@ use App\Models\Historico\HistoricoUrgenciaAtendimento;
 use App\Models\Promotor;
 use App\Models\Promotoria;
 use App\Models\UrgenciaAtendimento;
-use Illuminate\Support\Facades\Log;
 
 class CreateNewHistorico
 {
