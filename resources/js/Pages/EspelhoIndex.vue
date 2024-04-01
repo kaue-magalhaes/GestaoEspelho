@@ -28,15 +28,29 @@ const props = defineProps({
 });
 
 const grupoDeTodasAsPromotoriasDados = ref<GrupoPromotoria[]>([]);
+const grupoDePromotoriasDados = ref<GrupoPromotoria[]>([]);
+const promotoriasMacapa = ref<HistoricoPromotoria[]>([]);
+const promotoriasSantana = ref<HistoricoPromotoria[]>([]);
+const promotoriasInterior = ref<HistoricoPromotoria[]>([]);
 const periodoEspelhoFormatado = ref<string[]>([]);
 const listaAtribuicoes = ref<Atribuicoes[]>([]);
 const atendimentosUrgenciaDados = ref<any>([]);
 const eventosComUUID = ref<Evento[]>([]);
 
+const separaPromotoriasPorMunicipio = (promotoria: HistoricoPromotoria) => {
+    if (promotoria.municipio === 'Macapá') {
+        promotoriasMacapa.value.push(promotoria);
+    } else if (promotoria.municipio === 'Santana') {
+        promotoriasSantana.value.push(promotoria);
+    } else {
+        promotoriasInterior.value.push(promotoria);
+    }
+};
+
 const processarPromotorias = (promotorias: HistoricoPromotoria[]) => {
     promotorias.forEach((promotoria) => {
-        if (grupoDeTodasAsPromotoriasDados.value.length === 0) {
-            grupoDeTodasAsPromotoriasDados.value.push({
+        if (grupoDePromotoriasDados.value.length === 0) {
+            grupoDePromotoriasDados.value.push({
                 nome_grupo_promotorias: promotoria.nome_grupo_promotorias,
                 promotorias: [{
                     id: promotoria.id,
@@ -52,7 +66,7 @@ const processarPromotorias = (promotorias: HistoricoPromotoria[]) => {
                 eventos: eventosComUUID.value.filter((evento) => evento.promotor_titular_id === promotoria.historico_promotor_titular_id) || [],
             });
         } else {
-            const grupoPromotoria = grupoDeTodasAsPromotoriasDados.value.find((grupoPromotoria) => grupoPromotoria.nome_grupo_promotorias === promotoria.nome_grupo_promotorias);
+            const grupoPromotoria = grupoDePromotoriasDados.value.find((grupoPromotoria) => grupoPromotoria.nome_grupo_promotorias === promotoria.nome_grupo_promotorias);
             if (grupoPromotoria) {
                 grupoPromotoria.promotorias.push({
                     id: promotoria.id,
@@ -73,7 +87,7 @@ const processarPromotorias = (promotorias: HistoricoPromotoria[]) => {
                     }
                 });
             } else {
-                grupoDeTodasAsPromotoriasDados.value.push({
+                grupoDePromotoriasDados.value.push({
                     nome_grupo_promotorias: promotoria.nome_grupo_promotorias,
                     promotorias: [{
                         id: promotoria.id,
@@ -91,6 +105,12 @@ const processarPromotorias = (promotorias: HistoricoPromotoria[]) => {
             }
         }
     });
+    adicionaDadosNoGrupoDePromotorias(grupoDePromotoriasDados.value);
+    grupoDePromotoriasDados.value = [];
+};
+
+const adicionaDadosNoGrupoDePromotorias = (grupoPromotorias: GrupoPromotoria[]) => {
+    grupoDeTodasAsPromotoriasDados.value = grupoDeTodasAsPromotoriasDados.value.concat(grupoPromotorias);
 };
 
 const atualizaAsAtribuicoes = (eventos: Evento[]) => {
@@ -151,7 +171,10 @@ const formatarPeriodo = (periodoInicio: string, periodoFim: string) => {
 watchEffect(() => {
     eventosComUUID.value = processaEventos(props.eventos);
     periodoEspelhoFormatado.value = formatarPeriodo(props.espelho.periodo_inicio, props.espelho.periodo_fim);
-    processarPromotorias(props.promotorias);
+    props.promotorias.forEach(separaPromotoriasPorMunicipio);
+    processarPromotorias(promotoriasMacapa.value);
+    processarPromotorias(promotoriasSantana.value);
+    processarPromotorias(promotoriasInterior.value);
     atualizaAsAtribuicoes(eventosComUUID.value);
     processaAtendimentosUrgenciaDados(props.urgenciaAtendimentos);
 });

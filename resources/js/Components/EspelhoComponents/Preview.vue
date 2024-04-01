@@ -53,9 +53,9 @@ watchEffect(() => {
         promotoriasInterior.value = [];
     }
 
-    console.log('promotoriasMacapa', promotoriasMacapa.value);
+    /* console.log('promotoriasMacapa', promotoriasMacapa.value);
     console.log('promotoriasSantana', promotoriasSantana.value);
-    console.log('promotoriasInterior', promotoriasInterior.value);
+    console.log('promotoriasInterior', promotoriasInterior.value); */
 });
 </script>
 
