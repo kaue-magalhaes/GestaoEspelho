@@ -63,6 +63,26 @@ class EspelhoController extends Controller
     }
 
     /**
+     * Display the specified resource.
+     */
+    public function show(string $id): Response
+    {
+        $historicoEspelho              = HistoricoEspelho::where('historico_id', $id)->first()->toArray();
+        $historicoPromotores           = HistoricoPromotor::where('historico_id', $id)->get()->toArray();
+        $historicoPromotorias          = HistoricoPromotoria::where('historico_id', $id)->get()->toArray();
+        $historicoEventos              = HistoricoEvento::where('historico_id', $id)->get()->toArray();
+        $historicoUrgenciaAtendimentos = HistoricoUrgenciaAtendimento::where('historico_id', $id)->get()->toArray();
+
+        return Inertia::render('EspelhoShow', [
+            'espelho'              => $historicoEspelho,
+            'promotores'           => $historicoPromotores,
+            'promotorias'          => $historicoPromotorias,
+            'eventos'              => $historicoEventos,
+            'urgenciaAtendimentos' => $historicoUrgenciaAtendimentos
+        ]);
+    }
+
+    /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, string $id): void
@@ -77,5 +97,15 @@ class EspelhoController extends Controller
     public function publish(Request $request, string $id): void
     {
         PublicarEspelhoEvent::dispatch();
+    }
+
+    /**
+     * Shows the history list
+     */
+    public function history(): Response
+    {
+        return Inertia::render('HistoryList', [
+            'espelhos' => HistoricoEspelho::with('user')->get()->toArray()
+        ]);
     }
 }

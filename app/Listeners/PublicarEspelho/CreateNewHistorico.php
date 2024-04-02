@@ -42,6 +42,7 @@ class CreateNewHistorico
         $historicoEspelho = HistoricoEspelho::query()->create([
             'periodo_inicio' => $periodoEspelho['periodo_inicio'],
             'periodo_fim'    => $periodoEspelho['periodo_fim'],
+            'usuario_id'     => auth()->id(),
             'historico_id'   => $historico->id,
         ]);
         $idNovoHistoricoPromotores = [];

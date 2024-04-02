@@ -98,7 +98,7 @@ const salvarEspelho = async () => {
     };
 
     try {
-        const response = await axios.put(`/espelho${props.espelho.id}`, data);
+        const response = await axios.put(`/espelho/${props.espelho.id}`, data);
         exibirBotaoSalvar.value = false;
         carregandoSalvamento.value = false;
         salvo.value = true;
@@ -158,39 +158,37 @@ onBeforeMount(() => {
 <template>
     <Head title="Espelho" />
     <AuthenticatedLayout>
-        <div class="py-12">
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <Carousel class="focus-visible:outline-none">
-                    <CarouselContent>
-                        <CarouselItem>
-                            <Editor
-                                :espelho="espelho"
-                                :promotorias="espelho.promotorias"
-                                :promotores="props.promotores"
-                                :eventos="eventosComUUID"
-                                :urgenciaAtendimentos="props.urgenciaAtendimentos"
-                                @update:periodoEspelho="updatePeriodoEspelho"
-                                @update:grupoDeTodasAsPromotorias="updateGrupoDeTodasAsPromotorias"
-                                @update:dadosIniciais="updateDadosIniciais"
-                                @update:dadosDosAtendimentosUrgencia="updateAtendimentosUrgencia"
-                                @update:atribuicao="updateAtribuicao"
-                                @update:ListaEventos="updateListaEventos"
-                            />
-                        </CarouselItem>
-                        <CarouselItem>
-                            <Preview
-                                :periodoEspelho="periodoEspelho"
-                                :grupoPromotoriaDeTodasAsPromotorias="grupoDeTodasAsPromotoriasDados"
-                                :listaAtribuicoes="listaAtribuicoes"
-                                :atendimentosUrgenciaDados="atendimentosUrgenciaDados"
-                            />
-                        </CarouselItem>
-                    </CarouselContent>
-                    <CarouselPrevious />
-                    <CarouselNext />
-                </Carousel>
-            </div>
-        </div>
+        <ContainerComponent>
+            <Carousel class="focus-visible:outline-none">
+                <CarouselContent>
+                    <CarouselItem>
+                        <Editor
+                            :espelho="espelho"
+                            :promotorias="espelho.promotorias"
+                            :promotores="props.promotores"
+                            :eventos="eventosComUUID"
+                            :urgenciaAtendimentos="props.urgenciaAtendimentos"
+                            @update:periodoEspelho="updatePeriodoEspelho"
+                            @update:grupoDeTodasAsPromotorias="updateGrupoDeTodasAsPromotorias"
+                            @update:dadosIniciais="updateDadosIniciais"
+                            @update:dadosDosAtendimentosUrgencia="updateAtendimentosUrgencia"
+                            @update:atribuicao="updateAtribuicao"
+                            @update:ListaEventos="updateListaEventos"
+                        />
+                    </CarouselItem>
+                    <CarouselItem>
+                        <Preview
+                            :periodoEspelho="periodoEspelho"
+                            :grupoPromotoriaDeTodasAsPromotorias="grupoDeTodasAsPromotoriasDados"
+                            :listaAtribuicoes="listaAtribuicoes"
+                            :atendimentosUrgenciaDados="atendimentosUrgenciaDados"
+                        />
+                    </CarouselItem>
+                </CarouselContent>
+                <CarouselPrevious />
+                <CarouselNext />
+            </Carousel>
+        </ContainerComponent>
     </AuthenticatedLayout>
     <span class="fixed bottom-5 right-5 z-50 space-x-2">
         <span v-if="exibirBotaoSalvar">

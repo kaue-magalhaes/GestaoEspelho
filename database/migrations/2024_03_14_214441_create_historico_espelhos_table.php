@@ -14,6 +14,7 @@ return new class extends Migration {
             $table->id();
             $table->date('periodo_inicio');
             $table->date('periodo_fim');
+            $table->foreignId('usuario_id')->constrained('users');
             $table->foreignId('historico_id')->constrained('historicos');
             $table->timestamps();
         });

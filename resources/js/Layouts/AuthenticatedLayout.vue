@@ -21,6 +21,9 @@ const showingNavigationDropdown = ref(false);
                                 <NavLink :href="route('espelho.editor')" :active="route().current('espelho.editor')">
                                     Espelho
                                 </NavLink>
+                                <NavLink :href="route('espelho.history')" :active="route().current('espelho.history')">
+                                    Histórico
+                                </NavLink>
                             </div>
                         </div>
 
@@ -103,6 +106,9 @@ const showingNavigationDropdown = ref(false);
                     <div class="pt-2 pb-3 space-y-1">
                         <ResponsiveNavLink :href="route('espelho.editor')" :active="route().current('espelho.editor')">
                             Espelho
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink :href="route('espelho.history')" :active="route().current('espelho.history')">
+                            Histórico
                         </ResponsiveNavLink>
                     </div>
 

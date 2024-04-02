@@ -25,8 +25,11 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    Route::put('/espelho{id}', [EspelhoController::class, 'update'])->name('espelho.update');
+    Route::get('/espelho/historico/{id}', [EspelhoController::class, 'show'])->name('espelho.show');
+    Route::put('/espelho/{id}', [EspelhoController::class, 'update'])->name('espelho.update');
     Route::post('/espelho/publicar/{id}', [EspelhoController::class, 'publish'])->name('espelho.publish');
+
+    Route::get('/espelho/historico', [EspelhoController::class, 'history'])->name('espelho.history');
 });
 
 Route::get('/espelho', [EspelhoController::class, 'index'])->name('espelho.index');

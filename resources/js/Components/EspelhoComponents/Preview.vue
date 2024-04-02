@@ -26,8 +26,6 @@ const promotoriasSantana = ref<GrupoPromotoria[]>([]);
 const promotoriasInterior = ref<GrupoPromotoria[]>([]);
 
 watchEffect(() => {
-    console.log('grupoPromotoriaDeTodasAsPromotorias', props.grupoPromotoriaDeTodasAsPromotorias);
-    
     props.grupoPromotoriaDeTodasAsPromotorias.forEach((grupoPromotoria) => {
         grupoPromotoria.promotorias.forEach((promotoria) => {
             if (promotoria.municipio === 'Macapá') {

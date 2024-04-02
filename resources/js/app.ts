@@ -25,11 +25,13 @@ import TabelaPromotoresSubstitutosPreview from '@/Components/EspelhoComponents/P
 import PlantaoCaraterUrgenciaPreview from "@/Components/EspelhoComponents/PreviewComponents/PlantaoCaraterUrgenciaPreview.vue";
 import TabelaPromotoriaPreview from '@/Components/EspelhoComponents/PreviewComponents/TabelaPromotoriaPreview.vue';
 
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger} from '@/Components/ui/alert-dialog'
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger} from '@/Components/ui/alert-dialog';
 import { Dialog, DialogContent, DialogTrigger, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/Components/ui/dialog';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue} from '@/Components/ui/select';
+import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow} from '@/Components/ui/table';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/Components/ui/carousel';
-import { Card, CardContent, CardHeader, CardTitle } from '@/Components/ui/card';
+import { Card, CardDescription, CardContent, CardHeader, CardTitle } from '@/Components/ui/card';
+import ContainerComponent from '@/Components/ContainerComponent.vue';
 import { Button } from '@/Components/ui/button';
 import { Input } from '@/Components/ui/input';
 import { Label } from '@/Components/ui/label';
@@ -80,15 +82,24 @@ createInertiaApp({
             .component('SelectLabel', SelectLabel)
             .component('SelectTrigger', SelectTrigger)
             .component('SelectValue', SelectValue)
+            .component('Table', Table)
+            .component('TableBody', TableBody)
+            .component('TableCaption', TableCaption)
+            .component('TableCell', TableCell)
+            .component('TableHead', TableHead)
+            .component('TableHeader', TableHeader)
+            .component('TableRow', TableRow)
             .component('Carousel', Carousel)
             .component('CarouselContent', CarouselContent)
             .component('CarouselItem', CarouselItem)
             .component('CarouselNext', CarouselNext)
             .component('CarouselPrevious', CarouselPrevious)
             .component('Card', Card)
+            .component('CardDescription', CardDescription)
             .component('CardContent', CardContent)
             .component('CardHeader', CardHeader)
             .component('CardTitle', CardTitle)
+            .component('ContainerComponent', ContainerComponent)
             .component('Button', Button)
             .component('Input', Input)
             .component('Label', Label)
