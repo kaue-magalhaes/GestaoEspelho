@@ -12,8 +12,9 @@ class EspelhoUpdatedEvent
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $id;
-    public $request;
+    public string $id;
+
+    public Request $request;
 
     /**
      * Create a new event instance.
@@ -34,6 +35,8 @@ class EspelhoUpdatedEvent
 
     /**
      * get the periodoEspelho from request
+     *
+     * @return array<string>
      */
     public function getPeriodoEspelho(): array
     {
@@ -42,19 +45,24 @@ class EspelhoUpdatedEvent
 
     /**
      * get the listaEventos from request
+     *
+     * @return array<array{uuid: string, titulo: string, tipo: string, periodo_inicio: string, periodo_fim: string, promotor_titular_id: string, promotor_designado_id: string}>
      */
     public function getListaEventos(): array
     {
         return $this->request->input('listaEventos');
     }
-    
+
     /**
      * get the atendimentosUrgenciaDados from request
+     *
+     * @return array<array{uuid: string, periodo_inicio: string, periodo_fim: string, promotor_designado_id: string}>
      */
     public function getAtendimentosUrgenciaDados(): array
     {
         return $this->request->input('atendimentosUrgenciaDados');
     }
+
     /**
      * Get the channels the event should broadcast on.
      *

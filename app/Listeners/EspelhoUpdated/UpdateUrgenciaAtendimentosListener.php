@@ -27,12 +27,12 @@ class UpdateUrgenciaAtendimentosListener
             $atendimentosUrgenciaDados = $event->getAtendimentosUrgenciaDados();
 
             ChecksArray::is_array($atendimentosUrgenciaDados);
-            
+
             $atendimentosUrgenciaIds = UrgenciaAtendimento::all()->pluck('id')->toArray();
 
             DB::beginTransaction();
             foreach ($atendimentosUrgenciaDados as $atendimentoUrgencia) {
-                if (!$this->isUrgenciaAtendimentoValid($atendimentoUrgencia)) {
+                if (! $this->isUrgenciaAtendimentoValid($atendimentoUrgencia)) {
                     continue;
                 }
                 if (in_array($atendimentoUrgencia['uuid'], $atendimentosUrgenciaIds)) {
@@ -40,14 +40,14 @@ class UpdateUrgenciaAtendimentosListener
                     $urgenciaAtendimento->update([
                         'periodo_inicio'        => $atendimentoUrgencia['periodo_inicio'],
                         'periodo_fim'           => $atendimentoUrgencia['periodo_fim'],
-                        'promotor_designado_id' => $atendimentoUrgencia['promotor_designado_id']
+                        'promotor_designado_id' => $atendimentoUrgencia['promotor_designado_id'],
                     ]);
                     $atendimentosUrgenciaIds = array_diff($atendimentosUrgenciaIds, [$atendimentoUrgencia['uuid']]);
                 } else {
                     UrgenciaAtendimento::create([
                         'periodo_inicio'        => $atendimentoUrgencia['periodo_inicio'],
                         'periodo_fim'           => $atendimentoUrgencia['periodo_fim'],
-                        'promotor_designado_id' => $atendimentoUrgencia['promotor_designado_id']
+                        'promotor_designado_id' => $atendimentoUrgencia['promotor_designado_id'],
                     ]);
                 }
             }
@@ -62,6 +62,11 @@ class UpdateUrgenciaAtendimentosListener
         }
     }
 
+    /**
+     * Check if the urgencia atendimento is valid
+     *
+     * @param  array{uuid: string, periodo_inicio: string|null, periodo_fim: string|null, promotor_designado_id: string|null}  $atendimentoUrgencia
+     */
     private function isUrgenciaAtendimentoValid(array $atendimentoUrgencia): bool
     {
         return isset($atendimentoUrgencia['periodo_inicio'], $atendimentoUrgencia['periodo_fim'], $atendimentoUrgencia['promotor_designado_id']);

@@ -58,7 +58,7 @@
             "@php artisan key:generate --ansi"
         ],
         "fix" : [
-            "./vendor/bin/php-cs-fixer fix  --verbose --using-cache=no"
+            "./vendor/bin/pint"
         ],
         "test" : [
             "./vendor/bin/pest --parallel"

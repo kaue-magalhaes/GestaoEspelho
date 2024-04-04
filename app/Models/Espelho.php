@@ -18,17 +18,16 @@ class Espelho extends Model
 
     /**
      * Converte o id para string
-     * @param $value
-     * @return string
+     *
+     * @param  int  $value
      */
-    public function getIdAttribute($value)
+    public function getIdAttribute($value): string
     {
         return (string)$value;
     }
 
     /**
      * Busca as promotorias vinculadas ao espelho
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function promotorias(): \Illuminate\Database\Eloquent\Relations\HasMany
     {

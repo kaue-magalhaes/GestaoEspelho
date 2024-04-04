@@ -22,37 +22,36 @@ class Evento extends Model
 
     /**
      * Converte o id para string
-     * @param $value
-     * @return string
+     *
+     * @param  int  $value
      */
-    public function getIdAttribute($value)
+    public function getIdAttribute($value): string
     {
         return (string)$value;
     }
 
     /**
      * Converte o id do promotor titular para string
-     * @param $value
-     * @return string
+     *
+     * @param  int  $value
      */
-    public function getPromotorTitularIdAttribute($value)
+    public function getPromotorTitularIdAttribute($value): string
     {
         return (string)$value;
     }
 
     /**
      * Converte o id do promotor designado para string
-     * @param $value
-     * @return string
+     *
+     * @param  int  $value
      */
-    public function getPromotorDesignadoIdAttribute($value)
+    public function getPromotorDesignadoIdAttribute($value): string
     {
         return (string)$value;
     }
 
     /**
      * Busca o promotor titular do evento
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function promotorTitular(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
@@ -61,7 +60,6 @@ class Evento extends Model
 
     /**
      * Busca o promotor designado para o evento
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function promotorDesignado(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
