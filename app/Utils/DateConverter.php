@@ -1,8 +1,15 @@
 <?php
+
 namespace App\Utils;
 
 class DateConverter
 {
+    /**
+     * Convert the date format from dd/mm/yyyy to yyyy-mm-dd
+     *
+     * @param  array<string>  $period
+     * @return array<string>
+     */
     public static function convertDateFormat(array $period): array
     {
         return [

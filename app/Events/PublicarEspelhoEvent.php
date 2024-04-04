@@ -22,6 +22,8 @@ class PublicarEspelhoEvent
 
     /**
      * Busca o periodo_inicio e periodo_fim do espelho
+     *
+     * @return array<string, string>
      */
     public function getPeriodoEspelho(): array
     {
@@ -30,6 +32,7 @@ class PublicarEspelhoEvent
             'periodo_fim'    => Espelho::first()->periodo_fim,
         ];
     }
+
     /**
      * Get the channels the event should broadcast on.
      *

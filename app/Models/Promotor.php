@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Promotor extends Model
 {
     use HasFactory;
+
     protected $table = 'promotores';
 
     protected $fillable = [
@@ -19,17 +20,16 @@ class Promotor extends Model
 
     /**
      * Converte o id para string
-     * @param $value
-     * @return string
+     *
+     * @param  int  $value
      */
-    public function getIdAttribute($value)
+    public function getIdAttribute($value): string
     {
         return (string)$value;
     }
 
     /**
      * Busca as promotorias vinculadas ao promotor
-     * @return HasMany
      */
     public function promotorias(): HasMany
     {
@@ -38,7 +38,6 @@ class Promotor extends Model
 
     /**
      * Busca os eventos vinculados ao promotor
-     * @return HasMany
      */
     public function eventos(): HasMany
     {
@@ -47,7 +46,6 @@ class Promotor extends Model
 
     /**
      * Busca as urgências de atendimento vinculadas ao promotor
-     * @return HasMany
      */
     public function urgenciasAtendimento(): HasMany
     {

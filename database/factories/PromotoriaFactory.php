@@ -20,7 +20,7 @@ class PromotoriaFactory extends Factory
             'Promotoria de ',
             'Promotorias de ',
         ];
-        
+
         $promotoriasNomeGrupoWords = [
             'Justiça de Meio Ambiente',
             'Justiça de Direitos Humanos',
@@ -45,7 +45,7 @@ class PromotoriaFactory extends Factory
         ];
 
         $municipio = $this->faker->randomElement($municipioWords);
-         
+
         if ($municipio == 'Macapá' || $municipio == 'Santana') {
             $nomeGrupo        = $prefixosPromotoria[1] . $this->faker->randomElement($promotoriasNomeGrupoWords);
             $numeroPromotoria = \App\Models\Promotoria::where('nome_grupo_promotorias', $nomeGrupo)->count() + 1;

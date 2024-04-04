@@ -38,7 +38,7 @@ class EspelhoController extends Controller
             'promotores'           => $promotores,
             'promotorias'          => $espelho['promotorias'],
             'eventos'              => $eventos,
-            'urgenciaAtendimentos' => $urgenciaAtendimentos
+            'urgenciaAtendimentos' => $urgenciaAtendimentos,
         ]);
     }
 
@@ -58,7 +58,7 @@ class EspelhoController extends Controller
             'promotores'           => $historicoPromotores,
             'promotorias'          => $historicoPromotorias,
             'eventos'              => $historicoEventos,
-            'urgenciaAtendimentos' => $historicoUrgenciaAtendimentos
+            'urgenciaAtendimentos' => $historicoUrgenciaAtendimentos,
         ]);
     }
 
@@ -78,7 +78,7 @@ class EspelhoController extends Controller
             'promotores'           => $historicoPromotores,
             'promotorias'          => $historicoPromotorias,
             'eventos'              => $historicoEventos,
-            'urgenciaAtendimentos' => $historicoUrgenciaAtendimentos
+            'urgenciaAtendimentos' => $historicoUrgenciaAtendimentos,
         ]);
     }
 
@@ -87,7 +87,6 @@ class EspelhoController extends Controller
      */
     public function update(Request $request, string $id): void
     {
-        //dd($request->listaEventos, $request->atendimentosUrgenciaDados);
         EspelhoUpdatedEvent::dispatch($request, $id);
     }
 
@@ -105,7 +104,7 @@ class EspelhoController extends Controller
     public function history(): Response
     {
         return Inertia::render('HistoryList', [
-            'espelhos' => HistoricoEspelho::with('user')->get()->toArray()
+            'espelhos' => HistoricoEspelho::with('user')->get()->toArray(),
         ]);
     }
 }

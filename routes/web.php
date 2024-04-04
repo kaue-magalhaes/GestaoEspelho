@@ -19,7 +19,7 @@ use Inertia\Inertia;
 
 Route::middleware('auth')->group(function () {
     Route::get('/', [EspelhoController::class, 'editor'])
-    ->name('espelho.editor');
+        ->name('espelho.editor');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

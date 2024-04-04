@@ -13,6 +13,6 @@ class Historico extends Model
 
     protected $fillable = [
         'periodo_inicio',
-        'periodo_fim'
+        'periodo_fim',
     ];
 }

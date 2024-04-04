@@ -32,7 +32,7 @@ class UpdateListaEventosListener
 
             DB::beginTransaction();
             foreach ($listaEventos as $evento) {
-                if (!$this->isEventoValid($evento)) {
+                if (! $this->isEventoValid($evento)) {
                     continue;
                 }
                 if (in_array($evento['uuid'], $listaEventosIds)) {
@@ -43,7 +43,7 @@ class UpdateListaEventosListener
                         'periodo_inicio'        => $evento['periodo_inicio'],
                         'periodo_fim'           => $evento['periodo_fim'],
                         'promotor_titular_id'   => $evento['promotor_titular_id'],
-                        'promotor_designado_id' => $evento['promotor_designado_id']
+                        'promotor_designado_id' => $evento['promotor_designado_id'],
                     ]);
                     $listaEventosIds = array_diff($listaEventosIds, [$evento['uuid']]);
                 } else {
@@ -53,7 +53,7 @@ class UpdateListaEventosListener
                         'periodo_inicio'        => $evento['periodo_inicio'],
                         'periodo_fim'           => $evento['periodo_fim'],
                         'promotor_titular_id'   => $evento['promotor_titular_id'],
-                        'promotor_designado_id' => $evento['promotor_designado_id']
+                        'promotor_designado_id' => $evento['promotor_designado_id'],
                     ]);
                 }
             }
@@ -68,6 +68,11 @@ class UpdateListaEventosListener
         }
     }
 
+    /**
+     * Check if the event is valid
+     *
+     * @param  array{uuid: string, titulo: string, tipo: string|null, periodo_inicio: string|null, periodo_fim: string|null, promotor_titular_id: string|null, promotor_designado_id: string|null}  $evento
+     */
     private function isEventoValid(array $evento): bool
     {
         return isset($evento['tipo']) && isset($evento['periodo_inicio']) && isset($evento['periodo_fim']) && isset($evento['promotor_titular_id']) && isset($evento['promotor_designado_id']);
