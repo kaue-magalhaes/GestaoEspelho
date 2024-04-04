@@ -1,14 +1,29 @@
 <script setup lang="ts">
 import { format } from 'date-fns';
-import { Head } from '@inertiajs/vue3';
+import { Head, useForm } from '@inertiajs/vue3';
 
 const props = defineProps({
   espelhos: Array,
 });
 
+const form = useForm({
+  initial_date: '',
+  final_date: '',
+});
+
 function stringToDate(dateString: string) {
   const [year, month, day] = dateString.split('-').map(Number);
   return new Date(year, month - 1, day);
+}
+
+function dateSearch(period: any) {
+  form.initial_date = format(new Date(period.start), 'yyyy-MM-dd');
+  form.final_date = format(new Date(period.end), 'yyyy-MM-dd');
+
+  form.get(route('espelho.history'), {
+    initial_date: form.initial_date,
+    final_date: form.final_date,
+  });
 }
 </script>
 
@@ -18,8 +33,19 @@ function stringToDate(dateString: string) {
     <ContainerComponent>
       <Card>
         <CardHeader>
-          <CardTitle>Histórico</CardTitle>
-          <CardDescription>Aqui você pode ver o histórico dos Espelhos Publicados.</CardDescription>
+          <div class="flex justify-between items-center">
+            <div>
+              <CardTitle>Histórico</CardTitle>
+              <CardDescription>Aqui você pode ver o histórico dos Espelhos Publicados.</CardDescription>
+            </div>
+            <div>
+              <DatePicker
+                :range="true"
+                placeholder="Pesquisar por Data"
+                @update:period="dateSearch($event)"
+              />
+            </div>
+          </div>
         </CardHeader>
         <CardContent>
           <Table v-if="espelhos.length > 0">

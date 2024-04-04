@@ -14,6 +14,7 @@ use App\Models\Historico\HistoricoPromotoria;
 use App\Models\Historico\HistoricoUrgenciaAtendimento;
 use App\Models\Promotor;
 use App\Models\UrgenciaAtendimento;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -104,7 +105,18 @@ class EspelhoController extends Controller
     public function history(): Response
     {
         return Inertia::render('HistoryList', [
-            'espelhos' => HistoricoEspelho::with('user')->get()->toArray(),
+            'espelhos' => HistoricoEspelho::query()
+                ->when((
+                    request()->has('initial_date') && request()->has('final_date')
+                ), function (Builder $query) {
+                    $query->whereBetween('created_at', [
+                        request('initial_date'),
+                        request('final_date'),
+                    ]);
+                })
+                ->with('user')
+                ->get()
+                ->toArray(),
         ]);
     }
 }
