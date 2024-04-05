@@ -4,6 +4,8 @@ import { Head, useForm } from '@inertiajs/vue3';
 
 const props = defineProps({
   espelhos: Array,
+  wasSearch: Boolean,
+  search: Object,
 });
 
 const form = useForm({
@@ -40,7 +42,18 @@ function dateSearch(period: any) {
             </div>
             <div>
               <DatePicker
+                v-if="props.wasSearch"
                 :range="true"
+                :period_start="stringToDate(props.search.initial_date)"
+                :period_end="stringToDate(props.search.final_date)"
+                :wasChanged="props.wasSearch"
+                placeholder="Pesquisar por Data"
+                @update:period="dateSearch($event)"
+              />
+              <DatePicker
+                v-else
+                :range="true"
+                :wasChanged="props.wasSearch"
                 placeholder="Pesquisar por Data"
                 @update:period="dateSearch($event)"
               />

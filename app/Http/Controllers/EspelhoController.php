@@ -114,9 +114,15 @@ class EspelhoController extends Controller
                         request('final_date'),
                     ]);
                 })
+                ->orderBy('created_at', 'desc')
                 ->with('user')
                 ->get()
                 ->toArray(),
+            'wasSearch' => request()->has('initial_date') && request()->has('final_date'),
+            'search'    => [
+                'initial_date' => request('initial_date'),
+                'final_date'   => request('final_date'),
+            ],
         ]);
     }
 }
