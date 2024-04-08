@@ -106,22 +106,15 @@ class EspelhoController extends Controller
     {
         return Inertia::render('HistoryList', [
             'espelhos' => HistoricoEspelho::query()
-                ->when((
-                    request()->has('initial_date') && request()->has('final_date')
-                ), function (Builder $query) {
-                    $query->whereBetween('created_at', [
-                        request('initial_date'),
-                        request('final_date'),
-                    ]);
+                ->when(request()->has('search'), function (Builder $query) {
+                    $query->where('titulo', 'like', '%' . request('search') . '%');
                 })
                 ->orderBy('created_at', 'desc')
                 ->with('user')
-                ->get()
+                ->paginate(5)
                 ->toArray(),
-            'wasSearch' => request()->has('initial_date') && request()->has('final_date'),
-            'search'    => [
-                'initial_date' => request('initial_date'),
-                'final_date'   => request('final_date'),
+            'search' => [
+                'search' => request('search'),
             ],
         ]);
     }

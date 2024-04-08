@@ -17,6 +17,7 @@ class HistoricoEspelhoFactory extends Factory
     public function definition(): array
     {
         return [
+            'titulo'         => $this->faker->sentence,
             'periodo_inicio' => $this->faker->date(),
             'periodo_fim'    => $this->faker->date(),
             'usuario_id'     => \App\Models\User::factory(),
