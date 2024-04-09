@@ -12,26 +12,47 @@ const props = defineProps({
         type: Object as () => EspelhosPaginate,
         required: true
     },
-    search: Object as () => {
-        search: string
+    filters: {
+        type: Object as () => {
+            search: string
+            period: {
+                start: string
+                end: string
+            }
+        },
+        default: () => ({
+            search: '',
+            period: {
+                start: '',
+                end: ''
+            }
+        }),
     }
 });
+
+const filters = ref(props.filters);
 
 const espelhosData = ref(props.espelhos.data);
 
 const form = useForm({
-    search: props.search?.search || ''
+    filters: filters.value
 });
 
-function searchData() {
+function search() {
+    form.filters = {
+        search: filters.value.search,
+        period: {
+            start: filters.value.period.start,
+            end: filters.value.period.end
+        }
+    }
     form.get(route('espelho.history'));
 }
 
-const periodFilter = (period: any) => {
-    espelhosData.value = props.espelhos.data.filter((espelho: any) => {
-        const createdAt = new Date(espelho.created_at);
-        return createdAt >= period.start && createdAt <= period.end;
-    });
+function searchFilterByPeriod(period: any) {
+    filters.value.period.start = format(period.start, 'yyyy-MM-dd');
+    filters.value.period.end = format(period.end, 'yyyy-MM-dd');
+    search()
 }
 
 const convertInSearchParams = (obj: any) => {
@@ -61,9 +82,9 @@ function stringToDate(dateString: string) {
                     <div v-if="props.espelhos.data.length > 0" class="flex justify-between w-full items-center mt-2">
                         <div class="flex items-center space-x-2">
                             <div class="relative w-[300px]">
-                                <form @submit.prevent="searchData">
+                                <form @submit.prevent="search">
                                     <Input
-                                        v-model="form.search"
+                                        v-model="filters.search"
                                         type="text"
                                         placeholder="Buscar por título..."
                                         class="pl-8"
@@ -76,12 +97,16 @@ function stringToDate(dateString: string) {
                             <div>
                                 <Button
                                     type="button"
-                                    @click="searchData"
+                                    @click="search"
                                 >
                                     Buscar
                                 </Button>
                             </div>
-                            <div v-if="props.search?.search">
+                            <div v-if="
+                                    form.filters.search ||
+                                    form.filters.period.start ||
+                                    form.filters.period.end
+                            ">
                                 <Button
                                     variant="destructive"
                                     type="button"
@@ -96,9 +121,25 @@ function stringToDate(dateString: string) {
                         </div>
                         <div>
                             <DatePicker
+                                v-if="
+                                    !props.filters.period.start &&
+                                    !props.filters.period.end
+                                "
                                 :range="true"
                                 placeholder="Pesquisar por Período"
-                                @update:period="periodFilter($event)"
+                                @update:period="searchFilterByPeriod($event)"
+                            />
+                            <DatePicker
+                                v-else
+                                :range="true"
+                                :was-changed="
+                                    props.filters.period.start &&
+                                    props.filters.period.end
+                                "
+                                :period_start="stringToDate(props.filters.period.start)"
+                                :period_end="stringToDate(props.filters.period.end)"
+                                placeholder="Pesquisar por Período"
+                                @update:period="searchFilterByPeriod($event)"
                             />
                         </div>
                     </div>
@@ -118,7 +159,7 @@ function stringToDate(dateString: string) {
                             :nextPageUrl="props.espelhos.next_page_url"
                             :lastPageUrl="props.espelhos.last_page_url"
                             :links="props.espelhos.links"
-                            :filters="convertInSearchParams(props.search).toString()"
+                            :filters="convertInSearchParams(props.filters).toString()"
                         />
                     </div>
                     <div v-else>

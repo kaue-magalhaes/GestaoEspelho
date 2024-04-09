@@ -104,18 +104,32 @@ class EspelhoController extends Controller
      */
     public function history(): Response
     {
+        //dd(\request()->all());
         return Inertia::render('HistoryList', [
             'espelhos' => HistoricoEspelho::query()
-                ->when(request()->has('search'), function (Builder $query) {
-                    $query->where('titulo', 'like', '%' . request('search') . '%');
-                })
+                ->when(
+                    request()->has('filters') && isset(request('filters')['search']) && request('filters')['search'] !== null,
+                    function (Builder $query) {
+                        $query->where('titulo', 'like', '%' . request('filters')['search'] . '%');
+                    }
+                )
+                ->when(
+                    request()->has('filters') && isset(request('filters')['period']) && request('filters')['period']['start'] !== null && request('filters')['period']['end'] !== null,
+                    function (Builder $query) {
+                        $query->whereBetween('created_at', [request('filters')['period']['start'], request('filters')['period']['end']]);
+                    }
+                )
                 ->orderBy('created_at', 'desc')
                 ->with('user')
                 ->paginate(5)
                 ->toArray(),
-            'search' => [
-                'search' => request('search'),
-            ],
+            'filters' => \request('filters', [
+                'search' => request('search', ''),
+                'period' => [
+                    'start' => request('start'),
+                    'end'   => request('end'),
+                ],
+            ]),
         ]);
     }
 }
