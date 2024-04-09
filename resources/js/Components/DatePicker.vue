@@ -33,6 +33,10 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  placeholder: {
+    type: String,
+    default: '',
+  },
 })
 
 const localPeriod = ref({
@@ -75,7 +79,7 @@ watchEffect(() => {
             {{ localPeriod.start && wasChanged ? (
               localPeriod.end ? `${format(localPeriod.start, 'LLL dd, y')} - ${format(localPeriod.end, 'LLL dd, y')}`
               : format(localPeriod.start, 'LLL dd, y')
-            ) : 'Selecione o periodo' }}
+            ) : props.placeholder || 'Selecione o periodo' }}
           </span>
         </Button>
         <span v-if="props.isValidation" class="text-red-500 text-sm">Selecione o periodo</span>

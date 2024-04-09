@@ -5,6 +5,8 @@ import DropdownLink from '@/Components/DropdownLink.vue';
 import NavLink from '@/Components/NavLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
 
+import { Toaster } from '@/Components/ui/sonner'
+
 const showingNavigationDropdown = ref(false);
 </script>
 
@@ -136,4 +138,5 @@ const showingNavigationDropdown = ref(false);
             </main>
         </div>
     </div>
+    <Toaster />
 </template>

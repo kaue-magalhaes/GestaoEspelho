@@ -18,6 +18,17 @@ class DateConverter
         ];
     }
 
+    /**
+     * Convert the date format from yyyy-mm-dd to dd/mm/yyyy
+     */
+    public static function convertToBrazilianDate(string $date): string
+    {
+        $dateParts = explode('-', $date);
+        $date      = $dateParts[2] . '/' . $dateParts[1] . '/' . $dateParts[0];
+
+        return $date;
+    }
+
     private static function convertDate(string $date): string
     {
         $dateParts = explode('/', $date);

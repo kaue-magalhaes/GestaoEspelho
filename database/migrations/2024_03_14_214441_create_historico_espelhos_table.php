@@ -12,6 +12,7 @@ return new class extends Migration {
     {
         Schema::create('historico_espelhos', function (Blueprint $table) {
             $table->id();
+            $table->string('titulo');
             $table->date('periodo_inicio');
             $table->date('periodo_fim');
             $table->foreignId('usuario_id')->constrained('users');

@@ -3,6 +3,7 @@ import { ref, onBeforeMount } from 'vue';
 import { Head } from '@inertiajs/vue3';
 import { format } from 'date-fns';
 import axios from 'axios';
+import { toast } from 'vue-sonner';
 import {
     GrupoPromotoria,
     Atribuicoes,
@@ -89,42 +90,54 @@ function stringToDate(dateString: string) {
     return new Date(year, month - 1, day);
 }
 
-const salvarEspelho = async () => {
-    carregandoSalvamento.value = true;
-    const data = {
-        periodoEspelho: periodoEspelho.value,
-        listaEventos: listaEventos.value,
-        atendimentosUrgenciaDados: atendimentosUrgenciaDados.value,
-    };
+const salvarEspelho = async () =>
+    {
+        carregandoSalvamento.value = true;
+        const data = {
+            periodoEspelho: periodoEspelho.value,
+            listaEventos: listaEventos.value,
+            atendimentosUrgenciaDados: atendimentosUrgenciaDados.value,
+        };
 
-    try {
-        const response = await axios.put(`/espelho/${props.espelho.id}`, data);
-        exibirBotaoSalvar.value = false;
-        carregandoSalvamento.value = false;
-        salvo.value = true;
+        try {
+            await axios.put(`/espelho/${props.espelho.id}`, data);
+            exibirBotaoSalvar.value = false;
+            carregandoSalvamento.value = false;
+            salvo.value = true;
 
-    } catch (error) {
-        console.error(error);
+            toast('Alteração salva!', {
+                description: 'As alterações foram salvas com sucesso.',
+            });
+
+        } catch (error) {
+            console.error(error);
+        }
     }
-};
+;
 
-const publicarEspelho = async () => {
-    carregandoPublicacao.value = true;
-    const data = {
-        periodoEspelho: periodoEspelho.value,
-        listaEventos: listaEventos.value,
-        atendimentosUrgenciaDados: atendimentosUrgenciaDados.value,
-    };
+const publicarEspelho = async () =>
+    {
+        carregandoPublicacao.value = true;
+        const data = {
+            periodoEspelho: periodoEspelho.value,
+            listaEventos: listaEventos.value,
+            atendimentosUrgenciaDados: atendimentosUrgenciaDados.value,
+        };
 
-    try {
-        const response = await axios.post(`/espelho/publicar/${props.espelho.id}`, data);
-        exibirBotaoPublicar.value = false;
-        carregandoPublicacao.value = false;
-        salvo.value = false;
-    } catch (error) {
-        console.error(error);
+        try {
+            await axios.post(`/espelho/publicar/${props.espelho.id}`, data);
+            exibirBotaoPublicar.value = false;
+            carregandoPublicacao.value = false;
+            salvo.value = false;
+
+            toast('Espelho publicado!', {
+                description: 'O espelho foi publicado com sucesso.',
+            });
+        } catch (error) {
+            console.error(error);
+        }
     }
-};
+;
 
 const processaEventos = (eventos: EventoServerSide[]) => {
     return eventos.map(evento => ({
@@ -144,7 +157,7 @@ const processaUrgenciaAtendimentos = (urgenciaAtendimentos: UrgenciaAtendimentoS
         periodo_inicio: atendimentoUrgencia.periodo_inicio,
         periodo_fim: atendimentoUrgencia.periodo_fim,
         promotor_designado_id: atendimentoUrgencia.promotor_designado_id,
-    }));    
+    }));
 };
 
 onBeforeMount(() => {

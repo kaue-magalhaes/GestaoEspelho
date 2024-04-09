@@ -13,6 +13,7 @@ class HistoricoEspelho extends Model
     protected $table = 'historico_espelhos';
 
     protected $fillable = [
+        'titulo',
         'periodo_inicio',
         'periodo_fim',
         'usuario_id',
