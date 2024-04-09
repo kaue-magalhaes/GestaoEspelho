@@ -3,6 +3,7 @@
 use App\Models\Historico\HistoricoEspelho;
 use App\Models\User;
 
+use function Pest\Laravel\actingAs;
 use function Pest\Laravel\get;
 
 it('should be able to search a historico by date', function () {
@@ -19,17 +20,22 @@ it('should be able to search a historico by date', function () {
         'created_at' => '2021-10-11 00:00:00',
     ]);
 
-    $this->actingAs($user);
+    actingAs($user);
 
     $request = get(route('espelho.history', [
-        'initial_date' => '2021-10-10',
-        'final_date'   => '2021-10-12',
+        'filters' => [
+            'search' => '',
+            'period' => [
+                'start' => '2021-10-10',
+                'end'   => '2021-10-11',
+            ],
+        ],
     ]));
 
-    //    foreach ($historicosErrados as $historicoErrado) {
-    //        $request->assertDontSee($historicoErrado->created_at->toJSON());
-    //    }
-    //
-    //    $request->assertSee($historico1->created_at->toJSON());
-    //    $request->assertSee($historico2->created_at->toJSON());
+    foreach ($historicosErrados as $historicoErrado) {
+        $request->assertDontSee($historicoErrado->created_at->toJSON());
+    }
+
+    $request->assertSee($historico1->created_at->toJSON());
+    $request->assertSee($historico2->created_at->toJSON());
 });

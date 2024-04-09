@@ -31,11 +31,9 @@ defineProps({
     },
     prevPageUrl: {
         type: String as () => string | null,
-        required: true
     },
     nextPageUrl: {
         type: String as () => string | null,
-        required: true
     },
     lastPageUrl: {
         type: String,
@@ -46,11 +44,27 @@ defineProps({
         required: true
     },
     filters: {
-        type: String,
+        type: Object,
         required: false,
-        default: ''
     }
 });
+
+const convertInSearchParams = (obj: any) => {
+    const params = new URLSearchParams();
+
+    for (const key in obj) {
+        if (obj[key]) {
+            if (typeof obj[key] === 'object') {
+                for (const subKey in obj[key]) {
+                    params.append(`filters[${key}][${subKey}]`, obj[key][subKey] ? obj[key][subKey] : '');
+                }
+            } else {
+                params.append(`filters[${key}]`, obj[key]);
+            }
+        }
+    }
+    return params.toString();
+}
 
 function buildUrl(url: string, filters: string) {
     if (filters) {
@@ -65,17 +79,17 @@ function buildUrl(url: string, filters: string) {
     <div class="flex justify-center mt-4">
         <Pagination v-slot="{ page }" :total="total" :sibling-count="1" show-edges :default-page="currentPage" :items-per-page="perPage">
             <PaginationList v-slot="{ items }" class="flex items-center gap-1">
-                <Link :href="buildUrl(firstPageUrl, filters)">
+                <Link :href="buildUrl(firstPageUrl, convertInSearchParams(filters).toString())">
                     <PaginationFirst />
                 </Link>
-                <Link :href="buildUrl(prevPageUrl || firstPageUrl, filters)">
+                <Link :href="buildUrl(prevPageUrl || firstPageUrl, convertInSearchParams(filters).toString())">
                     <PaginationPrev />
                 </Link>
 
                 <template v-for="(item, index) in items">
                     <PaginationListItem v-if="item.type === 'page'" :key="index" :value="item.value" as-child>
                         <Button class="w-10 h-10 p-0" :variant="item.value === page ? 'default' : 'outline'" as-child>
-                            <Link :href="buildUrl(links[item.value].url || '#', filters)">
+                            <Link :href="buildUrl(links[item.value].url || '#', convertInSearchParams(filters).toString())">
                                 {{ item.value }}
                             </Link>
                         </Button>
@@ -83,10 +97,10 @@ function buildUrl(url: string, filters: string) {
                     <PaginationEllipsis v-else :key="item.type" :index="index" />
                 </template>
 
-                <Link :href="buildUrl(nextPageUrl || lastPageUrl, filters)">
+                <Link :href="buildUrl(nextPageUrl || lastPageUrl, convertInSearchParams(filters).toString())">
                     <PaginationNext />
                 </Link>
-                <Link :href="buildUrl(lastPageUrl, filters)">
+                <Link :href="buildUrl(lastPageUrl, convertInSearchParams(filters).toString())">
                     <PaginationLast />
                 </Link>
             </PaginationList>

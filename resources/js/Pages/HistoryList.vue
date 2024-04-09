@@ -55,16 +55,6 @@ function searchFilterByPeriod(period: any) {
     search()
 }
 
-const convertInSearchParams = (obj: any) => {
-    const params = new URLSearchParams();
-    for (const key in obj) {
-        if (obj[key]) {
-            params.append(key, obj[key]);
-        }
-    }
-    return params.toString();
-}
-
 function stringToDate(dateString: string) {
     const [year, month, day] = dateString.split('-').map(Number);
     return new Date(year, month - 1, day);
@@ -122,8 +112,10 @@ function stringToDate(dateString: string) {
                         <div>
                             <DatePicker
                                 v-if="
-                                    !props.filters.period.start &&
-                                    !props.filters.period.end
+                                    (
+                                        !props.filters.period.start &&
+                                        !props.filters.period.end
+                                    )
                                 "
                                 :range="true"
                                 placeholder="Pesquisar por Período"
@@ -133,8 +125,10 @@ function stringToDate(dateString: string) {
                                 v-else
                                 :range="true"
                                 :was-changed="
-                                    props.filters.period.start &&
-                                    props.filters.period.end
+                                    !(
+                                        !props.filters.period.start &&
+                                        !props.filters.period.end
+                                    )
                                 "
                                 :period_start="stringToDate(props.filters.period.start)"
                                 :period_end="stringToDate(props.filters.period.end)"
@@ -159,7 +153,7 @@ function stringToDate(dateString: string) {
                             :nextPageUrl="props.espelhos.next_page_url"
                             :lastPageUrl="props.espelhos.last_page_url"
                             :links="props.espelhos.links"
-                            :filters="convertInSearchParams(props.filters).toString()"
+                            :filters="props.filters"
                         />
                     </div>
                     <div v-else>

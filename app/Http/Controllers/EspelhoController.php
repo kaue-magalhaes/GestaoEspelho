@@ -116,7 +116,8 @@ class EspelhoController extends Controller
                 ->when(
                     request()->has('filters') && isset(request('filters')['period']) && request('filters')['period']['start'] !== null && request('filters')['period']['end'] !== null,
                     function (Builder $query) {
-                        $query->whereBetween('created_at', [request('filters')['period']['start'], request('filters')['period']['end']]);
+                        $endDate = date('Y-m-d H:i:s', strtotime(request('filters')['period']['end'] . ' 23:59:59'));
+                        $query->whereBetween('created_at', [request('filters')['period']['start'], $endDate]);
                     }
                 )
                 ->orderBy('created_at', 'desc')
