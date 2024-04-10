@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import {ref, watchEffect, onMounted} from 'vue'
+import {ref, watchEffect} from 'vue'
 
 import { cn } from '@/lib/utils'
 import { format } from 'date-fns';
+import { pt } from 'date-fns/locale';
 
 import { Button } from '@/Components/ui/button';
 import { Calendar } from '@/Components/ui/calendar'
@@ -77,8 +78,8 @@ watchEffect(() => {
 
           <span>
             {{ localPeriod.start && wasChanged ? (
-              localPeriod.end ? `${format(localPeriod.start, 'LLL dd, y')} - ${format(localPeriod.end, 'LLL dd, y')}`
-              : format(localPeriod.start, 'LLL dd, y')
+              localPeriod.end ? `${format(localPeriod.start, 'LLL dd, y', { locale: pt })} - ${format(localPeriod.start, 'LLL dd, y', { locale: pt })}`
+              : format(localPeriod.start, 'LLL dd, y', { locale: pt })
             ) : props.placeholder || 'Selecione o periodo' }}
           </span>
         </Button>
