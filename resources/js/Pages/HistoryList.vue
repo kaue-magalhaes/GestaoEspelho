@@ -5,7 +5,7 @@ import {EspelhosPaginate} from "@/Interfaces/EspelhosPaginate";
 import PaginationComponent from "@/Components/PaginationComponent.vue";
 import EspelhosListComponent from "@/Components/EspelhosListComponent.vue";
 import { Search, Trash2 } from 'lucide-vue-next'
-import {onMounted, ref} from "vue";
+import {ref} from "vue";
 
 const props = defineProps({
     espelhos: {
@@ -64,10 +64,6 @@ function stringToDate(dateString: string) {
     const [year, month, day] = dateString.split('-').map(Number);
     return new Date(year, month - 1, day);
 }
-
-onMounted(() => {
-    console.log(orderAsc.value)
-})
 </script>
 
 <template>
