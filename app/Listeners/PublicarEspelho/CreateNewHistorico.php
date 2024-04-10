@@ -58,8 +58,8 @@ class CreateNewHistorico
         foreach ($promotorias as $promotoria) {
             HistoricoPromotoria::query()->create([
                 'nome'                          => $promotoria->nome,
-                'nome_grupo_promotorias'        => $promotoria->nome_grupo_promotorias,
-                'municipio'                     => $promotoria->municipio,
+                'nome_grupo_promotorias'        => $promotoria->grupoPromotoria->nome,
+                'municipio'                     => $promotoria->grupoPromotoria->municipio->nome,
                 'is_especializada'              => $promotoria->is_especializada,
                 'historico_espelho_id'          => $historicoEspelho->id,
                 'historico_promotor_titular_id' => $idNovoHistoricoPromotores[$promotoria->promotor_titular_id],

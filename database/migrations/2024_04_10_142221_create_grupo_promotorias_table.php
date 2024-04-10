@@ -10,13 +10,10 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('promotorias', function (Blueprint $table) {
+        Schema::create('grupo_promotorias', function (Blueprint $table) {
             $table->id();
             $table->string('nome');
-            $table->boolean('is_especializada')->default(true);
-            $table->foreignId('espelho_id')->references('id')->on('espelhos');
-            $table->foreignId('promotor_titular_id')->references('id')->on('promotores');
-            $table->foreignId('grupo_promotoria_id')->references('id')->on('grupo_promotorias');
+            $table->foreignId('municipio_id')->references('id')->on('municipios');
             $table->timestamps();
         });
     }
@@ -26,6 +23,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('promotorias');
+        Schema::dropIfExists('grupo_promotorias');
     }
 };
