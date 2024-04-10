@@ -1,6 +1,11 @@
 <script setup lang="ts">
 import {format} from "date-fns";
 import {Espelhos} from "@/Interfaces/Espelhos";
+import { ArrowUpDown } from 'lucide-vue-next'
+
+defineEmits([
+    'invertOrderByCreatedAt'
+]);
 
 defineProps({
     espelhos: {
@@ -8,11 +13,6 @@ defineProps({
         required: true
     }
 });
-
-function stringToDate(dateString: string) {
-    const [year, month, day] = dateString.split('-').map(Number);
-    return new Date(year, month - 1, day);
-}
 </script>
 
 <template>
@@ -23,7 +23,10 @@ function stringToDate(dateString: string) {
                     Espelho
                 </TableHead>
                 <TableHead>
-                    Data de Publicação
+                    <Button variant="ghost" @click="$emit('invertOrderByCreatedAt')">
+                        Data de Publicação
+                        <ArrowUpDown class="ml-2 w-4 h-4" />
+                    </Button>
                 </TableHead>
                 <TableHead>
                     Publicado por

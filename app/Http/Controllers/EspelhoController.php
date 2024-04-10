@@ -120,7 +120,7 @@ class EspelhoController extends Controller
                         $query->whereBetween('created_at', [request('filters')['period']['start'], $endDate]);
                     }
                 )
-                ->orderBy('created_at', 'desc')
+                ->orderBy('created_at', request()->has('orderBy') ? request('orderBy') : 'desc')
                 ->with('user')
                 ->paginate(5)
                 ->toArray(),
@@ -131,6 +131,7 @@ class EspelhoController extends Controller
                     'end'   => request('end'),
                 ],
             ]),
+            'orderAsc' => request()->has('orderBy') && request('orderBy') === 'asc',
         ]);
     }
 }

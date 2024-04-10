@@ -12,7 +12,7 @@ import {Button} from "@/Components/ui/button";
 import {Links} from "@/Interfaces/Links";
 import {build} from "vite";
 
-defineProps({
+const props = defineProps({
     total: {
         type: Number,
         required: true
@@ -46,6 +46,10 @@ defineProps({
     filters: {
         type: Object,
         required: false,
+    },
+    orderAsc: {
+        type: Boolean,
+        default: false
     }
 });
 
@@ -68,10 +72,10 @@ const convertInSearchParams = (obj: any) => {
 
 function buildUrl(url: string, filters: string) {
     if (filters) {
-        return `${url}&${filters}`;
+        return props.orderAsc ? `${url}&orderBy=asc&${filters}` : `${url}&orderBy=desc&${filters}`;
     }
 
-    return url;
+    return props.orderAsc ? `${url}&orderBy=asc` : `${url}&orderBy=desc`;
 }
 </script>
 
