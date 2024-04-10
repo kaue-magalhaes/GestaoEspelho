@@ -5,7 +5,7 @@ import {EspelhosPaginate} from "@/Interfaces/EspelhosPaginate";
 import PaginationComponent from "@/Components/PaginationComponent.vue";
 import EspelhosListComponent from "@/Components/EspelhosListComponent.vue";
 import { Search, Trash2 } from 'lucide-vue-next'
-import {ref} from "vue";
+import {onMounted, ref} from "vue";
 
 const props = defineProps({
     espelhos: {
@@ -27,10 +27,15 @@ const props = defineProps({
                 end: ''
             }
         }),
+    },
+    orderAsc: {
+        type: Boolean,
+        default: false
     }
 });
 
 const filters = ref(props.filters);
+const orderAsc = ref(props.orderAsc);
 
 const espelhosData = ref(props.espelhos.data);
 
@@ -46,7 +51,7 @@ function search() {
             end: filters.value.period.end
         }
     }
-    form.get(route('espelho.history'));
+    form.get(route('espelho.history', {'orderBy': orderAsc.value ? 'asc' : 'desc'}));
 }
 
 function searchFilterByPeriod(period: any) {
@@ -59,6 +64,10 @@ function stringToDate(dateString: string) {
     const [year, month, day] = dateString.split('-').map(Number);
     return new Date(year, month - 1, day);
 }
+
+onMounted(() => {
+    console.log(orderAsc.value)
+})
 </script>
 
 <template>
@@ -142,6 +151,7 @@ function stringToDate(dateString: string) {
                     <div v-if="espelhosData.length > 0">
                         <EspelhosListComponent
                             :espelhos="espelhosData"
+                            @invertOrderByCreatedAt="orderAsc = !orderAsc; search()"
                         />
                         <PaginationComponent
                             v-if="props.espelhos.total > props.espelhos.per_page"
@@ -154,6 +164,7 @@ function stringToDate(dateString: string) {
                             :lastPageUrl="props.espelhos.last_page_url"
                             :links="props.espelhos.links"
                             :filters="props.filters"
+                            :orderAsc="orderAsc"
                         />
                     </div>
                     <div v-else>
