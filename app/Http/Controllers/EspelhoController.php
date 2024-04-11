@@ -14,6 +14,7 @@ use App\Models\Historico\HistoricoPromotoria;
 use App\Models\Historico\HistoricoUrgenciaAtendimento;
 use App\Models\Promotor;
 use App\Models\UrgenciaAtendimento;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -103,8 +104,34 @@ class EspelhoController extends Controller
      */
     public function history(): Response
     {
+        //dd(\request()->all());
         return Inertia::render('HistoryList', [
-            'espelhos' => HistoricoEspelho::with('user')->get()->toArray(),
+            'espelhos' => HistoricoEspelho::query()
+                ->when(
+                    request()->has('filters') && isset(request('filters')['search']) && request('filters')['search'] !== null,
+                    function (Builder $query) {
+                        $query->where('titulo', 'like', '%' . request('filters')['search'] . '%');
+                    }
+                )
+                ->when(
+                    request()->has('filters') && isset(request('filters')['period']) && request('filters')['period']['start'] !== null && request('filters')['period']['end'] !== null,
+                    function (Builder $query) {
+                        $endDate = date('Y-m-d H:i:s', strtotime(request('filters')['period']['end'] . ' 23:59:59'));
+                        $query->whereBetween('created_at', [request('filters')['period']['start'], $endDate]);
+                    }
+                )
+                ->orderBy('created_at', request()->has('orderBy') ? request('orderBy') : 'desc')
+                ->with('user')
+                ->paginate(5)
+                ->toArray(),
+            'filters' => \request('filters', [
+                'search' => request('search', ''),
+                'period' => [
+                    'start' => request('start'),
+                    'end'   => request('end'),
+                ],
+            ]),
+            'orderAsc' => request()->has('orderBy') && request('orderBy') === 'asc',
         ]);
     }
 }

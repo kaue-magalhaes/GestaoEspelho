@@ -13,6 +13,7 @@ use App\Models\Historico\HistoricoUrgenciaAtendimento;
 use App\Models\Promotor;
 use App\Models\Promotoria;
 use App\Models\UrgenciaAtendimento;
+use App\Utils\DateConverter;
 
 class CreateNewHistorico
 {
@@ -40,6 +41,7 @@ class CreateNewHistorico
             'periodo_fim'    => $periodoEspelho['periodo_fim'],
         ]);
         $historicoEspelho = HistoricoEspelho::query()->create([
+            'titulo'         => 'Espelho de ' . DateConverter::convertToBrazilianDate($periodoEspelho['periodo_inicio']) . ' a ' . DateConverter::convertToBrazilianDate($periodoEspelho['periodo_fim']),
             'periodo_inicio' => $periodoEspelho['periodo_inicio'],
             'periodo_fim'    => $periodoEspelho['periodo_fim'],
             'usuario_id'     => auth()->id(),
