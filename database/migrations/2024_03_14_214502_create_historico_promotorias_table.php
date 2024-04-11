@@ -18,7 +18,7 @@ return new class extends Migration {
             $table->boolean('is_especializada')->default(true);
             $table->foreignId('historico_espelho_id')->references('id')->on('historico_espelhos');
             $table->foreignId('historico_promotor_titular_id')->references('id')->on('historico_promotores');
-            $table->foreignId('historico_id')->constrained('historicos');
+            $table->foreignId('historico_id')->references('id')->on('historicos');
             $table->timestamps();
         });
     }

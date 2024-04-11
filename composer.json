@@ -58,6 +58,7 @@
             "@php artisan key:generate --ansi"
         ],
         "fix" : [
+            "./vendor/bin/phpstan analyse",
             "./vendor/bin/pint"
         ],
         "test" : [

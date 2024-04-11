@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Espelho extends Model
 {
@@ -29,7 +30,7 @@ class Espelho extends Model
     /**
      * Busca as promotorias vinculadas ao espelho
      */
-    public function promotorias(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function promotorias(): HasMany
     {
         return $this->hasMany(Promotoria::class);
     }
