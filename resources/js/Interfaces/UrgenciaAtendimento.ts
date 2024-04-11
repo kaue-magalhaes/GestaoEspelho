@@ -1,7 +1,7 @@
 import {Promotor} from "@/Interfaces/Promotor";
 
-export interface UrgenciaAtendimentoClientSide {
-    uuid: string;
+export interface UrgenciaAtendimento {
+    id: string;
     periodo_inicio: string;
     periodo_fim: string;
     promotor_designado_id: string;

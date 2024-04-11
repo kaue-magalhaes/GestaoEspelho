@@ -28,12 +28,12 @@ class GrupoPromotoriaSeeder extends Seeder
             if ($municipio->nome === 'Macapá' || $municipio->nome === 'Santana') {
                 GrupoPromotoria::factory()->create([
                     'nome'         => "Promotorias de $grupoPromotoriasNome",
-                    'Municipio_id' => $municipio->id,
+                    'municipio_id' => $municipio->id,
                 ]);
             } else {
                 GrupoPromotoria::factory()->create([
                     'nome'         => "$municipio->nome",
-                    'Municipio_id' => $municipio->id,
+                    'municipio_id' => $municipio->id,
                 ]);
             }
 

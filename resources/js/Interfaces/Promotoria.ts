@@ -1,3 +1,7 @@
+import {Promotor} from "@/Interfaces/Promotor";
+import {GrupoPromotoria} from "@/Interfaces/GrupoPromotoria";
+import {Espelho} from "@/Interfaces/Espelho";
+
 export interface Promotoria {
     id: string;
     nome: string;
@@ -7,4 +11,7 @@ export interface Promotoria {
     grupo_promotoria_id: string;
     created_at: string;
     updated_at: string;
+    espelho?: Espelho;
+    promotor?: Promotor;
+    grupoPromotoria?: GrupoPromotoria;
 }

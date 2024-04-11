@@ -20,10 +20,8 @@ class Promotor extends Model
 
     /**
      * Converte o id para string
-     *
-     * @param  int  $value
      */
-    public function getIdAttribute($value): string
+    public function getIdAttribute(int $value): string
     {
         return (string)$value;
     }

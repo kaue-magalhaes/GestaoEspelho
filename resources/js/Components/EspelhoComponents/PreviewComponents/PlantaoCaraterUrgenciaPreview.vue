@@ -1,5 +1,7 @@
 <script setup lang="ts">
-import { Promotor, UrgenciaAtendimentoServeSide } from "@/types";
+import {UrgenciaAtendimentoClientSide} from "@/Interfaces/UrgenciaAtendimentoClientSide";
+import {Promotor} from "@/Interfaces/Promotor";
+
 import { usePage } from "@inertiajs/vue3";
 import { ref } from "vue";
 import { format } from 'date-fns';
@@ -7,7 +9,7 @@ import { format } from 'date-fns';
 const page = usePage();
 defineProps({
     plantaoDeAtendimentos: {
-    type: Array as () => UrgenciaAtendimentoServeSide[],
+    type: Array as () => UrgenciaAtendimentoClientSide[],
     required: true,
   },
 });

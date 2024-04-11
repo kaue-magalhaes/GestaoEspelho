@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { Atribuicoes } from '@/types';
 import { format } from 'date-fns';
+import {Atribuicoes} from "@/Interfaces/Atribuicoes";
 
 const props = defineProps({
   listaAtribuicoes: {
@@ -38,7 +38,7 @@ function stringToDate(dateString: string) {
             {{ atribuicoes.nome_promotor }}
           </td>
           <td class="border px-6 py-4 font-medium">
-            <span class="flex items-center justify-center space-x-2" v-for="atribuicao in atribuicoes.atribuicoes" :key="atribuicao.uuid">
+            <span class="flex items-center justify-center space-x-2" v-for="atribuicao in atribuicoes.atribuicoes" :key="atribuicao.id">
               <span>
                 <span v-if="atribuicao.titulo !== ''">
                 {{ atribuicao.tipo }} - {{ atribuicao.titulo }}

@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import {Evento, GrupoPromotoria, Promotor, Promotoria} from '@/types';
 import { ref } from 'vue';
+import {Promotoria} from "@/Interfaces/Promotoria";
+import {EventoClientSide} from "@/Interfaces/EventoClientSide";
 
 const emit = defineEmits([
   'update:novoEventoAdicionado',
@@ -18,7 +19,7 @@ const props = defineProps({
     required: true,
   },
   eventos: {
-    type: Array as () => Evento[],
+    type: Array as () => EventoClientSide[],
     required: true,
   },
   promotores: {
@@ -42,7 +43,7 @@ const enviaDadosDoEventoDeletado = (uuid: string) => {
   emit('delete:umEventoFoiDeletado', uuid);
 };
 
-const enviaNomeDoPromotorSelecionado = (index: number, idPromotor: string) => {  
+const enviaNomeDoPromotorSelecionado = (index: number, idPromotor: string) => {
   emit('update:nomeFoiSelecionado', index, idPromotor);
 };
 

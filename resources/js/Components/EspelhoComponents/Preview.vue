@@ -1,5 +1,8 @@
 <script setup lang="ts">
-import {GrupoPromotoria, Atribuicoes, UrgenciaAtendimentoServeSide} from '@/types';
+import {GrupoPromotoria} from "@/Interfaces/GrupoPromotoria";
+import {Atribuicoes} from "@/Interfaces/Atribuicoes";
+import {UrgenciaAtendimentoClientSide} from "@/Interfaces/UrgenciaAtendimentoClientSide";
+
 import { ref, watchEffect } from 'vue';
 
 const props = defineProps({
@@ -16,7 +19,7 @@ const props = defineProps({
         required: true,
     },
     atendimentosUrgenciaDados: {
-        type: Array as () => UrgenciaAtendimentoServeSide[],
+        type: Array as () => UrgenciaAtendimentoClientSide[],
         required: true,
     },
 });
@@ -27,24 +30,30 @@ const promotoriasInterior = ref<GrupoPromotoria[]>([]);
 
 watchEffect(() => {
     props.grupoPromotoriaDeTodasAsPromotorias.forEach((grupoPromotoria) => {
-        grupoPromotoria.promotorias.forEach((promotoria) => {
-            if (promotoria.municipio === 'Macapá') {
-                promotoriasMacapa.value.push(grupoPromotoria);
-            } else if (promotoria.municipio === 'Santana') {
-                promotoriasSantana.value.push(grupoPromotoria);
-            } else {
-                if (promotoriasInterior.value.length === 0) {
-                    promotoriasInterior.value.push(grupoPromotoria);
-                } else {
-                    const index = promotoriasInterior.value.findIndex((grupoPromotoriaInterior) => grupoPromotoriaInterior.nome_grupo_promotorias === grupoPromotoria.nome_grupo_promotorias);
-                    if (index === -1) {
-                        promotoriasInterior.value.push(grupoPromotoria);
+        if (grupoPromotoria.promotorias) {
+            grupoPromotoria.promotorias.forEach((promotoria) => {
+                if (promotoria.grupoPromotoria){
+                    if (promotoria.grupoPromotoria.municipio){
+                        if (promotoria.grupoPromotoria.municipio.nome === 'Macapá') {
+                            promotoriasMacapa.value.push(grupoPromotoria);
+                        } else if (promotoria.grupoPromotoria.municipio.nome === 'Santana') {
+                            promotoriasSantana.value.push(grupoPromotoria);
+                        } else {
+                            if (promotoriasInterior.value.length === 0) {
+                                promotoriasInterior.value.push(grupoPromotoria);
+                            } else {
+                                const index = promotoriasInterior.value.findIndex((grupoPromotoriaInterior) => grupoPromotoriaInterior.nome === grupoPromotoria.nome);
+                                if (index === -1) {
+                                    promotoriasInterior.value.push(grupoPromotoria);
+                                }
+                            }
+                        }
                     }
                 }
-            }
-        });
+            });
+        }
     });
-    
+
     if (props.grupoPromotoriaDeTodasAsPromotorias.length === 0) {
         promotoriasMacapa.value = [];
         promotoriasSantana.value = [];
@@ -66,7 +75,7 @@ watchEffect(() => {
                         <a href="https://www.mpap.mp.br" target="_blank" class="flex flex-col items-center">
                             <div class="h-16 w-auto sm:h-20">
                                 <img alt="MPAP Logo"
-                                class="h-16 w-auto sm:h-20" 
+                                class="h-16 w-auto sm:h-20"
                                 src="https://www.mpap.mp.br/templates/portal/images/logo-mpap.png"
                                 >
                             </div>
@@ -91,15 +100,15 @@ watchEffect(() => {
             </div>
         </CardHeader>
         <CardContent class="flex flex-col items-center space-y-8 w-full">
-            <EntranciaFinalMacapaPreview 
+            <EntranciaFinalMacapaPreview
                 v-if="promotoriasMacapa.length > 0 || props.atendimentosUrgenciaDados.length > 0"
                 :grupoPromotorias="promotoriasMacapa"
                 :urgenciaAtendimentos="props.atendimentosUrgenciaDados"
             />
-            <EntranciaFinalSantanaPreview 
+            <EntranciaFinalSantanaPreview
                 v-if="promotoriasSantana.length > 0"
                 :promotorias="promotoriasSantana"
-            /> 
+            />
             <EntranciaInicialPreview
                 v-if="promotoriasInterior.length > 0"
                 :promotoriasDados="promotoriasInterior"
