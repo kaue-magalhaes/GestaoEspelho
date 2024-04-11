@@ -1,5 +1,7 @@
 <script setup lang="ts">
-import { Promotor, UrgenciaAtendimentoServeSide } from "@/types";
+import {UrgenciaAtendimentoClientSide} from "@/Interfaces/UrgenciaAtendimentoClientSide";
+import {Promotor} from "@/Interfaces/Promotor";
+
 import { usePage } from "@inertiajs/vue3";
 import { ref } from "vue";
 import { format } from 'date-fns';
@@ -7,7 +9,7 @@ import { format } from 'date-fns';
 const page = usePage();
 defineProps({
     plantaoDeAtendimentos: {
-    type: Array as () => UrgenciaAtendimentoServeSide[],
+    type: Array as () => UrgenciaAtendimentoClientSide[],
     required: true,
   },
 });
@@ -25,7 +27,7 @@ function stringToDate(dateString: string) {
         <div class="w-full flex flex-col items-center">
             <h2 class="text-xl font-bold mb-4">PLANTÃO DE ATENDIMENTOS EM CARÁTER DE URGÊNCIA - MACAPÁ/SANTANA</h2>
             <ul class="grid grid-cols-2 gap-4">
-                <li class="mb-2 text-left" v-for="atendimento in plantaoDeAtendimentos" :key="atendimento.id">
+                <li class="mb-2 text-left" v-for="atendimento in plantaoDeAtendimentos" :key="atendimento.uuid">
                     <span v-if="atendimento.periodo_inicio !== ''">
                         <span class="font-semibold">
                             - {{ promotoresQuePodemAtender.find((promotor) => promotor.id === atendimento.promotor_designado_id)?.nome }}:

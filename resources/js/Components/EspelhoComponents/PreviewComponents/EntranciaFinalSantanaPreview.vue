@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { GrupoPromotoria } from '@/types';
 import { ref, watchEffect } from 'vue';
+import {GrupoPromotoria} from "@/Interfaces/GrupoPromotoria";
 
 const props = defineProps({
   promotorias: {
@@ -13,14 +13,13 @@ const promotoriasNaoEspecializadas = ref<GrupoPromotoria[]>([]);
 const promotoriasEspecializadas = ref<GrupoPromotoria[]>([]);
 
 watchEffect(() => {
-  //console.log(props.promotorias);
   props.promotorias.forEach((grupoPromotoria) => {
-    grupoPromotoria.promotorias.forEach((promotoria) => {
+    grupoPromotoria.promotorias?.forEach((promotoria) => {
       if (promotoria.is_especializada) {
         if (promotoriasEspecializadas.value.length === 0) {
           promotoriasEspecializadas.value.push(grupoPromotoria);
         } else {
-          const index = promotoriasEspecializadas.value.findIndex((promotoriaEspecializada) => promotoriaEspecializada.nome_grupo_promotorias === grupoPromotoria.nome_grupo_promotorias);
+          const index = promotoriasEspecializadas.value.findIndex((promotoriaEspecializada) => promotoriaEspecializada.nome === grupoPromotoria.nome);
           if (index === -1) {
             promotoriasEspecializadas.value.push(grupoPromotoria);
           }
@@ -29,7 +28,7 @@ watchEffect(() => {
         if (promotoriasNaoEspecializadas.value.length === 0) {
           promotoriasNaoEspecializadas.value.push(grupoPromotoria);
         } else {
-          const index = promotoriasNaoEspecializadas.value.findIndex((promotoriaNaoEspecializada) => promotoriaNaoEspecializada.nome_grupo_promotorias === grupoPromotoria.nome_grupo_promotorias);
+          const index = promotoriasNaoEspecializadas.value.findIndex((promotoriaNaoEspecializada) => promotoriaNaoEspecializada.nome === grupoPromotoria.nome);
           if (index === -1) {
             promotoriasNaoEspecializadas.value.push(grupoPromotoria);
           }

@@ -78,7 +78,7 @@ watchEffect(() => {
 
           <span>
             {{ localPeriod.start && wasChanged ? (
-              localPeriod.end ? `${format(localPeriod.start, 'LLL dd, y', { locale: pt })} - ${format(localPeriod.start, 'LLL dd, y', { locale: pt })}`
+              localPeriod.end ? `${format(localPeriod.start, 'LLL dd, y', { locale: pt })} - ${format(localPeriod.end, 'LLL dd, y', { locale: pt })}`
               : format(localPeriod.start, 'LLL dd, y', { locale: pt })
             ) : props.placeholder || 'Selecione o periodo' }}
           </span>

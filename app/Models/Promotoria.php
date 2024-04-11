@@ -37,19 +37,19 @@ class Promotoria extends Model
     }
 
     /**
-     * get the promotor that owns the Promotoria
-     */
-    public function promotor(): BelongsTo
-    {
-        return $this->belongsTo(Promotor::class, 'promotor_titular_id');
-    }
-
-    /**
      * get the espelho that owns the Promotoria
      */
     public function espelho(): BelongsTo
     {
         return $this->belongsTo(Espelho::class);
+    }
+
+    /**
+     * get the promotor that owns the Promotoria
+     */
+    public function promotor(): BelongsTo
+    {
+        return $this->belongsTo(Promotor::class, 'promotor_titular_id');
     }
 
     /**

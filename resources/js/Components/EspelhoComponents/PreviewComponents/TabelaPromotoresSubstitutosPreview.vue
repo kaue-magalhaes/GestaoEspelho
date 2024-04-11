@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { Atribuicoes } from '@/types';
 import { format } from 'date-fns';
+import {Atribuicoes} from "@/Interfaces/Atribuicoes";
 
 const props = defineProps({
   listaAtribuicoes: {

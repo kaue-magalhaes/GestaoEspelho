@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { GrupoPromotoria } from '@/types';
+
+import {GrupoPromotoria} from "@/Interfaces/GrupoPromotoria";
 
 defineProps({
   promotoriasDados: {

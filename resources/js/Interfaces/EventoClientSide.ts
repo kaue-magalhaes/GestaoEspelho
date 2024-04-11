@@ -1,6 +1,6 @@
-export interface EventoServerSide {
-    id: string;
-    titulo: string;
+export interface EventoClientSide {
+    uuid: string;
+    titulo?: string;
     tipo: string;
     periodo_inicio: string;
     periodo_fim: string;

@@ -1,15 +1,12 @@
 <script setup lang="ts">
-import { Promotor } from '@/types';
-import { usePage } from '@inertiajs/vue3';
 import { ref, onMounted } from 'vue';
 import { format } from 'date-fns';
 import { v4 as uuidv4 } from 'uuid';
+import {Promotor} from "@/Interfaces/Promotor";
 
 const emit = defineEmits([
     'update:adicionaEvento',
 ]);
-
-const page = usePage();
 
 const props = defineProps({
     promotores: {
@@ -83,7 +80,7 @@ const enviaDadosDoEvento = (evento: { titulo: string; tipo: string; periodo: { s
             promotor_titular_id: evento.promotor_titular_id,
             promotor_designado_id: evento.promotor_designado_id,
         };
-        
+
         emit('update:adicionaEvento', props.nomeMunicipio, novoEvento);
         resetarInformacoes();
         dialogOpen.value = false;
@@ -136,7 +133,7 @@ onMounted(() => {
                         <Label class="text-base">
                             Período <span class="text-red-500">*</span>
                         </Label>
-                        <DatePicker 
+                        <DatePicker
                             :range="true"
                             :period_start="periodoEvento.start"
                             :period_end="periodoEvento.end"
@@ -177,10 +174,10 @@ onMounted(() => {
                 <Button variant="destructive" @click="resetarInformacoes">
                     Cancelar
                 </Button>
-                <Button variant="default" @click="enviaDadosDoEvento({ 
-                    tipo: tipoEvento, 
-                    periodo: periodoEvento, 
-                    titulo: tituloEvento, 
+                <Button variant="default" @click="enviaDadosDoEvento({
+                    tipo: tipoEvento,
+                    periodo: periodoEvento,
+                    titulo: tituloEvento,
                     promotor_titular_id: props.promotores.find(promotor => promotor.nome === props.nomePromotor)?.id || '',
                     promotor_designado_id: props.promotores.find(promotor => promotor.nome === promotor_designado_evento)?.id || ''
                 })">

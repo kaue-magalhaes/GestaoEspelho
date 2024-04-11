@@ -34,7 +34,7 @@ class EspelhoController extends Controller
         //dd($grupoPromotoriasArray);
         //dd($espelho, $promotores, $eventos, $urgenciaAtendimentos);
 
-        return Inertia::render('EspelhoEditor', [
+        return Inertia::render('Espelho/Editor', [
             'espelho'              => $espelho,
             'promotores'           => $promotores,
             'promotorias'          => $espelho['promotorias'],
@@ -54,7 +54,7 @@ class EspelhoController extends Controller
 
         //dd($historicoEspelho, $historicoPromotores, $historicoPromotorias, $historicoEventos, $historicoUrgenciaAtendimentos);
 
-        return Inertia::render('EspelhoIndex', [
+        return Inertia::render('Espelho/Index', [
             'espelho'              => $historicoEspelho,
             'promotores'           => $historicoPromotores,
             'promotorias'          => $historicoPromotorias,
@@ -74,7 +74,7 @@ class EspelhoController extends Controller
         $historicoEventos              = HistoricoEvento::where('historico_id', $id)->get()->toArray();
         $historicoUrgenciaAtendimentos = HistoricoUrgenciaAtendimento::where('historico_id', $id)->get()->toArray();
 
-        return Inertia::render('EspelhoShow', [
+        return Inertia::render('Espelho/Show', [
             'espelho'              => $historicoEspelho,
             'promotores'           => $historicoPromotores,
             'promotorias'          => $historicoPromotorias,

@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { Promotor } from '@/types';
 import { ref } from 'vue';
 import { format } from 'date-fns';
 
 import { Edit } from 'lucide-vue-next';
+import {Promotor} from "@/Interfaces/Promotor";
 
 const emit = defineEmits([
     'update:editaEvento',
@@ -170,9 +170,9 @@ function stringToDate(dateString: string) {
                 <Button variant="default" @click="enviaDadosDoEvento(
                     {
                         uuid: props.uuid,
-                        titulo: tituloEvento, 
-                        tipo: tipoEvento, 
-                        periodo: periodoEvento, 
+                        titulo: tituloEvento,
+                        tipo: tipoEvento,
+                        periodo: periodoEvento,
                         promotor_titular_id: props.promotor_titular_id,
                         promotor_designado_id: promotor_designado_id_reativo
                     }

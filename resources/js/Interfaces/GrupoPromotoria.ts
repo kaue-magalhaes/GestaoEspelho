@@ -1,8 +1,12 @@
 import {Promotoria} from "@/Interfaces/Promotoria";
-import {Evento} from "@/Interfaces/Evento";
+import {Municipio} from "@/Interfaces/Municipio";
 
 export interface GrupoPromotoria {
-    nome_grupo_promotorias: string;
-    promotorias: Promotoria[];
-    eventos: Evento[];
+    id: string;
+    nome: string;
+    municipio_id: string;
+    created_at: string;
+    updated_at: string;
+    promotorias?: Promotoria[];
+    municipio?: Municipio;
 }

@@ -1,6 +1,9 @@
 <script setup lang="ts">
-import {Evento, GrupoPromotoria, Promotor, Promotoria} from '@/types';
 import { ref } from 'vue';
+import {Promotoria} from "@/Interfaces/Promotoria";
+import {EventoClientSide} from "@/Interfaces/EventoClientSide";
+import {Promotor} from "@/Interfaces/Promotor";
+import {GrupoPromotoria} from "@/Interfaces/GrupoPromotoria";
 
 const emit = defineEmits([
   'update:novoEventoAdicionado',
@@ -17,10 +20,6 @@ const props = defineProps({
     type: Array as () => Promotoria[],
     required: true,
   },
-  eventos: {
-    type: Array as () => Evento[],
-    required: true,
-  },
   promotores: {
     type: Array as () => Promotor[],
     required: true,
@@ -30,11 +29,11 @@ const props = defineProps({
 const promotoriasNaoEspecializadas = ref<Promotoria[]>(props.promotoriasMacapa?.filter((promotoria) => !promotoria.is_especializada));
 const promotoriasEspecializadas = ref<Promotoria[]>(props.promotoriasMacapa?.filter((promotoria) => promotoria.is_especializada));
 
-const enviaDadosDoNovoEvento = (nomeDoGrupoDePromotorias: string, novoEvento: Evento) => {
+const enviaDadosDoNovoEvento = (nomeDoGrupoDePromotorias: string, novoEvento: EventoClientSide) => {
   emit('update:novoEventoAdicionado', nomeDoGrupoDePromotorias, novoEvento);
 };
 
-const enviaDadosDoEventoAlterado = (eventoAlterado: Evento) => {
+const enviaDadosDoEventoAlterado = (eventoAlterado: EventoClientSide) => {
   emit('update:umEventoFoiAlterado', eventoAlterado);
 };
 
@@ -42,7 +41,7 @@ const enviaDadosDoEventoDeletado = (uuid: string) => {
   emit('delete:umEventoFoiDeletado', uuid);
 };
 
-const enviaNomeDoPromotorSelecionado = (index: number, idPromotor: string) => {  
+const enviaNomeDoPromotorSelecionado = (index: number, idPromotor: string) => {
   emit('update:nomeFoiSelecionado', index, idPromotor);
 };
 
@@ -72,7 +71,6 @@ const enviaDadosDoGrupoDePromotorias = (grupoPromotorias: GrupoPromotoria[]) => 
       />
       <TabelaPromotoriaEditor
         :promotorias="promotoriasNaoEspecializadas"
-        :eventos="props.eventos"
         @update:novoEventoAdicionado="enviaDadosDoNovoEvento"
         @update:UmEventoFoiAlterado="enviaDadosDoEventoAlterado"
         @delete:umEventoFoiDeletado="enviaDadosDoEventoDeletado"
@@ -85,7 +83,6 @@ const enviaDadosDoGrupoDePromotorias = (grupoPromotorias: GrupoPromotoria[]) => 
       </h1>
       <TabelaPromotoriaEditor
         :promotorias="promotoriasEspecializadas"
-        :eventos="props.eventos"
         @update:novoEventoAdicionado="enviaDadosDoNovoEvento"
         @update:UmEventoFoiAlterado="enviaDadosDoEventoAlterado"
         @delete:umEventoFoiDeletado="enviaDadosDoEventoDeletado"

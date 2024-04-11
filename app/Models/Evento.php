@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Evento extends Model
 {
@@ -22,30 +23,24 @@ class Evento extends Model
 
     /**
      * Converte o id para string
-     *
-     * @param  int  $value
      */
-    public function getIdAttribute($value): string
+    public function getIdAttribute(int $value): string
     {
         return (string)$value;
     }
 
     /**
      * Converte o id do promotor titular para string
-     *
-     * @param  int  $value
      */
-    public function getPromotorTitularIdAttribute($value): string
+    public function getPromotorTitularIdAttribute(int $value): string
     {
         return (string)$value;
     }
 
     /**
      * Converte o id do promotor designado para string
-     *
-     * @param  int  $value
      */
-    public function getPromotorDesignadoIdAttribute($value): string
+    public function getPromotorDesignadoIdAttribute(int $value): string
     {
         return (string)$value;
     }
@@ -53,7 +48,7 @@ class Evento extends Model
     /**
      * Busca o promotor titular do evento
      */
-    public function promotorTitular(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function promotorTitular(): BelongsTo
     {
         return $this->belongsTo(Promotor::class);
     }
@@ -61,7 +56,7 @@ class Evento extends Model
     /**
      * Busca o promotor designado para o evento
      */
-    public function promotorDesignado(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function promotorDesignado(): BelongsTo
     {
         return $this->belongsTo(Promotor::class);
     }

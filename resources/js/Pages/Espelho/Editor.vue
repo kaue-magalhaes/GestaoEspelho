@@ -1,19 +1,18 @@
 <script setup lang="ts">
+import {UrgenciaAtendimento} from "@/Interfaces/UrgenciaAtendimento";
+import {Promotor} from "@/Interfaces/Promotor";
+import {Espelho} from "@/Interfaces/Espelho";
+import {Evento} from "@/Interfaces/Evento";
+import {GrupoPromotoria} from "@/Interfaces/GrupoPromotoria";
+import {UrgenciaAtendimentoClientSide} from "@/Interfaces/UrgenciaAtendimentoClientSide";
+import {Atribuicoes} from "@/Interfaces/Atribuicoes";
+import {EventoClientSide} from "@/Interfaces/EventoClientSide";
+
 import { ref, onBeforeMount } from 'vue';
 import { Head } from '@inertiajs/vue3';
 import { format } from 'date-fns';
 import axios from 'axios';
 import { toast } from 'vue-sonner';
-import {
-    GrupoPromotoria,
-    Atribuicoes,
-    Espelho,
-    Promotor,
-    EventoServerSide,
-    Evento,
-    UrgenciaAtendimentoServeSide,
-    UrgenciaAtendimentoClientSide
-} from '@/types';
 import { Loader2 } from 'lucide-vue-next'
 
 const props = defineProps({
@@ -26,15 +25,15 @@ const props = defineProps({
         required: true,
     },
     eventos: {
-        type: Array as () => EventoServerSide[],
+        type: Array as () => Evento[],
         required: true,
     },
     urgenciaAtendimentos: {
-        type: Array as () => UrgenciaAtendimentoServeSide[],
+        type: Array as () => UrgenciaAtendimento[],
         required: true,
     },
 });
-const eventosComUUID = ref<Evento[]>([]);
+const eventosComUUID = ref<EventoClientSide[]>([]);
 
 const periodoEspelho = ref<string[]>([
     format(stringToDate(props.espelho?.periodo_inicio), 'dd/MM/yyyy'),
@@ -43,7 +42,7 @@ const periodoEspelho = ref<string[]>([
 const grupoDeTodasAsPromotoriasDados = ref<GrupoPromotoria[]>([]);
 const atendimentosUrgenciaDados = ref<UrgenciaAtendimentoClientSide[]>([]);
 const listaAtribuicoes = ref<Atribuicoes[]>([]);
-const listaEventos = ref<Evento[]>([]);
+const listaEventos = ref<EventoClientSide[]>([]);
 const salvo = ref(false);
 const exibirBotaoSalvar = ref(false);
 const exibirBotaoPublicar = ref(false);
@@ -79,7 +78,7 @@ const updateAtendimentosUrgencia = (value: []) => {
     exibirBotaoPublicar.value = true;
 };
 
-const updateListaEventos = (value: Evento[]) => {
+const updateListaEventos = (value: EventoClientSide[]) => {
     listaEventos.value = value;
     exibirBotaoSalvar.value = true;
     exibirBotaoPublicar.value = true;
@@ -90,59 +89,55 @@ function stringToDate(dateString: string) {
     return new Date(year, month - 1, day);
 }
 
-const salvarEspelho = async () =>
-    {
-        carregandoSalvamento.value = true;
-        const data = {
-            periodoEspelho: periodoEspelho.value,
-            listaEventos: listaEventos.value,
-            atendimentosUrgenciaDados: atendimentosUrgenciaDados.value,
-        };
+const salvarEspelho = async () => {
+    carregandoSalvamento.value = true;
+    const data = {
+        periodoEspelho: periodoEspelho.value,
+        listaEventos: listaEventos.value,
+        atendimentosUrgenciaDados: atendimentosUrgenciaDados.value,
+    };
 
-        try {
-            await axios.put(`/espelho/${props.espelho.id}`, data);
-            exibirBotaoSalvar.value = false;
-            carregandoSalvamento.value = false;
-            salvo.value = true;
+    try {
+        await axios.put(`/espelho/${props.espelho.id}`, data);
+        exibirBotaoSalvar.value = false;
+        carregandoSalvamento.value = false;
+        salvo.value = true;
 
-            toast('Alteração salva!', {
-                description: 'As alterações foram salvas com sucesso.',
-            });
+        toast('Alteração salva!', {
+            description: 'As alterações foram salvas com sucesso.',
+        });
 
-        } catch (error) {
-            console.error(error);
-        }
+    } catch (error) {
+        console.error(error);
     }
-;
+}
 
-const publicarEspelho = async () =>
-    {
-        carregandoPublicacao.value = true;
-        const data = {
-            periodoEspelho: periodoEspelho.value,
-            listaEventos: listaEventos.value,
-            atendimentosUrgenciaDados: atendimentosUrgenciaDados.value,
-        };
+const publicarEspelho = async () => {
+    carregandoPublicacao.value = true;
+    const data = {
+        periodoEspelho: periodoEspelho.value,
+        listaEventos: listaEventos.value,
+        atendimentosUrgenciaDados: atendimentosUrgenciaDados.value,
+    };
 
-        try {
-            await axios.post(`/espelho/publicar/${props.espelho.id}`, data);
-            exibirBotaoPublicar.value = false;
-            carregandoPublicacao.value = false;
-            salvo.value = false;
+    try {
+        await axios.post(`/espelho/publicar/${props.espelho.id}`, data);
+        exibirBotaoPublicar.value = false;
+        carregandoPublicacao.value = false;
+        salvo.value = false;
 
-            toast('Espelho publicado!', {
-                description: 'O espelho foi publicado com sucesso.',
-            });
-        } catch (error) {
-            console.error(error);
-        }
+        toast('Espelho publicado!', {
+            description: 'O espelho foi publicado com sucesso.',
+        });
+    } catch (error) {
+        console.error(error);
     }
-;
+}
 
-const processaEventos = (eventos: EventoServerSide[]) => {
+const processaEventos = (eventos: Evento[]) => {
     return eventos.map(evento => ({
         uuid: evento.id,
-        titulo: evento.titulo,
+        titulo: evento.titulo ? evento.titulo : '',
         tipo: evento.tipo,
         periodo_inicio: evento.periodo_inicio,
         periodo_fim: evento.periodo_fim,
@@ -151,12 +146,14 @@ const processaEventos = (eventos: EventoServerSide[]) => {
     }));
 };
 
-const processaUrgenciaAtendimentos = (urgenciaAtendimentos: UrgenciaAtendimentoServeSide[]) => {
+const processaUrgenciaAtendimentos = (urgenciaAtendimentos: UrgenciaAtendimento[]) => {
     return urgenciaAtendimentos.map(atendimentoUrgencia => ({
         uuid: atendimentoUrgencia.id,
         periodo_inicio: atendimentoUrgencia.periodo_inicio,
         periodo_fim: atendimentoUrgencia.periodo_fim,
         promotor_designado_id: atendimentoUrgencia.promotor_designado_id,
+        created_at: atendimentoUrgencia.created_at,
+        updated_at: atendimentoUrgencia.updated_at,
     }));
 };
 
