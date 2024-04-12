@@ -14,10 +14,16 @@ import { format } from 'date-fns';
 import axios from 'axios';
 import { toast } from 'vue-sonner';
 import { Loader2 } from 'lucide-vue-next'
+import {Promotoria} from "@/Interfaces/Promotoria";
 
 const props = defineProps({
     espelho: {
         type: Object as () => Espelho,
+        required: true,
+    },
+    grupoPromotorias: Array as () => GrupoPromotoria[],
+    promotorias: {
+        type: Array as () => Promotoria[],
         required: true,
     },
     promotores: {
@@ -174,8 +180,9 @@ onBeforeMount(() => {
                     <CarouselItem>
                         <Editor
                             :espelho="espelho"
-                            :promotorias="espelho.promotorias"
                             :promotores="props.promotores"
+                            :grupoPromotorias="props.grupoPromotorias"
+                            :promotorias="props.promotorias"
                             :eventos="eventosComUUID"
                             :urgenciaAtendimentos="props.urgenciaAtendimentos"
                             @update:periodoEspelho="updatePeriodoEspelho"

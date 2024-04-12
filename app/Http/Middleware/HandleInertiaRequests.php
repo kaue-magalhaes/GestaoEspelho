@@ -54,7 +54,7 @@ class HandleInertiaRequests extends Middleware
             ],
             'promotorias' => [
                 'all' => Promotoria::query()
-                    ->with(['promotor', 'espelho', 'grupoPromotoria'])
+                    ->with(['promotor', 'grupoPromotoria'])
                     ->get()
                     ->toArray(),
             ],

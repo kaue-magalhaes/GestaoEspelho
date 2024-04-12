@@ -6,6 +6,7 @@ use App\Events\EspelhoUpdatedEvent;
 use App\Events\PublicarEspelhoEvent;
 use App\Models\Espelho;
 use App\Models\Evento;
+use App\Models\GrupoPromotoria;
 use App\Models\Historico\Historico;
 use App\Models\Historico\HistoricoEspelho;
 use App\Models\Historico\HistoricoEvento;
@@ -13,6 +14,7 @@ use App\Models\Historico\HistoricoPromotor;
 use App\Models\Historico\HistoricoPromotoria;
 use App\Models\Historico\HistoricoUrgenciaAtendimento;
 use App\Models\Promotor;
+use App\Models\Promotoria;
 use App\Models\UrgenciaAtendimento;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
@@ -35,9 +37,16 @@ class EspelhoController extends Controller
         //dd($espelho, $promotores, $eventos, $urgenciaAtendimentos);
 
         return Inertia::render('Espelho/Editor', [
-            'espelho'              => $espelho,
-            'promotores'           => $promotores,
-            'promotorias'          => $espelho['promotorias'],
+            'espelho'          => $espelho,
+            'promotores'       => $promotores,
+            'grupoPromotorias' => GrupoPromotoria::query()
+                ->with(['promotorias', 'promotorias.promotor', 'municipio'])
+                ->get()
+                ->toArray(),
+            'promotorias' => Promotoria::query()
+                ->with(['promotor', 'grupoPromotoria', 'grupoPromotoria.municipio'])
+                ->get()
+                ->toArray(),
             'eventos'              => $eventos,
             'urgenciaAtendimentos' => $urgenciaAtendimentos,
         ]);

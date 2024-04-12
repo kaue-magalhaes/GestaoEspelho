@@ -29,6 +29,7 @@ const props = defineProps({
         type: Array as () => Promotor[],
         required: true,
     },
+    grupoPromotorias: Array as () => GrupoPromotoria[],
     promotorias: {
         type: Array as () => Promotoria[],
         required: true,
@@ -274,7 +275,8 @@ onBeforeMount(() => {
 
             <CardContent>
                 <EntranciaFinalMacapaEditor
-                    :promotoriasMacapa="props.promotorias?.filter((promotoria) => promotoria.grupoPromotoria?.municipio?.nome === 'Macapá')"
+                    :grupoPromotorias="grupoPromotorias?.filter((grupoPromotoria) => grupoPromotoria.municipio?.nome === 'Macapá')"
+                    :promotorias="props.promotorias?.filter((promotoria) => promotoria.grupo_promotoria?.municipio?.nome === 'Macapá')"
                     :promotores="props.promotores"
                     :urgenciaAtendimentos="props.urgenciaAtendimentos"
                     @update:novoEventoAdicionado="adicionaEventoNoGrupoDePromotorias"
@@ -287,7 +289,7 @@ onBeforeMount(() => {
 
                 />
                 <EntranciaFinalSantanaEditor
-                    :promotoriasSantana="props.promotorias?.filter((promotoria) => promotoria.grupoPromotoria?.municipio?.nome === 'Santana')"
+                    :promotoriasSantana="props.promotorias?.filter((promotoria) => promotoria.grupo_promotoria?.municipio?.nome === 'Santana')"
                     :promotores="props.promotores"
                     @update:novoEventoAdicionado="adicionaEventoNoGrupoDePromotorias"
                     @update:umEventoFoiAlterado="alteraEventoNoGrupoDePromotorias"
@@ -295,7 +297,7 @@ onBeforeMount(() => {
                     @update:grupoPromotorias="adicionaDadosNoGrupoDePromotorias"
                 />
                 <EntranciaInicialEditor
-                    :promotoriasInterior="props.promotorias?.filter((promotoria) => promotoria.grupoPromotoria?.municipio?.nome !== 'Macapá' && promotoria.grupoPromotoria?.municipio?.nome !== 'Santana')"
+                    :promotoriasInterior="props.promotorias?.filter((promotoria) => promotoria.grupo_promotoria?.municipio?.nome !== 'Macapá' && promotoria.grupo_promotoria?.municipio?.nome !== 'Santana')"
                     :promotores="props.promotores"
                     @update:novoEventoAdicionado="adicionaEventoNoGrupoDePromotorias"
                     @update:umEventoFoiAlterado="alteraEventoNoGrupoDePromotorias"

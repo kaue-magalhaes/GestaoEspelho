@@ -13,5 +13,5 @@ export interface Promotoria {
     updated_at: string;
     espelho?: Espelho;
     promotor?: Promotor;
-    grupoPromotoria?: GrupoPromotoria;
+    grupo_promotoria: GrupoPromotoria;
 }
