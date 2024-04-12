@@ -1,61 +1,55 @@
 <script setup lang="ts">
-import { ref, watchEffect } from 'vue';
+import {ref, watchEffect} from 'vue';
 import {GrupoPromotoria} from "@/Interfaces/GrupoPromotoria";
 
 const props = defineProps({
-  promotorias: {
-    type: Array as () => GrupoPromotoria[],
-    required: true,
-  },
+    grupoPromotorias: {
+        type: Array as () => GrupoPromotoria[],
+        required: true,
+    },
 });
 
-const promotoriasNaoEspecializadas = ref<GrupoPromotoria[]>([]);
-const promotoriasEspecializadas = ref<GrupoPromotoria[]>([]);
+const grupoPromotoriasNaoEspecializadas = ref<GrupoPromotoria[]>([]);
+const grupoPromotoriasEspecializadas = ref<GrupoPromotoria[]>([]);
 
 watchEffect(() => {
-  props.promotorias.forEach((grupoPromotoria) => {
-    grupoPromotoria.promotorias?.forEach((promotoria) => {
-      if (promotoria.is_especializada) {
-        if (promotoriasEspecializadas.value.length === 0) {
-          promotoriasEspecializadas.value.push(grupoPromotoria);
-        } else {
-          const index = promotoriasEspecializadas.value.findIndex((promotoriaEspecializada) => promotoriaEspecializada.nome === grupoPromotoria.nome);
-          if (index === -1) {
-            promotoriasEspecializadas.value.push(grupoPromotoria);
-          }
+    props.grupoPromotorias.forEach((grupoPromotoria) => {
+        if (grupoPromotoria.promotorias){
+            let grupoPromotoriaCopyEspecializada = {...grupoPromotoria};
+            let grupoPromotoriaCopyNaoEspecializada = {...grupoPromotoria};
+            grupoPromotoriaCopyEspecializada.promotorias = [];
+            grupoPromotoriaCopyNaoEspecializada.promotorias = [];
+            grupoPromotoria.promotorias.forEach((promotoria) => {
+                if (promotoria.is_especializada) {
+                    grupoPromotoriaCopyEspecializada.promotorias?.push(promotoria);
+                } else {
+                    grupoPromotoriaCopyNaoEspecializada.promotorias?.push(promotoria);
+                }
+            });
+            grupoPromotoriasEspecializadas.value.push(grupoPromotoriaCopyEspecializada);
+            grupoPromotoriasNaoEspecializadas.value.push(grupoPromotoriaCopyNaoEspecializada);
         }
-      } else {
-        if (promotoriasNaoEspecializadas.value.length === 0) {
-          promotoriasNaoEspecializadas.value.push(grupoPromotoria);
-        } else {
-          const index = promotoriasNaoEspecializadas.value.findIndex((promotoriaNaoEspecializada) => promotoriaNaoEspecializada.nome === grupoPromotoria.nome);
-          if (index === -1) {
-            promotoriasNaoEspecializadas.value.push(grupoPromotoria);
-          }
-        }
-      }
     });
-  });
 });
 </script>
 
 <template>
-  <div class="max-w-5xl w-full mx-auto flex flex-col items-center space-y-4" v-if="props.promotorias.length > 0">
-    <div class="w-full mx-auto flex flex-col items-center space-y-4" v-if="promotoriasNaoEspecializadas.length > 0">
-      <h1 class="text-2xl font-bold text-gray-700 dark:text-gray-200 mt-4">
-        Entrância Final – Santana
-      </h1>
-      <TabelaPromotoriaPreview
-      :grupoPromotorias="promotoriasNaoEspecializadas"
-      />
+    <div class="max-w-5xl w-full mx-auto flex flex-col items-center space-y-4" v-if="props.grupoPromotorias.length > 0">
+        <div class="w-full mx-auto flex flex-col items-center space-y-4" v-if="grupoPromotoriasNaoEspecializadas.length > 0">
+            <h1 class="text-2xl font-bold text-gray-700 dark:text-gray-200 mt-4">
+                Entrância Final – Santana
+            </h1>
+            <TabelaPromotoriaPreview
+                :grupoPromotorias="grupoPromotoriasNaoEspecializadas"
+            />
+        </div>
+        <div class="w-full mx-auto flex flex-col items-center space-y-4" v-if="grupoPromotoriasEspecializadas.length > 0">
+            <h1 class="text-2xl font-bold text-gray-700 dark:text-gray-200 mt-4">
+                Entrância Final – Santana (Especializadas)
+            </h1>
+            <TabelaPromotoriaPreview
+                :grupoPromotorias="grupoPromotoriasEspecializadas"
+            />
+        </div>
     </div>
-    <div class="w-full mx-auto flex flex-col items-center space-y-4" v-if="promotoriasEspecializadas.length > 0">
-      <h1 class="text-2xl font-bold text-gray-700 dark:text-gray-200 mt-4">
-        Entrância Final – Santana (Especializadas)
-      </h1>
-      <TabelaPromotoriaPreview
-      :grupoPromotorias="promotoriasEspecializadas"
-      />
-    </div>
-  </div>
 </template>

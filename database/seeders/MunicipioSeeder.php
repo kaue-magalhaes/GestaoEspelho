@@ -14,7 +14,11 @@ class MunicipioSeeder extends Seeder
     {
         $grupoPromotoriasNomes = [
             'Macapá',
+            'Macapá', // Duplicado
+            'Macapá', // Duplicado
             'Santana',
+            'Santana', // Duplicado
+            'Santana', // Duplicado
             'Mazagão',
             'Oiapoque',
             'Calçoene',

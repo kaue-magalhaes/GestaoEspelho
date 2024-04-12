@@ -2,7 +2,7 @@
 import {GrupoPromotoria} from "@/Interfaces/GrupoPromotoria";
 import {UrgenciaAtendimentoClientSide} from "@/Interfaces/UrgenciaAtendimentoClientSide";
 
-import {ref, watchEffect} from 'vue';
+import {onMounted, ref, watchEffect} from 'vue';
 
 const props = defineProps({
     grupoPromotorias: {
@@ -15,33 +15,25 @@ const props = defineProps({
     },
 });
 
-const promotoriasNaoEspecializadas = ref<GrupoPromotoria[]>([]);
-const promotoriasEspecializadas = ref<GrupoPromotoria[]>([]);
+const grupoPromotoriasNaoEspecializadas = ref<GrupoPromotoria[]>([]);
+const grupoPromotoriasEspecializadas = ref<GrupoPromotoria[]>([]);
 
 watchEffect(() => {
     props.grupoPromotorias.forEach((grupoPromotoria) => {
         if (grupoPromotoria.promotorias){
+            let grupoPromotoriaCopyEspecializada = {...grupoPromotoria};
+            let grupoPromotoriaCopyNaoEspecializada = {...grupoPromotoria};
+            grupoPromotoriaCopyEspecializada.promotorias = [];
+            grupoPromotoriaCopyNaoEspecializada.promotorias = [];
             grupoPromotoria.promotorias.forEach((promotoria) => {
                 if (promotoria.is_especializada) {
-                    if (promotoriasEspecializadas.value.length === 0) {
-                        promotoriasEspecializadas.value.push(grupoPromotoria);
-                    } else {
-                        const index = promotoriasEspecializadas.value.findIndex((promotoriaEspecializada) => promotoriaEspecializada.nome === grupoPromotoria.nome);
-                        if (index === -1) {
-                            promotoriasEspecializadas.value.push(grupoPromotoria);
-                        }
-                    }
+                    grupoPromotoriaCopyEspecializada.promotorias?.push(promotoria);
                 } else {
-                    if (promotoriasNaoEspecializadas.value.length === 0) {
-                        promotoriasNaoEspecializadas.value.push(grupoPromotoria);
-                    } else {
-                        const index = promotoriasNaoEspecializadas.value.findIndex((promotoriaNaoEspecializada) => promotoriaNaoEspecializada.nome === grupoPromotoria.nome);
-                        if (index === -1) {
-                            promotoriasNaoEspecializadas.value.push(grupoPromotoria);
-                        }
-                    }
+                    grupoPromotoriaCopyNaoEspecializada.promotorias?.push(promotoria);
                 }
             });
+            grupoPromotoriasEspecializadas.value.push(grupoPromotoriaCopyEspecializada);
+            grupoPromotoriasNaoEspecializadas.value.push(grupoPromotoriaCopyNaoEspecializada);
         }
     });
 });
@@ -51,7 +43,7 @@ watchEffect(() => {
     <div class="max-w-5xl w-full mx-auto flex flex-col items-center space-y-4"
          v-if="props.grupoPromotorias.length > 0 || props.urgenciaAtendimentos.length > 0">
         <div class="w-full mx-auto flex flex-col items-center space-y-4"
-             v-if="promotoriasNaoEspecializadas.length > 0 || props.urgenciaAtendimentos.length > 0">
+             v-if="grupoPromotoriasNaoEspecializadas.length > 0 || props.urgenciaAtendimentos.length > 0">
             <h1 class="text-2xl font-bold text-gray-700 dark:text-gray-200 mt-4">
                 Entrância Final – Macapá
             </h1>
@@ -60,17 +52,17 @@ watchEffect(() => {
                 :plantaoDeAtendimentos="props.urgenciaAtendimentos"
             />
             <TabelaPromotoriaPreview
-                v-if="promotoriasNaoEspecializadas.length > 0"
-                :grupoPromotorias="promotoriasNaoEspecializadas"
+                v-if="grupoPromotoriasNaoEspecializadas.length > 0"
+                :grupoPromotorias="grupoPromotoriasNaoEspecializadas"
             />
         </div>
-        <div class="w-full mx-auto flex flex-col items-center space-y-4" v-if="promotoriasEspecializadas.length > 0">
+        <div class="w-full mx-auto flex flex-col items-center space-y-4" v-if="grupoPromotoriasEspecializadas.length > 0">
             <h1 class="text-2xl font-bold text-gray-700 dark:text-gray-200 mt-4">
                 Entrância Final – Macapá (Especializadas)
             </h1>
             <TabelaPromotoriaPreview
-                v-if="promotoriasEspecializadas.length > 0"
-                :grupoPromotorias="promotoriasEspecializadas"
+                v-if="grupoPromotoriasEspecializadas.length > 0"
+                :grupoPromotorias="grupoPromotoriasEspecializadas"
             />
         </div>
     </div>

@@ -21,9 +21,12 @@ class GrupoPromotoriaSeeder extends Seeder
             'Justiça de Combate à Violência Doméstica',
             'Justiça de Direito Constitucional',
             'Justiça de Direito do Consumidor',
+            'Justiça de Direito Criminal',
+            'Justiça de Direito da Mulher',
         ];
-        foreach ($grupoPromotoriasNomes as $grupoPromotoriasNome) {
-            $municipio = Municipio::inRandomOrder()->first();
+        for ($i = 0; $i < 20; $i++) {
+            $municipio            = Municipio::inRandomOrder()->first();
+            $grupoPromotoriasNome = $grupoPromotoriasNomes[array_rand($grupoPromotoriasNomes)];
 
             if ($municipio->nome === 'Macapá' || $municipio->nome === 'Santana') {
                 GrupoPromotoria::factory()->create([

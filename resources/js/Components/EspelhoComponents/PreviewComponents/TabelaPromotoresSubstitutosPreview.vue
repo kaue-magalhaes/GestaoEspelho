@@ -47,9 +47,9 @@ function stringToDate(dateString: string) {
                   {{ atribuicao.tipo }}
                 </span>
               </span>
-              <p class="text-xs">
+              <span class="text-xs">
                 ({{ format(stringToDate(atribuicao.periodo_inicio), 'dd/MM/yyyy') }} - {{ format(stringToDate(atribuicao.periodo_fim), 'dd/MM/yyyy') }})
-              </p>
+              </span>
             </span>
           </td>
         </tr>

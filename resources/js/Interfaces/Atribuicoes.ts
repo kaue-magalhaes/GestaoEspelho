@@ -1,6 +1,6 @@
-import {EventoClientSide} from "@/Interfaces/EventoClientSide";
+import {Evento} from "@/Interfaces/Evento";
 
 export interface Atribuicoes {
     nome_promotor: string;
-    atribuicoes: EventoClientSide[];
+    atribuicoes: Evento[];
 }

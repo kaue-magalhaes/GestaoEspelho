@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import {onMounted, ref} from 'vue';
-import {format} from 'date-fns';
-
-import {Plus, Trash} from 'lucide-vue-next';
-import {usePage} from "@inertiajs/vue3";
 import {Promotor} from "@/Interfaces/Promotor";
 import {UrgenciaAtendimento} from "@/Interfaces/UrgenciaAtendimento";
+
+import {usePage} from "@inertiajs/vue3";
+import {ref} from 'vue';
+
+import {Plus, Trash} from 'lucide-vue-next';
+import {format} from 'date-fns';
 
 const page = usePage();
 const emit = defineEmits([
@@ -63,10 +64,6 @@ function stringToDate(dateString: string) {
     const [year, month, day] = dateString.split('-').map(Number);
     return new Date(year, month - 1, day);
 }
-
-onMounted(() => {
-    //console.log(plantaoDeAtendimentos.value);
-});
 </script>
 
 <template>
@@ -87,9 +84,12 @@ onMounted(() => {
                     <SelectContent>
                         <SelectGroup>
                             <SelectLabel>Promotores</SelectLabel>
-                            <SelectItem v-for="promotor in promotoresQuePodemAtender" :key="promotor.id"
-                                        :value="promotor.id"
-                                        @click="adicionaNomeDoPromotorSelecionado(index, promotor.id)">
+                            <SelectItem
+                                v-for="promotor in promotoresQuePodemAtender" :key="promotor.id"
+                                :value="promotor.id"
+
+                                @click="adicionaNomeDoPromotorSelecionado(index, promotor.id)"
+                            >
                                 {{ promotor.nome }}
                             </SelectItem>
                         </SelectGroup>
@@ -104,13 +104,11 @@ onMounted(() => {
                     v-if="input.periodo_fim !== '' && input.periodo_inicio !== ''"
                     :period_start="stringToDate(input.periodo_inicio)"
                     :period_end="stringToDate(input.periodo_fim)"
-                    :range="true"
                     :was-changed="true"
                     @update:period="adicionaPeriodoDeAtendimentoSelecionado(index, $event)"
                 />
                 <DatePicker
                     v-else
-                    :range="true"
                     :was-changed="false"
                     @update:period="adicionaPeriodoDeAtendimentoSelecionado(index, $event)"
                 />

@@ -14,10 +14,19 @@ import { format } from 'date-fns';
 import axios from 'axios';
 import { toast } from 'vue-sonner';
 import { Loader2 } from 'lucide-vue-next'
+import {Promotoria} from "@/Interfaces/Promotoria";
 
 const props = defineProps({
     espelho: {
         type: Object as () => Espelho,
+        required: true,
+    },
+    grupoPromotorias: {
+        type: Array as () => GrupoPromotoria[],
+        required: true,
+    },
+    promotorias: {
+        type: Array as () => Promotoria[],
         required: true,
     },
     promotores: {
@@ -39,7 +48,7 @@ const periodoEspelho = ref<string[]>([
     format(stringToDate(props.espelho?.periodo_inicio), 'dd/MM/yyyy'),
     format(stringToDate(props.espelho?.periodo_fim), 'dd/MM/yyyy'),
 ]);
-const grupoDeTodasAsPromotoriasDados = ref<GrupoPromotoria[]>([]);
+const grupoDeTodasAsPromotoriasDados = ref<GrupoPromotoria[]>(props.grupoPromotorias);
 const atendimentosUrgenciaDados = ref<UrgenciaAtendimentoClientSide[]>([]);
 const listaAtribuicoes = ref<Atribuicoes[]>([]);
 const listaEventos = ref<EventoClientSide[]>([]);
@@ -174,8 +183,9 @@ onBeforeMount(() => {
                     <CarouselItem>
                         <Editor
                             :espelho="espelho"
-                            :promotorias="espelho.promotorias"
                             :promotores="props.promotores"
+                            :grupoPromotorias="props.grupoPromotorias"
+                            :promotorias="props.promotorias"
                             :eventos="eventosComUUID"
                             :urgenciaAtendimentos="props.urgenciaAtendimentos"
                             @update:periodoEspelho="updatePeriodoEspelho"

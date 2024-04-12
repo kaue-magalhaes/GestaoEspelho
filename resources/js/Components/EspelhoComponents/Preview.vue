@@ -29,40 +29,36 @@ const promotoriasSantana = ref<GrupoPromotoria[]>([]);
 const promotoriasInterior = ref<GrupoPromotoria[]>([]);
 
 watchEffect(() => {
-    props.grupoPromotoriaDeTodasAsPromotorias.forEach((grupoPromotoria) => {
-        if (grupoPromotoria.promotorias) {
-            grupoPromotoria.promotorias.forEach((promotoria) => {
-                if (promotoria.grupoPromotoria){
-                    if (promotoria.grupoPromotoria.municipio){
-                        if (promotoria.grupoPromotoria.municipio.nome === 'Macapá') {
-                            promotoriasMacapa.value.push(grupoPromotoria);
-                        } else if (promotoria.grupoPromotoria.municipio.nome === 'Santana') {
-                            promotoriasSantana.value.push(grupoPromotoria);
-                        } else {
-                            if (promotoriasInterior.value.length === 0) {
-                                promotoriasInterior.value.push(grupoPromotoria);
-                            } else {
-                                const index = promotoriasInterior.value.findIndex((grupoPromotoriaInterior) => grupoPromotoriaInterior.nome === grupoPromotoria.nome);
-                                if (index === -1) {
-                                    promotoriasInterior.value.push(grupoPromotoria);
-                                }
-                            }
-                        }
-                    }
-                }
-            });
-        }
-    });
+    const municipios : Record<string, GrupoPromotoria[]> = {
+        'Macapa': [],
+        'Santana': [],
+        'Interior': []
+    };
 
     if (props.grupoPromotoriaDeTodasAsPromotorias.length === 0) {
         promotoriasMacapa.value = [];
         promotoriasSantana.value = [];
         promotoriasInterior.value = [];
+        return;
     }
+    props.grupoPromotoriaDeTodasAsPromotorias.forEach((grupoPromotoria) => {
+        const municipioNome = grupoPromotoria?.municipio?.nome;
+        if (municipioNome === 'Macapá') {
+            municipios['Macapa'].push(grupoPromotoria);
+        }
+        else if (municipioNome === 'Santana') {
+            municipios['Santana'].push(grupoPromotoria);
+        }
+        else {
+            if (municipios['Interior'].findIndex((grupo) => grupo.nome === grupoPromotoria.nome) === -1) {
+                municipios['Interior'].push(grupoPromotoria);
+            }
+        }
+    });
 
-    /* console.log('promotoriasMacapa', promotoriasMacapa.value);
-    console.log('promotoriasSantana', promotoriasSantana.value);
-    console.log('promotoriasInterior', promotoriasInterior.value); */
+    promotoriasMacapa.value = municipios['Macapa'];
+    promotoriasSantana.value = municipios['Santana'];
+    promotoriasInterior.value = municipios['Interior'];
 });
 </script>
 
@@ -107,7 +103,7 @@ watchEffect(() => {
             />
             <EntranciaFinalSantanaPreview
                 v-if="promotoriasSantana.length > 0"
-                :promotorias="promotoriasSantana"
+                :grupoPromotorias="promotoriasSantana"
             />
             <EntranciaInicialPreview
                 v-if="promotoriasInterior.length > 0"
