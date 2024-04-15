@@ -21,7 +21,10 @@ const props = defineProps({
         type: Object as () => Espelho,
         required: true,
     },
-    grupoPromotorias: Array as () => GrupoPromotoria[],
+    grupoPromotorias: {
+        type: Array as () => GrupoPromotoria[],
+        required: true,
+    },
     promotorias: {
         type: Array as () => Promotoria[],
         required: true,
@@ -39,16 +42,16 @@ const props = defineProps({
         required: true,
     },
 });
-const eventosComUUID = ref<EventoClientSide[]>([]);
+const eventosComUUID = ref<Evento[]>([]);
 
 const periodoEspelho = ref<string[]>([
     format(stringToDate(props.espelho?.periodo_inicio), 'dd/MM/yyyy'),
     format(stringToDate(props.espelho?.periodo_fim), 'dd/MM/yyyy'),
 ]);
-const grupoDeTodasAsPromotoriasDados = ref<GrupoPromotoria[]>([]);
+const grupoDeTodasAsPromotoriasDados = ref<GrupoPromotoria[]>(props.grupoPromotorias);
 const atendimentosUrgenciaDados = ref<UrgenciaAtendimentoClientSide[]>([]);
 const listaAtribuicoes = ref<Atribuicoes[]>([]);
-const listaEventos = ref<EventoClientSide[]>([]);
+const listaEventos = ref<Evento[]>([]);
 const salvo = ref(false);
 const exibirBotaoSalvar = ref(false);
 const exibirBotaoPublicar = ref(false);
@@ -84,7 +87,7 @@ const updateAtendimentosUrgencia = (value: []) => {
     exibirBotaoPublicar.value = true;
 };
 
-const updateListaEventos = (value: EventoClientSide[]) => {
+const updateListaEventos = (value: Evento[]) => {
     listaEventos.value = value;
     exibirBotaoSalvar.value = true;
     exibirBotaoPublicar.value = true;
@@ -142,7 +145,8 @@ const publicarEspelho = async () => {
 
 const processaEventos = (eventos: Evento[]) => {
     return eventos.map(evento => ({
-        uuid: evento.id,
+        id: evento.id,
+        uuid: evento.uuid,
         titulo: evento.titulo ? evento.titulo : '',
         tipo: evento.tipo,
         periodo_inicio: evento.periodo_inicio,

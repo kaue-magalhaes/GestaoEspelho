@@ -1,8 +1,11 @@
 <script setup lang="ts">
+import {Promotor} from "@/Interfaces/Promotor";
+import {Promotoria} from "@/Interfaces/Promotoria";
+import {GrupoPromotoria} from "@/Interfaces/GrupoPromotoria";
+
 import { ref, onMounted } from 'vue';
 import { format } from 'date-fns';
 import { v4 as uuidv4 } from 'uuid';
-import {Promotor} from "@/Interfaces/Promotor";
 
 const emit = defineEmits([
     'update:adicionaEvento',
@@ -13,12 +16,16 @@ const props = defineProps({
         type: Array as () => Promotor[] ,
         required: true,
     },
-    nomeMunicipio: {
-        type: String,
+    grupoPromotoria: {
+        type: Object as () => GrupoPromotoria,
         required: true,
     },
-    nomePromotor: {
-        type: String,
+    promotoria: {
+        type: Object as () => Promotoria,
+        required: true,
+    },
+    promotorTitular: {
+        type: Object as () => Promotor,
         required: true,
     },
 });
@@ -69,9 +76,21 @@ const updatePeriodo = (periodo: { start: Date; end: Date } | any, alterado: bool
     periodoEventoAlterado.value = alterado;
 };
 
-const enviaDadosDoEvento = (evento: { titulo: string; tipo: string; periodo: { start: Date; end: Date }; promotor_titular_id: string; promotor_designado_id: string }) => {
+const enviaDadosDoEvento = (
+    grupoPromotoriaID: string,
+    promotoriaID: string,
+    evento: {
+        id: string;
+        titulo: string;
+        tipo: string;
+        periodo: { start: Date; end: Date };
+        promotor_titular_id: string;
+        promotor_designado_id: string
+    }
+) => {
     if (verificaSeDadosDoEventoSaoValidos()) {
         const novoEvento = {
+            id: '',
             uuid: uuidv4(),
             titulo: evento.titulo,
             tipo: evento.tipo,
@@ -81,7 +100,7 @@ const enviaDadosDoEvento = (evento: { titulo: string; tipo: string; periodo: { s
             promotor_designado_id: evento.promotor_designado_id,
         };
 
-        emit('update:adicionaEvento', props.nomeMunicipio, novoEvento);
+        emit('update:adicionaEvento', grupoPromotoriaID, promotoriaID, novoEvento);
         resetarInformacoes();
         dialogOpen.value = false;
     }
@@ -105,7 +124,7 @@ onMounted(() => {
                     Adicionar Evento
                 </DialogTitle>
                 <DialogDescription>
-                    Adicione um evento para o Promotor de Justiça {{ nomePromotor }}.
+                    Adicione um evento para o Promotor de Justiça {{ props.promotorTitular.nome }}.
                 </DialogDescription>
             </DialogHeader>
             <div class="flex flex-col space-y-4">
@@ -160,7 +179,7 @@ onMounted(() => {
                             <SelectContent>
                                 <SelectGroup>
                                     <SelectLabel>Promotores</SelectLabel>
-                                    <SelectItem v-for="promotor in props.promotores" :key="promotor.id" :value="promotor.nome">
+                                    <SelectItem v-for="promotor in props.promotores" :key="promotor.id" :value="promotor.id">
                                         {{ promotor.nome }}
                                     </SelectItem>
                                 </SelectGroup>
@@ -174,13 +193,20 @@ onMounted(() => {
                 <Button variant="destructive" @click="resetarInformacoes">
                     Cancelar
                 </Button>
-                <Button variant="default" @click="enviaDadosDoEvento({
-                    tipo: tipoEvento,
-                    periodo: periodoEvento,
-                    titulo: tituloEvento,
-                    promotor_titular_id: props.promotores.find(promotor => promotor.nome === props.nomePromotor)?.id || '',
-                    promotor_designado_id: props.promotores.find(promotor => promotor.nome === promotor_designado_evento)?.id || ''
-                })">
+                <Button
+                    variant="default"
+                    @click="enviaDadosDoEvento(
+                        props.grupoPromotoria?.id,
+                        props.promotoria?.id,
+                        {
+                            tipo: tipoEvento,
+                            periodo: periodoEvento,
+                            titulo: tituloEvento,
+                            promotor_titular_id: props.promotorTitular.id,
+                            promotor_designado_id: promotor_designado_evento
+                        }
+                    )"
+                >
                     Adicionar Evento
                 </Button>
             </DialogFooter>

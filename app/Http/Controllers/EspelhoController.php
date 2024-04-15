@@ -40,11 +40,11 @@ class EspelhoController extends Controller
             'espelho'          => $espelho,
             'promotores'       => $promotores,
             'grupoPromotorias' => GrupoPromotoria::query()
-                ->with(['promotorias', 'promotorias.promotor', 'municipio'])
+                ->with(['promotorias', 'promotorias.promotor', 'municipio', 'promotorias.promotor.eventos'])
                 ->get()
                 ->toArray(),
             'promotorias' => Promotoria::query()
-                ->with(['promotor', 'grupoPromotoria', 'grupoPromotoria.municipio'])
+                ->with(['promotor', 'grupoPromotoria', 'grupoPromotoria.municipio', 'promotor.eventos'])
                 ->get()
                 ->toArray(),
             'eventos'              => $eventos,

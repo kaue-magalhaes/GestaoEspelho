@@ -5,6 +5,7 @@ import {Promotor} from "@/Interfaces/Promotor";
 import {GrupoPromotoria} from "@/Interfaces/GrupoPromotoria";
 
 import {onMounted, ref} from "vue";
+import {Evento} from "@/Interfaces/Evento";
 
 const emit = defineEmits([
     'update:novoEventoAdicionado',
@@ -17,7 +18,10 @@ const emit = defineEmits([
 ]);
 
 const props = defineProps({
-    grupoPromotorias: Array as () => GrupoPromotoria[],
+    grupoPromotorias: {
+        type: Array as () => GrupoPromotoria[],
+        required: true,
+    },
     promotorias: {
         type: Array as () => Promotoria[],
         required: true,
@@ -28,25 +32,26 @@ const props = defineProps({
     },
 });
 
-const promotoriasMacapa= ref<Promotoria[]>(props.promotorias);
-
-const promotoriasNaoEspecializadas = ref<Promotoria[]>(promotoriasMacapa.value.filter((promotoria) =>
+const promotoriasNaoEspecializadas = ref<Promotoria[]>(props.promotorias.filter((promotoria) =>
     !promotoria.is_especializada
 ));
-const promotoriasEspecializadas = ref<Promotoria[]>(promotoriasMacapa.value.filter((promotoria) =>
+const promotoriasEspecializadas = ref<Promotoria[]>(props.promotorias.filter((promotoria) =>
     promotoria.is_especializada
 ));
 
-const enviaDadosDoNovoEvento = (nomeDoGrupoDePromotorias: string, novoEvento: EventoClientSide) => {
-    emit('update:novoEventoAdicionado', nomeDoGrupoDePromotorias, novoEvento);
+const grupoDePromotoriasNaoEspecializadas = ref<GrupoPromotoria[]>(props.grupoPromotorias);
+const grupoDePromotoriasEspecializadas = ref<GrupoPromotoria[]>(props.grupoPromotorias);
+
+const enviaDadosDoNovoEvento = (grupoDePromotoriaID: String, promotoriaID: String, novoEvento: Evento) => {
+    emit('update:novoEventoAdicionado', grupoDePromotoriaID, promotoriaID, novoEvento);
 };
 
 const enviaDadosDoEventoAlterado = (eventoAlterado: EventoClientSide) => {
     emit('update:umEventoFoiAlterado', eventoAlterado);
 };
 
-const enviaDadosDoEventoDeletado = (uuid: string) => {
-    emit('delete:umEventoFoiDeletado', uuid);
+const enviaDadosDoEventoDeletado = (eventoDeletado: Evento) => {
+    emit('delete:umEventoFoiDeletado', eventoDeletado);
 };
 
 const enviaNomeDoPromotorSelecionado = (index: number, idPromotor: string) => {
@@ -65,8 +70,20 @@ const enviaDadosDoGrupoDePromotorias = (grupoPromotorias: GrupoPromotoria[]) => 
     emit('update:grupoPromotorias', grupoPromotorias);
 };
 
+const filtraGrupoPromotoria = (grupoPromotorias: GrupoPromotoria[], promotoriasSelecionadas: Promotoria[]) => {
+    const grupoValue: GrupoPromotoria[] = [];
+    grupoPromotorias.forEach((grupo) => {
+        const value = grupo.promotorias?.filter((promotoria) => promotoriasSelecionadas.some((promotoriaSelecionada) => promotoriaSelecionada.id === promotoria.id));
+        if (value && value.length > 0) {
+            grupoValue.push({...grupo, promotorias: value});
+        }
+    })
+    return grupoValue;
+}
+
 onMounted(() => {
-    //console.log(props.grupoPromotorias);
+    grupoDePromotoriasNaoEspecializadas.value = filtraGrupoPromotoria(grupoDePromotoriasNaoEspecializadas.value, promotoriasNaoEspecializadas.value);
+    grupoDePromotoriasEspecializadas.value = filtraGrupoPromotoria(grupoDePromotoriasEspecializadas.value, promotoriasEspecializadas.value);
 });
 </script>
 
@@ -82,8 +99,7 @@ onMounted(() => {
                 @update:periodoDoAtendimentoFoiSelecionado="enviaPeriodoDoAtendimentoSelecionado"
             />
             <TabelaPromotoriaEditor
-                :grupoPromotorias="grupoPromotorias"
-                :promotorias="promotoriasNaoEspecializadas"
+                :grupoPromotorias="grupoDePromotoriasNaoEspecializadas"
                 @update:novoEventoAdicionado="enviaDadosDoNovoEvento"
                 @update:UmEventoFoiAlterado="enviaDadosDoEventoAlterado"
                 @delete:umEventoFoiDeletado="enviaDadosDoEventoDeletado"
@@ -95,8 +111,7 @@ onMounted(() => {
                 Entrância Final – Macapá (Especializadas)
             </h1>
             <TabelaPromotoriaEditor
-                :grupoPromotorias="grupoPromotorias"
-                :promotorias="promotoriasEspecializadas"
+                :grupoPromotorias="grupoDePromotoriasEspecializadas"
                 @update:novoEventoAdicionado="enviaDadosDoNovoEvento"
                 @update:UmEventoFoiAlterado="enviaDadosDoEventoAlterado"
                 @delete:umEventoFoiDeletado="enviaDadosDoEventoDeletado"
