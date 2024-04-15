@@ -1,12 +1,14 @@
 import {Promotor} from "@/Interfaces/Promotor";
 
-export interface UrgenciaAtendimento {
+export interface HistoricoEvento {
     id: string;
     uuid?: string;
+    titulo?: string;
+    tipo: string;
     periodo_inicio: string;
     periodo_fim: string;
+    promotor_titular_id: string;
     promotor_designado_id: string;
-    created_at: string;
-    updated_at: string;
-    promotor?: Promotor;
+    promotorTitular?: Promotor;
+    promotorDesignado?: Promotor;
 }

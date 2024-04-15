@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import {GrupoPromotoria} from "@/Interfaces/GrupoPromotoria";
-import {UrgenciaAtendimentoClientSide} from "@/Interfaces/UrgenciaAtendimentoClientSide";
+import {UrgenciaAtendimento} from "@/Interfaces/UrgenciaAtendimento";
 
-import {onMounted, ref, watchEffect} from 'vue';
+import {ref, watchEffect} from 'vue';
 
 const props = defineProps({
     grupoPromotorias: {
@@ -10,7 +10,7 @@ const props = defineProps({
         required: true,
     },
     urgenciaAtendimentos: {
-        type: Array as () => UrgenciaAtendimentoClientSide[],
+        type: Array as () => UrgenciaAtendimento[],
         required: true,
     },
 });

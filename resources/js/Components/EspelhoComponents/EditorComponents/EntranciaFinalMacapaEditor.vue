@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import {Promotoria} from "@/Interfaces/Promotoria";
-import {EventoClientSide} from "@/Interfaces/EventoClientSide";
 import {Promotor} from "@/Interfaces/Promotor";
 import {GrupoPromotoria} from "@/Interfaces/GrupoPromotoria";
 
@@ -14,7 +13,6 @@ const emit = defineEmits([
     'update:nomeFoiSelecionado',
     'update:periodoDoAtendimentoFoiSelecionado',
     'delete:inputDeDadosFoiDeletado',
-    'update:grupoPromotorias'
 ]);
 
 const props = defineProps({
@@ -46,8 +44,8 @@ const enviaDadosDoNovoEvento = (grupoDePromotoriaID: String, promotoriaID: Strin
     emit('update:novoEventoAdicionado', grupoDePromotoriaID, promotoriaID, novoEvento);
 };
 
-const enviaDadosDoEventoAlterado = (eventoAlterado: EventoClientSide) => {
-    emit('update:umEventoFoiAlterado', eventoAlterado);
+const enviaDadosDoEventoAlterado = (grupoDePromotoriaID: String, promotoriaID: String, eventoAlterado: Evento) => {
+    emit('update:umEventoFoiAlterado', grupoDePromotoriaID, promotoriaID, eventoAlterado);
 };
 
 const enviaDadosDoEventoDeletado = (eventoDeletado: Evento) => {
@@ -64,10 +62,6 @@ const enviaPeriodoDoAtendimentoSelecionado = (index: number, periodo_start: stri
 
 const enviaIndexInputDeDadosDeletado = (index: number) => {
     emit('delete:inputDeDadosFoiDeletado', index);
-};
-
-const enviaDadosDoGrupoDePromotorias = (grupoPromotorias: GrupoPromotoria[]) => {
-    emit('update:grupoPromotorias', grupoPromotorias);
 };
 
 const filtraGrupoPromotoria = (grupoPromotorias: GrupoPromotoria[], promotoriasSelecionadas: Promotoria[]) => {
@@ -101,9 +95,8 @@ onMounted(() => {
             <TabelaPromotoriaEditor
                 :grupoPromotorias="grupoDePromotoriasNaoEspecializadas"
                 @update:novoEventoAdicionado="enviaDadosDoNovoEvento"
-                @update:UmEventoFoiAlterado="enviaDadosDoEventoAlterado"
+                @update:umEventoFoiAlterado="enviaDadosDoEventoAlterado"
                 @delete:umEventoFoiDeletado="enviaDadosDoEventoDeletado"
-                @update:grupoPromotorias="enviaDadosDoGrupoDePromotorias"
             />
         </div>
         <div class="max-w-5xl w-full mx-auto flex flex-col items-center space-y-4">
@@ -113,9 +106,8 @@ onMounted(() => {
             <TabelaPromotoriaEditor
                 :grupoPromotorias="grupoDePromotoriasEspecializadas"
                 @update:novoEventoAdicionado="enviaDadosDoNovoEvento"
-                @update:UmEventoFoiAlterado="enviaDadosDoEventoAlterado"
+                @update:umEventoFoiAlterado="enviaDadosDoEventoAlterado"
                 @delete:umEventoFoiDeletado="enviaDadosDoEventoDeletado"
-                @update:grupoPromotorias="enviaDadosDoGrupoDePromotorias"
             />
         </div>
     </div>

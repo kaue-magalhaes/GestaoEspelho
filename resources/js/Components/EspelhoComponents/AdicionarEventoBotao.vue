@@ -80,7 +80,6 @@ const enviaDadosDoEvento = (
     grupoPromotoriaID: string,
     promotoriaID: string,
     evento: {
-        id: string;
         titulo: string;
         tipo: string;
         periodo: { start: Date; end: Date };
@@ -90,7 +89,6 @@ const enviaDadosDoEvento = (
 ) => {
     if (verificaSeDadosDoEventoSaoValidos()) {
         const novoEvento = {
-            id: '',
             uuid: uuidv4(),
             titulo: evento.titulo,
             tipo: evento.tipo,

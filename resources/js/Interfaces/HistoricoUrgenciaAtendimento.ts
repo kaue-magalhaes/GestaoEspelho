@@ -1,4 +1,4 @@
-export interface HistoricoUrgenciaAtendimentoServeSide {
+export interface HistoricoUrgenciaAtendimento {
     id: string;
     periodo_inicio: string;
     periodo_fim: string;

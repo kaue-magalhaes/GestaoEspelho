@@ -1,7 +1,7 @@
 import {Promotor} from "@/Interfaces/Promotor";
 
 export interface Evento {
-    id: string;
+    id?: string;
     uuid?: string;
     titulo?: string;
     tipo: string;

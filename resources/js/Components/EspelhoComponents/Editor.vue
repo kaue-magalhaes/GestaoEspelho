@@ -7,7 +7,6 @@ import {Promotor} from "@/Interfaces/Promotor";
 import {Promotoria} from "@/Interfaces/Promotoria";
 import {UrgenciaAtendimento} from "@/Interfaces/UrgenciaAtendimento";
 import {GrupoPromotoria} from "@/Interfaces/GrupoPromotoria";
-import {UrgenciaAtendimentoClientSide} from "@/Interfaces/UrgenciaAtendimentoClientSide";
 import {Atribuicoes} from "@/Interfaces/Atribuicoes";
 import {Evento} from "@/Interfaces/Evento";
 
@@ -53,7 +52,7 @@ const periodoEspelho = ref({
     end: props.espelho?.periodo_fim ? stringToDate(props.espelho.periodo_fim) : new Date(),
 });
 const grupoDeTodasAsPromotorias = ref<GrupoPromotoria[]>(props.grupoPromotorias);
-const dadosDosAtendimentosUrgencia = ref<UrgenciaAtendimentoClientSide[]>([]);
+const dadosDosAtendimentosUrgencia = ref<UrgenciaAtendimento[]>([]);
 const atribuicao = ref<Atribuicoes[]>([]);
 const eventosReativos = ref<Evento[]>(props.eventos);
 
@@ -75,18 +74,32 @@ const adicionaEventoNoGrupoDePromotorias = (grupoDePromotoriaID: String, promoto
     adicionaEventoNoArrayReativoDeEventos(novoEvento);
 };
 
-const alteraEventoNoGrupoDePromotorias = (eventoAlterado: Evento) => {
-    grupoDeTodasAsPromotorias.value.forEach((grupoPromotoria) => {
-        grupoPromotoria.promotorias?.find((promotoria) => promotoria.promotor_titular_id === eventoAlterado.promotor_designado_id)?.promotor?.eventos?.forEach((evento) => {
-            if (evento.id === eventoAlterado.uuid) {
+const alteraEventoNoGrupoDePromotorias =(grupoDePromotoriaID: String, promotoriaID: String, eventoAlterado: Evento) => {
+    grupoDeTodasAsPromotorias.value.find((grupoPromotoria) =>
+        grupoPromotoria.id === grupoDePromotoriaID)?.promotorias?.find((promotoria) =>
+        promotoria.id === promotoriaID)?.promotor?.eventos?.forEach((evento) => {
+            if (evento.uuid === eventoAlterado.uuid && evento.uuid !== undefined) {
+                evento.id = eventoAlterado.id;
+                evento.uuid = eventoAlterado.uuid;
+                evento.titulo = eventoAlterado.titulo;
                 evento.tipo = eventoAlterado.tipo;
                 evento.periodo_inicio = eventoAlterado.periodo_inicio;
                 evento.periodo_fim = eventoAlterado.periodo_fim;
-                evento.titulo = eventoAlterado.titulo;
                 evento.promotor_designado_id = eventoAlterado.promotor_designado_id;
+                return evento;
             }
+            if (evento.id === eventoAlterado.id && evento.id !== undefined) {
+                evento.id = eventoAlterado.id;
+                evento.uuid = eventoAlterado.uuid;
+                evento.titulo = eventoAlterado.titulo;
+                evento.tipo = eventoAlterado.tipo;
+                evento.periodo_inicio = eventoAlterado.periodo_inicio;
+                evento.periodo_fim = eventoAlterado.periodo_fim;
+                evento.promotor_designado_id = eventoAlterado.promotor_designado_id;
+                return evento;
+            }
+            return evento;
         });
-    });
     emit('update:grupoDeTodasAsPromotorias', grupoDeTodasAsPromotorias.value);
     alteraAtribuicao(eventoAlterado);
     alteraEventoNoArrayReativoDeEventos(eventoAlterado);
@@ -110,6 +123,7 @@ const atualizaPromotorDesignadoParaAtendimentosDeUrgencia = (index: number, idPr
         dadosDosAtendimentosUrgencia.value[index].promotor_designado_id = idPromotor;
     } else {
         dadosDosAtendimentosUrgencia.value.push({
+            id: '',
             uuid: uuidv4(),
             periodo_inicio: '',
             periodo_fim: '',
@@ -127,6 +141,7 @@ const atualizaPeriodoQueOPromotorVaiEstarDesignadoParaAtendimentosDeUrgencia = (
         dadosDosAtendimentosUrgencia.value[index].periodo_fim = periodo_end;
     } else {
         dadosDosAtendimentosUrgencia.value.push({
+            id: '',
             uuid: uuidv4(),
             periodo_inicio: periodo_start,
             periodo_fim: periodo_end,
@@ -188,11 +203,6 @@ const deletaAtribuicao = (eventoDeletado: Evento) => {
     emit('update:atribuicao', atribuicao.value);
 };
 
-const adicionaDadosNoGrupoDePromotorias = (grupoPromotorias: GrupoPromotoria[]) => {
-    grupoDeTodasAsPromotorias.value = grupoDeTodasAsPromotorias.value.concat(grupoPromotorias);
-    emit('update:dadosIniciais', grupoDeTodasAsPromotorias.value);
-};
-
 const atualizaAsAtribuicoes = (eventos: Evento[]) => {
     eventos.forEach((evento) => {
         if (atribuicao.value.length === 0) {
@@ -221,9 +231,17 @@ const adicionaEventoNoArrayReativoDeEventos = (evento: Evento) => {
 };
 
 const alteraEventoNoArrayReativoDeEventos = (evento: Evento) => {
-    const index = eventosReativos.value.findIndex((e) => e.uuid === evento.uuid);
-    if (index !== -1) {
-        eventosReativos.value[index] = evento;
+    if (evento.uuid !== undefined){
+        const index = eventosReativos.value.findIndex((e) => e.uuid === evento.uuid);
+        if (index !== -1) {
+            eventosReativos.value[index] = evento;
+        }
+    }
+    if (evento.id !== undefined){
+        const index = eventosReativos.value.findIndex((e) => e.id === evento.id);
+        if (index !== -1) {
+            eventosReativos.value[index] = evento;
+        }
     }
     emit('update:ListaEventos', eventosReativos.value);
 };
@@ -241,7 +259,7 @@ function stringToDate(dateString: string) {
 onBeforeMount(() => {
     props.urgenciaAtendimentos?.forEach((atendimentoUrgencia) => {
         dadosDosAtendimentosUrgencia.value.push({
-            uuid: atendimentoUrgencia.id,
+            id: atendimentoUrgencia.id,
             periodo_inicio: atendimentoUrgencia.periodo_inicio,
             periodo_fim: atendimentoUrgencia.periodo_fim,
             promotor_designado_id: atendimentoUrgencia.promotor_designado_id,
@@ -286,7 +304,6 @@ onBeforeMount(() => {
                     @update:nomeFoiSelecionado="atualizaPromotorDesignadoParaAtendimentosDeUrgencia"
                     @update:periodoDoAtendimentoFoiSelecionado="atualizaPeriodoQueOPromotorVaiEstarDesignadoParaAtendimentosDeUrgencia"
                     @delete:inputDeDadosFoiDeletado="deletaInputDeDadosDeAtendimentoUrgencia"
-                    @update:grupoPromotorias="adicionaDadosNoGrupoDePromotorias"
 
                 />
                 <EntranciaFinalSantanaEditor
@@ -296,7 +313,6 @@ onBeforeMount(() => {
                     @update:novoEventoAdicionado="adicionaEventoNoGrupoDePromotorias"
                     @update:umEventoFoiAlterado="alteraEventoNoGrupoDePromotorias"
                     @delete:umEventoFoiDeletado="deletaEventoNoGrupoDePromotorias"
-                    @update:grupoPromotorias="adicionaDadosNoGrupoDePromotorias"
                 />
                 <EntranciaInicialEditor
                     :grupoPromotorias="grupoPromotorias?.filter((grupoPromotoria) => grupoPromotoria.municipio?.nome !== 'Macapá' && grupoPromotoria.municipio?.nome !== 'Santana')"
@@ -305,7 +321,6 @@ onBeforeMount(() => {
                     @update:novoEventoAdicionado="adicionaEventoNoGrupoDePromotorias"
                     @update:umEventoFoiAlterado="alteraEventoNoGrupoDePromotorias"
                     @delete:umEventoFoiDeletado="deletaEventoNoGrupoDePromotorias"
-                    @update:grupoPromotorias="adicionaDadosNoGrupoDePromotorias"
                 />
             </CardContent>
         </div>

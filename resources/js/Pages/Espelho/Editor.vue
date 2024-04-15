@@ -4,9 +4,7 @@ import {Promotor} from "@/Interfaces/Promotor";
 import {Espelho} from "@/Interfaces/Espelho";
 import {Evento} from "@/Interfaces/Evento";
 import {GrupoPromotoria} from "@/Interfaces/GrupoPromotoria";
-import {UrgenciaAtendimentoClientSide} from "@/Interfaces/UrgenciaAtendimentoClientSide";
 import {Atribuicoes} from "@/Interfaces/Atribuicoes";
-import {EventoClientSide} from "@/Interfaces/EventoClientSide";
 
 import { ref, onBeforeMount } from 'vue';
 import { Head } from '@inertiajs/vue3';
@@ -49,7 +47,7 @@ const periodoEspelho = ref<string[]>([
     format(stringToDate(props.espelho?.periodo_fim), 'dd/MM/yyyy'),
 ]);
 const grupoDeTodasAsPromotoriasDados = ref<GrupoPromotoria[]>(props.grupoPromotorias);
-const atendimentosUrgenciaDados = ref<UrgenciaAtendimentoClientSide[]>([]);
+const atendimentosUrgenciaDados = ref<UrgenciaAtendimento[]>([]);
 const listaAtribuicoes = ref<Atribuicoes[]>([]);
 const listaEventos = ref<Evento[]>([]);
 const salvo = ref(false);
@@ -158,7 +156,7 @@ const processaEventos = (eventos: Evento[]) => {
 
 const processaUrgenciaAtendimentos = (urgenciaAtendimentos: UrgenciaAtendimento[]) => {
     return urgenciaAtendimentos.map(atendimentoUrgencia => ({
-        uuid: atendimentoUrgencia.id,
+        id: atendimentoUrgencia.id,
         periodo_inicio: atendimentoUrgencia.periodo_inicio,
         periodo_fim: atendimentoUrgencia.periodo_fim,
         promotor_designado_id: atendimentoUrgencia.promotor_designado_id,

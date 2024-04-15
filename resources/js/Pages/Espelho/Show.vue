@@ -1,8 +1,15 @@
 <script setup lang="ts">
-import { Atribuicoes, Espelho, Evento, HistoricoEventoServerSide, HistoricoUrgenciaAtendimentoServeSide, GrupoPromotoria, HistoricoPromotoria, Promotor } from '@/types';
 import { Head } from '@inertiajs/vue3';
 import { format } from 'date-fns';
 import { watchEffect, ref } from 'vue';
+import {Espelho} from "@/Interfaces/Espelho";
+import {HistoricoPromotoria} from "@/Interfaces/HistoricoPromotoria";
+import {Promotor} from "@/Interfaces/Promotor";
+import {HistoricoEventoServerSide} from "@/Interfaces/HistoricoEvento";
+import {HistoricoUrgenciaAtendimentoServeSide} from "@/Interfaces/HistoricoUrgenciaAtendimento";
+import {GrupoPromotoria} from "@/Interfaces/GrupoPromotoria";
+import {Atribuicoes} from "@/Interfaces/Atribuicoes";
+import {Evento} from "@/Interfaces/Evento";
 
 const props = defineProps({
     espelho: {
@@ -183,7 +190,7 @@ watchEffect(() => {
 <template>
     <Head title="Espelho" />
     <AuthenticatedLayout>
-      <Preview 
+      <Preview
           :periodoEspelho="periodoEspelhoFormatado"
           :grupoPromotoriaDeTodasAsPromotorias="grupoDeTodasAsPromotoriasDados"
           :listaAtribuicoes="listaAtribuicoes"

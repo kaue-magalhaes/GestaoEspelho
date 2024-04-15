@@ -1,8 +1,15 @@
 <script setup lang="ts">
-import { Atribuicoes, Espelho, Evento, HistoricoEventoServerSide, HistoricoUrgenciaAtendimentoServeSide, GrupoPromotoria, HistoricoPromotoria, Promotor } from '@/types';
 import { Head } from '@inertiajs/vue3';
 import { format } from 'date-fns';
 import { watchEffect, ref } from 'vue';
+import {Espelho} from "@/Interfaces/Espelho";
+import {HistoricoPromotoria} from "@/Interfaces/HistoricoPromotoria";
+import {Promotor} from "@/Interfaces/Promotor";
+import {HistoricoEvento} from "@/Interfaces/HistoricoEvento";
+import {HistoricoUrgenciaAtendimento} from "@/Interfaces/HistoricoUrgenciaAtendimento";
+import {GrupoPromotoria} from "@/Interfaces/GrupoPromotoria";
+import {Atribuicoes} from "@/Interfaces/Atribuicoes";
+import {Evento} from "@/Interfaces/Evento";
 
 const props = defineProps({
     espelho: {
@@ -18,11 +25,11 @@ const props = defineProps({
         required: true,
     },
     eventos: {
-        type: Array as () => HistoricoEventoServerSide[],
+        type: Array as () => HistoricoEvento[],
         required: true,
     },
     urgenciaAtendimentos: {
-        type: Array as () => HistoricoUrgenciaAtendimentoServeSide[],
+        type: Array as () => HistoricoUrgenciaAtendimento[],
         required: true,
     },
 });
@@ -134,7 +141,7 @@ const atualizaAsAtribuicoes = (eventos: Evento[]) => {
   });
 }
 
-const processaAtendimentosUrgenciaDados = (urgenciaAtendimentos: HistoricoUrgenciaAtendimentoServeSide[]) => {
+const processaAtendimentosUrgenciaDados = (urgenciaAtendimentos: HistoricoUrgenciaAtendimento[]) => {
     urgenciaAtendimentos?.forEach((atendimentoUrgencia) => {
         atendimentosUrgenciaDados.value.push({
         uuid: atendimentoUrgencia.id,
@@ -144,7 +151,7 @@ const processaAtendimentosUrgenciaDados = (urgenciaAtendimentos: HistoricoUrgenc
         });
     });
 }
-const processaEventos = (eventos: HistoricoEventoServerSide[]) => {
+const processaEventos = (eventos: HistoricoEvento[]) => {
     return eventos.map(evento => ({
         uuid: evento.id,
         titulo: evento.titulo,
@@ -182,7 +189,7 @@ watchEffect(() => {
 
 <template>
     <Head title="Espelho" />
-    <Preview 
+    <Preview
         :periodoEspelho="periodoEspelhoFormatado"
         :grupoPromotoriaDeTodasAsPromotorias="grupoDeTodasAsPromotoriasDados"
         :listaAtribuicoes="listaAtribuicoes"

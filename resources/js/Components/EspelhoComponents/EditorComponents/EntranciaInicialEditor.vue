@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import {EventoClientSide} from "@/Interfaces/EventoClientSide";
 import {GrupoPromotoria} from "@/Interfaces/GrupoPromotoria";
 import {Promotoria} from "@/Interfaces/Promotoria";
 import {Promotor} from "@/Interfaces/Promotor";
@@ -9,7 +8,6 @@ const emit = defineEmits([
     'update:novoEventoAdicionado',
     'update:umEventoFoiAlterado',
     'delete:umEventoFoiDeletado',
-    'update:grupoPromotorias'
 ]);
 
 defineProps({
@@ -31,17 +29,13 @@ const enviaDadosDoNovoEvento = (grupoDePromotoriaID: String, promotoriaID: Strin
     emit('update:novoEventoAdicionado', grupoDePromotoriaID, promotoriaID, novoEvento);
 };
 
-const enviaDadosDoEventoAlterado = (eventoAlterado: EventoClientSide) => {
-    emit('update:umEventoFoiAlterado', eventoAlterado);
+const enviaDadosDoEventoAlterado = (grupoDePromotoriaID: String, promotoriaID: String, eventoAlterado: Evento) => {
+    emit('update:umEventoFoiAlterado', grupoDePromotoriaID, promotoriaID, eventoAlterado);
 };
 
 const enviaDadosDoEventoDeletado = (eventoDeletado: Evento) => {
     emit('delete:umEventoFoiDeletado', eventoDeletado);
-};
-
-const enviaDadosDoGrupoDePromotorias = (grupoPromotorias: GrupoPromotoria[], eventos: EventoClientSide[]) => {
-    emit('update:grupoPromotorias', grupoPromotorias, eventos);
-};
+}
 </script>
 
 <template>
@@ -52,9 +46,8 @@ const enviaDadosDoGrupoDePromotorias = (grupoPromotorias: GrupoPromotoria[], eve
         <TabelaPromotoriaEditor
             :grupoPromotorias="grupoPromotorias"
             @update:novoEventoAdicionado="enviaDadosDoNovoEvento"
-            @update:UmEventoFoiAlterado="enviaDadosDoEventoAlterado"
+            @update:umEventoFoiAlterado="enviaDadosDoEventoAlterado"
             @delete:umEventoFoiDeletado="enviaDadosDoEventoDeletado"
-            @update:grupoPromotorias="enviaDadosDoGrupoDePromotorias"
         />
     </div>
 </template>

@@ -12,9 +12,8 @@ import {GrupoPromotoria} from "@/Interfaces/GrupoPromotoria";
 const page = usePage();
 const emit = defineEmits([
     'update:novoEventoAdicionado',
-    'update:UmEventoFoiAlterado',
+    'update:umEventoFoiAlterado',
     'delete:umEventoFoiDeletado',
-    'update:grupoPromotorias',
 ]);
 
 defineProps({
@@ -30,12 +29,11 @@ const adicionaEvento = (grupoDePromotoriaID: String, promotoriaID: String, novoE
     emit('update:novoEventoAdicionado', grupoDePromotoriaID, promotoriaID, novoEvento);
 };
 
-const EditaEvento = (eventoAlterado: Evento) => {
-    emit('update:UmEventoFoiAlterado', eventoAlterado);
+const editaEvento = (grupoDePromotoriaID: String, promotoriaID: String, eventoAlterado: Evento) => {
+    emit('update:umEventoFoiAlterado', grupoDePromotoriaID, promotoriaID, eventoAlterado);
 };
 
 const deleteEvento = (eventoDeletado: Evento) => {
-    console.log(eventoDeletado)
     emit('delete:umEventoFoiDeletado', eventoDeletado);
 };
 </script>
@@ -68,7 +66,7 @@ const deleteEvento = (eventoDeletado: Evento) => {
                 <td class="border px-6 py-4">
                     <span v-for="evento in promotoria.promotor?.eventos" :key="evento.id">
                       <span class="flex items-center justify-between space-y-2">
-                        <span v-if="evento.titulo !== ''">
+                        <span v-if="evento.titulo && evento.titulo !== ''">
                           {{ evento.tipo }} - {{ evento.titulo }}
                         </span>
                         <span v-else>
@@ -77,16 +75,10 @@ const deleteEvento = (eventoDeletado: Evento) => {
                         <span class="flex space-x-2">
                           <EditarEventoBotao
                               :promotores="promotores"
-                              :nomePromotoria="promotoria.nome"
-                              :nomeComarca="comarca.nome"
-                              :uuid="evento.id"
-                              :tipo="evento.tipo"
-                              :periodo_inicio="evento.periodo_inicio"
-                              :periodo_fim="evento.periodo_fim"
-                              :titulo="evento.titulo"
-                              :promotor_titular_id="evento.promotor_titular_id"
-                              :promotor_designado_id="evento.promotor_designado_id"
-                              @update:editaEvento="EditaEvento"
+                              :grupoPromotoria="comarca"
+                              :promotoria="promotoria"
+                              :evento="evento"
+                              @update:editaEvento="editaEvento"
                           />
                           <AlertDialog>
                             <AlertDialogTrigger>
