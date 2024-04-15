@@ -46,8 +46,8 @@ const enviaDadosDoEventoAlterado = (eventoAlterado: EventoClientSide) => {
     emit('update:umEventoFoiAlterado', eventoAlterado);
 };
 
-const enviaDadosDoEventoDeletado = (uuid: string) => {
-    emit('delete:umEventoFoiDeletado', uuid);
+const enviaDadosDoEventoDeletado = (eventoDeletado: Evento) => {
+    emit('delete:umEventoFoiDeletado', eventoDeletado);
 };
 
 const enviaDadosDoGrupoDePromotorias = (grupoPromotorias: GrupoPromotoria[]) => {

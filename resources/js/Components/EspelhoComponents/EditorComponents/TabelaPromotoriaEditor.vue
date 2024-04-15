@@ -34,8 +34,9 @@ const EditaEvento = (eventoAlterado: Evento) => {
     emit('update:UmEventoFoiAlterado', eventoAlterado);
 };
 
-const deleteEvento = (uuid: string) => {
-    emit('delete:umEventoFoiDeletado', uuid);
+const deleteEvento = (eventoDeletado: Evento) => {
+    console.log(eventoDeletado)
+    emit('delete:umEventoFoiDeletado', eventoDeletado);
 };
 </script>
 
@@ -111,7 +112,7 @@ const deleteEvento = (uuid: string) => {
                                 <AlertDialogCancel class="bg-red-500 hover:bg-red-400 text-white hover:text-white">
                                   Cancelar
                                 </AlertDialogCancel>
-                                <AlertDialogAction @click="deleteEvento(evento.id)">
+                                <AlertDialogAction @click="deleteEvento(evento)">
                                   Excluir evento
                                 </AlertDialogAction>
                               </AlertDialogFooter>

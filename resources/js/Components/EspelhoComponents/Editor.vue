@@ -92,17 +92,17 @@ const alteraEventoNoGrupoDePromotorias = (eventoAlterado: Evento) => {
     alteraEventoNoArrayReativoDeEventos(eventoAlterado);
 };
 
-const deletaEventoNoGrupoDePromotorias = (uuid: string) => {
+const deletaEventoNoGrupoDePromotorias = (eventoDeletado: Evento) => {
     grupoDeTodasAsPromotorias.value.forEach((grupoPromotoria) => {
-        grupoPromotoria.promotorias?.find((promotoria) => promotoria.promotor?.eventos?.find((evento) => evento.id === uuid))?.promotor?.eventos?.forEach((evento, index) => {
-            if (evento.id === uuid) {
-                grupoPromotoria.promotorias?.find((promotoria) => promotoria.promotor?.eventos?.splice(index, 1));
-            }
+        grupoPromotoria.promotorias?.forEach((promotoria) => {
+          if (promotoria.promotor_titular_id === eventoDeletado.promotor_titular_id) {
+            promotoria.promotor?.eventos?.splice(promotoria.promotor?.eventos?.indexOf(eventoDeletado), 1);
+          }
         });
     });
     emit('update:grupoDeTodasAsPromotorias', grupoDeTodasAsPromotorias.value)
-    deletaAtribuicao(uuid);
-    deletaEventoNoArrayReativoDeEventos(uuid);
+    deletaAtribuicao(eventoDeletado);
+    deletaEventoNoArrayReativoDeEventos(eventoDeletado);
 };
 
 const atualizaPromotorDesignadoParaAtendimentosDeUrgencia = (index: number, idPromotor: string) => {
@@ -169,12 +169,20 @@ const alteraAtribuicao = (evento: Evento) => {
     emit('update:atribuicao', atribuicao.value);
 };
 
-const deletaAtribuicao = (uuid: string) => {
-    const evento = atribuicao.value.find((a) => a.atribuicoes.find((e) => e.uuid === uuid));
-    if (evento) {
-        evento.atribuicoes = evento.atribuicoes.filter((e) => e.uuid !== uuid);
-        if (evento.atribuicoes.length === 0) {
-            atribuicao.value = atribuicao.value.filter((a) => a !== evento);
+const deletaAtribuicao = (eventoDeletado: Evento) => {
+    const eventoBuscaPorUuid = atribuicao.value.find((a) => a.atribuicoes.find((e) => e.uuid === eventoDeletado.uuid));
+    if (eventoBuscaPorUuid) {
+        eventoBuscaPorUuid.atribuicoes = eventoBuscaPorUuid.atribuicoes.filter((e) => e.uuid !== eventoDeletado.uuid);
+        if (eventoBuscaPorUuid.atribuicoes.length === 0) {
+            atribuicao.value = atribuicao.value.filter((a) => a !== eventoBuscaPorUuid);
+        }
+    } else {
+        const eventoBuscaPorId = atribuicao.value.find((a) => a.atribuicoes.find((e) => e.id === eventoDeletado.id));
+        if (eventoBuscaPorId) {
+            eventoBuscaPorId.atribuicoes = eventoBuscaPorId.atribuicoes.filter((e) => e.id !== eventoDeletado.id);
+            if (eventoBuscaPorId.atribuicoes.length === 0) {
+                atribuicao.value = atribuicao.value.filter((a) => a !== eventoBuscaPorId);
+            }
         }
     }
     emit('update:atribuicao', atribuicao.value);
@@ -220,8 +228,8 @@ const alteraEventoNoArrayReativoDeEventos = (evento: Evento) => {
     emit('update:ListaEventos', eventosReativos.value);
 };
 
-const deletaEventoNoArrayReativoDeEventos = (uuid: string) => {
-    eventosReativos.value = eventosReativos.value.filter((evento) => evento.uuid !== uuid);
+const deletaEventoNoArrayReativoDeEventos = (eventoDeletado: Evento) => {
+    eventosReativos.value = eventosReativos.value.filter((evento) => evento.uuid !== eventoDeletado.uuid || evento.id !== eventoDeletado.id);
     emit('update:ListaEventos', eventosReativos.value);
 };
 
