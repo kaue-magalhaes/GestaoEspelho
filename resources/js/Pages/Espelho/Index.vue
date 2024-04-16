@@ -39,7 +39,10 @@ const grupoDePromotoriasDados = ref<GrupoPromotoria[]>([]);
 const promotoriasMacapa = ref<HistoricoPromotoria[]>([]);
 const promotoriasSantana = ref<HistoricoPromotoria[]>([]);
 const promotoriasInterior = ref<HistoricoPromotoria[]>([]);
-const periodoEspelhoFormatado = ref<string[]>([]);
+const periodoEspelho = ref<string[]>([
+    format(stringToDate(props.espelho?.periodo_inicio), 'dd/MM/yyyy'),
+    format(stringToDate(props.espelho?.periodo_fim), 'dd/MM/yyyy'),
+]);
 const listaAtribuicoes = ref<Atribuicoes[]>([]);
 const atendimentosUrgenciaDados = ref<any>([]);
 const eventosComUUID = ref<Evento[]>([]);
@@ -168,16 +171,8 @@ function stringToDate(dateString: string) {
     return new Date(year, month - 1, day);
 }
 
-const formatarPeriodo = (periodoInicio: string, periodoFim: string) => {
-    return [
-        format(stringToDate(periodoInicio), 'dd/MM/yyyy'),
-        format(stringToDate(periodoFim), 'dd/MM/yyyy'),
-    ];
-};
-
 watchEffect(() => {
     eventosComUUID.value = processaEventos(props.eventos);
-    periodoEspelhoFormatado.value = formatarPeriodo(props.espelho.periodo_inicio, props.espelho.periodo_fim);
     props.promotorias.forEach(separaPromotoriasPorMunicipio);
     processarPromotorias(promotoriasMacapa.value);
     processarPromotorias(promotoriasSantana.value);
@@ -190,7 +185,7 @@ watchEffect(() => {
 <template>
     <Head title="Espelho" />
     <Preview
-        :periodoEspelho="periodoEspelhoFormatado"
+        :periodoEspelho="periodoEspelho"
         :grupoPromotoriaDeTodasAsPromotorias="grupoDeTodasAsPromotoriasDados"
         :listaAtribuicoes="listaAtribuicoes"
         :atendimentosUrgenciaDados="atendimentosUrgenciaDados"
