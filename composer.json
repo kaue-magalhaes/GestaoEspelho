@@ -59,6 +59,13 @@
         ],
         "fix" : [
             "./vendor/bin/phpstan analyse",
+            "./vendor/bin/pint",
+            "./vendor/bin/pest --parallel"
+        ],
+        "analyse" : [
+            "./vendor/bin/phpstan analyse"
+        ],
+        "pint" : [
             "./vendor/bin/pint"
         ],
         "test" : [
