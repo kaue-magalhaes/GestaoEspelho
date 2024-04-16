@@ -166,7 +166,6 @@ onBeforeMount(() => {
     listaEventos.value = eventosComUUID.value;
 
     atendimentosUrgenciaDados.value = processaUrgenciaAtendimentos(props.urgenciaAtendimentos);
-    console.log(props.grupoPromotorias);
 });
 </script>
 

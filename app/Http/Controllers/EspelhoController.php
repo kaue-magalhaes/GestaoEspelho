@@ -62,26 +62,26 @@ class EspelhoController extends Controller
         $historicoId = Historico::query()->orderBy('id', 'desc')->first();
 
         return Inertia::render('Espelho/Index', [
-            'espelho' => HistoricoEspelho::query()
+            'historicoEspelho' => HistoricoEspelho::query()
                 ->where('historico_id', $historicoId->id)
                 ->with('promotorias')
                 ->first()
                 ->toArray(),
-            'promotores' => HistoricoPromotor::query()
+            'historicoPromotores' => HistoricoPromotor::query()
                 ->get()
                 ->toArray(),
-            'grupoPromotorias' => HistoricoGrupoPromotoria::query()
+            'historicoGrupoPromotorias' => HistoricoGrupoPromotoria::query()
                 ->with(['promotorias', 'promotorias.promotor', 'municipio', 'promotorias.promotor.eventos'])
                 ->get()
                 ->toArray(),
-            'promotorias' => HistoricoPromotoria::query()
+            'historicoPromotorias' => HistoricoPromotoria::query()
                 ->with(['promotor', 'grupoPromotoria', 'grupoPromotoria.municipio', 'promotor.eventos'])
                 ->get()
                 ->toArray(),
-            'eventos' => HistoricoEvento::query()
+            'historicoEventos' => HistoricoEvento::query()
                 ->get()
                 ->toArray(),
-            'urgenciaAtendimentos' => HistoricoUrgenciaAtendimento::query()
+            'historicoUrgenciaAtendimentos' => HistoricoUrgenciaAtendimento::query()
                 ->get()
                 ->toArray(),
         ]);

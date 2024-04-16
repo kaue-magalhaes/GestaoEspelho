@@ -128,7 +128,7 @@ class CreateNewHistorico
      * @param  array<HistoricoPromotor>  $novosHistoricoPromotores
      * @param  array<HistoricoGrupoPromotoria>  $novosHistoricoGrupoPromotorias
      */
-    private function createHistoricoPromotoria(Promotoria $promotoria, int $historicoEspelhoId, array $novosHistoricoPromotores, array $novosHistoricoGrupoPromotorias, int $historicoId): void
+    private function createHistoricoPromotoria(Promotoria $promotoria, string $historicoEspelhoId, array $novosHistoricoPromotores, array $novosHistoricoGrupoPromotorias, int $historicoId): void
     {
         HistoricoPromotoria::query()
             ->create([
