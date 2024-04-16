@@ -3,6 +3,7 @@
 use App\Models\Historico\HistoricoEspelho;
 use App\Models\User;
 
+use function Pest\Laravel\actingAs;
 use function Pest\Laravel\get;
 
 it('should be able to view the Historicos list', function () {
@@ -10,7 +11,7 @@ it('should be able to view the Historicos list', function () {
     $historicos = HistoricoEspelho::factory()->count(5)->create([
         'usuario_id' => $user->id,
     ]);
-    $this->actingAs($user);
+    actingAs($user);
 
     $request = get(route('espelho.history'));
 

@@ -10,6 +10,13 @@ class HistoricoMunicipio extends Model
 {
     use HasFactory;
 
+    protected $table = 'historico_municipios';
+
+    protected $fillable = [
+        'nome',
+        'historico_id',
+    ];
+
     /**
      * Get all the grupoPromotorias for the HistoricoMunicipio
      */

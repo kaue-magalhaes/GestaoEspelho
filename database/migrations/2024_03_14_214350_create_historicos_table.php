@@ -12,8 +12,6 @@ return new class extends Migration {
     {
         Schema::create('historicos', function (Blueprint $table) {
             $table->id();
-            $table->date('periodo_inicio');
-            $table->date('periodo_fim');
             $table->timestamps();
         });
     }

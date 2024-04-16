@@ -11,6 +11,14 @@ class HistoricoGrupoPromotoria extends Model
 {
     use HasFactory;
 
+    protected $table = 'historico_grupo_promotorias';
+
+    protected $fillable = [
+        'nome',
+        'historico_municipio_id',
+        'historico_id',
+    ];
+
     /**
      * Get all the promotorias of the HistoricoGrupoPromotoria
      */
