@@ -3,10 +3,10 @@ import { Head } from '@inertiajs/vue3';
 import { format } from 'date-fns';
 import { watchEffect, ref } from 'vue';
 import {Espelho} from "@/Interfaces/Espelho";
-import {HistoricoPromotoria} from "@/Interfaces/HistoricoPromotoria";
+import {HistoricoPromotoria} from "@/Interfaces/Historico/HistoricoPromotoria";
 import {Promotor} from "@/Interfaces/Promotor";
-import {HistoricoEvento} from "@/Interfaces/HistoricoEvento";
-import {HistoricoUrgenciaAtendimento} from "@/Interfaces/HistoricoUrgenciaAtendimento";
+import {HistoricoEvento} from "@/Interfaces/Historico/HistoricoEvento";
+import {HistoricoUrgenciaAtendimento} from "@/Interfaces/Historico/HistoricoUrgenciaAtendimento";
 import {GrupoPromotoria} from "@/Interfaces/GrupoPromotoria";
 import {Atribuicoes} from "@/Interfaces/Atribuicoes";
 import {Evento} from "@/Interfaces/Evento";
@@ -14,6 +14,10 @@ import {Evento} from "@/Interfaces/Evento";
 const props = defineProps({
     espelho: {
         type: Object as () => Espelho,
+        required: true,
+    },
+    grupoPromotorias: {
+        type: Array as () => GrupoPromotoria[],
         required: true,
     },
     promotorias: {
@@ -34,7 +38,7 @@ const props = defineProps({
     },
 });
 
-const grupoDeTodasAsPromotoriasDados = ref<GrupoPromotoria[]>([]);
+const grupoDeTodasAsPromotoriasDados = ref<GrupoPromotoria[]>(props.grupoPromotorias);
 const grupoDePromotoriasDados = ref<GrupoPromotoria[]>([]);
 const promotoriasMacapa = ref<HistoricoPromotoria[]>([]);
 const promotoriasSantana = ref<HistoricoPromotoria[]>([]);
@@ -46,82 +50,6 @@ const periodoEspelho = ref<string[]>([
 const listaAtribuicoes = ref<Atribuicoes[]>([]);
 const atendimentosUrgenciaDados = ref<any>([]);
 const eventosComUUID = ref<Evento[]>([]);
-
-const separaPromotoriasPorMunicipio = (promotoria: HistoricoPromotoria) => {
-    if (promotoria.municipio === 'Macapá') {
-        promotoriasMacapa.value.push(promotoria);
-    } else if (promotoria.municipio === 'Santana') {
-        promotoriasSantana.value.push(promotoria);
-    } else {
-        promotoriasInterior.value.push(promotoria);
-    }
-};
-
-const processarPromotorias = (promotorias: HistoricoPromotoria[]) => {
-    promotorias.forEach((promotoria) => {
-        if (grupoDePromotoriasDados.value.length === 0) {
-            grupoDePromotoriasDados.value.push({
-                nome_grupo_promotorias: promotoria.nome_grupo_promotorias,
-                promotorias: [{
-                    id: promotoria.id,
-                    nome: promotoria.nome,
-                    nome_grupo_promotorias: promotoria.nome_grupo_promotorias,
-                    municipio: promotoria.municipio,
-                    is_especializada: promotoria.is_especializada,
-                    espelho_id: promotoria.historico_espelho_id,
-                    promotor_titular_id: promotoria.historico_promotor_titular_id,
-                    created_at: promotoria.created_at,
-                    updated_at: promotoria.updated_at,
-                }],
-                eventos: eventosComUUID.value.filter((evento) => evento.promotor_titular_id === promotoria.historico_promotor_titular_id) || [],
-            });
-        } else {
-            const grupoPromotoria = grupoDePromotoriasDados.value.find((grupoPromotoria) => grupoPromotoria.nome_grupo_promotorias === promotoria.nome_grupo_promotorias);
-            if (grupoPromotoria) {
-                grupoPromotoria.promotorias.push({
-                    id: promotoria.id,
-                    nome: promotoria.nome,
-                    nome_grupo_promotorias: promotoria.nome_grupo_promotorias,
-                    municipio: promotoria.municipio,
-                    is_especializada: promotoria.is_especializada,
-                    espelho_id: promotoria.historico_espelho_id,
-                    promotor_titular_id: promotoria.historico_promotor_titular_id,
-                    created_at: promotoria.created_at,
-                    updated_at: promotoria.updated_at,
-                });
-                const novosEventos = eventosComUUID.value.filter((evento) => evento.promotor_titular_id === promotoria.historico_promotor_titular_id);
-                novosEventos.forEach((novoEvento) => {
-                    const eventoExiste = grupoPromotoria.eventos.some((eventoExistente) => eventoExistente.uuid === novoEvento.uuid);
-                    if (!eventoExiste) {
-                        grupoPromotoria.eventos.push(novoEvento);
-                    }
-                });
-            } else {
-                grupoDePromotoriasDados.value.push({
-                    nome_grupo_promotorias: promotoria.nome_grupo_promotorias,
-                    promotorias: [{
-                        id: promotoria.id,
-                        nome: promotoria.nome,
-                        nome_grupo_promotorias: promotoria.nome_grupo_promotorias,
-                        municipio: promotoria.municipio,
-                        is_especializada: promotoria.is_especializada,
-                        espelho_id: promotoria.historico_espelho_id,
-                        promotor_titular_id: promotoria.historico_promotor_titular_id,
-                        created_at: promotoria.created_at,
-                        updated_at: promotoria.updated_at,
-                    }],
-                    eventos: eventosComUUID.value.filter((evento) => evento.promotor_titular_id === promotoria.historico_promotor_titular_id) || [],
-                });
-            }
-        }
-    });
-    adicionaDadosNoGrupoDePromotorias(grupoDePromotoriasDados.value);
-    grupoDePromotoriasDados.value = [];
-};
-
-const adicionaDadosNoGrupoDePromotorias = (grupoPromotorias: GrupoPromotoria[]) => {
-    grupoDeTodasAsPromotoriasDados.value = grupoDeTodasAsPromotoriasDados.value.concat(grupoPromotorias);
-};
 
 const atualizaAsAtribuicoes = (eventos: Evento[]) => {
   eventos.forEach((evento) => {
@@ -154,17 +82,6 @@ const processaAtendimentosUrgenciaDados = (urgenciaAtendimentos: HistoricoUrgenc
         });
     });
 }
-const processaEventos = (eventos: HistoricoEvento[]) => {
-    return eventos.map(evento => ({
-        uuid: evento.id,
-        titulo: evento.titulo,
-        tipo: evento.tipo,
-        periodo_inicio: evento.periodo_inicio,
-        periodo_fim: evento.periodo_fim,
-        promotor_titular_id: evento.historico_promotor_titular_id,
-        promotor_designado_id: evento.historico_promotor_designado_id,
-    }));
-};
 
 function stringToDate(dateString: string) {
     const [year, month, day] = dateString.split('-').map(Number);
@@ -172,13 +89,9 @@ function stringToDate(dateString: string) {
 }
 
 watchEffect(() => {
-    eventosComUUID.value = processaEventos(props.eventos);
-    props.promotorias.forEach(separaPromotoriasPorMunicipio);
-    processarPromotorias(promotoriasMacapa.value);
-    processarPromotorias(promotoriasSantana.value);
-    processarPromotorias(promotoriasInterior.value);
     atualizaAsAtribuicoes(eventosComUUID.value);
     processaAtendimentosUrgenciaDados(props.urgenciaAtendimentos);
+    console.log(props.grupoPromotorias);
 });
 </script>
 

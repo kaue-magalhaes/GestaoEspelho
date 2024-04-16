@@ -23,11 +23,35 @@ class HistoricoEvento extends Model
     ];
 
     /**
+     * Converte o id para string
+     */
+    public function getIdAttribute(int $value): string
+    {
+        return (string)$value;
+    }
+
+    /**
+     * Converte o id do promotor titular para string
+     */
+    public function getHistoricoPromotorTitularIdAttribute(int $value): string
+    {
+        return (string)$value;
+    }
+
+    /**
+     * Converte o id do promotor designado para string
+     */
+    public function getHistoricoPromotorDesignadoIdAttribute(int $value): string
+    {
+        return (string)$value;
+    }
+
+    /**
      * Get the promotorTitular of the HistoricoEvento
      */
     public function promotorTitular(): BelongsTo
     {
-        return $this->belongsTo(HistoricoPromotor::class);
+        return $this->belongsTo(HistoricoPromotor::class, 'historico_promotor_titular_id');
     }
 
     /**
@@ -35,6 +59,6 @@ class HistoricoEvento extends Model
      */
     public function promotorDesignado(): BelongsTo
     {
-        return $this->belongsTo(HistoricoPromotor::class);
+        return $this->belongsTo(HistoricoPromotor::class, 'historico_promotor_designado_id');
     }
 }

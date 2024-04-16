@@ -13,7 +13,6 @@ import {Evento} from "@/Interfaces/Evento";
 const emit = defineEmits([
     'update:periodoEspelho',
     'update:grupoDeTodasAsPromotorias',
-    'update:dadosIniciais',
     'update:dadosDosAtendimentosUrgencia',
     'update:atribuicao',
     'update:ListaEventos'

@@ -71,10 +71,6 @@ const updateGrupoDeTodasAsPromotorias = (value: GrupoPromotoria[]) => {
     exibirBotaoPublicar.value = true;
 }
 
-const updateDadosIniciais = (value: GrupoPromotoria[]) => {
-    grupoDeTodasAsPromotoriasDados.value = value;
-};
-
 const updateAtribuicao = (value: Atribuicoes[]) => {
     listaAtribuicoes.value = value;
 };
@@ -170,6 +166,7 @@ onBeforeMount(() => {
     listaEventos.value = eventosComUUID.value;
 
     atendimentosUrgenciaDados.value = processaUrgenciaAtendimentos(props.urgenciaAtendimentos);
+    console.log(props.grupoPromotorias);
 });
 </script>
 
@@ -189,7 +186,6 @@ onBeforeMount(() => {
                             :urgenciaAtendimentos="props.urgenciaAtendimentos"
                             @update:periodoEspelho="updatePeriodoEspelho"
                             @update:grupoDeTodasAsPromotorias="updateGrupoDeTodasAsPromotorias"
-                            @update:dadosIniciais="updateDadosIniciais"
                             @update:dadosDosAtendimentosUrgencia="updateAtendimentosUrgencia"
                             @update:atribuicao="updateAtribuicao"
                             @update:ListaEventos="updateListaEventos"

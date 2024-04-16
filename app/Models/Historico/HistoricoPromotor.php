@@ -19,11 +19,19 @@ class HistoricoPromotor extends Model
     ];
 
     /**
+     * Converte o id para string
+     */
+    public function getIdAttribute(int $value): string
+    {
+        return (string)$value;
+    }
+
+    /**
      * Get all the promotorias for the HistoricoPromotor
      */
     public function promotorias(): HasMany
     {
-        return $this->hasMany(HistoricoPromotoria::class, 'promotor_titular_id');
+        return $this->hasMany(HistoricoPromotoria::class, 'historico_promotor_titular_id');
     }
 
     /**
@@ -31,7 +39,7 @@ class HistoricoPromotor extends Model
      */
     public function eventos(): HasMany
     {
-        return $this->hasMany(HistoricoEvento::class, 'promotor_titular_id');
+        return $this->hasMany(HistoricoEvento::class, 'historico_promotor_titular_id');
     }
 
     /**
@@ -39,6 +47,6 @@ class HistoricoPromotor extends Model
      */
     public function urgenciasAtendimento(): HasMany
     {
-        return $this->hasMany(HistoricoUrgenciaAtendimento::class, 'promotor_designado_id');
+        return $this->hasMany(HistoricoUrgenciaAtendimento::class, 'historico_promotor_designado_id');
     }
 }

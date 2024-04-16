@@ -22,6 +22,22 @@ class HistoricoPromotoria extends Model
     ];
 
     /**
+     * convert the id to string
+     */
+    public function getIdAttribute(int $value): string
+    {
+        return (string)$value;
+    }
+
+    /**
+     * convert the promotor_titular_id to string
+     */
+    public function getHistoricoPromotorTitularIdAttribute(int $value): string
+    {
+        return (string)$value;
+    }
+
+    /**
      * get the HistoricoEspelho that owns the Promotoria
      */
     public function espelho(): BelongsTo
@@ -34,7 +50,7 @@ class HistoricoPromotoria extends Model
      */
     public function promotor(): BelongsTo
     {
-        return $this->belongsTo(HistoricoPromotor::class, 'promotor_titular_id');
+        return $this->belongsTo(HistoricoPromotor::class, 'historico_promotor_titular_id');
     }
 
     /**
@@ -42,6 +58,6 @@ class HistoricoPromotoria extends Model
      */
     public function grupoPromotoria(): BelongsTo
     {
-        return $this->belongsTo(HistoricoGrupoPromotoria::class);
+        return $this->belongsTo(HistoricoGrupoPromotoria::class, 'historico_grupo_promotoria_id');
     }
 }

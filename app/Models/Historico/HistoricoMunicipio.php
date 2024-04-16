@@ -22,6 +22,6 @@ class HistoricoMunicipio extends Model
      */
     public function grupoPromotorias(): HasMany
     {
-        return $this->hasMany(HistoricoGrupoPromotoria::class);
+        return $this->hasMany(HistoricoGrupoPromotoria::class, 'historico_municipio_id');
     }
 }

@@ -59,6 +59,10 @@ watchEffect(() => {
     promotoriasMacapa.value = municipios['Macapa'];
     promotoriasSantana.value = municipios['Santana'];
     promotoriasInterior.value = municipios['Interior'];
+
+    console.log('Promotorias Macapá', promotoriasMacapa.value);
+    console.log('Promotorias Santana', promotoriasSantana.value);
+    console.log('Promotorias Interior', promotoriasInterior.value);
 });
 </script>
 

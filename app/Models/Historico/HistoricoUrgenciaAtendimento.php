@@ -20,10 +20,26 @@ class HistoricoUrgenciaAtendimento extends Model
     ];
 
     /**
+     * Converte o id para string
+     */
+    public function getIdAttribute(int $value): string
+    {
+        return (string)$value;
+    }
+
+    /**
+     * Converte o id do promotor designado para string
+     */
+    public function getHistoricoPromotorDesignadoIdAttribute(int $value): string
+    {
+        return (string)$value;
+    }
+
+    /**
      * Get the promotor titular of the HistoricoUrgenciaAtendimento
      */
     public function promotor(): BelongsTo
     {
-        return $this->belongsTo(HistoricoPromotor::class);
+        return $this->belongsTo(HistoricoPromotor::class, 'historico_promotor_designado_id');
     }
 }

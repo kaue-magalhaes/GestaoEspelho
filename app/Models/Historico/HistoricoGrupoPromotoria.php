@@ -32,6 +32,6 @@ class HistoricoGrupoPromotoria extends Model
      */
     public function municipio(): BelongsTo
     {
-        return $this->belongsTo(HistoricoMunicipio::class);
+        return $this->belongsTo(HistoricoMunicipio::class, 'historico_municipio_id');
     }
 }

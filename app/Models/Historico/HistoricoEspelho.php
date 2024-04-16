@@ -23,6 +23,14 @@ class HistoricoEspelho extends Model
     ];
 
     /**
+     * Converte o id para string
+     */
+    public function getIdAttribute(int $value): string
+    {
+        return (string)$value;
+    }
+
+    /**
      * Get the user that owns the HistoricoEspelho
      */
     public function user(): BelongsTo
