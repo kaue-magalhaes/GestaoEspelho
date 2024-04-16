@@ -3,7 +3,6 @@ import {UrgenciaAtendimento} from "@/Interfaces/UrgenciaAtendimento";
 import {Promotor} from "@/Interfaces/Promotor";
 
 import { usePage } from "@inertiajs/vue3";
-import { ref } from "vue";
 import { format } from 'date-fns';
 
 const page = usePage();
@@ -14,7 +13,7 @@ defineProps({
   },
 });
 
-const promotoresQuePodemAtender = ref<Promotor[]>(page.props.promotores || []);
+const promotores = page.props.promotores as Promotor[];
 
 function stringToDate(dateString: string) {
   const [year, month, day] = dateString.split('-').map(Number);
@@ -30,7 +29,7 @@ function stringToDate(dateString: string) {
                 <li class="mb-2 text-left" v-for="atendimento in plantaoDeAtendimentos" :key="atendimento.uuid">
                     <span v-if="atendimento.periodo_inicio !== ''">
                         <span class="font-semibold">
-                            - {{ promotoresQuePodemAtender.find((promotor) => promotor.id === atendimento.promotor_designado_id)?.nome }}:
+                            - {{ promotores.find(promotor => promotor.id === atendimento.promotor_designado_id)?.nome }}
                         </span>
                         <span v-if="atendimento.periodo_inicio === atendimento.periodo_fim">
                             ({{ format(stringToDate(atendimento.periodo_inicio), 'dd/MM/yyyy') }})

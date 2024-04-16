@@ -2,11 +2,7 @@
 
 namespace App\Http\Middleware;
 
-use App\Models\Espelho;
-use App\Models\Evento;
-use App\Models\GrupoPromotoria;
 use App\Models\Promotor;
-use App\Models\Promotoria;
 use App\Models\UrgenciaAtendimento;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
@@ -40,42 +36,12 @@ class HandleInertiaRequests extends Middleware
             'auth' => [
                 'user' => $request->user(),
             ],
-            'espelho' => [
-                'all' => Espelho::query()
-                    ->with('promotorias')
+            'promotores' => Promotor::query()
                     ->get()
                     ->toArray(),
-            ],
-            'promotores' => [
-                'all' => Promotor::query()
-                    ->with(['promotorias', 'eventos', 'urgenciasAtendimento'])
+            'urgenciaAtendimentos' => UrgenciaAtendimento::query()
                     ->get()
                     ->toArray(),
-            ],
-            'promotorias' => [
-                'all' => Promotoria::query()
-                    ->with(['promotor', 'grupoPromotoria'])
-                    ->get()
-                    ->toArray(),
-            ],
-            'eventos' => [
-                'all' => Evento::query()
-                    ->with(['promotorTitular', 'promotorDesignado'])
-                    ->get()
-                    ->toArray(),
-            ],
-            'urgenciaAtendimentos' => [
-                'all' => UrgenciaAtendimento::query()
-                    ->with('promotor')
-                    ->get()
-                    ->toArray(),
-            ],
-            'grupoPromotoria' => [
-                'all' => GrupoPromotoria::query()
-                    ->with(['promotorias', 'promotorias.promotor', 'municipio'])
-                    ->get()
-                    ->toArray(),
-            ],
         ];
     }
 }

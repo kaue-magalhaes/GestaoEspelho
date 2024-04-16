@@ -15,8 +15,8 @@ const emit = defineEmits([
     'update:periodoDoAtendimentoFoiSelecionado',
 ]);
 
-const promotoresQuePodemAtender = ref<Promotor[]>(page.props.promotores || []);
-const plantaoDeAtendimentos = ref<UrgenciaAtendimento[]>(page.props.urgenciaAtendimentos || []);
+const promotoresQuePodemAtender = ref<Promotor[]>(page.props.promotores);
+const plantaoDeAtendimentos = ref<UrgenciaAtendimento[]>(page.props.urgenciaAtendimentos);
 
 const adicionarInputDeDados = () => {
     if (plantaoDeAtendimentos.value.length === 0) {

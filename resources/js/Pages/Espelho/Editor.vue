@@ -6,7 +6,7 @@ import {Evento} from "@/Interfaces/Evento";
 import {GrupoPromotoria} from "@/Interfaces/GrupoPromotoria";
 import {Atribuicoes} from "@/Interfaces/Atribuicoes";
 
-import { ref, onBeforeMount } from 'vue';
+import {ref, onBeforeMount, onMounted} from 'vue';
 import { Head } from '@inertiajs/vue3';
 import { format } from 'date-fns';
 import axios from 'axios';
@@ -166,7 +166,6 @@ onBeforeMount(() => {
     listaEventos.value = eventosComUUID.value;
 
     atendimentosUrgenciaDados.value = processaUrgenciaAtendimentos(props.urgenciaAtendimentos);
-    console.log(props.grupoPromotorias);
 });
 </script>
 

@@ -39,6 +39,6 @@ class UrgenciaAtendimento extends Model
      */
     public function promotor(): BelongsTo
     {
-        return $this->belongsTo(Promotor::class);
+        return $this->belongsTo(Promotor::class, 'promotor_designado_id');
     }
 }

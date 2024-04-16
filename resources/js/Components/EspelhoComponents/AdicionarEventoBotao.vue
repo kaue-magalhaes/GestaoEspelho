@@ -25,7 +25,7 @@ const props = defineProps({
         required: true,
     },
     promotorTitular: {
-        type: Object as () => Promotor,
+        type: Object as () => Promotor | undefined,
         required: true,
     },
 });
@@ -83,7 +83,7 @@ const enviaDadosDoEvento = (
         titulo: string;
         tipo: string;
         periodo: { start: Date; end: Date };
-        promotor_titular_id: string;
+        promotor_titular_id: string | undefined;
         promotor_designado_id: string
     }
 ) => {
@@ -116,13 +116,13 @@ onMounted(() => {
                 Adicionar Evento
             </Button>
         </DialogTrigger>
-        <DialogContent class="w-full max-w-2xl">
+        <DialogContent class="w-full max-w-2xl" v-if="props.promotorTitular">
             <DialogHeader>
                 <DialogTitle>
                     Adicionar Evento
                 </DialogTitle>
                 <DialogDescription>
-                    Adicione um evento para o Promotor de Justiça {{ props.promotorTitular.nome }}.
+                    Adicione um evento para o Promotor de Justiça {{ props.promotorTitular?.nome }}.
                 </DialogDescription>
             </DialogHeader>
             <div class="flex flex-col space-y-4">
