@@ -1,0 +1,12 @@
+version: "3.9"
+services:
+  web:
+    image: 3run01/urano:v-2.0
+    container_name: espelho-gestao
+    volumes:
+      - .:/var/www/app
+    ports:
+      - "8002:80" #httpdoc
+      #- "5173:5173" #httpdoc
+      #- "443:443" #https
+    restart: always
