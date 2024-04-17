@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class UrgenciaAtendimento extends Model
 {
@@ -19,20 +20,16 @@ class UrgenciaAtendimento extends Model
 
     /**
      * Converte o id para string
-     *
-     * @param  int  $value
      */
-    public function getIdAttribute($value): string
+    public function getIdAttribute(int $value): string
     {
         return (string)$value;
     }
 
     /**
      * Converte o id do promotor designado para string
-     *
-     * @param  int  $value
      */
-    public function getPromotorDesignadoIdAttribute($value): string
+    public function getPromotorDesignadoIdAttribute(int $value): string
     {
         return (string)$value;
     }
@@ -40,8 +37,8 @@ class UrgenciaAtendimento extends Model
     /**
      * Busca o promotor designado para a urgência
      */
-    public function promotor(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function promotor(): BelongsTo
     {
-        return $this->belongsTo(Promotor::class);
+        return $this->belongsTo(Promotor::class, 'promotor_designado_id');
     }
 }

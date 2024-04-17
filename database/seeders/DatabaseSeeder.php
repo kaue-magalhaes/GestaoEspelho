@@ -16,6 +16,8 @@ class DatabaseSeeder extends Seeder
         $this->call([
             EspelhoSeeder::class,
             PromotorSeeder::class,
+            MunicipioSeeder::class,
+            GrupoPromotoriaSeeder::class,
             PromotoriaSeeder::class,
             EventoSeeder::class,
             UrgenciaAtendimentoSeeder::class,

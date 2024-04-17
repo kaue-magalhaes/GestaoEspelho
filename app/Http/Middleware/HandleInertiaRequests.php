@@ -2,10 +2,8 @@
 
 namespace App\Http\Middleware;
 
-use App\Models\Espelho;
-use App\Models\Evento;
+use App\Models\Historico\HistoricoPromotor;
 use App\Models\Promotor;
-use App\Models\Promotoria;
 use App\Models\UrgenciaAtendimento;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
@@ -39,21 +37,15 @@ class HandleInertiaRequests extends Middleware
             'auth' => [
                 'user' => $request->user(),
             ],
-            'espelho' => [
-                'all' => optional(Espelho::with('promotorias')->first())->toArray(),
-            ],
-            'promotores' => [
-                'all' => Promotor::all()->toArray(),
-            ],
-            'promotorias' => [
-                'all' => Promotoria::all()->toArray(),
-            ],
-            'eventos' => [
-                'all' => Evento::all()->toArray(),
-            ],
-            'urgenciaAtendimentos' => [
-                'all' => UrgenciaAtendimento::all()->toArray(),
-            ],
+            'promotores' => Promotor::query()
+                ->get()
+                ->toArray(),
+            'historicoPromotores' => HistoricoPromotor::query()
+                ->get()
+                ->toArray(),
+            'urgenciaAtendimentos' => UrgenciaAtendimento::query()
+                ->get()
+                ->toArray(),
         ];
     }
 }

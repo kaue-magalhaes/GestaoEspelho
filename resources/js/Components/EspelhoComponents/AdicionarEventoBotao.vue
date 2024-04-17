@@ -1,6 +1,8 @@
 <script setup lang="ts">
-import { Promotor } from '@/types';
-import { usePage } from '@inertiajs/vue3';
+import {Promotor} from "@/Interfaces/Promotor";
+import {Promotoria} from "@/Interfaces/Promotoria";
+import {GrupoPromotoria} from "@/Interfaces/GrupoPromotoria";
+
 import { ref, onMounted } from 'vue';
 import { format } from 'date-fns';
 import { v4 as uuidv4 } from 'uuid';
@@ -9,19 +11,21 @@ const emit = defineEmits([
     'update:adicionaEvento',
 ]);
 
-const page = usePage();
-
 const props = defineProps({
     promotores: {
         type: Array as () => Promotor[] ,
         required: true,
     },
-    nomeMunicipio: {
-        type: String,
+    grupoPromotoria: {
+        type: Object as () => GrupoPromotoria,
         required: true,
     },
-    nomePromotor: {
-        type: String,
+    promotoria: {
+        type: Object as () => Promotoria,
+        required: true,
+    },
+    promotorTitular: {
+        type: Object as () => Promotor | undefined,
         required: true,
     },
 });
@@ -72,7 +76,17 @@ const updatePeriodo = (periodo: { start: Date; end: Date } | any, alterado: bool
     periodoEventoAlterado.value = alterado;
 };
 
-const enviaDadosDoEvento = (evento: { titulo: string; tipo: string; periodo: { start: Date; end: Date }; promotor_titular_id: string; promotor_designado_id: string }) => {
+const enviaDadosDoEvento = (
+    grupoPromotoriaID: string,
+    promotoriaID: string,
+    evento: {
+        titulo: string;
+        tipo: string;
+        periodo: { start: Date; end: Date };
+        promotor_titular_id: string | undefined;
+        promotor_designado_id: string
+    }
+) => {
     if (verificaSeDadosDoEventoSaoValidos()) {
         const novoEvento = {
             uuid: uuidv4(),
@@ -83,8 +97,8 @@ const enviaDadosDoEvento = (evento: { titulo: string; tipo: string; periodo: { s
             promotor_titular_id: evento.promotor_titular_id,
             promotor_designado_id: evento.promotor_designado_id,
         };
-        
-        emit('update:adicionaEvento', props.nomeMunicipio, novoEvento);
+
+        emit('update:adicionaEvento', grupoPromotoriaID, promotoriaID, novoEvento);
         resetarInformacoes();
         dialogOpen.value = false;
     }
@@ -102,13 +116,13 @@ onMounted(() => {
                 Adicionar Evento
             </Button>
         </DialogTrigger>
-        <DialogContent class="w-full max-w-2xl">
+        <DialogContent class="w-full max-w-2xl" v-if="props.promotorTitular">
             <DialogHeader>
                 <DialogTitle>
                     Adicionar Evento
                 </DialogTitle>
                 <DialogDescription>
-                    Adicione um evento para o Promotor de Justiça {{ nomePromotor }}.
+                    Adicione um evento para o Promotor de Justiça {{ props.promotorTitular?.nome }}.
                 </DialogDescription>
             </DialogHeader>
             <div class="flex flex-col space-y-4">
@@ -136,7 +150,7 @@ onMounted(() => {
                         <Label class="text-base">
                             Período <span class="text-red-500">*</span>
                         </Label>
-                        <DatePicker 
+                        <DatePicker
                             :range="true"
                             :period_start="periodoEvento.start"
                             :period_end="periodoEvento.end"
@@ -163,7 +177,7 @@ onMounted(() => {
                             <SelectContent>
                                 <SelectGroup>
                                     <SelectLabel>Promotores</SelectLabel>
-                                    <SelectItem v-for="promotor in props.promotores" :key="promotor.id" :value="promotor.nome">
+                                    <SelectItem v-for="promotor in props.promotores" :key="promotor.id" :value="promotor.id">
                                         {{ promotor.nome }}
                                     </SelectItem>
                                 </SelectGroup>
@@ -177,13 +191,20 @@ onMounted(() => {
                 <Button variant="destructive" @click="resetarInformacoes">
                     Cancelar
                 </Button>
-                <Button variant="default" @click="enviaDadosDoEvento({ 
-                    tipo: tipoEvento, 
-                    periodo: periodoEvento, 
-                    titulo: tituloEvento, 
-                    promotor_titular_id: props.promotores.find(promotor => promotor.nome === props.nomePromotor)?.id || '',
-                    promotor_designado_id: props.promotores.find(promotor => promotor.nome === promotor_designado_evento)?.id || ''
-                })">
+                <Button
+                    variant="default"
+                    @click="enviaDadosDoEvento(
+                        props.grupoPromotoria?.id,
+                        props.promotoria?.id,
+                        {
+                            tipo: tipoEvento,
+                            periodo: periodoEvento,
+                            titulo: tituloEvento,
+                            promotor_titular_id: props.promotorTitular.id,
+                            promotor_designado_id: promotor_designado_evento
+                        }
+                    )"
+                >
                     Adicionar Evento
                 </Button>
             </DialogFooter>

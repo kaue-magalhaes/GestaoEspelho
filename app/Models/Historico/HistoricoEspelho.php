@@ -5,6 +5,8 @@ namespace App\Models\Historico;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class HistoricoEspelho extends Model
 {
@@ -21,10 +23,26 @@ class HistoricoEspelho extends Model
     ];
 
     /**
+     * Converte o id para string
+     */
+    public function getIdAttribute(int $value): string
+    {
+        return (string)$value;
+    }
+
+    /**
      * Get the user that owns the HistoricoEspelho
      */
-    public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'usuario_id');
+    }
+
+    /**
+     * Get all the promotorias for the HistoricoEspelho
+     */
+    public function promotorias(): HasMany
+    {
+        return $this->hasMany(HistoricoPromotoria::class);
     }
 }

@@ -22,10 +22,6 @@ const props = defineProps({
     type: Date,
     default: new Date(),
   },
-  range: {
-    type: Boolean,
-    default: false,
-  },
   wasChanged: {
     type: Boolean,
     default: false,
@@ -65,7 +61,6 @@ watchEffect(() => {
     <Popover>
       <PopoverTrigger as-child>
         <Button
-          v-if="props.range"
           id="date"
           :variant="'outline'"
           :class="cn(
@@ -78,7 +73,7 @@ watchEffect(() => {
 
           <span>
             {{ localPeriod.start && wasChanged ? (
-              localPeriod.end ? `${format(localPeriod.start, 'LLL dd, y', { locale: pt })} - ${format(localPeriod.start, 'LLL dd, y', { locale: pt })}`
+              localPeriod.end ? `${format(localPeriod.start, 'LLL dd, y', { locale: pt })} - ${format(localPeriod.end, 'LLL dd, y', { locale: pt })}`
               : format(localPeriod.start, 'LLL dd, y', { locale: pt })
             ) : props.placeholder || 'Selecione o periodo' }}
           </span>
@@ -87,7 +82,6 @@ watchEffect(() => {
       </PopoverTrigger>
       <PopoverContent class="w-auto p-0" align="start">
         <Calendar
-          v-if="props.range"
           v-model.range="localPeriod"
           :columns="2"
           @update:model-value="emitirMudanca($event)"

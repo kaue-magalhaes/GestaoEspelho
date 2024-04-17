@@ -1,9 +1,12 @@
 <script setup lang="ts">
-import { Promotor } from '@/types';
 import { ref } from 'vue';
 import { format } from 'date-fns';
 
 import { Edit } from 'lucide-vue-next';
+import {Promotor} from "@/Interfaces/Promotor";
+import {GrupoPromotoria} from "@/Interfaces/GrupoPromotoria";
+import {Promotoria} from "@/Interfaces/Promotoria";
+import {Evento} from "@/Interfaces/Evento";
 
 const emit = defineEmits([
     'update:editaEvento',
@@ -14,49 +17,25 @@ const props = defineProps({
         type: Array as () => Promotor[] ,
         required: true,
     },
-    nomePromotoria: {
-        type: String,
+    grupoPromotoria: {
+        type: Object as () => GrupoPromotoria,
         required: true,
     },
-    nomeComarca: {
-        type: String,
+    promotoria: {
+        type: Object as () => Promotoria,
         required: true,
     },
-    uuid: {
-        type: String,
+    evento: {
+        type: Object as () => Evento,
         required: true,
     },
-    tipo: {
-        type: String,
-        required: true,
-    },
-    periodo_inicio: {
-        type: String,
-        required: true,
-    },
-    periodo_fim: {
-        type: String,
-        required: true,
-    },
-    titulo: {
-        type: String,
-        required: true,
-    },
-    promotor_titular_id: {
-        type: String,
-        required: true,
-    },
-    promotor_designado_id: {
-        type: String,
-        required: true,
-    }
 });
 
 /* Variaveis Reativas */
-const tipoEvento = ref<string>(props.tipo);
-const periodoEvento = ref<{ start: Date; end: Date }>({ start: stringToDate(props.periodo_inicio), end: stringToDate(props.periodo_fim) });
-const tituloEvento = ref<string>(props.titulo);
-const promotor_designado_id_reativo = ref<string>(props.promotor_designado_id);
+const tipoEvento = ref<string>(props.evento?.tipo);
+const periodoEvento = ref<{ start: Date; end: Date }>({ start: stringToDate(props.evento?.periodo_inicio), end: stringToDate(props.evento?.periodo_fim) });
+const tituloEvento = ref<string>(props.evento?.titulo || '');
+const promotor_designado_id = ref<string>(props.evento?.promotor_designado_id);
 const dialogOpen = ref<boolean>(false);
 
 const eventos = [
@@ -67,8 +46,21 @@ const eventos = [
     { id: 5, nome: 'Outros', selecionado: false },
 ];
 
-const enviaDadosDoEvento = (evento: { uuid: string; titulo: string; tipo: string; periodo: { start: Date; end: Date }; promotor_titular_id: string; promotor_designado_id: string }) => {
+const enviaDadosDoEvento = (
+    grupoPromotoriaID: string,
+    promotoriaID: string,
+    evento: {
+        id?: string;
+        uuid?: string;
+        titulo: string;
+        tipo: string;
+        periodo: { start: Date; end: Date };
+        promotor_titular_id: string;
+        promotor_designado_id: string
+    }
+) => {
     const novoEvento = {
+        id: evento.id,
         uuid: evento.uuid,
         titulo: evento.titulo,
         tipo: evento.tipo,
@@ -77,7 +69,7 @@ const enviaDadosDoEvento = (evento: { uuid: string; titulo: string; tipo: string
         promotor_titular_id: evento.promotor_titular_id,
         promotor_designado_id: evento.promotor_designado_id,
     };
-    emit('update:editaEvento', novoEvento);
+    emit('update:editaEvento', grupoPromotoriaID, promotoriaID, novoEvento);
     dialogOpen.value = false;
 };
 
@@ -147,7 +139,7 @@ function stringToDate(dateString: string) {
                         <Label class="text-base">
                             Promotor designado:
                         </Label>
-                        <Select class="mb-2 w-full" v-model="promotor_designado_id_reativo">
+                        <Select class="mb-2 w-full" v-model="promotor_designado_id">
                             <SelectTrigger>
                                 <SelectValue placeholder="Selecione o Promotor que foi designado" />
                             </SelectTrigger>
@@ -167,16 +159,22 @@ function stringToDate(dateString: string) {
                 <Button variant="destructive" @click="dialogOpen = false">
                     Cancelar
                 </Button>
-                <Button variant="default" @click="enviaDadosDoEvento(
-                    {
-                        uuid: props.uuid,
-                        titulo: tituloEvento, 
-                        tipo: tipoEvento, 
-                        periodo: periodoEvento, 
-                        promotor_titular_id: props.promotor_titular_id,
-                        promotor_designado_id: promotor_designado_id_reativo
-                    }
-                )">
+                <Button
+                    variant="default"
+                    @click="enviaDadosDoEvento(
+                        props.grupoPromotoria?.id,
+                        props.promotoria?.id,
+                        {
+                            id: props.evento?.id,
+                            uuid: props.evento?.uuid,
+                            tipo: tipoEvento,
+                            periodo: periodoEvento,
+                            titulo: tituloEvento,
+                            promotor_titular_id: props.evento?.promotor_titular_id,
+                            promotor_designado_id: promotor_designado_id
+                        }
+                    )"
+                >
                     Editar Evento
                 </Button>
             </DialogFooter>
