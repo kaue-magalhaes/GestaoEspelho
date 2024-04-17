@@ -3,10 +3,9 @@ import GuestLayout from '@/Layouts/GuestLayout.vue';
 import InputError from '@/Components/InputError.vue';
 import { Label } from '@/Components/ui/label';
 import { Input } from '@/Components/ui/input';
-import { Checkbox } from '@/Components/ui/checkbox';
 import { Button } from '@/Components/ui/button';
 import { CardDescription, CardTitle } from '@/Components/ui/card';
-import { Head, Link, useForm } from '@inertiajs/vue3';
+import { Head, useForm } from '@inertiajs/vue3';
 
 defineProps<{
     canResetPassword?: boolean;
@@ -33,8 +32,12 @@ const submit = () => {
         <Head title="Login" />
 
         <template #card-header>
-            <CardTitle>Faça login na sua conta</CardTitle>
-            <CardDescription>Faça login em sua conta usando seu e-mail e senha.</CardDescription>
+            <CardTitle>
+                Gestão Espelho
+            </CardTitle>
+            <CardDescription>
+                Faça login em sua conta com seu usuário e senha da Intranet.
+            </CardDescription>
         </template>
 
         <div v-if="status" class="mb-4 font-medium text-sm text-green-600">
@@ -43,11 +46,19 @@ const submit = () => {
 
         <form @submit.prevent="submit">
             <div>
-                <Label for="email">
-                    Email
+                <Label>
+                    Usuário
                 </Label>
 
-                <Input id="email" type="email" class="mt-1 block w-full" v-model="form.email" required autofocus />
+                <Input
+                    id="email"
+                    type="email"
+                    class="mt-1 block w-full"
+                    v-model="form.email"
+                    placeholder="kaue.brandao"
+                    required
+                    autofocus
+                />
 
                 <InputError class="mt-2" :message="form.errors.email" />
             </div>
@@ -57,36 +68,33 @@ const submit = () => {
                     Senha
                 </Label>
 
-                <Input id="password" type="password" class="mt-1 block w-full" v-model="form.password" required />
+                <Input
+                    id="password"
+                    type="password"
+                    class="mt-1 block w-full"
+                    v-model="form.password"
+                    placeholder="123@Senha"
+                    required
+                />
 
                 <InputError class="mt-2" :message="form.errors.password" />
 
-                <Link
-                    v-if="canResetPassword"
-                    :href="route('password.request')"
-                    class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md"
-                >
-                    Esqueceu sua senha?
-                </Link>
-            </div>
-
-            <div class="block mt-4">
-                <Label class="flex items-center">
-                    <Checkbox name="remember" v-model:checked="form.remember" />
-                    <span class="ms-2 text-sm text-gray-600 cursor-pointer">Lembre de mim</span>
-                </Label>
+<!--                <Link-->
+<!--                    v-if="canResetPassword"-->
+<!--                    :href="route('password.request')"-->
+<!--                    class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md"-->
+<!--                >-->
+<!--                    Esqueceu sua senha?-->
+<!--                </Link>-->
             </div>
 
             <div class="flex items-center justify-end mt-4">
-                <Link
-                    :href="route('register')"
-                    class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md"
+                <Button
+                    class="ms-4"
+                    :class="{ 'opacity-25': form.processing }"
+                    :disabled="form.processing"
                 >
-                    Não possui uma conta?
-                </Link>
-
-                <Button class="ms-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                    Login
+                    Entrar
                 </Button>
             </div>
         </form>

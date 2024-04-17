@@ -6,6 +6,7 @@ import NavLink from '@/Components/NavLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
 
 import { Toaster } from '@/Components/ui/sonner'
+import LogoMPAP from "@/Components/Icons/LogoMPAP.vue";
 
 const showingNavigationDropdown = ref(false);
 </script>
@@ -16,7 +17,8 @@ const showingNavigationDropdown = ref(false);
             <nav class="bg-white border-b border-gray-100">
                 <!-- Primary Navigation Menu -->
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div class="flex justify-between h-16">
+                    <div class="flex justify-between h-20">
+                        <LogoMPAP class="h-16 my-auto" />
                         <div class="flex">
                             <!-- Navigation Links -->
                             <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
@@ -58,7 +60,7 @@ const showingNavigationDropdown = ref(false);
                                     </template>
 
                                     <template #content>
-                                        <DropdownLink :href="route('profile.edit')"> Perfil </DropdownLink>
+<!--                                        <DropdownLink :href="route('profile.edit')"> Perfil </DropdownLink>-->
                                         <DropdownLink :href="route('logout')" method="post" as="button">
                                             Sair
                                         </DropdownLink>
