@@ -1,19 +1,13 @@
 <script setup lang="ts">
 import {format} from "date-fns";
-import {usePage} from "@inertiajs/vue3";
-import { ref } from 'vue';
 import {GrupoPromotoria} from "@/Interfaces/GrupoPromotoria";
-import {Promotor} from "@/Interfaces/Promotor";
 
-const page = usePage();
 defineProps({
   grupoPromotorias: {
     type: Array as () => GrupoPromotoria[],
     required: true,
   },
 });
-
-const promotores = ref<Promotor[]>(page.props.promotores || []);
 
 function stringToDate(dateString: string) {
   const [year, month, day] = dateString.split('-').map(Number);
@@ -61,7 +55,7 @@ function stringToDate(dateString: string) {
                   {{ format(stringToDate(evento.periodo_inicio), 'dd/MM/yyyy') }} - {{ format(stringToDate(evento.periodo_fim), 'dd/MM/yyyy') }}
                 </span>
                 <span>
-                  Promotor designado: {{ promotores.find((promotor) => promotor.id === evento.promotor_designado_id)?.nome }}
+                  Promotor designado: {{ promotoria.promotor?.nome }}
                 </span>
               </span>
             </span>
@@ -85,7 +79,7 @@ function stringToDate(dateString: string) {
         </tr>
         <tr class="bg-white hover:bg-gray-50" v-for="promotoria in comarca.promotorias" :key="promotoria.nome">
           <td class="border px-6 py-4 font-medium">
-              {{ promotores.find((promotor) => promotor.id === promotoria.promotor_titular_id)?.nome }}
+              {{ promotoria.promotor?.nome }}
           </td>
           <td class="border px-6 py-4">
             <span v-if="promotoria.promotor?.eventos?.length === 0">
@@ -105,7 +99,7 @@ function stringToDate(dateString: string) {
                   {{ format(stringToDate(evento.periodo_inicio), 'dd/MM/yyyy') }} - {{ format(stringToDate(evento.periodo_fim), 'dd/MM/yyyy') }}
                 </span>
                 <span>
-                  Promotor designado: {{ promotores.find((promotor) => promotor.id === evento.promotor_designado_id)?.nome }}
+                  Promotor designado: {{ promotoria.promotor?.nome }}
                 </span>
               </span>
             </span>

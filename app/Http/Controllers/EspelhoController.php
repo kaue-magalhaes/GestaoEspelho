@@ -61,6 +61,12 @@ class EspelhoController extends Controller
     {
         $historicoId = Historico::query()->orderBy('id', 'desc')->first();
 
+        //        dd(
+        //            HistoricoUrgenciaAtendimento::query()
+        //                ->where('historico_id', $historicoId->id)
+        //                ->get()
+        //                ->toArray(),
+        //        );
         return Inertia::render('Espelho/Index', [
             'historicoEspelho' => HistoricoEspelho::query()
                 ->where('historico_id', $historicoId->id)
@@ -68,20 +74,25 @@ class EspelhoController extends Controller
                 ->first()
                 ->toArray(),
             'historicoPromotores' => HistoricoPromotor::query()
+                ->where('historico_id', $historicoId->id)
                 ->get()
                 ->toArray(),
             'historicoGrupoPromotorias' => HistoricoGrupoPromotoria::query()
+                ->where('historico_id', $historicoId->id)
                 ->with(['promotorias', 'promotorias.promotor', 'municipio', 'promotorias.promotor.eventos'])
                 ->get()
                 ->toArray(),
             'historicoPromotorias' => HistoricoPromotoria::query()
+                ->where('historico_id', $historicoId->id)
                 ->with(['promotor', 'grupoPromotoria', 'grupoPromotoria.municipio', 'promotor.eventos'])
                 ->get()
                 ->toArray(),
             'historicoEventos' => HistoricoEvento::query()
+                ->where('historico_id', $historicoId->id)
                 ->get()
                 ->toArray(),
             'historicoUrgenciaAtendimentos' => HistoricoUrgenciaAtendimento::query()
+                ->where('historico_id', $historicoId->id)
                 ->get()
                 ->toArray(),
         ]);
@@ -93,32 +104,32 @@ class EspelhoController extends Controller
     public function show(string $id): Response
     {
         return Inertia::render('Espelho/Show', [
-            'espelho' => HistoricoEspelho::query()
+            'historicoEspelho' => HistoricoEspelho::query()
                 ->where('historico_id', $id)
                 ->with('promotorias')
                 ->first()
                 ->toArray(),
-            'promotores' => HistoricoPromotor::query()
+            'historicoPromotores' => HistoricoPromotor::query()
                 ->where('historico_id', $id)
                 ->get()
                 ->toArray(),
-            'grupoPromotorias' => HistoricoGrupoPromotoria::query()
+            'historicoGrupoPromotorias' => HistoricoGrupoPromotoria::query()
                 ->where('historico_id', $id)
                 ->with(['promotorias', 'promotorias.promotor', 'municipio', 'promotorias.promotor.eventos'])
-                ->first()
+                ->get()
                 ->toArray(),
-            'promotorias' => HistoricoPromotoria::query()
+            'historicoPromotorias' => HistoricoPromotoria::query()
                 ->where('historico_id', $id)
                 ->with(['promotor', 'grupoPromotoria', 'grupoPromotoria.municipio', 'promotor.eventos'])
-                ->first()
+                ->get()
                 ->toArray(),
-            'eventos' => HistoricoEvento::query()
+            'historicoEventos' => HistoricoEvento::query()
                 ->where('historico_id', $id)
-                ->first()
+                ->get()
                 ->toArray(),
-            'urgenciaAtendimentos' => HistoricoUrgenciaAtendimento::query()
+            'historicoUrgenciaAtendimentos' => HistoricoUrgenciaAtendimento::query()
                 ->where('historico_id', $id)
-                ->first()
+                ->get()
                 ->toArray(),
         ]);
     }

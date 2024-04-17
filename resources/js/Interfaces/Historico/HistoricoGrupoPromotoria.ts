@@ -1,5 +1,5 @@
-import {Municipio} from "@/Interfaces/Municipio";
 import {HistoricoPromotoria} from "@/Interfaces/Historico/HistoricoPromotoria";
+import {HistoricoMunicipio} from "@/Interfaces/Historico/HistoricoMunicipio";
 
 export interface HistoricoGrupoPromotoria {
     id: string;
@@ -9,5 +9,5 @@ export interface HistoricoGrupoPromotoria {
     created_at: string;
     updated_at: string;
     promotorias?: HistoricoPromotoria[];
-    municipio?: Municipio;
+    municipio?: HistoricoMunicipio;
 }
