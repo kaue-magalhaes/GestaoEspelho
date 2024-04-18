@@ -5,23 +5,22 @@ import { Label } from '@/Components/ui/label';
 import { Input } from '@/Components/ui/input';
 import { Button } from '@/Components/ui/button';
 import { CardDescription, CardTitle } from '@/Components/ui/card';
+import {Tooltip, TooltipContent, TooltipProvider, TooltipTrigger} from '@/Components/ui/tooltip'
 import { Head, useForm } from '@inertiajs/vue3';
 
 defineProps<{
-    canResetPassword?: boolean;
     status?: string;
 }>();
 
 const form = useForm({
-    email: '',
-    password: '',
-    remember: false,
+    login_intranet: '',
+    senha_intranet: '',
 });
 
 const submit = () => {
     form.post(route('login'), {
         onFinish: () => {
-            form.reset('password');
+            form.reset('senha_intranet');
         },
     });
 };
@@ -51,16 +50,16 @@ const submit = () => {
                 </Label>
 
                 <Input
-                    id="email"
-                    type="email"
+                    id="login"
+                    type="text"
                     class="mt-1 block w-full"
-                    v-model="form.email"
+                    v-model="form.login_intranet"
                     placeholder="kaue.brandao"
                     required
                     autofocus
                 />
 
-                <InputError class="mt-2" :message="form.errors.email" />
+                <InputError class="mt-2" :message="form.errors.login_intranet" />
             </div>
 
             <div class="mt-4">
@@ -72,20 +71,29 @@ const submit = () => {
                     id="password"
                     type="password"
                     class="mt-1 block w-full"
-                    v-model="form.password"
+                    v-model="form.senha_intranet"
                     placeholder="123@Senha"
                     required
                 />
 
-                <InputError class="mt-2" :message="form.errors.password" />
+                <InputError class="mt-2" :message="form.errors.senha_intranet" />
 
-<!--                <Link-->
-<!--                    v-if="canResetPassword"-->
-<!--                    :href="route('password.request')"-->
-<!--                    class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md"-->
-<!--                >-->
-<!--                    Esqueceu sua senha?-->
-<!--                </Link>-->
+
+                <TooltipProvider delay-duration="150" delay="1000" placement="top">
+                    <Tooltip>
+                        <TooltipTrigger>
+                            <a
+                                href="https://centraldeti.mpap.mp.br/projects/csti/issues/new?mascara"
+                                class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md"
+                            >
+                                Esqueceu sua senha?
+                            </a>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                            <p>Criar chamado para a Central de TI</p>
+                        </TooltipContent>
+                    </Tooltip>
+                </TooltipProvider>
             </div>
 
             <div class="flex items-center justify-end mt-4">

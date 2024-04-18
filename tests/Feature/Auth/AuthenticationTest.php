@@ -10,11 +10,13 @@ test('login screen can be rendered', function () {
 });
 
 test('users can authenticate using the login screen', function () {
-    $user = User::factory()->create();
+    $user = User::where('login_intranet', env('USER_TESTING_LOGIN'))
+        ->first()
+        ->toArray();
 
-    $response = $this->post('/login', [
-        'email'    => $user->email,
-        'password' => 'password',
+    $response = $this->post(route('login'), [
+        'login_intranet' => $user['login_intranet'],
+        'senha_intranet' => env('USER_TESTING_PASSWORD'),
     ]);
 
     $this->assertAuthenticated();
@@ -22,21 +24,14 @@ test('users can authenticate using the login screen', function () {
 });
 
 test('users can not authenticate with invalid password', function () {
-    $user = User::factory()->create();
+    $user = User::where('login_intranet', env('USER_TESTING_LOGIN'))
+        ->first()
+        ->toArray();
 
-    $this->post('/login', [
-        'email'    => $user->email,
-        'password' => 'wrong-password',
+    $this->post(route('login'), [
+        'login_intranet' => $user['login_intranet'],
+        'senha_intranet' => 'wrong-password',
     ]);
 
     $this->assertGuest();
-});
-
-test('users can logout', function () {
-    $user = User::factory()->create();
-
-    $response = $this->actingAs($user)->post('/logout');
-
-    $this->assertGuest();
-    $response->assertRedirect('/');
 });

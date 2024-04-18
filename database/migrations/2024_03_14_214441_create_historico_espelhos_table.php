@@ -15,7 +15,7 @@ return new class extends Migration {
             $table->string('titulo');
             $table->date('periodo_inicio');
             $table->date('periodo_fim');
-            $table->foreignId('usuario_id')->constrained('users');
+            $table->unsignedBigInteger('usuario_id');
             $table->foreignId('historico_id')->constrained('historicos');
             $table->timestamps();
         });
