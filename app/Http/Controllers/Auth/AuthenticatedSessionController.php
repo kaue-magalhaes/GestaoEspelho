@@ -32,7 +32,9 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->intended(RouteServiceProvider::HOME);
+        //dd(Auth::guard('internal')->user());
+
+        return redirect()->route('espelho.editor');
     }
 
     /**
