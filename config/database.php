@@ -78,6 +78,21 @@ return [
             'sslmode'        => 'prefer',
         ],
 
+        'sol' => [
+            'driver'         => 'pgsql',
+            'url'            => env('DATABASE_URL'),
+            'host'           => env('DB_SOL_HOST', '127.0.0.1'),
+            'port'           => env('DB_SOL_PORT', '5432'),
+            'database'       => env('DB_SOL_DATABASE', 'forge'),
+            'username'       => env('DB_SOL_USERNAME', 'forge'),
+            'password'       => env('DB_SOL_PASSWORD', ''),
+            'charset'        => 'utf8',
+            'prefix'         => '',
+            'prefix_indexes' => true,
+            'search_path'    => 'public',
+            'sslmode'        => 'prefer',
+        ],
+
         'sqlsrv' => [
             'driver'         => 'sqlsrv',
             'url'            => env('DATABASE_URL'),

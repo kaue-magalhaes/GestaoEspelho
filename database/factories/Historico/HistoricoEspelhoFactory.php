@@ -4,7 +4,6 @@ namespace Database\Factories\Historico;
 
 use App\Models\Historico\Historico;
 use App\Models\Historico\HistoricoEspelho;
-use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -23,7 +22,7 @@ class HistoricoEspelhoFactory extends Factory
             'titulo'         => $this->faker->sentence,
             'periodo_inicio' => $this->faker->date(),
             'periodo_fim'    => $this->faker->date(),
-            'usuario_id'     => User::factory(),
+            'usuario_id'     => env('USER_TESTING_ID'),
             'historico_id'   => Historico::factory(),
         ];
     }

@@ -6,7 +6,7 @@ import {Evento} from "@/Interfaces/Evento";
 import {GrupoPromotoria} from "@/Interfaces/GrupoPromotoria";
 import {Atribuicoes} from "@/Interfaces/Atribuicoes";
 
-import {ref, onBeforeMount, onMounted} from 'vue';
+import {ref, onBeforeMount} from 'vue';
 import { Head } from '@inertiajs/vue3';
 import { format } from 'date-fns';
 import axios from 'axios';

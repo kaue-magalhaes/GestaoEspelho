@@ -21,7 +21,6 @@ class DatabaseSeeder extends Seeder
             PromotoriaSeeder::class,
             EventoSeeder::class,
             UrgenciaAtendimentoSeeder::class,
-            UserSeeder::class,
         ]);
     }
 }

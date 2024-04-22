@@ -46,7 +46,7 @@ defineProps({
                     {{ format(new Date(espelho.created_at), 'HH:mm') }} horas
                 </TableCell>
                 <TableCell>
-                    {{ espelho.user.name }}
+                    {{ espelho.user.nome }}
                 </TableCell>
                 <TableCell>
                     <a :href="`/espelho/historico/${espelho.id}`">
