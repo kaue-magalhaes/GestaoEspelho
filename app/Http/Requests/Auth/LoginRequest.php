@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Auth;
 
+use App\Models\InternalSystemUser;
 use App\Models\User;
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Foundation\Http\FormRequest;
@@ -73,19 +74,25 @@ class LoginRequest extends FormRequest
      */
     protected function existIntranetUser(array $credentials): bool
     {
-        $user = User::where('login_intranet', $credentials['login_intranet'])
-            ->first()
-            ->toArray();
+        $user = null;
 
         if (empty($user)) {
+            $user = InternalSystemUser::where('login_intranet', $credentials['login_intranet'])->first();
+
+            if (empty($user)) {
+                return false;
+            }
+        }
+
+        if (! password_verify($credentials['senha_intranet'], $user->senha_intranet)) {
             return false;
         }
 
-        if (! password_verify($credentials['senha_intranet'], $user['senha_intranet'])) {
-            return false;
+        if ($user instanceof User) {
+            Auth::guard('web')->login($user);
+        } else {
+            Auth::guard('internal')->login($user);
         }
-
-        Auth::loginUsingId($user['id']);
 
         return true;
     }

@@ -14,7 +14,7 @@ return [
     */
 
     'defaults' => [
-        'guard'     => 'web',
+        'guard'     => env('AUTH_GUARD', 'web'),
         'passwords' => 'users',
     ],
 
@@ -40,6 +40,10 @@ return [
             'driver'   => 'session',
             'provider' => 'users',
         ],
+        'internal' => [
+            'driver'   => 'session',
+            'provider' => 'internal_system_users',
+        ],
     ],
 
     /*
@@ -63,6 +67,10 @@ return [
         'users' => [
             'driver' => 'eloquent',
             'model'  => App\Models\User::class,
+        ],
+        'internal_system_users' => [
+            'driver' => 'eloquent',
+            'model'  => App\Models\InternalSystemUser::class,
         ],
 
         // 'users' => [
