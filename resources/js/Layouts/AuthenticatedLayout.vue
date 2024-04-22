@@ -18,10 +18,12 @@ const showingNavigationDropdown = ref(false);
                 <!-- Primary Navigation Menu -->
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div class="flex justify-between h-20">
-                        <LogoMPAP
-                            dark
-                            class="h-16 my-auto"
-                        />
+                        <a href="https://www.mpap.mp.br/" class="flex">
+                            <LogoMPAP
+                                dark
+                                class="h-16 my-auto"
+                            />
+                        </a>
                         <div class="flex">
                             <!-- Navigation Links -->
                             <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
