@@ -20,6 +20,6 @@ class InternalSystemUser extends Authenticatable
 
     public function niveis(): HasMany
     {
-        return $this->hasMany(InternalSystemNivel::class, 'id_usuario', 'id');
+        return $this->hasMany(InternalSystemNivel::class, 'usuario_id', 'id');
     }
 }
