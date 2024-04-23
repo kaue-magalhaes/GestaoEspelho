@@ -16,16 +16,16 @@ use function Pest\Laravel\post;
 
 it('should be possible to create a Promotoria', function () {
     Municipio::factory()->create();
-    $user = InternalSystemUser::factory()->create();
+    $user             = InternalSystemUser::factory()->create();
+    $espelho          = Espelho::factory()->create();
+    $promotor_titular = Promotor::factory()->create();
+    $grupo_promotoria = GrupoPromotoria::factory()->create();
     InternalSystemNivel::factory()->create([
         'usuario_id' => $user->id,
         'sistema'    => 'SOL',
         'nivel'      => fake()->numberBetween(5, 10),
         'status'     => 1,
     ]);
-    $espelho          = Espelho::factory()->create();
-    $promotor_titular = Promotor::factory()->create();
-    $grupo_promotoria = GrupoPromotoria::factory()->create();
 
     actingAs($user);
     $request = post(route('promotoria.store'), [
@@ -52,15 +52,15 @@ it('should not be possible to create a Promotoria if it is not authorized', func
     // primeiro um usuário não autorizado, ou seja, com nível menor que 5 no sistema SOL
     Municipio::factory()->create();
     $unauthorizedUser = InternalSystemUser::factory()->create();
+    $espelho          = Espelho::factory()->create();
+    $promotor_titular = Promotor::factory()->create();
+    $grupo_promotoria = GrupoPromotoria::factory()->create();
     InternalSystemNivel::factory()->create([
         'usuario_id' => $unauthorizedUser->id,
         'sistema'    => 'SOL',
         'nivel'      => fake()->numberBetween(1, 4),
         'status'     => 1,
     ]);
-    $espelho          = Espelho::factory()->create();
-    $promotor_titular = Promotor::factory()->create();
-    $grupo_promotoria = GrupoPromotoria::factory()->create();
 
     actingAs($unauthorizedUser);
     $request = post(route('promotoria.store'), [
@@ -106,15 +106,15 @@ it('should not be possible to create a Promotoria if it is not authorized', func
 
 it('should not be possible to create a Promotoria without a Promotor Titular', function () {
     Municipio::factory()->create();
-    $user = InternalSystemUser::factory()->create();
+    $user             = InternalSystemUser::factory()->create();
+    $espelho          = Espelho::factory()->create();
+    $grupo_promotoria = GrupoPromotoria::factory()->create();
     InternalSystemNivel::factory()->create([
         'usuario_id' => $user->id,
         'sistema'    => 'SOL',
         'nivel'      => fake()->numberBetween(5, 10),
         'status'     => 1,
     ]);
-    $espelho          = Espelho::factory()->create();
-    $grupo_promotoria = GrupoPromotoria::factory()->create();
 
     actingAs($user);
     $request = post(route('promotoria.store'), [
@@ -131,15 +131,15 @@ it('should not be possible to create a Promotoria without a Promotor Titular', f
 
 it('should not be possible to create a Promotoria without a Grupo Promotoria', function () {
     Municipio::factory()->create();
-    $user = InternalSystemUser::factory()->create();
+    $user             = InternalSystemUser::factory()->create();
+    $espelho          = Espelho::factory()->create();
+    $promotor_titular = Promotor::factory()->create();
     InternalSystemNivel::factory()->create([
         'usuario_id' => $user->id,
         'sistema'    => 'SOL',
         'nivel'      => fake()->numberBetween(5, 10),
         'status'     => 1,
     ]);
-    $espelho          = Espelho::factory()->create();
-    $promotor_titular = Promotor::factory()->create();
 
     actingAs($user);
     $request = post(route('promotoria.store'), [
@@ -156,16 +156,16 @@ it('should not be possible to create a Promotoria without a Grupo Promotoria', f
 
 it('should not be possible to create a Promotoria without a name ', function () {
     Municipio::factory()->create();
-    $user = InternalSystemUser::factory()->create();
+    $user             = InternalSystemUser::factory()->create();
+    $espelho          = Espelho::factory()->create();
+    $promotor_titular = Promotor::factory()->create();
+    $grupo_promotoria = GrupoPromotoria::factory()->create();
     InternalSystemNivel::factory()->create([
         'usuario_id' => $user->id,
         'sistema'    => 'SOL',
         'nivel'      => fake()->numberBetween(5, 10),
         'status'     => 1,
     ]);
-    $espelho          = Espelho::factory()->create();
-    $promotor_titular = Promotor::factory()->create();
-    $grupo_promotoria = GrupoPromotoria::factory()->create();
 
     actingAs($user);
     $request = post(route('promotoria.store'), [
@@ -182,15 +182,15 @@ it('should not be possible to create a Promotoria without a name ', function () 
 
 it('should not be possible to create a Promotoria with a non-existent Promotor Titular', function () {
     Municipio::factory()->create();
-    $user = InternalSystemUser::factory()->create();
+    $user             = InternalSystemUser::factory()->create();
+    $espelho          = Espelho::factory()->create();
+    $grupo_promotoria = GrupoPromotoria::factory()->create();
     InternalSystemNivel::factory()->create([
         'usuario_id' => $user->id,
         'sistema'    => 'SOL',
         'nivel'      => fake()->numberBetween(5, 10),
         'status'     => 1,
     ]);
-    $espelho          = Espelho::factory()->create();
-    $grupo_promotoria = GrupoPromotoria::factory()->create();
 
     actingAs($user);
     $request = post(route('promotoria.store'), [
@@ -208,15 +208,15 @@ it('should not be possible to create a Promotoria with a non-existent Promotor T
 
 it('should not be possible to create a Promotoria with a non-existent Grupo Promotoria', function () {
     Municipio::factory()->create();
-    $user = InternalSystemUser::factory()->create();
+    $user             = InternalSystemUser::factory()->create();
+    $espelho          = Espelho::factory()->create();
+    $promotor_titular = Promotor::factory()->create();
     InternalSystemNivel::factory()->create([
         'usuario_id' => $user->id,
         'sistema'    => 'SOL',
         'nivel'      => fake()->numberBetween(5, 10),
         'status'     => 1,
     ]);
-    $espelho          = Espelho::factory()->create();
-    $promotor_titular = Promotor::factory()->create();
 
     actingAs($user);
     $request = post(route('promotoria.store'), [
@@ -234,17 +234,17 @@ it('should not be possible to create a Promotoria with a non-existent Grupo Prom
 
 it('should not be possible to create a Promotoria with a name that already exists', function () {
     Municipio::factory()->create();
-    $user = InternalSystemUser::factory()->create();
+    $user             = InternalSystemUser::factory()->create();
+    $espelho          = Espelho::factory()->create();
+    $promotor_titular = Promotor::factory()->create();
+    $grupo_promotoria = GrupoPromotoria::factory()->create();
+    $promotoria       = Promotoria::factory()->create();
     InternalSystemNivel::factory()->create([
         'usuario_id' => $user->id,
         'sistema'    => 'SOL',
         'nivel'      => fake()->numberBetween(5, 10),
         'status'     => 1,
     ]);
-    $espelho          = Espelho::factory()->create();
-    $promotor_titular = Promotor::factory()->create();
-    $grupo_promotoria = GrupoPromotoria::factory()->create();
-    $promotoria       = Promotoria::factory()->create();
 
     actingAs($user);
     $request = post(route('promotoria.store'), [
