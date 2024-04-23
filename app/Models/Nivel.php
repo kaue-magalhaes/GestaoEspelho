@@ -9,6 +9,8 @@ class Nivel extends Model
 {
     use HasFactory;
 
+    public $timestamps = false;
+
     protected $connection = 'sol';
 
     protected $table = 'public.niveis';
