@@ -6,12 +6,14 @@ use App\Models\InternalSystemUser;
 use App\Models\Municipio;
 use App\Models\Promotor;
 
+use App\Models\User;
 use function Pest\Laravel\actingAs;
+use function Pest\Laravel\assertDatabaseHas;
 use function Pest\Laravel\post;
 
 it('should be possible to create a Promotoria', function () {
     Municipio::factory()->create();
-    $user             = InternalSystemUser::factory()->create();
+    $user             = User::factory()->create();
     $espelho          = Espelho::factory()->create();
     $promotor_titular = Promotor::factory()->create();
     $grupo_promotoria = GrupoPromotoria::factory()->create();
@@ -28,7 +30,7 @@ it('should be possible to create a Promotoria', function () {
     $request->assertRedirect();
     $request->assertSessionHas('success', 'Promotoria criada com sucesso!');
 
-    $this->assertDatabaseHas('promotorias', [
+    assertDatabaseHas('promotorias', [
         'nome'                => 'Teste',
         'is_especializada'    => true,
         'espelho_id'          => $espelho->id,
