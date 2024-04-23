@@ -24,6 +24,15 @@ class PromotoriaPolicy
         return false;
     }
 
+    public function delete(InternalSystemUser $user): bool
+    {
+        if ($this->checksLevelInSolSystem($user)) {
+            return true;
+        }
+
+        return false;
+    }
+
     private function checksLevelInSolSystem(InternalSystemUser $user): bool
     {
         $nivel = $user->niveis()->where('sistema', 'SOL')->first()->toArray()['nivel'];

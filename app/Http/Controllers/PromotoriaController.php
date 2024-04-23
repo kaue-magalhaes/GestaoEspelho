@@ -30,4 +30,13 @@ class PromotoriaController extends Controller
 
         return back()->with('success', 'Promotoria alterada com sucesso!');
     }
+
+    public function destroy(Promotoria $promotoria): RedirectResponse
+    {
+        $this->authorize('delete', $promotoria);
+
+        $promotoria->delete();
+
+        return back()->with('success', 'Promotoria deletada com sucesso!');
+    }
 }

@@ -334,3 +334,35 @@ it('should not be possible to edit a Promotoria with a name that already exists'
     $request->assertSessionHasErrors('nome');
     $request->assertStatus(302);
 });
+
+
+it('should be possible to edit a Promotoria with associated Promotores', function () {
+    // Crie uma Promotoria com Promotores associados
+    // Tente editar a Promotoria
+    // Verifique se a resposta tem um status 200 ou 302
+    // Verifique se a Promotoria foi editada corretamente no banco de dados
+})->todo();
+
+it('should be possible to edit a Promotoria with associated GruposPromotoria', function () {
+    // Crie uma Promotoria com GruposPromotoria associados
+    // Tente editar a Promotoria
+    // Verifique se a resposta tem um status 200 ou 302
+    // Verifique se a Promotoria foi editada corretamente no banco de dados
+})->todo();
+
+it('should be possible to edit a Promotoria with associated Espelhos', function () {
+    // Crie uma Promotoria com Espelhos associados
+    // Tente editar a Promotoria
+    // Verifique se a resposta tem um status 200 ou 302
+    // Verifique se a Promotoria foi editada corretamente no banco de dados
+})->todo();
+
+it('should not be possible to edit a non-existent Promotoria', function () {
+    // Tente editar uma Promotoria que não existe
+    // Verifique se a resposta tem um status 404
+})->todo();
+
+it('should not be possible for an unauthenticated user to edit a Promotoria', function () {
+    // Tente editar uma Promotoria sem estar autenticado
+    // Verifique se a resposta tem um status 401 ou 403
+})->todo();

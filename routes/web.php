@@ -26,6 +26,7 @@ Route::middleware('auth')->group(function () {
 
     Route::post('/promotoria/store', [PromotoriaController::class, 'store'])->name('promotoria.store');
     Route::put('/promotoria/update/{promotoria}', [PromotoriaController::class, 'update'])->name('promotoria.update');
+    Route::delete('/promotoria/destroy/{promotoria}', [PromotoriaController::class, 'destroy'])->name('promotoria.destroy');
 });
 
 Route::get('/espelho', [EspelhoController::class, 'index'])->name('espelho.index');
