@@ -22,11 +22,11 @@ class PromotoriaRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'nome'                => 'required',
+            'nome'                => 'required|unique:promotorias,nome',
             'is_especializada'    => 'required',
-            'espelho_id'          => 'required',
-            'promotor_titular_id' => 'required',
-            'grupo_promotoria_id' => 'required',
+            'espelho_id'          => 'required|exists:espelhos,id',
+            'promotor_titular_id' => 'required|exists:promotores,id',
+            'grupo_promotoria_id' => 'required|exists:grupo_promotorias,id',
         ];
     }
 }
