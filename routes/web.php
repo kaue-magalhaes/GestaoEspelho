@@ -25,6 +25,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/espelho/historico', [EspelhoController::class, 'history'])->name('espelho.history');
 
     Route::post('/promotoria/store', [PromotoriaController::class, 'store'])->name('promotoria.store');
+    Route::put('/promotoria/update/{promotoria}', [PromotoriaController::class, 'update'])->name('promotoria.update');
 });
 
 Route::get('/espelho', [EspelhoController::class, 'index'])->name('espelho.index');
