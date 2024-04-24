@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import {onMounted, ref} from 'vue';
 import Dropdown from '@/Components/Dropdown.vue';
 import DropdownLink from '@/Components/DropdownLink.vue';
 import NavLink from '@/Components/NavLink.vue';
@@ -7,8 +7,17 @@ import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
 
 import { Toaster } from '@/Components/ui/sonner'
 import LogoMPAP from "@/Components/Icons/LogoMPAP.vue";
+import { computed } from 'vue'
+import { usePage } from '@inertiajs/vue3'
 
+const page = usePage()
+
+const user = computed(() => page.props.auth.user)
 const showingNavigationDropdown = ref(false);
+
+onMounted(() => {
+    console.log(user.value)
+});
 </script>
 
 <template>
@@ -65,6 +74,9 @@ const showingNavigationDropdown = ref(false);
                                     </template>
 
                                     <template #content>
+                                        <DropdownLink :href="route('admin.dashboard')" v-if="$page.props.auth.user.is_admin">
+                                            Área do Administrador
+                                        </DropdownLink>
                                         <DropdownLink :href="route('logout')" method="post" as="button">
                                             Sair
                                         </DropdownLink>

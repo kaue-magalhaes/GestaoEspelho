@@ -2,7 +2,6 @@
 
 use App\Models\Espelho;
 use App\Models\GrupoPromotoria;
-use App\Models\InternalSystemNivel;
 use App\Models\InternalSystemUser;
 use App\Models\Municipio;
 use App\Models\Promotor;
@@ -20,11 +19,10 @@ it('should be possible to create a Promotoria', function () {
     $espelho          = Espelho::factory()->create();
     $promotor_titular = Promotor::factory()->create();
     $grupo_promotoria = GrupoPromotoria::factory()->create();
-    InternalSystemNivel::factory()->create([
-        'usuario_id' => $user->id,
-        'sistema'    => 'SOL',
-        'nivel'      => fake()->numberBetween(5, 10),
-        'status'     => 1,
+    $user->niveis()->create([
+        'sistema' => 'Sol',
+        'nivel'   => fake()->numberBetween(5, 10),
+        'status'  => 1,
     ]);
 
     actingAs($user);
@@ -55,11 +53,10 @@ it('should not be possible to create a Promotoria if it is not authorized', func
     $espelho          = Espelho::factory()->create();
     $promotor_titular = Promotor::factory()->create();
     $grupo_promotoria = GrupoPromotoria::factory()->create();
-    InternalSystemNivel::factory()->create([
-        'usuario_id' => $unauthorizedUser->id,
-        'sistema'    => 'SOL',
-        'nivel'      => fake()->numberBetween(1, 4),
-        'status'     => 1,
+    $unauthorizedUser->niveis()->create([
+        'sistema' => 'Sol',
+        'nivel'   => fake()->numberBetween(1, 4),
+        'status'  => 1,
     ]);
 
     actingAs($unauthorizedUser);
@@ -76,11 +73,10 @@ it('should not be possible to create a Promotoria if it is not authorized', func
 
     // agora um usuário autorizado, ou seja, com nível maior ou igual a 5 no sistema SOL
     $authorizedUser = InternalSystemUser::factory()->create();
-    InternalSystemNivel::factory()->create([
-        'usuario_id' => $authorizedUser->id,
-        'sistema'    => 'SOL',
-        'nivel'      => fake()->numberBetween(5, 10),
-        'status'     => 1,
+    $authorizedUser->niveis()->create([
+        'sistema' => 'Sol',
+        'nivel'   => fake()->numberBetween(5, 10),
+        'status'  => 1,
     ]);
 
     actingAs($authorizedUser);
@@ -109,11 +105,10 @@ it('should not be possible to create a Promotoria without a Promotor Titular', f
     $user             = InternalSystemUser::factory()->create();
     $espelho          = Espelho::factory()->create();
     $grupo_promotoria = GrupoPromotoria::factory()->create();
-    InternalSystemNivel::factory()->create([
-        'usuario_id' => $user->id,
-        'sistema'    => 'SOL',
-        'nivel'      => fake()->numberBetween(5, 10),
-        'status'     => 1,
+    $user->niveis()->create([
+        'sistema' => 'Sol',
+        'nivel'   => fake()->numberBetween(5, 10),
+        'status'  => 1,
     ]);
 
     actingAs($user);
@@ -134,11 +129,10 @@ it('should not be possible to create a Promotoria without a Grupo Promotoria', f
     $user             = InternalSystemUser::factory()->create();
     $espelho          = Espelho::factory()->create();
     $promotor_titular = Promotor::factory()->create();
-    InternalSystemNivel::factory()->create([
-        'usuario_id' => $user->id,
-        'sistema'    => 'SOL',
-        'nivel'      => fake()->numberBetween(5, 10),
-        'status'     => 1,
+    $user->niveis()->create([
+        'sistema' => 'Sol',
+        'nivel'   => fake()->numberBetween(5, 10),
+        'status'  => 1,
     ]);
 
     actingAs($user);
@@ -160,11 +154,10 @@ it('should not be possible to create a Promotoria without a name ', function () 
     $espelho          = Espelho::factory()->create();
     $promotor_titular = Promotor::factory()->create();
     $grupo_promotoria = GrupoPromotoria::factory()->create();
-    InternalSystemNivel::factory()->create([
-        'usuario_id' => $user->id,
-        'sistema'    => 'SOL',
-        'nivel'      => fake()->numberBetween(5, 10),
-        'status'     => 1,
+    $user->niveis()->create([
+        'sistema' => 'Sol',
+        'nivel'   => fake()->numberBetween(5, 10),
+        'status'  => 1,
     ]);
 
     actingAs($user);
@@ -185,11 +178,10 @@ it('should not be possible to create a Promotoria with a non-existent Promotor T
     $user             = InternalSystemUser::factory()->create();
     $espelho          = Espelho::factory()->create();
     $grupo_promotoria = GrupoPromotoria::factory()->create();
-    InternalSystemNivel::factory()->create([
-        'usuario_id' => $user->id,
-        'sistema'    => 'SOL',
-        'nivel'      => fake()->numberBetween(5, 10),
-        'status'     => 1,
+    $user->niveis()->create([
+        'sistema' => 'Sol',
+        'nivel'   => fake()->numberBetween(5, 10),
+        'status'  => 1,
     ]);
 
     actingAs($user);
@@ -211,11 +203,10 @@ it('should not be possible to create a Promotoria with a non-existent Grupo Prom
     $user             = InternalSystemUser::factory()->create();
     $espelho          = Espelho::factory()->create();
     $promotor_titular = Promotor::factory()->create();
-    InternalSystemNivel::factory()->create([
-        'usuario_id' => $user->id,
-        'sistema'    => 'SOL',
-        'nivel'      => fake()->numberBetween(5, 10),
-        'status'     => 1,
+    $user->niveis()->create([
+        'sistema' => 'Sol',
+        'nivel'   => fake()->numberBetween(5, 10),
+        'status'  => 1,
     ]);
 
     actingAs($user);
@@ -239,11 +230,10 @@ it('should not be possible to create a Promotoria with a name that already exist
     $promotor_titular = Promotor::factory()->create();
     $grupo_promotoria = GrupoPromotoria::factory()->create();
     $promotoria       = Promotoria::factory()->create();
-    InternalSystemNivel::factory()->create([
-        'usuario_id' => $user->id,
-        'sistema'    => 'SOL',
-        'nivel'      => fake()->numberBetween(5, 10),
-        'status'     => 1,
+    $user->niveis()->create([
+        'sistema' => 'Sol',
+        'nivel'   => fake()->numberBetween(5, 10),
+        'status'  => 1,
     ]);
 
     actingAs($user);

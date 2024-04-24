@@ -8,7 +8,7 @@ class PromotoriaPolicy
 {
     public function create(InternalSystemUser $user): bool
     {
-        if ($this->checksLevelInSolSystem($user)) {
+        if ($user->isAdmin()) {
             return true;
         }
 
@@ -17,7 +17,7 @@ class PromotoriaPolicy
 
     public function update(InternalSystemUser $user): bool
     {
-        if ($this->checksLevelInSolSystem($user)) {
+        if ($user->isAdmin()) {
             return true;
         }
 
@@ -26,17 +26,10 @@ class PromotoriaPolicy
 
     public function delete(InternalSystemUser $user): bool
     {
-        if ($this->checksLevelInSolSystem($user)) {
+        if ($user->isAdmin()) {
             return true;
         }
 
         return false;
-    }
-
-    private function checksLevelInSolSystem(InternalSystemUser $user): bool
-    {
-        $nivel = $user->niveis()->where('sistema', 'SOL')->first()->toArray()['nivel'];
-
-        return $nivel >= 5;
     }
 }

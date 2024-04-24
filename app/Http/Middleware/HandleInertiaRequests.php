@@ -32,11 +32,16 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
-        //dd($request->user());
+        $user = $request->user();
+
+        if ($user) {
+            $user = $user->isAdmin() ? $user->toArray() + ['is_admin' => true] : $user->toArray();
+        }
+
         return [
             ...parent::share($request),
             'auth' => [
-                'user' => $request->user(),
+                'user' => $user,
             ],
             'promotores' => Promotor::query()
                 ->get()

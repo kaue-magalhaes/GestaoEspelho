@@ -2,11 +2,11 @@
 
 use App\Models\Espelho;
 use App\Models\GrupoPromotoria;
-use App\Models\InternalSystemNivel;
 use App\Models\InternalSystemUser;
 use App\Models\Municipio;
 use App\Models\Promotor;
 use App\Models\Promotoria;
+
 use function Pest\Laravel\actingAs;
 use function Pest\Laravel\assertDatabaseCount;
 use function Pest\Laravel\delete;
@@ -26,11 +26,10 @@ it('should be possible to delete a Promotoria', function () {
             'grupo_promotoria_id' => $grupo_promotoria->id,
         ]
     );
-    InternalSystemNivel::factory()->create([
-        'usuario_id' => $user->id,
-        'sistema'    => 'SOL',
-        'nivel'      => fake()->numberBetween(5, 10),
-        'status'     => 1,
+    $user->niveis()->create([
+        'sistema' => 'Sol',
+        'nivel'   => fake()->numberBetween(5, 10),
+        'status'  => 1,
     ]);
 
     actingAs($user);
@@ -44,7 +43,7 @@ it('should be possible to delete a Promotoria', function () {
 
 it('should not be possible to delete a Promotoria if it is not authorized', function () {
     Municipio::factory()->create();
-    $unauthorizedUser             = InternalSystemUser::factory()->create();
+    $unauthorizedUser = InternalSystemUser::factory()->create();
     $espelho          = Espelho::factory()->create();
     $promotor_titular = Promotor::factory()->create();
     $grupo_promotoria = GrupoPromotoria::factory()->create();
@@ -57,11 +56,10 @@ it('should not be possible to delete a Promotoria if it is not authorized', func
             'grupo_promotoria_id' => $grupo_promotoria->id,
         ]
     );
-    InternalSystemNivel::factory()->create([
-        'usuario_id' => $unauthorizedUser->id,
-        'sistema'    => 'SOL',
-        'nivel'      => fake()->numberBetween(1, 4),
-        'status'     => 1,
+    $unauthorizedUser->niveis()->create([
+        'sistema' => 'Sol',
+        'nivel'   => fake()->numberBetween(1, 4),
+        'status'  => 1,
     ]);
 
     actingAs($unauthorizedUser);
@@ -71,16 +69,14 @@ it('should not be possible to delete a Promotoria if it is not authorized', func
 
     // agora um usuário autorizado, ou seja, com nível maior ou igual a 5 no sistema SOL
     $authorizedUser = InternalSystemUser::factory()->create();
-    InternalSystemNivel::factory()->create([
-        'usuario_id' => $authorizedUser->id,
-        'sistema'    => 'SOL',
-        'nivel'      => fake()->numberBetween(5, 10),
-        'status'     => 1,
+    $authorizedUser->niveis()->create([
+        'sistema' => 'Sol',
+        'nivel'   => fake()->numberBetween(5, 10),
+        'status'  => 1,
     ]);
 
     actingAs($authorizedUser);
     $request = delete(route('promotoria.destroy', $promotoria));
-
 
     $request->assertRedirect();
     $request->assertSessionHas('success', 'Promotoria deletada com sucesso!');

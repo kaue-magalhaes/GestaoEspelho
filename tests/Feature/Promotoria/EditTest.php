@@ -2,7 +2,6 @@
 
 use App\Models\Espelho;
 use App\Models\GrupoPromotoria;
-use App\Models\InternalSystemNivel;
 use App\Models\InternalSystemUser;
 use App\Models\Municipio;
 use App\Models\Promotor;
@@ -28,11 +27,10 @@ it('should be possible to edit a Promotoria', function () {
             'grupo_promotoria_id' => $grupo_promotoria->id,
         ]
     );
-    InternalSystemNivel::factory()->create([
-        'usuario_id' => $user->id,
-        'sistema'    => 'SOL',
-        'nivel'      => fake()->numberBetween(5, 10),
-        'status'     => 1,
+    $user->niveis()->create([
+        'sistema' => 'Sol',
+        'nivel'   => fake()->numberBetween(5, 10),
+        'status'  => 1,
     ]);
 
     actingAs($user);
@@ -72,11 +70,10 @@ it('should not be possible to edit a Promotoria if it is not authorized', functi
             'grupo_promotoria_id' => $grupo_promotoria->id,
         ]
     );
-    InternalSystemNivel::factory()->create([
-        'usuario_id' => $unauthorizedUser->id,
-        'sistema'    => 'SOL',
-        'nivel'      => fake()->numberBetween(1, 4),
-        'status'     => 1,
+    $unauthorizedUser->niveis()->create([
+        'sistema' => 'Sol',
+        'nivel'   => fake()->numberBetween(1, 4),
+        'status'  => 1,
     ]);
 
     actingAs($unauthorizedUser);
@@ -92,11 +89,10 @@ it('should not be possible to edit a Promotoria if it is not authorized', functi
 
     // agora um usuário autorizado, ou seja, com nível maior ou igual a 5 no sistema SOL
     $authorizedUser = InternalSystemUser::factory()->create();
-    InternalSystemNivel::factory()->create([
-        'usuario_id' => $authorizedUser->id,
-        'sistema'    => 'SOL',
-        'nivel'      => fake()->numberBetween(5, 10),
-        'status'     => 1,
+    $authorizedUser->niveis()->create([
+        'sistema' => 'Sol',
+        'nivel'   => fake()->numberBetween(5, 10),
+        'status'  => 1,
     ]);
 
     actingAs($authorizedUser);
@@ -135,11 +131,10 @@ it('should not be possible to edit a Promotoria without a Promotor Titular', fun
             'grupo_promotoria_id' => $grupo_promotoria->id,
         ]
     );
-    InternalSystemNivel::factory()->create([
-        'usuario_id' => $user->id,
-        'sistema'    => 'SOL',
-        'nivel'      => fake()->numberBetween(5, 10),
-        'status'     => 1,
+    $user->niveis()->create([
+        'sistema' => 'Sol',
+        'nivel'   => fake()->numberBetween(5, 10),
+        'status'  => 1,
     ]);
 
     actingAs($user);
@@ -169,11 +164,10 @@ it('should not be possible to edit a Promotoria without a Grupo Promotoria', fun
             'grupo_promotoria_id' => $grupo_promotoria->id,
         ]
     );
-    InternalSystemNivel::factory()->create([
-        'usuario_id' => $user->id,
-        'sistema'    => 'SOL',
-        'nivel'      => fake()->numberBetween(5, 10),
-        'status'     => 1,
+    $user->niveis()->create([
+        'sistema' => 'Sol',
+        'nivel'   => fake()->numberBetween(5, 10),
+        'status'  => 1,
     ]);
 
     actingAs($user);
@@ -203,11 +197,10 @@ it('should not be possible to edit a Promotoria without a name ', function () {
             'grupo_promotoria_id' => $grupo_promotoria->id,
         ]
     );
-    InternalSystemNivel::factory()->create([
-        'usuario_id' => $user->id,
-        'sistema'    => 'SOL',
-        'nivel'      => fake()->numberBetween(5, 10),
-        'status'     => 1,
+    $user->niveis()->create([
+        'sistema' => 'Sol',
+        'nivel'   => fake()->numberBetween(5, 10),
+        'status'  => 1,
     ]);
 
     actingAs($user);
@@ -237,11 +230,10 @@ it('should not be possible to edit a Promotoria with a non-existent Promotor Tit
             'grupo_promotoria_id' => $grupo_promotoria->id,
         ]
     );
-    InternalSystemNivel::factory()->create([
-        'usuario_id' => $user->id,
-        'sistema'    => 'SOL',
-        'nivel'      => fake()->numberBetween(5, 10),
-        'status'     => 1,
+    $user->niveis()->create([
+        'sistema' => 'Sol',
+        'nivel'   => fake()->numberBetween(5, 10),
+        'status'  => 1,
     ]);
 
     actingAs($user);
@@ -272,11 +264,10 @@ it('should not be possible to edit a Promotoria with a non-existent Grupo Promot
             'grupo_promotoria_id' => $grupo_promotoria->id,
         ]
     );
-    InternalSystemNivel::factory()->create([
-        'usuario_id' => $user->id,
-        'sistema'    => 'SOL',
-        'nivel'      => fake()->numberBetween(5, 10),
-        'status'     => 1,
+    $user->niveis()->create([
+        'sistema' => 'Sol',
+        'nivel'   => fake()->numberBetween(5, 10),
+        'status'  => 1,
     ]);
 
     actingAs($user);
@@ -315,11 +306,10 @@ it('should not be possible to edit a Promotoria with a name that already exists'
             'grupo_promotoria_id' => $grupo_promotoria->id,
         ]
     );
-    InternalSystemNivel::factory()->create([
-        'usuario_id' => $user->id,
-        'sistema'    => 'SOL',
-        'nivel'      => fake()->numberBetween(5, 10),
-        'status'     => 1,
+    $user->niveis()->create([
+        'sistema' => 'Sol',
+        'nivel'   => fake()->numberBetween(5, 10),
+        'status'  => 1,
     ]);
 
     actingAs($user);
@@ -334,7 +324,6 @@ it('should not be possible to edit a Promotoria with a name that already exists'
     $request->assertSessionHasErrors('nome');
     $request->assertStatus(302);
 });
-
 
 it('should be possible to edit a Promotoria with associated Promotores', function () {
     // Crie uma Promotoria com Promotores associados

@@ -9,5 +9,10 @@ class InternalSystemNivel extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'sistema',
+        'nivel',
+    ];
+
     protected $table = 'internal_system_nivels';
 }

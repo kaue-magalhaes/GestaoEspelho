@@ -1,8 +1,8 @@
 <?php
 
+use App\Http\Controllers\Admin;
 use App\Http\Controllers\EspelhoController;
 use App\Http\Controllers\PromotoriaController;
-use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -23,6 +23,8 @@ Route::middleware('auth')->group(function () {
     Route::put('/espelho/{id}', [EspelhoController::class, 'update'])->name('espelho.update');
     Route::post('/espelho/publicar/{id}', [EspelhoController::class, 'publish'])->name('espelho.publish');
     Route::get('/espelho/historico', [EspelhoController::class, 'history'])->name('espelho.history');
+
+    Route::get('/area-do-administrador', Admin\DashboardController::class)->name('admin.dashboard');
 
     Route::post('/promotoria/store', [PromotoriaController::class, 'store'])->name('promotoria.store');
     Route::put('/promotoria/update/{promotoria}', [PromotoriaController::class, 'update'])->name('promotoria.update');

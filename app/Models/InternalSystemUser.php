@@ -22,4 +22,15 @@ class InternalSystemUser extends Authenticatable
     {
         return $this->hasMany(InternalSystemNivel::class, 'usuario_id', 'id');
     }
+
+    public function isAdmin(): bool
+    {
+        foreach ($this->niveis as $nivel) {
+            if ($nivel->sistema === 'Sol' && $nivel->nivel >= 5) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }
