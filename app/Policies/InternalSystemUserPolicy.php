@@ -6,7 +6,7 @@ use App\Models\InternalSystemUser;
 
 class InternalSystemUserPolicy
 {
-    public function accessAdminDashboard(InternalSystemUser $user): bool
+    public function isAdmin(InternalSystemUser $user): bool
     {
         if ($user->isAdmin()) {
             return true;

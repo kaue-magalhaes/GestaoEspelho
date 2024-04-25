@@ -8,6 +8,12 @@ use Illuminate\Http\RedirectResponse;
 
 class PromotoriaController extends Controller
 {
+    public function index()
+    {
+        // retorno de api um array com todas as promotorias
+        return Promotoria::query()
+            ->get();
+    }
     public function store(PromotoriaRequest $request): RedirectResponse
     {
         $this->authorize('create', Promotoria::class);
