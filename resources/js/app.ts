@@ -30,7 +30,7 @@ import { Dialog, DialogContent, DialogTrigger, DialogHeader, DialogTitle, Dialog
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue} from '@/Components/ui/select';
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow} from '@/Components/ui/table';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/Components/ui/carousel';
-import { Card, CardDescription, CardContent, CardHeader, CardTitle } from '@/Components/ui/card';
+import { Card, CardDescription, CardContent, CardHeader, CardTitle, CardFooter } from '@/Components/ui/card';
 import ContainerComponent from '@/Components/ContainerComponent.vue';
 import { Button } from '@/Components/ui/button';
 import { Input } from '@/Components/ui/input';
@@ -99,6 +99,7 @@ createInertiaApp({
             .component('CardContent', CardContent)
             .component('CardHeader', CardHeader)
             .component('CardTitle', CardTitle)
+            .component('CardFooter', CardFooter)
             .component('ContainerComponent', ContainerComponent)
             .component('Button', Button)
             .component('Input', Input)

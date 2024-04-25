@@ -1,15 +1,29 @@
 <script setup lang="ts">
 import {Head} from "@inertiajs/vue3";
+import AdminLayout from "@/Layouts/AdminLayout.vue";
 
 </script>
 
 <template>
-    <Head title="Espelho" />
+    <Head title="Espelho"/>
     <AuthenticatedLayout>
         <ContainerComponent>
-            <div class="flex justify-between">
-                <h1 class="text-2xl font-semibold text-gray-900">Dashboard</h1>
-            </div>
+            <AdminLayout>
+                <Card>
+                    <CardHeader>
+                        <CardTitle>titulo</CardTitle>
+                        <CardDescription>
+                            descrição
+                        </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        Conteúdo
+                    </CardContent>
+                    <CardFooter>
+
+                    </CardFooter>
+                </Card>
+            </AdminLayout>
         </ContainerComponent>
     </AuthenticatedLayout>
 </template>

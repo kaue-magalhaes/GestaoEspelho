@@ -124,10 +124,10 @@ onMounted(() => {
                     class="sm:hidden"
                 >
                     <div class="pt-2 pb-3 space-y-1">
-                        <ResponsiveNavLink :href="route('espelho.editor')" :active="route().current('espelho.editor')">
+                        <ResponsiveNavLink dark :href="route('espelho.editor')" :active="route().current('espelho.editor')">
                             Editor
                         </ResponsiveNavLink>
-                        <ResponsiveNavLink :href="route('espelho.history')" :active="route().current('espelho.history')">
+                        <ResponsiveNavLink dark :href="route('espelho.history')" :active="route().current('espelho.history')">
                             Histórico
                         </ResponsiveNavLink>
                     </div>
@@ -135,15 +135,17 @@ onMounted(() => {
                     <!-- Responsive Settings Options -->
                     <div class="pt-4 pb-1 border-t border-gray-200">
                         <div class="px-4">
-                            <div class="font-medium text-base text-gray-800">
+                            <div class="font-medium text-base text-white">
                                 {{ $page.props.auth.user.nome }}
                             </div>
-                            <div class="font-medium text-sm text-gray-500">{{ $page.props.auth.user.email }}</div>
+                            <div class="font-medium text-sm text-gray-300">{{ $page.props.auth.user.email }}</div>
                         </div>
 
                         <div class="mt-3 space-y-1">
-                            <ResponsiveNavLink :href="route('logout')" method="post" as="button">
-                                Sair
+                            <ResponsiveNavLink dark :href="route('logout')" method="post" as="button">
+                                <span class="text-gray-300">
+                                    Sair
+                                </span>
                             </ResponsiveNavLink>
                         </div>
                     </div>
