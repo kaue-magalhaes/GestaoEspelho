@@ -2,6 +2,7 @@ import './bootstrap';
 import '../css/app.css';
 
 import { createApp, h, DefineComponent } from 'vue';
+import { createPinia } from "pinia";
 import { createInertiaApp } from '@inertiajs/vue3';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { ZiggyVue } from '../../vendor/tightenco/ziggy/dist/vue.m';
@@ -39,6 +40,7 @@ import DatePicker from '@/Components/DatePicker.vue';
 
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
+const pinia = createPinia()
 
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,
@@ -105,6 +107,7 @@ createInertiaApp({
             .component('Input', Input)
             .component('Label', Label)
             .component('DatePicker', DatePicker)
+            .use(pinia)
             .use(plugin)
             .use(ZiggyVue)
             .mount(el);

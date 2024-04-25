@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Response;
 
-class DashboardController extends Controller
+class PromotoriasController extends Controller
 {
     /**
      * Handle the incoming request.
@@ -18,6 +18,6 @@ class DashboardController extends Controller
 
         $this->authorize('isAdmin', $user);
 
-        return inertia('Admin/Dashboard');
+        return inertia('Admin/Promotorias');
     }
 }

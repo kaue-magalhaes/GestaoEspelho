@@ -8,6 +8,11 @@ use Illuminate\Http\RedirectResponse;
 
 class PromotoriaController extends Controller
 {
+    public function index(): \Illuminate\Database\Eloquent\Collection
+    {
+        return Promotoria::query()->get();
+    }
+
     public function store(PromotoriaRequest $request): RedirectResponse
     {
         $this->authorize('create', Promotoria::class);

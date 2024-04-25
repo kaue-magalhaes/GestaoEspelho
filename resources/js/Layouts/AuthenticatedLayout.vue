@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {onMounted, ref} from 'vue';
+import {ref} from 'vue';
 import Dropdown from '@/Components/Dropdown.vue';
 import DropdownLink from '@/Components/DropdownLink.vue';
 import NavLink from '@/Components/NavLink.vue';
@@ -14,10 +14,6 @@ const page = usePage()
 
 const user = computed(() => page.props.auth.user)
 const showingNavigationDropdown = ref(false);
-
-onMounted(() => {
-    console.log(user.value)
-});
 </script>
 
 <template>
