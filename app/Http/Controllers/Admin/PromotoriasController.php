@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Promotoria;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Response;
@@ -18,6 +19,9 @@ class PromotoriasController extends Controller
 
         $this->authorize('isAdmin', $user);
 
-        return inertia('Admin/Promotorias');
+        return inertia('Admin/Promotorias', [
+            'promotorias' => Promotoria::query()
+                ->paginate(10),
+        ]);
     }
 }

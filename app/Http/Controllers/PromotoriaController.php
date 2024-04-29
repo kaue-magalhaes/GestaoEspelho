@@ -4,14 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\PromotoriaRequest;
 use App\Models\Promotoria;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\RedirectResponse;
 
 class PromotoriaController extends Controller
 {
-    public function index(): \Illuminate\Contracts\Pagination\LengthAwarePaginator
+    public function index(): Collection
     {
         return Promotoria::query()
-            ->paginate(10);
+            ->get();
     }
 
     public function store(PromotoriaRequest $request): RedirectResponse
