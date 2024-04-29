@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {UrgenciaAtendimento} from "@/Interfaces/UrgenciaAtendimento";
 import {Promotor} from "@/Interfaces/Promotor";
-import {Espelho} from "@/Interfaces/Espelho";
+import {Espelho} from "@/Interfaces/Espelho/Espelho";
 import {Evento} from "@/Interfaces/Evento";
 import {GrupoPromotoria} from "@/Interfaces/GrupoPromotoria";
 import {Atribuicoes} from "@/Interfaces/Atribuicoes";
@@ -12,7 +12,7 @@ import { format } from 'date-fns';
 import axios from 'axios';
 import { toast } from 'vue-sonner';
 import { Loader2 } from 'lucide-vue-next'
-import {Promotoria} from "@/Interfaces/Promotoria";
+import {Promotoria} from "@/Interfaces/Promotoria/Promotoria";
 
 const props = defineProps({
     espelho: {

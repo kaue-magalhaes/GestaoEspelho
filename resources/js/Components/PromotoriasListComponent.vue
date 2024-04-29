@@ -1,15 +1,15 @@
 <script setup lang="ts">
 import {format} from "date-fns";
-import {Espelhos} from "@/Interfaces/Espelho/Espelhos";
 import { ArrowUpDown } from 'lucide-vue-next'
+import {Promotoria} from "@/Interfaces/Promotoria/Promotoria";
 
 defineEmits([
     'invertOrderByCreatedAt'
 ]);
 
 defineProps({
-    espelhos: {
-        type: Array as () => Espelhos[],
+    promotorias: {
+        type: Array as () => Promotoria[],
         required: true
     }
 });
@@ -28,32 +28,19 @@ defineProps({
                         <ArrowUpDown class="ml-2 w-4 h-4" />
                     </Button>
                 </TableHead>
-                <TableHead>
-                    Publicado por
-                </TableHead>
                 <TableHead class="w-[100px]">
 
                 </TableHead>
             </TableRow>
         </TableHeader>
         <TableBody>
-            <TableRow v-for="espelho in espelhos" :key="espelho.id">
+            <TableRow v-for="promotoria in promotorias" :key="promotoria.id">
                 <TableCell class="font-medium">
-                    {{ espelho.titulo }}
+                    {{ promotoria.nome }}
                 </TableCell>
                 <TableCell>
-                    {{ format(new Date(espelho.created_at), 'dd/MM/yyyy') }} às
-                    {{ format(new Date(espelho.created_at), 'HH:mm') }} horas
-                </TableCell>
-                <TableCell>
-                    {{ espelho.user.nome }}
-                </TableCell>
-                <TableCell>
-                    <a :href="`/espelho/historico/${espelho.id}`">
-                        <Button size="sm" variant="link">
-                            Visualizar
-                        </Button>
-                    </a>
+                    {{ format(new Date(promotoria.created_at), 'dd/MM/yyyy') }} às
+                    {{ format(new Date(promotoria.created_at), 'HH:mm') }} horas
                 </TableCell>
             </TableRow>
         </TableBody>

@@ -1,11 +1,11 @@
 import { defineStore } from 'pinia';
 import axios from 'axios';
-import {Promotoria} from "@/Interfaces/Promotoria";
+import {PromotoriasPaginate} from "@/Interfaces/Promotoria/PromotoriaPaginate";
 
 
 export const usePromotoriaStore = defineStore('promotoria', () => {
-    const getPromotorias = async (): Promise<Promotoria[]> => {
-        const response = await axios.get<Promotoria[]>('http://localhost:8000/api/promotorias');
+    const getPromotorias = async (): Promise<PromotoriasPaginate> => {
+        const response = await axios.get<PromotoriasPaginate>('http://localhost:8000/api/promotorias');
         return response.data;
     }
 

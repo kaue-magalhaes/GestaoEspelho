@@ -8,9 +8,10 @@ use Illuminate\Http\RedirectResponse;
 
 class PromotoriaController extends Controller
 {
-    public function index(): \Illuminate\Database\Eloquent\Collection
+    public function index(): \Illuminate\Contracts\Pagination\LengthAwarePaginator
     {
-        return Promotoria::query()->get();
+        return Promotoria::query()
+            ->paginate(10);
     }
 
     public function store(PromotoriaRequest $request): RedirectResponse

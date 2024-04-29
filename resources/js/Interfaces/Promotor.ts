@@ -1,4 +1,4 @@
-import {Promotoria} from "@/Interfaces/Promotoria";
+import {Promotoria} from "@/Interfaces/Promotoria/Promotoria";
 import {Evento} from "@/Interfaces/Evento";
 import {UrgenciaAtendimento} from "@/Interfaces/UrgenciaAtendimento";
 

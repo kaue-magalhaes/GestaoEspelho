@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {GrupoPromotoria} from "@/Interfaces/GrupoPromotoria";
-import {Promotoria} from "@/Interfaces/Promotoria";
+import {Promotoria} from "@/Interfaces/Promotoria/Promotoria";
 import {Promotor} from "@/Interfaces/Promotor";
 import {Evento} from "@/Interfaces/Evento";
 

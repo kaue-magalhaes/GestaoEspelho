@@ -1,6 +1,6 @@
 import {Promotor} from "@/Interfaces/Promotor";
 import {GrupoPromotoria} from "@/Interfaces/GrupoPromotoria";
-import {Espelho} from "@/Interfaces/Espelho";
+import {Espelho} from "@/Interfaces/Espelho/Espelho";
 
 export interface Promotoria {
     id: string;

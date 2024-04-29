@@ -2,9 +2,9 @@
 import {ref, onBeforeMount} from 'vue';
 import {v4 as uuidv4} from 'uuid';
 import {format} from 'date-fns';
-import {Espelho} from "@/Interfaces/Espelho";
+import {Espelho} from "@/Interfaces/Espelho/Espelho";
 import {Promotor} from "@/Interfaces/Promotor";
-import {Promotoria} from "@/Interfaces/Promotoria";
+import {Promotoria} from "@/Interfaces/Promotoria/Promotoria";
 import {UrgenciaAtendimento} from "@/Interfaces/UrgenciaAtendimento";
 import {GrupoPromotoria} from "@/Interfaces/GrupoPromotoria";
 import {Atribuicoes} from "@/Interfaces/Atribuicoes";

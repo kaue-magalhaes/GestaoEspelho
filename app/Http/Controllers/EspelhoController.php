@@ -61,12 +61,6 @@ class EspelhoController extends Controller
     {
         $historicoId = Historico::query()->orderBy('id', 'desc')->first();
 
-        //        dd(
-        //            HistoricoUrgenciaAtendimento::query()
-        //                ->where('historico_id', $historicoId->id)
-        //                ->get()
-        //                ->toArray(),
-        //        );
         return Inertia::render('Espelho/Index', [
             'historicoEspelho' => HistoricoEspelho::query()
                 ->where('historico_id', $historicoId->id)

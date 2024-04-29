@@ -12,7 +12,7 @@ import {Evento} from "@/Interfaces/Evento";
 import {UrgenciaAtendimento} from "@/Interfaces/UrgenciaAtendimento";
 import {HistoricoEspelho} from "@/Interfaces/Historico/HistoricoEspelho";
 import {HistoricoGrupoPromotoria} from "@/Interfaces/Historico/HistoricoGrupoPromotoria";
-import {Promotoria} from "@/Interfaces/Promotoria";
+import {Promotoria} from "@/Interfaces/Promotoria/Promotoria";
 
 const props = defineProps({
     historicoEspelho: {

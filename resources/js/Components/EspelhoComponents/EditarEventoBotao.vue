@@ -5,7 +5,7 @@ import { format } from 'date-fns';
 import { Edit } from 'lucide-vue-next';
 import {Promotor} from "@/Interfaces/Promotor";
 import {GrupoPromotoria} from "@/Interfaces/GrupoPromotoria";
-import {Promotoria} from "@/Interfaces/Promotoria";
+import {Promotoria} from "@/Interfaces/Promotoria/Promotoria";
 import {Evento} from "@/Interfaces/Evento";
 
 const emit = defineEmits([
