@@ -1,8 +1,6 @@
 <script setup lang="ts">
 import {Head} from "@inertiajs/vue3";
-//import { usePromotoriaStore } from '@/Stores/promotoria';
 import AdminLayout from "@/Layouts/AdminLayout.vue";
-import {onBeforeMount, ref} from "vue";
 import {PromotoriasPaginate} from "@/Interfaces/Promotoria/PromotoriaPaginate";
 import PromotoriaCardHeader from "@/Components/PromotoriaCardHeader.vue";
 import PromotoriaCardContent from "@/Components/PromotoriaCardContent.vue";
@@ -13,16 +11,6 @@ const props = defineProps({
         required: true
     }
 });
-
-//const { getPromotorias } = usePromotoriaStore();
-
-const promotorias = ref<PromotoriasPaginate>(props.promotorias);
-
-onBeforeMount(() => {
-    // getPromotorias().then(result => {
-    //     promotorias.value = result;
-    // });
-});
 </script>
 
 <template>
@@ -30,12 +18,12 @@ onBeforeMount(() => {
     <AuthenticatedLayout>
         <ContainerComponent>
             <AdminLayout>
-                <Card>
+                <Card v-if="promotorias">
                     <CardHeader>
-                        <PromotoriaCardHeader :promotorias="promotorias" />
+                        <PromotoriaCardHeader :promotorias="promotorias"/>
                     </CardHeader>
                     <CardContent>
-                        <PromotoriaCardContent :promotorias="promotorias" />
+                        <PromotoriaCardContent :promotorias="promotorias"/>
                     </CardContent>
                 </Card>
             </AdminLayout>

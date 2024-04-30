@@ -10,7 +10,7 @@ import AdminNavLink from "@/Components/AdminNavLink.vue";
                 Área do Administrador
             </h1>
         </div>
-        <div class="mx-auto grid w-full items-start gap-6 md:grid-cols-[180px_1fr] lg:grid-cols-[250px_1fr]">
+        <div class="mx-auto grid w-full items-start gap-6 lg:grid-cols-[130px_1fr]">
             <nav class="grid gap-4 text-sm text-muted-foreground">
                 <AdminNavLink :href="route('admin.dashboard')" :active="route().current('admin.dashboard')">
                     Home

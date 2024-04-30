@@ -1,16 +1,15 @@
 <script setup lang="ts">
 
 import PromotoriasListComponent from "@/Components/PromotoriasListComponent.vue";
-import {Skeleton} from "@/Components/ui/skeleton";
 import PaginationComponent from "@/Components/PaginationComponent.vue";
 import {PromotoriasPaginate} from "@/Interfaces/Promotoria/PromotoriaPaginate";
-import PromotoriaTableSkeleton from "@/Components/PromotoriaTableSkeleton.vue";
 
 defineProps({
     promotorias: {
         type: Object as () => PromotoriasPaginate,
     }
 })
+
 </script>
 
 <template>
@@ -29,8 +28,5 @@ defineProps({
             :lastPageUrl="promotorias.last_page_url"
             :links="promotorias.links"
         />
-    </div>
-    <div v-else>
-        <PromotoriaTableSkeleton />
     </div>
 </template>

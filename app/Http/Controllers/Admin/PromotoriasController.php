@@ -21,6 +21,7 @@ class PromotoriasController extends Controller
 
         return inertia('Admin/Promotorias', [
             'promotorias' => Promotoria::query()
+                ->with('promotor', 'grupoPromotoria')
                 ->paginate(10),
         ]);
     }

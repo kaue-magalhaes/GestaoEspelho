@@ -1,7 +1,11 @@
 <script setup lang="ts">
-import {format} from "date-fns";
-import { ArrowUpDown } from 'lucide-vue-next'
 import {Promotoria} from "@/Interfaces/Promotoria/Promotoria";
+import {Button} from "@/Components/ui/button";
+import {format} from "date-fns"
+import {Check, Pencil, Trash, X} from 'lucide-vue-next'
+import {TableCell, TableHead} from "@/Components/ui/table";
+import {usePromotoriaStore} from "@/Stores/promotoria";
+
 
 defineEmits([
     'invertOrderByCreatedAt'
@@ -13,6 +17,8 @@ defineProps({
         required: true
     }
 });
+
+const promotoriaStore = usePromotoriaStore();
 </script>
 
 <template>
@@ -20,16 +26,18 @@ defineProps({
         <TableHeader>
             <TableRow>
                 <TableHead>
-                    Espelho
+                    Promotoria
                 </TableHead>
                 <TableHead>
-                    <Button variant="ghost" @click="$emit('invertOrderByCreatedAt')">
-                        Data de Publicação
-                        <ArrowUpDown class="ml-2 w-4 h-4" />
-                    </Button>
+                    Promotor Titular
                 </TableHead>
-                <TableHead class="w-[100px]">
-
+                <TableHead>
+                    Especializada
+                </TableHead>
+                <TableHead>
+                    Data de criação
+                </TableHead>
+                <TableHead>
                 </TableHead>
             </TableRow>
         </TableHeader>
@@ -39,8 +47,46 @@ defineProps({
                     {{ promotoria.nome }}
                 </TableCell>
                 <TableCell>
+                    {{ promotoria.promotor?.nome }}
+                </TableCell>
+                <TableCell>
+                    <Check class="w-4 h-4 text-green-500 mx-auto" v-if="promotoria.is_especializada"/>
+                    <X class="w-4 h-4 text-red-500 mx-auto" v-else/>
+                </TableCell>
+                <TableCell>
                     {{ format(new Date(promotoria.created_at), 'dd/MM/yyyy') }} às
                     {{ format(new Date(promotoria.created_at), 'HH:mm') }} horas
+                </TableCell>
+                <TableCell class="flex space-x-2">
+                    <Button variant="secondary" size="icon">
+                        <Pencil class="w-4 h-4"/>
+                    </Button>
+                    <AlertDialog>
+                        <AlertDialogTrigger>
+                            <Button variant="destructive" size="icon">
+                                <Trash class="w-4 h-4"/>
+                            </Button>
+                        </AlertDialogTrigger>
+                        <AlertDialogContent>
+                            <AlertDialogHeader>
+                                <AlertDialogTitle>
+                                    Deletar Promotoria
+                                </AlertDialogTitle>
+                                <AlertDialogDescription>
+                                    Você tem certeza que deseja deletar a promotoria?
+                                </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                                <AlertDialogCancel>
+                                    Cancelar
+                                </AlertDialogCancel>
+                                <AlertDialogAction variant="destructive"
+                                                   @click="promotoriaStore.deletePromotoria(promotoria.id)">
+                                    Deletar
+                                </AlertDialogAction>
+                            </AlertDialogFooter>
+                        </AlertDialogContent>
+                    </AlertDialog>
                 </TableCell>
             </TableRow>
         </TableBody>
