@@ -1,11 +1,10 @@
 <script setup lang="ts">
 import {Promotoria} from "@/Interfaces/Promotoria/Promotoria";
-import {Button} from "@/Components/ui/button";
 import {format} from "date-fns"
-import {Check, Trash, X} from 'lucide-vue-next'
+import {Check, X} from 'lucide-vue-next'
 import {TableCell, TableHead} from "@/Components/ui/table";
-import {usePromotoriaStore} from "@/Stores/promotoria";
 import EditPromotoriaModal from "@/Components/EditPromotoriaModal.vue";
+import DeletePromotoriaModal from "@/Components/DeletePromotoriaModal.vue";
 
 
 defineEmits([
@@ -18,9 +17,6 @@ defineProps({
         required: true
     }
 });
-
-const promotoriaStore = usePromotoriaStore();
-
 </script>
 
 <template>
@@ -62,33 +58,6 @@ const promotoriaStore = usePromotoriaStore();
                 <TableCell class="flex space-x-2">
                     <EditPromotoriaModal :promotoria="promotoria"/>
                     <DeletePromotoriaModal :promotoria="promotoria"/>
-
-                    <AlertDialog>
-                        <AlertDialogTrigger>
-                            <Button variant="destructive" size="icon">
-                                <Trash class="w-4 h-4"/>
-                            </Button>
-                        </AlertDialogTrigger>
-                        <AlertDialogContent>
-                            <AlertDialogHeader>
-                                <AlertDialogTitle>
-                                    Deletar Promotoria
-                                </AlertDialogTitle>
-                                <AlertDialogDescription>
-                                    Você tem certeza que deseja deletar a promotoria?
-                                </AlertDialogDescription>
-                            </AlertDialogHeader>
-                            <AlertDialogFooter>
-                                <AlertDialogCancel>
-                                    Cancelar
-                                </AlertDialogCancel>
-                                <AlertDialogAction variant="destructive"
-                                                   @click="promotoriaStore.deletePromotoria(promotoria.id)">
-                                    Deletar
-                                </AlertDialogAction>
-                            </AlertDialogFooter>
-                        </AlertDialogContent>
-                    </AlertDialog>
                 </TableCell>
             </TableRow>
         </TableBody>
