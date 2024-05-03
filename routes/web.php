@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin;
 use App\Http\Controllers\EspelhoController;
+use App\Http\Controllers\Promotoria;
 use App\Http\Controllers\PromotoriaController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -28,7 +29,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/area-do-administrador/promotorias', Admin\PromotoriasController::class)->name('admin.promotorias');
 
     Route::post('/promotoria/store', [PromotoriaController::class, 'store'])->name('promotoria.store');
-    Route::put('/promotoria/update/{promotoria}', [PromotoriaController::class, 'update'])->name('promotoria.update');
+    Route::put('/promotoria/update/{promotoria}', Promotoria\UpdateController::class)->name('promotoria.update');
     Route::delete('/promotoria/destroy/{promotoria}', [PromotoriaController::class, 'destroy'])->name('promotoria.destroy');
 });
 

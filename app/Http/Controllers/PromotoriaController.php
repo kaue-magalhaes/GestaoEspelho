@@ -27,17 +27,6 @@ class PromotoriaController extends Controller
         return back()->with('success', 'Promotoria criada com sucesso!');
     }
 
-    public function update(PromotoriaRequest $request, Promotoria $promotoria): RedirectResponse
-    {
-        $this->authorize('update', $promotoria);
-
-        $promotoria->update(
-            $request->validated()
-        );
-
-        return back()->with('success', 'Promotoria alterada com sucesso!');
-    }
-
     public function destroy(Promotoria $promotoria): RedirectResponse
     {
         $this->authorize('delete', $promotoria);
