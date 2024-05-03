@@ -9,7 +9,7 @@ export type PageProps<T extends Record<string, unknown> = Record<string, unknown
         user: User;
     };
     flash: {
-        message: string;
+        success: string;
     }
     promotores: Promotor[];
     grupoPromotorias: GrupoPromotoria[];

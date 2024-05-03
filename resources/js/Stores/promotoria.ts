@@ -1,5 +1,6 @@
 import {defineStore} from 'pinia';
-import {router} from "@inertiajs/vue3";
+import {router, usePage} from "@inertiajs/vue3";
+import {toast} from "vue-sonner";
 
 
 export const usePromotoriaStore = defineStore('promotoria', () => {
@@ -8,8 +9,15 @@ export const usePromotoriaStore = defineStore('promotoria', () => {
         router.put(route('promotoria.update', id), request);
     }
 
-    function deletePromotoria(id: string) {
-        router.delete(route('promotoria.destroy', id));
+    function deletePromotoria(id: string, nome: string) {
+        router.delete(route('promotoria.destroy', id), {
+            onFinish: () => {
+                const successMessage = usePage().props.flash.success;
+                if (successMessage) {
+                    toast.success(`${successMessage}`);
+                }
+            },
+        });
     }
 
     return {
