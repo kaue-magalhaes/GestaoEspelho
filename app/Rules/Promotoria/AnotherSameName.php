@@ -22,14 +22,16 @@ class AnotherSameName implements ValidationRule
 
     private function existAnoutherPromotoriaWithSameName(string $value): bool
     {
-        $promotoria = Promotoria::query()
-            ->where('nome', $value)
-            ->first();
+        $promotoria = Promotoria::where('nome', $value)->first();
 
-        if ($promotoria) {
-            return true;
+        if ($promotoria === null) {
+            return false;
         }
 
-        return false;
+        if ($promotoria->id === request()->id) {
+            return false;
+        }
+
+        return true;
     }
 }
