@@ -4,6 +4,7 @@ import {Button} from "@/Components/ui/button";
 import {Label} from "@/Components/ui/label";
 import {Promotoria} from "@/Interfaces/Promotoria/Promotoria";
 import {usePage} from "@inertiajs/vue3";
+import {usePromotoriaStore} from "@/Stores/promotoria";
 
 defineProps({
     promotoria: {
@@ -14,6 +15,8 @@ defineProps({
 
 const promotores = usePage().props.promotores;
 const grupoPromotorias = usePage().props.grupoPromotorias;
+
+const promotoriaStore = usePromotoriaStore();
 </script>
 
 <template>
@@ -107,7 +110,9 @@ const grupoPromotorias = usePage().props.grupoPromotorias;
                 <AlertDialogCancel>
                     Cancelar
                 </AlertDialogCancel>
-                <AlertDialogAction>
+                <AlertDialogAction
+                    @click="promotoriaStore.editPromotoria(promotoria.id, promotoria)"
+                >
                     Salvar
                 </AlertDialogAction>
             </AlertDialogFooter>
