@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\GrupoPromotoria;
 use App\Models\Historico\HistoricoPromotor;
 use App\Models\Promotor;
 use App\Models\UrgenciaAtendimento;
@@ -44,6 +45,9 @@ class HandleInertiaRequests extends Middleware
                 'user' => $user,
             ],
             'promotores' => Promotor::query()
+                ->get()
+                ->toArray(),
+            'grupoPromotorias' => GrupoPromotoria::query()
                 ->get()
                 ->toArray(),
             'historicoPromotores' => HistoricoPromotor::query()
