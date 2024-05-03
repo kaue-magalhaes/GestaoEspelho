@@ -157,5 +157,5 @@ const showingNavigationDropdown = ref(false);
             </main>
         </div>
     </div>
-    <Toaster :expand="true" rich-colors/>
+    <Toaster :expand="true" position="top-center" rich-colors/>
 </template>
