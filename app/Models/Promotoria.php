@@ -4,7 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * @property-read string $nome
+ */
 class Promotoria extends Model
 {
     use HasFactory;
@@ -13,48 +17,49 @@ class Promotoria extends Model
 
     protected $fillable = [
         'nome',
-        'nome_grupo_promotorias',
-        'municipio',
         'is_especializada',
         'espelho_id',
         'promotor_titular_id',
+        'grupo_promotoria_id',
     ];
 
     /**
-     * Converte o id para string
-     *
-     * @param  int  $value
-     * @return string
+     * convert the id to string
      */
-    public function getIdAttribute($value)
+    public function getIdAttribute(int $value): string
     {
         return (string)$value;
     }
 
     /**
-     * Converte o id do promotor titular para string
-     *
-     * @param  int  $value
-     * @return string
+     * convert the promotor_titular_id to string
      */
-    public function getPromotorTitularIdAttribute($value)
+    public function getPromotorTitularIdAttribute(int $value): string
     {
         return (string)$value;
     }
 
     /**
-     * Busca o promotor titular da promotoria
+     * get the espelho that owns the Promotoria
      */
-    public function promotor(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function espelho(): BelongsTo
+    {
+        return $this->belongsTo(Espelho::class);
+    }
+
+    /**
+     * get the promotor that owns the Promotoria
+     */
+    public function promotor(): BelongsTo
     {
         return $this->belongsTo(Promotor::class, 'promotor_titular_id');
     }
 
     /**
-     * busca o espelho que a promotoria está vinculada
+     * get the grupoPromotoria that owns the Promotoria
      */
-    public function espelho(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function grupoPromotoria(): BelongsTo
     {
-        return $this->belongsTo(Espelho::class);
+        return $this->belongsTo(GrupoPromotoria::class);
     }
 }

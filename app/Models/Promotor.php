@@ -20,10 +20,8 @@ class Promotor extends Model
 
     /**
      * Converte o id para string
-     *
-     * @param  int  $value
      */
-    public function getIdAttribute($value): string
+    public function getIdAttribute(int $value): string
     {
         return (string)$value;
     }
@@ -33,7 +31,7 @@ class Promotor extends Model
      */
     public function promotorias(): HasMany
     {
-        return $this->hasMany(Promotoria::class);
+        return $this->hasMany(Promotoria::class, 'promotor_titular_id');
     }
 
     /**

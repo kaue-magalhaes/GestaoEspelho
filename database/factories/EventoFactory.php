@@ -2,10 +2,13 @@
 
 namespace Database\Factories;
 
+use App\Models\Evento;
+use App\Models\Promotor;
+use App\Models\Promotoria;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Evento>
+ * @extends Factory<Evento>
  */
 class EventoFactory extends Factory
 {
@@ -21,8 +24,8 @@ class EventoFactory extends Factory
             'tipo'                  => $this->faker->randomElement(['Férias', 'Licença', 'Plantão', 'Reunião', 'Outros']),
             'periodo_inicio'        => $this->faker->date(),
             'periodo_fim'           => $this->faker->date(),
-            'promotor_titular_id'   => \App\Models\Promotoria::inRandomOrder()->first()->promotor_titular_id,
-            'promotor_designado_id' => \App\Models\Promotor::inRandomOrder()->first()->id,
+            'promotor_titular_id'   => Promotoria::inRandomOrder()->first()->promotor_titular_id,
+            'promotor_designado_id' => Promotor::inRandomOrder()->first()->id,
             'created_at'            => now(),
             'updated_at'            => now(),
         ];

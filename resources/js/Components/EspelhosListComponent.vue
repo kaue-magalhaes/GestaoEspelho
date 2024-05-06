@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {format} from "date-fns";
-import {Espelhos} from "@/Interfaces/Espelhos";
+import {Espelhos} from "@/Interfaces/Espelho/Espelhos";
 import { ArrowUpDown } from 'lucide-vue-next'
 
 defineEmits([
@@ -46,7 +46,7 @@ defineProps({
                     {{ format(new Date(espelho.created_at), 'HH:mm') }} horas
                 </TableCell>
                 <TableCell>
-                    {{ espelho.user.name }}
+                    {{ espelho.user.nome }}
                 </TableCell>
                 <TableCell>
                     <a :href="`/espelho/historico/${espelho.id}`">

@@ -2,10 +2,9 @@
 
 namespace App\Http\Middleware;
 
-use App\Models\Espelho;
-use App\Models\Evento;
+use App\Models\GrupoPromotoria;
+use App\Models\Historico\HistoricoPromotor;
 use App\Models\Promotor;
-use App\Models\Promotoria;
 use App\Models\UrgenciaAtendimento;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
@@ -34,26 +33,32 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
+        $user = $request->user();
+
+        if ($user) {
+            $user = $user->isAdmin() ? $user->toArray() + ['is_admin' => true] : $user->toArray();
+        }
+
         return [
             ...parent::share($request),
             'auth' => [
-                'user' => $request->user(),
+                'user' => $user,
             ],
-            'espelho' => [
-                'all' => optional(Espelho::with('promotorias')->first())->toArray(),
+            'flash' => [
+                'success' => fn () => $request->session()->get('success'),
             ],
-            'promotores' => [
-                'all' => Promotor::all()->toArray(),
-            ],
-            'promotorias' => [
-                'all' => Promotoria::all()->toArray(),
-            ],
-            'eventos' => [
-                'all' => Evento::all()->toArray(),
-            ],
-            'urgenciaAtendimentos' => [
-                'all' => UrgenciaAtendimento::all()->toArray(),
-            ],
+            'promotores' => Promotor::query()
+                ->get()
+                ->toArray(),
+            'grupoPromotorias' => GrupoPromotoria::query()
+                ->get()
+                ->toArray(),
+            'historicoPromotores' => HistoricoPromotor::query()
+                ->get()
+                ->toArray(),
+            'urgenciaAtendimentos' => UrgenciaAtendimento::query()
+                ->get()
+                ->toArray(),
         ];
     }
 }

@@ -46,7 +46,7 @@ class EspelhoUpdatedEvent
     /**
      * get the listaEventos from request
      *
-     * @return array<array{uuid: string, titulo: string, tipo: string, periodo_inicio: string, periodo_fim: string, promotor_titular_id: string, promotor_designado_id: string}>
+     * @return array<array{id: string|null, uuid?: string|null, titulo: string, tipo: string, periodo_inicio: string, periodo_fim: string, promotor_titular_id: string, promotor_designado_id: string}>
      */
     public function getListaEventos(): array
     {
@@ -56,7 +56,7 @@ class EspelhoUpdatedEvent
     /**
      * get the atendimentosUrgenciaDados from request
      *
-     * @return array<array{uuid: string, periodo_inicio: string, periodo_fim: string, promotor_designado_id: string}>
+     * @return array<array{id:string|null, uuid?: string|null, periodo_inicio: string, periodo_fim: string, promotor_designado_id: string}>
      */
     public function getAtendimentosUrgenciaDados(): array
     {

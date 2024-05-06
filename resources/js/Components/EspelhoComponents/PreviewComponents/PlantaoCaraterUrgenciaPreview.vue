@@ -1,34 +1,43 @@
 <script setup lang="ts">
-import { Promotor, UrgenciaAtendimentoServeSide } from "@/types";
+import {UrgenciaAtendimento} from "@/Interfaces/UrgenciaAtendimento";
+import {Promotor} from "@/Interfaces/Promotor";
+
 import { usePage } from "@inertiajs/vue3";
-import { ref } from "vue";
 import { format } from 'date-fns';
+import {onMounted} from "vue";
 
 const page = usePage();
-defineProps({
+const props = defineProps({
     plantaoDeAtendimentos: {
-    type: Array as () => UrgenciaAtendimentoServeSide[],
+    type: Array as () => UrgenciaAtendimento[],
     required: true,
   },
 });
 
-const promotoresQuePodemAtender = ref<Promotor[]>(page.props.promotores || []);
+const promotores = page.props.promotores as Promotor[];
+const historicoPromotores = page.props.historicoPromotores as Promotor[];
 
 function stringToDate(dateString: string) {
   const [year, month, day] = dateString.split('-').map(Number);
   return new Date(year, month - 1, day);
 }
 
+onMounted(() => {
+
+});
 </script>
 <template>
     <div v-if="plantaoDeAtendimentos.length > 0" class="w-full border-2 border-black p-4 rounded-md">
         <div class="w-full flex flex-col items-center">
             <h2 class="text-xl font-bold mb-4">PLANTÃO DE ATENDIMENTOS EM CARÁTER DE URGÊNCIA - MACAPÁ/SANTANA</h2>
             <ul class="grid grid-cols-2 gap-4">
-                <li class="mb-2 text-left" v-for="atendimento in plantaoDeAtendimentos" :key="atendimento.id">
+                <li class="mb-2 text-left" v-for="atendimento in plantaoDeAtendimentos" :key="atendimento.uuid">
                     <span v-if="atendimento.periodo_inicio !== ''">
                         <span class="font-semibold">
-                            - {{ promotoresQuePodemAtender.find((promotor) => promotor.id === atendimento.promotor_designado_id)?.nome }}:
+                            - {{
+                                promotores.find(promotor => promotor.id === atendimento.promotor_designado_id)?.nome ||
+                                historicoPromotores.find(promotor => promotor.id === atendimento.promotor_designado_id)?.nome
+                            }}
                         </span>
                         <span v-if="atendimento.periodo_inicio === atendimento.periodo_fim">
                             ({{ format(stringToDate(atendimento.periodo_inicio), 'dd/MM/yyyy') }})

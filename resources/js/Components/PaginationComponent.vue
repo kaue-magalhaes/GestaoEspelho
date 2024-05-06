@@ -10,7 +10,6 @@ import {
 import {Link} from "@inertiajs/vue3";
 import {Button} from "@/Components/ui/button";
 import {Links} from "@/Interfaces/Links";
-import {build} from "vite";
 
 const props = defineProps({
     total: {

@@ -3,24 +3,27 @@
 use App\Models\Historico\HistoricoEspelho;
 use App\Models\User;
 
-use function Pest\Laravel\actingAs;
+use Illuminate\Support\Facades\Auth;
+
 use function Pest\Laravel\get;
 
 it('should be able to search a historico by date', function () {
-    $user              = User::factory()->create();
+    $user = User::where('login_intranet', env('USER_TESTING_LOGIN'))
+        ->first()
+        ->toArray();
     $historicosErrados = HistoricoEspelho::factory()->count(5)->create([
         'created_at' => '2021-10-09 00:00:00',
     ]);
     $historico1 = HistoricoEspelho::factory()->create([
-        'usuario_id' => $user->id,
+        'usuario_id' => $user['id'],
         'created_at' => '2021-10-10 00:00:00',
     ]);
     $historico2 = HistoricoEspelho::factory()->create([
-        'usuario_id' => $user->id,
+        'usuario_id' => $user['id'],
         'created_at' => '2021-10-11 00:00:00',
     ]);
 
-    actingAs($user);
+    Auth::loginUsingId($user['id']);
 
     $request = get(route('espelho.history', [
         'filters' => [

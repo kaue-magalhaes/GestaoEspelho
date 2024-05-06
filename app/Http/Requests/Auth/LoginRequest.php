@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests\Auth;
 
+use App\Models\InternalSystemUser;
+use App\Models\User;
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
@@ -27,25 +29,38 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email'    => ['required', 'string', 'email'],
-            'password' => ['required', 'string'],
+            'login_intranet' => ['required', 'string'],
+            'senha_intranet' => ['required', 'string'],
+        ];
+    }
+
+    /**
+     * Get the error messages for the defined validation rules.
+     *
+     * @return array<string, string>
+     */
+    public function messages(): array
+    {
+        return [
+            'login_intranet.required' => 'O campo login é obrigatório.',
+            'senha_intranet.required' => 'O campo senha é obrigatório.',
         ];
     }
 
     /**
      * Attempt to authenticate the request's credentials.
      *
-     * @throws \Illuminate\Validation\ValidationException
+     * @throws ValidationException
      */
     public function authenticate(): void
     {
         $this->ensureIsNotRateLimited();
 
-        if (! Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
+        if (! $this->existIntranetUser($this->only('login_intranet', 'senha_intranet'))) {
             RateLimiter::hit($this->throttleKey());
 
             throw ValidationException::withMessages([
-                'email' => trans('auth.failed'),
+                'login_intranet' => __('auth.failed'),
             ]);
         }
 
@@ -53,9 +68,39 @@ class LoginRequest extends FormRequest
     }
 
     /**
+     * Check if the user exists in the intranet database.
+     *
+     * @param  array<string, string>  $credentials
+     */
+    protected function existIntranetUser(array $credentials): bool
+    {
+        $user = User::where('login_intranet', $credentials['login_intranet'])->first();
+
+        if (empty($user)) {
+            $user = InternalSystemUser::where('login_intranet', $credentials['login_intranet'])->first();
+
+            if (empty($user)) {
+                return false;
+            }
+        }
+
+        if (! password_verify($credentials['senha_intranet'], $user->senha_intranet)) {
+            return false;
+        }
+
+        if ($user instanceof User) {
+            Auth::guard('web')->login($user);
+        } else {
+            Auth::guard('internal')->login($user);
+        }
+
+        return true;
+    }
+
+    /**
      * Ensure the login request is not rate limited.
      *
-     * @throws \Illuminate\Validation\ValidationException
+     * @throws ValidationException
      */
     public function ensureIsNotRateLimited(): void
     {
@@ -68,7 +113,7 @@ class LoginRequest extends FormRequest
         $seconds = RateLimiter::availableIn($this->throttleKey());
 
         throw ValidationException::withMessages([
-            'email' => trans('auth.throttle', [
+            'login_intranet' => trans('auth.throttle', [
                 'seconds' => $seconds,
                 'minutes' => ceil($seconds / 60),
             ]),
@@ -80,6 +125,6 @@ class LoginRequest extends FormRequest
      */
     public function throttleKey(): string
     {
-        return Str::transliterate(Str::lower($this->input('email')) . '|' . $this->ip());
+        return Str::transliterate(Str::lower($this->input('login_intranet')) . '|' . $this->ip());
     }
 }

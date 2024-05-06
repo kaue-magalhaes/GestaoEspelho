@@ -2,6 +2,7 @@ import './bootstrap';
 import '../css/app.css';
 
 import { createApp, h, DefineComponent } from 'vue';
+import { createPinia } from "pinia";
 import { createInertiaApp } from '@inertiajs/vue3';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { ZiggyVue } from '../../vendor/tightenco/ziggy/dist/vue.m';
@@ -30,7 +31,7 @@ import { Dialog, DialogContent, DialogTrigger, DialogHeader, DialogTitle, Dialog
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue} from '@/Components/ui/select';
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow} from '@/Components/ui/table';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/Components/ui/carousel';
-import { Card, CardDescription, CardContent, CardHeader, CardTitle } from '@/Components/ui/card';
+import { Card, CardDescription, CardContent, CardHeader, CardTitle, CardFooter } from '@/Components/ui/card';
 import ContainerComponent from '@/Components/ContainerComponent.vue';
 import { Button } from '@/Components/ui/button';
 import { Input } from '@/Components/ui/input';
@@ -39,6 +40,7 @@ import DatePicker from '@/Components/DatePicker.vue';
 
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
+const pinia = createPinia()
 
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,
@@ -99,11 +101,13 @@ createInertiaApp({
             .component('CardContent', CardContent)
             .component('CardHeader', CardHeader)
             .component('CardTitle', CardTitle)
+            .component('CardFooter', CardFooter)
             .component('ContainerComponent', ContainerComponent)
             .component('Button', Button)
             .component('Input', Input)
             .component('Label', Label)
             .component('DatePicker', DatePicker)
+            .use(pinia)
             .use(plugin)
             .use(ZiggyVue)
             .mount(el);

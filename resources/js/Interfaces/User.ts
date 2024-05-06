@@ -1,6 +1,7 @@
 export interface User {
     id: number;
-    name: string;
+    is_admin?: boolean;
+    nome: string;
     email: string;
     email_verified_at: string;
     created_at: string;
