@@ -5,7 +5,7 @@ import {PromotoriasPaginate} from "@/Interfaces/Promotoria/PromotoriaPaginate";
 import PromotoriaCardHeader from "@/Components/PromotoriaCardHeader.vue";
 import PromotoriaCardContent from "@/Components/PromotoriaCardContent.vue";
 
-const props = defineProps({
+defineProps({
     promotorias: {
         type: Object as () => PromotoriasPaginate,
         required: true

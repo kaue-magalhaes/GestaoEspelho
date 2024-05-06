@@ -6,11 +6,6 @@ import {TableCell, TableHead} from "@/Components/ui/table";
 import EditPromotoriaModal from "@/Components/EditPromotoriaModal.vue";
 import DeletePromotoriaModal from "@/Components/DeletePromotoriaModal.vue";
 
-
-defineEmits([
-    'invertOrderByCreatedAt'
-]);
-
 defineProps({
     promotorias: {
         type: Array as () => Promotoria[],
