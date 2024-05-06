@@ -16,7 +16,7 @@ export const usePromotoriaStore = defineStore('promotoria', () => {
         });
     }
 
-    function deletePromotoria(id: string, nome: string) {
+    function deletePromotoria(id: string) {
         router.delete(route('promotoria.destroy', id), {
             onFinish: () => {
                 const successMessage = usePage().props.flash.success;
