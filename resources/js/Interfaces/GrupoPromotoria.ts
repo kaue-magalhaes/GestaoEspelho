@@ -1,4 +1,4 @@
-import {Promotoria} from "@/Interfaces/Promotoria";
+import {Promotoria} from "@/Interfaces/Promotoria/Promotoria";
 import {Municipio} from "@/Interfaces/Municipio";
 
 export interface GrupoPromotoria {

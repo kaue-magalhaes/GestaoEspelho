@@ -1,18 +1,18 @@
 <script setup lang="ts">
 import {UrgenciaAtendimento} from "@/Interfaces/UrgenciaAtendimento";
 import {Promotor} from "@/Interfaces/Promotor";
-import {Espelho} from "@/Interfaces/Espelho";
+import {Espelho} from "@/Interfaces/Espelho/Espelho";
 import {Evento} from "@/Interfaces/Evento";
 import {GrupoPromotoria} from "@/Interfaces/GrupoPromotoria";
 import {Atribuicoes} from "@/Interfaces/Atribuicoes";
 
-import {ref, onBeforeMount} from 'vue';
-import { Head } from '@inertiajs/vue3';
-import { format } from 'date-fns';
+import {onBeforeMount, ref} from 'vue';
+import {Head} from '@inertiajs/vue3';
+import {format} from 'date-fns';
 import axios from 'axios';
-import { toast } from 'vue-sonner';
-import { Loader2 } from 'lucide-vue-next'
-import {Promotoria} from "@/Interfaces/Promotoria";
+import {toast} from 'vue-sonner';
+import {Loader2} from 'lucide-vue-next'
+import {Promotoria} from "@/Interfaces/Promotoria/Promotoria";
 
 const props = defineProps({
     espelho: {
@@ -106,9 +106,7 @@ const salvarEspelho = async () => {
         carregandoSalvamento.value = false;
         salvo.value = true;
 
-        toast('Alteração salva!', {
-            description: 'As alterações foram salvas com sucesso.',
-        });
+        toast.success('Alteração foi salva com sucesso!');
 
     } catch (error) {
         console.error(error);
@@ -129,9 +127,7 @@ const publicarEspelho = async () => {
         carregandoPublicacao.value = false;
         salvo.value = false;
 
-        toast('Espelho publicado!', {
-            description: 'O espelho foi publicado com sucesso.',
-        });
+        toast.success('Espelho publicado foi publicado com sucesso!');
     } catch (error) {
         console.error(error);
     }
@@ -170,7 +166,7 @@ onBeforeMount(() => {
 </script>
 
 <template>
-    <Head title="Espelho" />
+    <Head title="Espelho"/>
     <AuthenticatedLayout>
         <ContainerComponent>
             <Carousel class="focus-visible:outline-none">
@@ -199,8 +195,8 @@ onBeforeMount(() => {
                         />
                     </CarouselItem>
                 </CarouselContent>
-                <CarouselPrevious />
-                <CarouselNext />
+                <CarouselPrevious/>
+                <CarouselNext/>
             </Carousel>
         </ContainerComponent>
     </AuthenticatedLayout>
@@ -210,7 +206,7 @@ onBeforeMount(() => {
                 Salvar as alterações
             </Button>
             <Button v-else variant="outline" disabled>
-                <Loader2 class="w-4 h-4 mr-2 animate-spin" />
+                <Loader2 class="w-4 h-4 mr-2 animate-spin"/>
                 Enviando
             </Button>
         </span>
@@ -238,7 +234,7 @@ onBeforeMount(() => {
                             Publicar Espelho
                         </Button>
                         <Button v-else variant="default" disabled>
-                            <Loader2 class="w-4 h-4 mr-2 animate-spin" />
+                            <Loader2 class="w-4 h-4 mr-2 animate-spin"/>
                             Publicando
                         </Button>
                     </AlertDialogFooter>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\GrupoPromotoria;
 use App\Models\Historico\HistoricoPromotor;
 use App\Models\Promotor;
 use App\Models\UrgenciaAtendimento;
@@ -32,12 +33,24 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
+        $user = $request->user();
+
+        if ($user) {
+            $user = $user->isAdmin() ? $user->toArray() + ['is_admin' => true] : $user->toArray();
+        }
+
         return [
             ...parent::share($request),
             'auth' => [
-                'user' => $request->user(),
+                'user' => $user,
+            ],
+            'flash' => [
+                'success' => fn () => $request->session()->get('success'),
             ],
             'promotores' => Promotor::query()
+                ->get()
+                ->toArray(),
+            'grupoPromotorias' => GrupoPromotoria::query()
                 ->get()
                 ->toArray(),
             'historicoPromotores' => HistoricoPromotor::query()

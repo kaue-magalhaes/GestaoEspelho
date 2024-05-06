@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {format} from 'date-fns';
 import {Head, Link, useForm} from '@inertiajs/vue3';
-import {EspelhosPaginate} from "@/Interfaces/EspelhosPaginate";
+import {EspelhosPaginate} from "@/Interfaces/Espelho/EspelhosPaginate";
 import PaginationComponent from "@/Components/PaginationComponent.vue";
 import EspelhosListComponent from "@/Components/EspelhosListComponent.vue";
 import { Search, Trash2 } from 'lucide-vue-next'

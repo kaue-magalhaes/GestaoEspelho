@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {Promotor} from "@/Interfaces/Promotor";
-import {Promotoria} from "@/Interfaces/Promotoria";
+import {Promotoria} from "@/Interfaces/Promotoria/Promotoria";
 import {GrupoPromotoria} from "@/Interfaces/GrupoPromotoria";
 
 import { ref, onMounted } from 'vue';

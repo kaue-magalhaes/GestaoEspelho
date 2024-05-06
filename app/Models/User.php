@@ -57,4 +57,15 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasMany(Nivel::class, 'id_usuario', 'id');
     }
+
+    public function isAdmin(): bool
+    {
+        foreach ($this->niveis as $nivel) {
+            if ($nivel->sistema === 'Sol' && $nivel->nivel >= 5) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

@@ -1,13 +1,17 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import {computed, ref} from 'vue';
 import Dropdown from '@/Components/Dropdown.vue';
 import DropdownLink from '@/Components/DropdownLink.vue';
 import NavLink from '@/Components/NavLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
 
-import { Toaster } from '@/Components/ui/sonner'
+import {Toaster} from '@/Components/ui/sonner'
 import LogoMPAP from "@/Components/Icons/LogoMPAP.vue";
+import {usePage} from '@inertiajs/vue3'
 
+const page = usePage()
+
+const user = computed(() => page.props.auth.user)
 const showingNavigationDropdown = ref(false);
 </script>
 
@@ -27,10 +31,12 @@ const showingNavigationDropdown = ref(false);
                         <div class="flex">
                             <!-- Navigation Links -->
                             <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                                <NavLink dark :href="route('espelho.editor')" :active="route().current('espelho.editor')">
+                                <NavLink dark :href="route('espelho.editor')"
+                                         :active="route().current('espelho.editor')">
                                     Editor
                                 </NavLink>
-                                <NavLink dark :href="route('espelho.history')" :active="route().current('espelho.history')">
+                                <NavLink dark :href="route('espelho.history')"
+                                         :active="route().current('espelho.history')">
                                     Histórico
                                 </NavLink>
                             </div>
@@ -65,6 +71,10 @@ const showingNavigationDropdown = ref(false);
                                     </template>
 
                                     <template #content>
+                                        <DropdownLink :href="route('admin.dashboard')"
+                                                      v-if="$page.props.auth.user.is_admin">
+                                            Área do Administrador
+                                        </DropdownLink>
                                         <DropdownLink :href="route('logout')" method="post" as="button">
                                             Sair
                                         </DropdownLink>
@@ -112,10 +122,12 @@ const showingNavigationDropdown = ref(false);
                     class="sm:hidden"
                 >
                     <div class="pt-2 pb-3 space-y-1">
-                        <ResponsiveNavLink :href="route('espelho.editor')" :active="route().current('espelho.editor')">
+                        <ResponsiveNavLink dark :href="route('espelho.editor')"
+                                           :active="route().current('espelho.editor')">
                             Editor
                         </ResponsiveNavLink>
-                        <ResponsiveNavLink :href="route('espelho.history')" :active="route().current('espelho.history')">
+                        <ResponsiveNavLink dark :href="route('espelho.history')"
+                                           :active="route().current('espelho.history')">
                             Histórico
                         </ResponsiveNavLink>
                     </div>
@@ -123,15 +135,17 @@ const showingNavigationDropdown = ref(false);
                     <!-- Responsive Settings Options -->
                     <div class="pt-4 pb-1 border-t border-gray-200">
                         <div class="px-4">
-                            <div class="font-medium text-base text-gray-800">
+                            <div class="font-medium text-base text-white">
                                 {{ $page.props.auth.user.nome }}
                             </div>
-                            <div class="font-medium text-sm text-gray-500">{{ $page.props.auth.user.email }}</div>
+                            <div class="font-medium text-sm text-gray-300">{{ $page.props.auth.user.email }}</div>
                         </div>
 
                         <div class="mt-3 space-y-1">
-                            <ResponsiveNavLink :href="route('logout')" method="post" as="button">
-                                Sair
+                            <ResponsiveNavLink dark :href="route('logout')" method="post" as="button">
+                                <span class="text-gray-300">
+                                    Sair
+                                </span>
                             </ResponsiveNavLink>
                         </div>
                     </div>
@@ -139,9 +153,9 @@ const showingNavigationDropdown = ref(false);
             </nav>
             <!-- Page Content -->
             <main>
-                <slot />
+                <slot/>
             </main>
         </div>
     </div>
-    <Toaster />
+    <Toaster :expand="true" position="top-center" rich-colors/>
 </template>

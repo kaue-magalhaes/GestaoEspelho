@@ -1,4 +1,4 @@
-import {Espelhos} from "@/Interfaces/Espelhos";
+import {Espelhos} from "@/Interfaces/Espelho/Espelhos";
 import {Links} from "@/Interfaces/Links";
 
 export interface EspelhosPaginate {

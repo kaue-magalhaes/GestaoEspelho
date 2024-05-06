@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {format} from "date-fns";
-import {Espelhos} from "@/Interfaces/Espelhos";
+import {Espelhos} from "@/Interfaces/Espelho/Espelhos";
 import { ArrowUpDown } from 'lucide-vue-next'
 
 defineEmits([
