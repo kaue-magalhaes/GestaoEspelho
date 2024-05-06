@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import GuestLayout from '@/Layouts/GuestLayout.vue';
 import InputError from '@/Components/InputError.vue';
-import { Label } from '@/Components/ui/label';
-import { Input } from '@/Components/ui/input';
-import { Button } from '@/Components/ui/button';
-import { CardDescription, CardTitle } from '@/Components/ui/card';
+import {Label} from '@/Components/ui/label';
+import {Input} from '@/Components/ui/input';
+import {Button} from '@/Components/ui/button';
+import {CardDescription, CardTitle} from '@/Components/ui/card';
 import {Tooltip, TooltipContent, TooltipProvider, TooltipTrigger} from '@/Components/ui/tooltip'
-import { Head, useForm } from '@inertiajs/vue3';
+import {Head, useForm} from '@inertiajs/vue3';
 
 defineProps<{
     status?: string;
@@ -28,7 +28,7 @@ const submit = () => {
 
 <template>
     <GuestLayout>
-        <Head title="Login" />
+        <Head title="Login"/>
 
         <template #card-header>
             <CardTitle>
@@ -59,7 +59,7 @@ const submit = () => {
                     autofocus
                 />
 
-                <InputError class="mt-2" :message="form.errors.login_intranet" />
+                <InputError class="mt-2" :message="form.errors.login_intranet"/>
             </div>
 
             <div class="mt-4">
@@ -76,10 +76,10 @@ const submit = () => {
                     required
                 />
 
-                <InputError class="mt-2" :message="form.errors.senha_intranet" />
+                <InputError class="mt-2" :message="form.errors.senha_intranet"/>
 
 
-                <TooltipProvider delay-duration="150" delay="1000" placement="top">
+                <TooltipProvider :delay-duration="150" delay="1000" placement="top">
                     <Tooltip>
                         <TooltipTrigger>
                             <a
