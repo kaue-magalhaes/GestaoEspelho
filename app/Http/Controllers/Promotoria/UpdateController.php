@@ -20,6 +20,6 @@ class UpdateController extends Controller
             $request->validated()
         );
 
-        return back()->with('success', 'Promotoria alterada com sucesso!');
+        return to_route('admin.promotorias')->with('success', 'Promotoria alterada com sucesso!');
     }
 }

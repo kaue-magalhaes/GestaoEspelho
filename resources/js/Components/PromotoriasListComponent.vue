@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import {Promotoria} from "@/Interfaces/Promotoria/Promotoria";
+import {Link} from '@inertiajs/vue3'
 import {format} from "date-fns"
-import {Check, X} from 'lucide-vue-next'
+import {Check, Edit, X} from 'lucide-vue-next'
 import {TableCell, TableHead} from "@/Components/ui/table";
-import EditPromotoriaModal from "@/Components/EditPromotoriaModal.vue";
 import DeletePromotoriaModal from "@/Components/DeletePromotoriaModal.vue";
+import {Button} from "@/Components/ui/button";
 
 defineProps({
     promotorias: {
@@ -51,7 +52,11 @@ defineProps({
                     {{ format(new Date(promotoria.created_at), 'HH:mm') }} horas
                 </TableCell>
                 <TableCell class="flex space-x-2">
-                    <EditPromotoriaModal :promotoria="promotoria"/>
+                    <Button variant="outline" size="icon">
+                        <Link :href="route('admin.promotorias.edit', promotoria.id)">
+                            <Edit class="w-4 h-4"/>
+                        </Link>
+                    </Button>
                     <DeletePromotoriaModal :promotoria="promotoria"/>
                 </TableCell>
             </TableRow>

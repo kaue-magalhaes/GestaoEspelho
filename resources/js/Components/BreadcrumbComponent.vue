@@ -9,7 +9,7 @@ import {
 
 interface BreadcrumbItem {
     label: string;
-    routeName: string;
+    routeName?: string;
 }
 
 defineProps({
@@ -25,7 +25,7 @@ defineProps({
         <BreadcrumbList>
             <template v-for="(item, index) in items" :key="index">
                 <BreadcrumbItem>
-                    <BreadcrumbLink :href="route(item.routeName)">
+                    <BreadcrumbLink :href="item.routeName ? route(item.routeName) : null">
                         {{ item.label }}
                     </BreadcrumbLink>
                 </BreadcrumbItem>
