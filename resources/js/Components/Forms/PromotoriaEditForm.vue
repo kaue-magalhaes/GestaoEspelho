@@ -2,6 +2,7 @@
 import {Promotoria} from "@/Interfaces/Promotoria/Promotoria";
 import {useForm, usePage} from "@inertiajs/vue3";
 import {Switch} from "@/Components/ui/switch";
+import {toast} from "vue-sonner";
 
 const props = defineProps({
     promotoria: {
@@ -22,7 +23,14 @@ const form = useForm({
 })
 
 const submit = () => {
-    form.put(route('promotoria.update', props.promotoria.id));
+    form.put(route('promotoria.update', props.promotoria.id), {
+        onFinish: () => {
+            const successMessage = usePage().props.flash.success;
+            if (successMessage) {
+                toast.success(`${successMessage}`);
+            }
+        },
+    });
 }
 </script>
 
