@@ -16,6 +16,7 @@ const grupoPromotorias = usePage().props.grupoPromotorias;
 
 const form = useForm({
     nome: props.promotoria.nome,
+    promotoria_id: props.promotoria.id,
     espelho_id: props.promotoria.espelho_id,
     promotor_titular_id: props.promotoria.promotor_titular_id,
     grupo_promotoria_id: props.promotoria.grupo_promotoria_id,
