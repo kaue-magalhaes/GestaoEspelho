@@ -20,6 +20,9 @@ defineProps({
         <TableHeader>
             <TableRow>
                 <TableHead>
+                    ID
+                </TableHead>
+                <TableHead>
                     Promotoria
                 </TableHead>
                 <TableHead>
@@ -38,6 +41,9 @@ defineProps({
         <TableBody>
             <TableRow v-for="promotoria in promotorias" :key="promotoria.id">
                 <TableCell class="font-medium">
+                    {{ promotoria.id }}
+                </TableCell>
+                <TableCell>
                     {{ promotoria.nome }}
                 </TableCell>
                 <TableCell>
