@@ -39,9 +39,9 @@ defineProps({
             </TableRow>
         </TableHeader>
         <TableBody>
-            <TableRow v-for="promotoria in promotorias" :key="promotoria.id">
+            <TableRow v-for="(promotoria, index) in promotorias" :key="promotoria.id">
                 <TableCell class="font-medium">
-                    {{ promotoria.id }}
+                    {{ index + 1 }}
                 </TableCell>
                 <TableCell>
                     {{ promotoria.nome }}
