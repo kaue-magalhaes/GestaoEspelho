@@ -58,11 +58,11 @@ defineProps({
                     {{ format(new Date(promotoria.created_at), 'HH:mm') }} horas
                 </TableCell>
                 <TableCell class="flex space-x-2">
-                    <Button variant="outline" size="icon">
-                        <Link :href="route('admin.promotorias.edit', promotoria.id)">
+                    <Link :href="route('admin.promotorias.edit', promotoria.id)">
+                        <Button variant="outline" size="icon">
                             <Edit class="w-4 h-4"/>
-                        </Link>
-                    </Button>
+                        </Button>
+                    </Link>
                     <DeletePromotoriaModal :promotoria="promotoria"/>
                 </TableCell>
             </TableRow>
