@@ -98,7 +98,7 @@ const submit = () => {
             </div>
             <div class="space-y-2 col-span-3">
                 <Label>
-                    Promotor Titular
+                    Município
                 </Label>
                 <Select v-model="form.grupo_promotoria_id" disabled>
                     <TooltipProvider>
