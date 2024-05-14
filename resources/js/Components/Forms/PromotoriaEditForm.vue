@@ -1,8 +1,15 @@
 <script setup lang="ts">
 import {Promotoria} from "@/Interfaces/Promotoria/Promotoria";
 import {useForm, usePage} from "@inertiajs/vue3";
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipProvider,
+    TooltipTrigger,
+} from '@/Components/ui/tooltip'
 import {Switch} from "@/Components/ui/switch";
 import {toast} from "vue-sonner";
+import {ref} from "vue";
 
 const props = defineProps({
     promotoria: {
@@ -13,6 +20,8 @@ const props = defineProps({
 
 const promotores = usePage().props.promotores;
 const grupoPromotorias = usePage().props.grupoPromotorias;
+
+const municipio = ref(props.promotoria?.grupo_promotoria?.municipio?.nome);
 
 const form = useForm({
     nome: props.promotoria.nome,
@@ -49,6 +58,26 @@ const submit = () => {
             </div>
             <div class="space-y-2 col-span-3">
                 <Label>
+                    Comarca
+                </Label>
+                <Select v-model="form.grupo_promotoria_id">
+                    <SelectTrigger>
+                        <SelectValue placeholder="Selecione a Comarca"/>
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectGroup>
+                            <SelectLabel>Comarcas</SelectLabel>
+                            <SelectItem v-for="comarca in grupoPromotorias"
+                                        :key="comarca.id"
+                                        :value="comarca.id">
+                                {{ comarca.nome }}
+                            </SelectItem>
+                        </SelectGroup>
+                    </SelectContent>
+                </Select>
+            </div>
+            <div class="space-y-2 col-span-3">
+                <Label>
                     Promotor Titular
                 </Label>
                 <Select v-model="form.promotor_titular_id">
@@ -69,19 +98,28 @@ const submit = () => {
             </div>
             <div class="space-y-2 col-span-3">
                 <Label>
-                    Comarca
+                    Promotor Titular
                 </Label>
-                <Select v-model="form.grupo_promotoria_id">
-                    <SelectTrigger>
-                        <SelectValue placeholder="Selecione a Comarca"/>
-                    </SelectTrigger>
+                <Select v-model="form.grupo_promotoria_id" disabled>
+                    <TooltipProvider>
+                        <Tooltip delay-duration="0">
+                            <TooltipTrigger as-child>
+                                <SelectTrigger>
+                                    <SelectValue placeholder="Selecione o Município"/>
+                                </SelectTrigger>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                                O município de uma promotoria é definido pela comarca.
+                            </TooltipContent>
+                        </Tooltip>
+                    </TooltipProvider>
                     <SelectContent>
                         <SelectGroup>
-                            <SelectLabel>Comarcas</SelectLabel>
+                            <SelectLabel>Municípios</SelectLabel>
                             <SelectItem v-for="comarca in grupoPromotorias"
                                         :key="comarca.id"
                                         :value="comarca.id">
-                                {{ comarca.nome }}
+                                {{ comarca.municipio.nome }}
                             </SelectItem>
                         </SelectGroup>
                     </SelectContent>

@@ -51,6 +51,7 @@ class HandleInertiaRequests extends Middleware
                 ->get()
                 ->toArray(),
             'grupoPromotorias' => GrupoPromotoria::query()
+                ->with('municipio')
                 ->get()
                 ->toArray(),
             'historicoPromotores' => HistoricoPromotor::query()
