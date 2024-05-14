@@ -26,7 +26,13 @@ defineProps({
                     Promotoria
                 </TableHead>
                 <TableHead>
+                    Comarca
+                </TableHead>
+                <TableHead>
                     Promotor Titular
+                </TableHead>
+                <TableHead>
+                    Município
                 </TableHead>
                 <TableHead>
                     Especializada
@@ -47,7 +53,13 @@ defineProps({
                     {{ promotoria.nome }}
                 </TableCell>
                 <TableCell>
+                    {{ promotoria.grupo_promotoria.nome }}
+                </TableCell>
+                <TableCell>
                     {{ promotoria.promotor?.nome }}
+                </TableCell>
+                <TableCell>
+                    {{ promotoria.grupo_promotoria.municipio.nome }}
                 </TableCell>
                 <TableCell>
                     <Check class="w-4 h-4 text-green-500 mx-auto" v-if="promotoria.is_especializada"/>
