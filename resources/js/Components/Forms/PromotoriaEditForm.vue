@@ -102,7 +102,7 @@ const submit = () => {
                 </Label>
                 <Select v-model="form.grupo_promotoria_id" disabled>
                     <TooltipProvider>
-                        <Tooltip delay-duration="0">
+                        <Tooltip :delay-duration="0">
                             <TooltipTrigger as-child>
                                 <SelectTrigger>
                                     <SelectValue placeholder="Selecione o Município"/>
@@ -119,7 +119,7 @@ const submit = () => {
                             <SelectItem v-for="comarca in grupoPromotorias"
                                         :key="comarca.id"
                                         :value="comarca.id">
-                                {{ comarca.municipio.nome }}
+                                {{ comarca.municipio?.nome }}
                             </SelectItem>
                         </SelectGroup>
                     </SelectContent>
