@@ -14,6 +14,9 @@ class StoreController extends Controller
      */
     public function __invoke(Request $request): RedirectResponse
     {
+        $user = auth()->user();
+        $this->authorize('isAdmin', $user);
+
         $request->validate([
             'nome'          => 'required|string',
             'is_substituto' => 'required|boolean',
