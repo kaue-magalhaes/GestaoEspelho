@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Promotor;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Promotor\StoreRequest;
 use App\Models\Promotor;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -12,15 +13,10 @@ class StoreController extends Controller
     /**
      * Handle the incoming request.
      */
-    public function __invoke(Request $request): RedirectResponse
+    public function __invoke(StoreRequest $request): RedirectResponse
     {
         $user = auth()->user();
         $this->authorize('isAdmin', $user);
-
-        $request->validate([
-            'nome'          => 'required|string',
-            'is_substituto' => 'required|boolean',
-        ]);
 
         Promotor::query()->create([
             'nome'          => $request->nome,
