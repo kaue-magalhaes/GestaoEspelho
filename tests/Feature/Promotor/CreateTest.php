@@ -86,5 +86,18 @@ it('should not be possible to create a Promotor without a name', function () {
 });
 
 it('should not be possible to create a Promotor without a in_substituto value', function () {
+    $user = InternalSystemUser::factory()->create();
+    $user->niveis()->create([
+        'sistema' => 'Sol',
+        'nivel'   => fake()->numberBetween(5, 10),
+        'status ' => 1,
+    ]);
 
-})->todo();
+    actingAs($user);
+    $request = post(route('promotor.store'), [
+        'nome' => 'Promotor Name',
+    ]);
+
+    $request->assertSessionHasErrors('is_substituto');
+    assertDatabaseCount('promotores', 0);
+});
