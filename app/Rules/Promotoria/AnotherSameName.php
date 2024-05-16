@@ -28,7 +28,7 @@ class AnotherSameName implements ValidationRule
             return false;
         }
 
-        if ($promotoria->id === request()->id) {
+        if ($promotoria->id === request()->promotoria_id) {
             return false;
         }
 

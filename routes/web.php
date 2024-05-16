@@ -28,6 +28,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/area-do-administrador', Admin\DashboardController::class)->name('admin.dashboard');
     Route::get('/area-do-administrador/promotorias', Admin\PromotoriasController::class)->name('admin.promotorias');
     Route::get('/area-do-administrador/promotorias/edit/{promotoria}', Admin\Promotoria\EditController::class)->name('admin.promotorias.edit');
+    Route::get('/area-do-administrador/promotorias/create', Admin\Promotoria\CreateController::class)->name('admin.promotorias.create');
 
     Route::post('/promotoria/store', [PromotoriaController::class, 'store'])->name('promotoria.store');
     Route::put('/promotoria/update/{promotoria}', Promotoria\UpdateController::class)->name('promotoria.update');

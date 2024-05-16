@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import {Promotoria} from "@/Interfaces/Promotoria/Promotoria";
 import {useForm, usePage} from "@inertiajs/vue3";
 import {
     Tooltip,
@@ -11,29 +10,21 @@ import {Switch} from "@/Components/ui/switch";
 import {toast} from "vue-sonner";
 import {ref} from "vue";
 
-const props = defineProps({
-    promotoria: {
-        type: Object as () => Promotoria,
-        required: true
-    }
-});
-
 const promotores = usePage().props.promotores;
 const grupoPromotorias = usePage().props.grupoPromotorias;
 
-const municipio = ref(props.promotoria?.grupo_promotoria?.municipio?.nome);
+const municipio = ref(null);
 
 const form = useForm({
-    nome: props.promotoria.nome,
-    promotoria_id: props.promotoria.id,
-    espelho_id: props.promotoria.espelho_id,
-    promotor_titular_id: props.promotoria.promotor_titular_id,
-    grupo_promotoria_id: props.promotoria.grupo_promotoria_id,
-    is_especializada: props.promotoria.is_especializada,
+    nome: '',
+    espelho_id: 1,
+    promotor_titular_id: null,
+    grupo_promotoria_id: null,
+    is_especializada: false,
 })
 
 const submit = () => {
-    form.put(route('promotoria.update', props.promotoria.id), {
+    form.post(route('promotoria.store'), {
         onFinish: () => {
             const successMessage = usePage().props.flash.success;
             if (successMessage) {
@@ -145,7 +136,7 @@ const submit = () => {
             </div>
             <div class="space-y-2 col-span-3">
                 <Button type="submit">
-                    Atualizar
+                    Adicionar
                 </Button>
             </div>
         </div>

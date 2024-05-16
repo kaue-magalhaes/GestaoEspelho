@@ -24,7 +24,7 @@ class PromotoriaController extends Controller
                 $request->validated()
             );
 
-        return back()->with('success', 'Promotoria criada com sucesso!');
+        return to_route('admin.promotorias')->with('success', 'Promotoria criada com sucesso!');
     }
 
     public function destroy(Promotoria $promotoria): RedirectResponse
