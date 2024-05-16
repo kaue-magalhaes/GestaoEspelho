@@ -20,10 +20,19 @@ defineProps({
         <TableHeader>
             <TableRow>
                 <TableHead>
+                    ID
+                </TableHead>
+                <TableHead>
                     Promotoria
                 </TableHead>
                 <TableHead>
+                    Comarca
+                </TableHead>
+                <TableHead>
                     Promotor Titular
+                </TableHead>
+                <TableHead>
+                    Município
                 </TableHead>
                 <TableHead>
                     Especializada
@@ -36,12 +45,21 @@ defineProps({
             </TableRow>
         </TableHeader>
         <TableBody>
-            <TableRow v-for="promotoria in promotorias" :key="promotoria.id">
+            <TableRow v-for="(promotoria, index) in promotorias" :key="promotoria.id">
                 <TableCell class="font-medium">
+                    {{ index + 1 }}
+                </TableCell>
+                <TableCell>
                     {{ promotoria.nome }}
                 </TableCell>
                 <TableCell>
+                    {{ promotoria.grupo_promotoria.nome }}
+                </TableCell>
+                <TableCell>
                     {{ promotoria.promotor?.nome }}
+                </TableCell>
+                <TableCell>
+                    {{ promotoria.grupo_promotoria.municipio.nome }}
                 </TableCell>
                 <TableCell>
                     <Check class="w-4 h-4 text-green-500 mx-auto" v-if="promotoria.is_especializada"/>
@@ -52,11 +70,11 @@ defineProps({
                     {{ format(new Date(promotoria.created_at), 'HH:mm') }} horas
                 </TableCell>
                 <TableCell class="flex space-x-2">
-                    <Button variant="outline" size="icon">
-                        <Link :href="route('admin.promotorias.edit', promotoria.id)">
+                    <Link :href="route('admin.promotorias.edit', promotoria.id)">
+                        <Button variant="outline" size="icon">
                             <Edit class="w-4 h-4"/>
-                        </Link>
-                    </Button>
+                        </Button>
+                    </Link>
                     <DeletePromotoriaModal :promotoria="promotoria"/>
                 </TableCell>
             </TableRow>

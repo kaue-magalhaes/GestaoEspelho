@@ -19,7 +19,7 @@ class EditController extends Controller
         $this->authorize('isAdmin', $user);
 
         return Inertia::render('Admin/Promotoria/Edit', [
-            'promotoria' => $promotoria,
+            'promotoria' => $promotoria->load('promotor', 'grupoPromotoria', 'grupoPromotoria.municipio'),
         ]);
     }
 }
