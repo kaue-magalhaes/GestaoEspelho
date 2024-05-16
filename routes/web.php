@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin;
 use App\Http\Controllers\EspelhoController;
+use App\Http\Controllers\Promotor;
 use App\Http\Controllers\Promotoria;
 use App\Http\Controllers\PromotoriaController;
 use Illuminate\Support\Facades\Route;
@@ -33,6 +34,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/promotoria/store', [PromotoriaController::class, 'store'])->name('promotoria.store');
     Route::put('/promotoria/update/{promotoria}', Promotoria\UpdateController::class)->name('promotoria.update');
     Route::delete('/promotoria/destroy/{promotoria}', [PromotoriaController::class, 'destroy'])->name('promotoria.destroy');
+
+    Route::post('/promotor/store', Promotor\StoreController::class)->name('promotor.store');
 });
 
 Route::get('/espelho', [EspelhoController::class, 'index'])->name('espelho.index');
