@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\PromotoriaController;
+use App\Http\Controllers\API;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -8,4 +8,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('/promotorias', [PromotoriaController::class, 'index'])->name('promotoria.index');
+Route::get('/promotores', API\Promotores\ListController::class)->name('api.promotores.list');

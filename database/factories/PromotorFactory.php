@@ -18,7 +18,7 @@ class PromotorFactory extends Factory
     {
         return [
             'nome'          => $this->faker->name(),
-            'is_substituto' => $this->faker->boolean(),
+            'is_substituto' => random_int(0, 1),
             'created_at'    => now(),
             'updated_at'    => now(),
         ];
