@@ -9,3 +9,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::get('/promotores', API\Promotores\ListController::class)->name('api.promotores.list');
+Route::get('/usuarios', API\Users\ListController::class)->name('api.users.list');
