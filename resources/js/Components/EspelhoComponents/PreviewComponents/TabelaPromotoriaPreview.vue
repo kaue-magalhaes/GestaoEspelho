@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import {format} from "date-fns";
 import {GrupoPromotoria} from "@/Interfaces/GrupoPromotoria";
+import {usePage} from "@inertiajs/vue3";
+
+const page = usePage();
 
 defineProps({
   grupoPromotorias: {
@@ -8,6 +11,8 @@ defineProps({
     required: true,
   },
 });
+
+const promotores = page.props.promotores;
 
 function stringToDate(dateString: string) {
   const [year, month, day] = dateString.split('-').map(Number);
@@ -55,7 +60,7 @@ function stringToDate(dateString: string) {
                   {{ format(stringToDate(evento.periodo_inicio), 'dd/MM/yyyy') }} - {{ format(stringToDate(evento.periodo_fim), 'dd/MM/yyyy') }}
                 </span>
                 <span>
-                  Promotor designado: {{ promotoria.promotor?.nome }}
+                  Promotor designado: {{ promotores.find((promotor) => promotor.id === evento.promotor_designado_id)?.nome }}
                 </span>
               </span>
             </span>
@@ -99,7 +104,7 @@ function stringToDate(dateString: string) {
                   {{ format(stringToDate(evento.periodo_inicio), 'dd/MM/yyyy') }} - {{ format(stringToDate(evento.periodo_fim), 'dd/MM/yyyy') }}
                 </span>
                 <span>
-                  Promotor designado: {{ promotoria.promotor?.nome }}
+                  Promotor designado: {{ promotores.find((promotor) => promotor.id === evento.promotor_designado_id)?.nome }}
                 </span>
               </span>
             </span>
