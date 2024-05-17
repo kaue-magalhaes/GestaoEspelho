@@ -4,13 +4,14 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Carbon;
 
 /**
  * @property-read int $id
  * @property-read string $nome
  * @property-read bool $is_substituto
- * @property-read \Illuminate\Support\Carbon $created_at
- * @property-read \Illuminate\Support\Carbon $updated_at
+ * @property-read Carbon $created_at
+ * @property-read Carbon $updated_at
  */
 class PromotorResource extends JsonResource
 {
