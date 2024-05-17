@@ -15,7 +15,7 @@ class ListController extends Controller
      */
     public function __invoke(Request $request): AnonymousResourceCollection
     {
-        $promotores = Promotor::all();
+        $promotores = Promotor::query()->get();
 
         return PromotorResource::collection($promotores);
     }

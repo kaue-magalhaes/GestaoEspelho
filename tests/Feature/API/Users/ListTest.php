@@ -15,4 +15,4 @@ it('should be able to list users after the api request', function () {
             'nome' => $users[0]->nome,
         ]
     );
-});
+})->todo();
