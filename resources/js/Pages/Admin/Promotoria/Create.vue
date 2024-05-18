@@ -5,6 +5,14 @@ import BreadcrumbComponent from "@/Components/BreadcrumbComponent.vue";
 import {CardDescription, CardTitle} from "@/Components/ui/card";
 import {Separator} from "@/Components/ui/separator";
 import PromotoriaCreateForm from "@/Components/Forms/PromotoriaCreateForm.vue";
+import {Promotor} from "@/Interfaces/Promotor";
+
+defineProps({
+    promotores: {
+        type: Array as () => Promotor[],
+        required: true,
+    },
+});
 </script>
 
 <template>
@@ -28,7 +36,9 @@ import PromotoriaCreateForm from "@/Components/Forms/PromotoriaCreateForm.vue";
                     </CardHeader>
                     <CardContent class="space-y-4">
                         <Separator/>
-                        <PromotoriaCreateForm />
+                        <PromotoriaCreateForm
+                            :promotores="promotores"
+                        />
                     </CardContent>
                 </Card>
             </AdminLayout>

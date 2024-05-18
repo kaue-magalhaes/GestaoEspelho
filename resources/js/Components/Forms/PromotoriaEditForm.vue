@@ -9,19 +9,20 @@ import {
 } from '@/Components/ui/tooltip'
 import {Switch} from "@/Components/ui/switch";
 import {toast} from "vue-sonner";
-import {ref} from "vue";
+import {Promotor} from "@/Interfaces/Promotor";
 
 const props = defineProps({
+    promotores: {
+        type: Array as () => Promotor[],
+        required: true,
+    },
     promotoria: {
         type: Object as () => Promotoria,
         required: true
     }
 });
 
-const promotores = usePage().props.promotores;
 const grupoPromotorias = usePage().props.grupoPromotorias;
-
-const municipio = ref(props.promotoria?.grupo_promotoria?.municipio?.nome);
 
 const form = useForm({
     nome: props.promotoria.nome,

@@ -47,9 +47,6 @@ class HandleInertiaRequests extends Middleware
             'flash' => [
                 'success' => fn () => $request->session()->get('success'),
             ],
-            'promotores' => Promotor::query()
-                ->get()
-                ->toArray(),
             'grupoPromotorias' => GrupoPromotoria::query()
                 ->with('municipio')
                 ->get()

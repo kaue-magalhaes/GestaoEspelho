@@ -7,8 +7,13 @@ import {Promotoria} from "@/Interfaces/Promotoria/Promotoria";
 import {CardDescription, CardTitle} from "@/Components/ui/card";
 import PromotoriaEditForm from "@/Components/Forms/PromotoriaEditForm.vue";
 import {Separator} from "@/Components/ui/separator";
+import {Promotor} from "@/Interfaces/Promotor";
 
 defineProps({
+    promotores: {
+        type: Array as () => Promotor[],
+        required: true,
+    },
     promotoria: {
         type: Object as () => Promotoria,
         required: true
@@ -38,6 +43,7 @@ defineProps({
                     <CardContent class="space-y-4">
                         <Separator/>
                         <PromotoriaEditForm
+                            :promotores="promotores"
                             :promotoria="promotoria"
                         />
                     </CardContent>

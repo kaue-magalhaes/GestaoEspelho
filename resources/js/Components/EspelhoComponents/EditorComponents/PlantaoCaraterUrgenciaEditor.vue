@@ -15,7 +15,13 @@ const emit = defineEmits([
     'update:periodoDoAtendimentoFoiSelecionado',
 ]);
 
-const promotoresQuePodemAtender = ref<Promotor[]>(page.props.promotores);
+defineProps({
+    promotores: {
+        type: Array as () => Promotor[],
+        required: true,
+    },
+});
+
 const plantaoDeAtendimentos = ref<UrgenciaAtendimento[]>(page.props.urgenciaAtendimentos);
 
 const adicionarInputDeDados = () => {
@@ -85,7 +91,7 @@ function stringToDate(dateString: string) {
                         <SelectGroup>
                             <SelectLabel>Promotores</SelectLabel>
                             <SelectItem
-                                v-for="promotor in promotoresQuePodemAtender" :key="promotor.id"
+                                v-for="promotor in promotores" :key="promotor.id"
                                 :value="promotor.id"
 
                                 @click="adicionaNomeDoPromotorSelecionado(index, promotor.id)"
