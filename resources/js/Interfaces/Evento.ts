@@ -1,4 +1,4 @@
-import {Promotor} from "@/Interfaces/Promotor";
+import {Promotor} from "@/Interfaces/Promotor/Promotor";
 
 export interface Evento {
     id?: string;

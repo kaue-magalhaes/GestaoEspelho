@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {UrgenciaAtendimento} from "@/Interfaces/UrgenciaAtendimento";
-import {Promotor} from "@/Interfaces/Promotor";
+import {Promotor} from "@/Interfaces/Promotor/Promotor";
 
 import { usePage } from "@inertiajs/vue3";
 import { format } from 'date-fns';

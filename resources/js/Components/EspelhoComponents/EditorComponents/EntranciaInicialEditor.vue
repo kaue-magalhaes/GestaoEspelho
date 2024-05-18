@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {GrupoPromotoria} from "@/Interfaces/GrupoPromotoria";
 import {Promotoria} from "@/Interfaces/Promotoria/Promotoria";
-import {Promotor} from "@/Interfaces/Promotor";
+import {Promotor} from "@/Interfaces/Promotor/Promotor";
 import {Evento} from "@/Interfaces/Evento";
 
 const emit = defineEmits([

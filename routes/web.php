@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin;
+use App\Http\Controllers\Espelho;
 use App\Http\Controllers\EspelhoController;
 use App\Http\Controllers\Promotor;
 use App\Http\Controllers\Promotoria;
@@ -20,7 +21,7 @@ use Inertia\Inertia;
 */
 
 Route::middleware('auth')->group(function () {
-    Route::get('/', [EspelhoController::class, 'editor'])->name('espelho.editor');
+    Route::get('/', Espelho\EditorController::class)->name('espelho.editor');
     Route::get('/espelho/historico/{id}', [EspelhoController::class, 'show'])->name('espelho.show');
     Route::put('/espelho/{id}', [EspelhoController::class, 'update'])->name('espelho.update');
     Route::post('/espelho/publicar/{id}', [EspelhoController::class, 'publish'])->name('espelho.publish');

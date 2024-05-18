@@ -1,4 +1,4 @@
-import {Promotor} from "@/Interfaces/Promotor";
+import {Promotor} from "@/Interfaces/Promotor/Promotor";
 import {GrupoPromotoria} from "@/Interfaces/GrupoPromotoria";
 import {Espelho} from "@/Interfaces/Espelho/Espelho";
 

@@ -4,7 +4,7 @@ import AdicionarEventoBotao from '@/Components/EspelhoComponents/AdicionarEvento
 
 import {Trash} from 'lucide-vue-next';
 import {Evento} from "@/Interfaces/Evento";
-import {Promotor} from "@/Interfaces/Promotor";
+import {Promotor} from "@/Interfaces/Promotor/Promotor";
 import {GrupoPromotoria} from "@/Interfaces/GrupoPromotoria";
 
 const emit = defineEmits([

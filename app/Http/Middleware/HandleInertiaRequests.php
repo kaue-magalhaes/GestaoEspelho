@@ -4,7 +4,6 @@ namespace App\Http\Middleware;
 
 use App\Models\GrupoPromotoria;
 use App\Models\Historico\HistoricoPromotor;
-use App\Models\Promotor;
 use App\Models\UrgenciaAtendimento;
 use Illuminate\Http\Request;
 use Inertia\Middleware;

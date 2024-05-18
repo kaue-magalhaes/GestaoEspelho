@@ -3,7 +3,7 @@ import { ref } from 'vue';
 import { format } from 'date-fns';
 
 import { Edit } from 'lucide-vue-next';
-import {Promotor} from "@/Interfaces/Promotor";
+import {Promotor} from "@/Interfaces/Promotor/Promotor";
 import {GrupoPromotoria} from "@/Interfaces/GrupoPromotoria";
 import {Promotoria} from "@/Interfaces/Promotoria/Promotoria";
 import {Evento} from "@/Interfaces/Evento";

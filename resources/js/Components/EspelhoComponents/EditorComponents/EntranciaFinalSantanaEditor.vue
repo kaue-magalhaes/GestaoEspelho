@@ -2,7 +2,7 @@
 import {onMounted, ref} from 'vue';
 import {Promotoria} from "@/Interfaces/Promotoria/Promotoria";
 import {GrupoPromotoria} from "@/Interfaces/GrupoPromotoria";
-import {Promotor} from "@/Interfaces/Promotor";
+import {Promotor} from "@/Interfaces/Promotor/Promotor";
 import {Evento} from "@/Interfaces/Evento";
 
 const emit = defineEmits([

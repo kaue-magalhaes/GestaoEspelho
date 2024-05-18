@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {Promotor} from "@/Interfaces/Promotor";
+import {Promotor} from "@/Interfaces/Promotor/Promotor";
 import {UrgenciaAtendimento} from "@/Interfaces/UrgenciaAtendimento";
 
 import {usePage} from "@inertiajs/vue3";

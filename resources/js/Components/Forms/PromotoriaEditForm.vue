@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import {Promotoria} from "@/Interfaces/Promotoria/Promotoria";
+import {Promotores} from "@/Interfaces/Promotor/Promotores";
+
 import {useForm, usePage} from "@inertiajs/vue3";
 import {
     Tooltip,
@@ -9,11 +11,10 @@ import {
 } from '@/Components/ui/tooltip'
 import {Switch} from "@/Components/ui/switch";
 import {toast} from "vue-sonner";
-import {Promotor} from "@/Interfaces/Promotor";
 
 const props = defineProps({
     promotores: {
-        type: Array as () => Promotor[],
+        type: Object as () => Promotores,
         required: true,
     },
     promotoria: {
@@ -88,7 +89,7 @@ const submit = () => {
                     <SelectContent>
                         <SelectGroup>
                             <SelectLabel>Promotores</SelectLabel>
-                            <SelectItem v-for="promotor in promotores"
+                            <SelectItem v-for="promotor in promotores.data"
                                         :key="promotor.id"
                                         :value="promotor.id">
                                 {{ promotor.nome }}

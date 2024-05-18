@@ -8,8 +8,6 @@ import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { ZiggyVue } from '../../vendor/tightenco/ziggy/dist/vue.m';
 
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import Preview from '@/Components/EspelhoComponents/Preview.vue';
-import Editor from '@/Components/EspelhoComponents/Editor.vue';
 
 import EntranciaFinalSantanaEditor from '@/Components/EspelhoComponents/EditorComponents/EntranciaFinalSantanaEditor.vue';
 import EntranciaFinalMacapaEditor from '@/Components/EspelhoComponents/EditorComponents/EntranciaFinalMacapaEditor.vue';
@@ -48,8 +46,6 @@ createInertiaApp({
     setup({ el, App, props, plugin }) {
         createApp({ render: () => h(App, props) })
             .component('AuthenticatedLayout', AuthenticatedLayout)
-            .component('Preview', Preview)
-            .component('Editor', Editor)
             .component('EntranciaFinalSantanaEditor', EntranciaFinalSantanaEditor)
             .component('EntranciaFinalMacapaEditor', EntranciaFinalMacapaEditor)
             .component('EntranciaInicialEditor', EntranciaInicialEditor)

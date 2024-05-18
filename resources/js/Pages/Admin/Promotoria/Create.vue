@@ -1,15 +1,16 @@
 <script setup lang="ts">
+import {Promotores} from "@/Interfaces/Promotor/Promotores";
+
 import {Head} from "@inertiajs/vue3";
 import AdminLayout from "@/Layouts/AdminLayout.vue";
 import BreadcrumbComponent from "@/Components/BreadcrumbComponent.vue";
 import {CardDescription, CardTitle} from "@/Components/ui/card";
 import {Separator} from "@/Components/ui/separator";
 import PromotoriaCreateForm from "@/Components/Forms/PromotoriaCreateForm.vue";
-import {Promotor} from "@/Interfaces/Promotor";
 
 defineProps({
     promotores: {
-        type: Array as () => Promotor[],
+        type: Object as () => Promotores,
         required: true,
     },
 });

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {UrgenciaAtendimento} from "@/Interfaces/UrgenciaAtendimento";
-import {Promotor} from "@/Interfaces/Promotor";
+import {Promotores} from "@/Interfaces/Promotor/Promotores";
 import {Espelho} from "@/Interfaces/Espelho/Espelho";
 import {Evento} from "@/Interfaces/Evento";
 import {GrupoPromotoria} from "@/Interfaces/GrupoPromotoria";
@@ -13,6 +13,8 @@ import axios from 'axios';
 import {toast} from 'vue-sonner';
 import {Loader2} from 'lucide-vue-next'
 import {Promotoria} from "@/Interfaces/Promotoria/Promotoria";
+import EditorComponent from "@/Components/EspelhoComponents/EditorComponent.vue";
+import PreviewComponent from "@/Components/EspelhoComponents/PreviewComponent.vue";
 
 const props = defineProps({
     espelho: {
@@ -28,7 +30,7 @@ const props = defineProps({
         required: true,
     },
     promotores: {
-        type: Array as () => Promotor[],
+        type: Object as () => Promotores,
         required: true,
     },
     eventos: {
@@ -172,9 +174,9 @@ onBeforeMount(() => {
             <Carousel class="focus-visible:outline-none">
                 <CarouselContent>
                     <CarouselItem>
-                        <Editor
+                        <EditorComponent
                             :espelho="espelho"
-                            :promotores="props.promotores"
+                            :promotores="props.promotores?.data"
                             :grupoPromotorias="props.grupoPromotorias"
                             :promotorias="props.promotorias"
                             :eventos="eventosComUUID"
@@ -187,7 +189,7 @@ onBeforeMount(() => {
                         />
                     </CarouselItem>
                     <CarouselItem>
-                        <Preview
+                        <PreviewComponent
                             :periodoEspelho="periodoEspelho"
                             :grupoPromotoriaDeTodasAsPromotorias="grupoDeTodasAsPromotoriasDados"
                             :listaAtribuicoes="listaAtribuicoes"

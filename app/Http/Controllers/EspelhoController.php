@@ -4,9 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Events\EspelhoUpdatedEvent;
 use App\Events\PublicarEspelhoEvent;
-use App\Models\Espelho;
-use App\Models\Evento;
-use App\Models\GrupoPromotoria;
 use App\Models\Historico\Historico;
 use App\Models\Historico\HistoricoEspelho;
 use App\Models\Historico\HistoricoEvento;
@@ -14,9 +11,6 @@ use App\Models\Historico\HistoricoGrupoPromotoria;
 use App\Models\Historico\HistoricoPromotor;
 use App\Models\Historico\HistoricoPromotoria;
 use App\Models\Historico\HistoricoUrgenciaAtendimento;
-use App\Models\Promotor;
-use App\Models\Promotoria;
-use App\Models\UrgenciaAtendimento;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -24,39 +18,6 @@ use Inertia\Response;
 
 class EspelhoController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function editor(): Response
-    {
-        //dd($grupoPromotoriasArray);
-        //dd($espelho, $promotores, $eventos, $urgenciaAtendimentos);
-
-        return Inertia::render('Espelho/Editor', [
-            'espelho' => Espelho::query()
-                ->with('promotorias')
-                ->first()
-                ->toArray(),
-            'promotores' => Promotor::query()
-                ->get()
-                ->toArray(),
-            'grupoPromotorias' => GrupoPromotoria::query()
-                ->with(['promotorias', 'promotorias.promotor', 'municipio', 'promotorias.promotor.eventos'])
-                ->get()
-                ->toArray(),
-            'promotorias' => Promotoria::query()
-                ->with(['promotor', 'grupoPromotoria', 'grupoPromotoria.municipio', 'promotor.eventos'])
-                ->get()
-                ->toArray(),
-            'eventos' => Evento::query()
-                ->get()
-                ->toArray(),
-            'urgenciaAtendimentos' => UrgenciaAtendimento::query()
-                ->get()
-                ->toArray(),
-        ]);
-    }
-
     public function index(): Response
     {
         $historicoId = Historico::query()->orderBy('id', 'desc')->first();

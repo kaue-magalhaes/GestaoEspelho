@@ -3,7 +3,7 @@ import {Head} from '@inertiajs/vue3';
 import {format} from 'date-fns';
 import {watchEffect, ref} from 'vue';
 import {HistoricoPromotoria} from "@/Interfaces/Historico/HistoricoPromotoria";
-import {Promotor} from "@/Interfaces/Promotor";
+import {Promotor} from "@/Interfaces/Promotor/Promotor";
 import {HistoricoEvento} from "@/Interfaces/Historico/HistoricoEvento";
 import {HistoricoUrgenciaAtendimento} from "@/Interfaces/Historico/HistoricoUrgenciaAtendimento";
 import {GrupoPromotoria} from "@/Interfaces/GrupoPromotoria";

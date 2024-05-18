@@ -1,5 +1,5 @@
 import {User} from "@/Interfaces/User";
-import {Promotor} from "@/Interfaces/Promotor";
+import {Promotor} from "@/Interfaces/Promotor/Promotor";
 import {UrgenciaAtendimento} from "@/Interfaces/UrgenciaAtendimento";
 import {HistoricoPromotor} from "@/Interfaces/Historico/HistoricoPromotor";
 import {GrupoPromotoria} from "@/Interfaces/GrupoPromotoria";
