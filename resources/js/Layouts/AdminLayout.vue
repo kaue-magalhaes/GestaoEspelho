@@ -17,9 +17,6 @@ import AdminNavLink from "@/Components/AdminNavLink.vue";
                 <AdminNavLink :href="route('admin.promotorias')" :active="route().current('admin.promotorias')">
                     Promotorias
                 </AdminNavLink>
-                <AdminNavLink href="#" class="hover:pl-2 hover:border-l hover:border-gray-400">
-                    Promotores
-                </AdminNavLink>
             </nav>
             <div class="grid gap-6">
                 <slot/>
