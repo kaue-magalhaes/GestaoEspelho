@@ -14,7 +14,7 @@ return new class extends Migration {
             $table->id();
             $table->date('periodo_inicio');
             $table->date('periodo_fim');
-            $table->foreignId('promotor_designado_id')->references('id')->on('promotores');
+            $table->unsignedBigInteger('promotor_designado_id');
             $table->timestamps();
         });
     }

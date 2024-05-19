@@ -21,7 +21,7 @@ class UrgenciaAtendimentoFactory extends Factory
         return [
             'periodo_inicio'        => $this->faker->date(),
             'periodo_fim'           => $this->faker->date(),
-            'promotor_designado_id' => Promotor::inRandomOrder()->first()->id,
+            'promotor_designado_id' => Promotor::query()->inRandomOrder()->first()->id,
         ];
     }
 }
