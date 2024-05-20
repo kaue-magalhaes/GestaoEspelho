@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import {GrupoPromotoria} from "@/Interfaces/GrupoPromotoria";
+import {GrupoPromotoria} from "@/Interfaces/GrupoPromotoria/GrupoPromotoria";
 import {Promotoria} from "@/Interfaces/Promotoria/Promotoria";
 import {Promotor} from "@/Interfaces/Promotor/Promotor";
-import {Evento} from "@/Interfaces/Evento";
+import {Evento} from "@/Interfaces/Evento/Evento";
 
 const emit = defineEmits([
     'update:novoEventoAdicionado',
@@ -44,6 +44,7 @@ const enviaDadosDoEventoDeletado = (eventoDeletado: Evento) => {
             Entrância Inicial
         </h1>
         <TabelaPromotoriaEditor
+            :promotores="promotores"
             :grupoPromotorias="grupoPromotorias"
             @update:novoEventoAdicionado="enviaDadosDoNovoEvento"
             @update:umEventoFoiAlterado="enviaDadosDoEventoAlterado"

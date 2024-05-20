@@ -22,7 +22,7 @@ class CreateController extends Controller
 
         $promotores = Promotor::query()->get();
 
-        return Inertia::render('Admin/Promotoria/Create',[
+        return Inertia::render('Admin/Promotoria/Create', [
             'promotores' => PromotorResource::collection($promotores),
         ]);
     }

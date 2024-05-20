@@ -1,10 +1,15 @@
 <script setup lang="ts">
-import {GrupoPromotoria} from "@/Interfaces/GrupoPromotoria";
-import {UrgenciaAtendimento} from "@/Interfaces/UrgenciaAtendimento";
+import {GrupoPromotoria} from "@/Interfaces/GrupoPromotoria/GrupoPromotoria";
+import {UrgenciaAtendimento} from "@/Interfaces/UrgenciaAtendimento/UrgenciaAtendimento";
 
 import {ref, watchEffect} from 'vue';
+import {Promotor} from "@/Interfaces/Promotor/Promotor";
 
 const props = defineProps({
+    promotores: {
+        type: Array as () => Promotor[],
+        required: true,
+    },
     grupoPromotorias: {
         type: Array as () => GrupoPromotoria[],
         required: true,
@@ -49,10 +54,12 @@ watchEffect(() => {
             </h1>
             <PlantaoCaraterUrgenciaPreview
                 v-if="props.urgenciaAtendimentos.length > 0"
+                :promotores="props.promotores"
                 :plantaoDeAtendimentos="props.urgenciaAtendimentos"
             />
             <TabelaPromotoriaPreview
                 v-if="grupoPromotoriasNaoEspecializadas.length > 0"
+                :promotores="props.promotores"
                 :grupoPromotorias="grupoPromotoriasNaoEspecializadas"
             />
         </div>
@@ -62,6 +69,7 @@ watchEffect(() => {
             </h1>
             <TabelaPromotoriaPreview
                 v-if="grupoPromotoriasEspecializadas.length > 0"
+                :promotores="props.promotores"
                 :grupoPromotorias="grupoPromotoriasEspecializadas"
             />
         </div>

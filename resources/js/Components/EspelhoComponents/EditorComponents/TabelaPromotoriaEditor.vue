@@ -3,9 +3,9 @@ import EditarEventoBotao from '@/Components/EspelhoComponents/EditarEventoBotao.
 import AdicionarEventoBotao from '@/Components/EspelhoComponents/AdicionarEventoBotao.vue';
 
 import {Trash} from 'lucide-vue-next';
-import {Evento} from "@/Interfaces/Evento";
+import {Evento} from "@/Interfaces/Evento/Evento";
 import {Promotor} from "@/Interfaces/Promotor/Promotor";
-import {GrupoPromotoria} from "@/Interfaces/GrupoPromotoria";
+import {GrupoPromotoria} from "@/Interfaces/GrupoPromotoria/GrupoPromotoria";
 
 const emit = defineEmits([
     'update:novoEventoAdicionado',

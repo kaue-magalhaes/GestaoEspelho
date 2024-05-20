@@ -7,7 +7,6 @@ use App\Http\Controllers\Promotor;
 use App\Http\Controllers\Promotoria;
 use App\Http\Controllers\PromotoriaController;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 
 /*
 |--------------------------------------------------------------------------
@@ -40,9 +39,5 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::get('/espelho', [EspelhoController::class, 'index'])->name('espelho.index');
-
-Route::get('/test', function () {
-    return Inertia::render('VerifyEmail');
-})->name('test');
 
 require __DIR__ . '/auth.php';

@@ -3,7 +3,12 @@
 namespace App\Http\Controllers\Espelho;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\EspelhoResource;
+use App\Http\Resources\EventoResource;
+use App\Http\Resources\GrupoPromotoriaResource;
+use App\Http\Resources\PromotoriaResource;
 use App\Http\Resources\PromotorResource;
+use App\Http\Resources\UrgenciaAtendimentoResource;
 use App\Models\Espelho;
 use App\Models\Evento;
 use App\Models\GrupoPromotoria;
@@ -20,28 +25,20 @@ class EditorController extends Controller
      */
     public function __invoke(Request $request)
     {
-        $promotores = Promotor::query()->get();
+        $espelho              = Espelho::query()->get();
+        $promotores           = Promotor::query()->get();
+        $grupoPromotorias     = GrupoPromotoria::query()->get();
+        $promotorias          = Promotoria::query()->get();
+        $eventos              = Evento::query()->get();
+        $urgenciaAtendimentos = UrgenciaAtendimento::query()->get();
 
         return Inertia::render('Espelho/Editor', [
-            'espelho' => Espelho::query()
-                ->with('promotorias')
-                ->first()
-                ->toArray(),
-            'promotores'       => PromotorResource::collection($promotores),
-            'grupoPromotorias' => GrupoPromotoria::query()
-                ->with(['promotorias', 'promotorias.promotor', 'municipio', 'promotorias.promotor.eventos'])
-                ->get()
-                ->toArray(),
-            'promotorias' => Promotoria::query()
-                ->with(['promotor', 'grupoPromotoria', 'grupoPromotoria.municipio', 'promotor.eventos'])
-                ->get()
-                ->toArray(),
-            'eventos' => Evento::query()
-                ->get()
-                ->toArray(),
-            'urgenciaAtendimentos' => UrgenciaAtendimento::query()
-                ->get()
-                ->toArray(),
+            'espelho'              => EspelhoResource::collection($espelho),
+            'promotores'           => PromotorResource::collection($promotores),
+            'grupoPromotorias'     => GrupoPromotoriaResource::collection($grupoPromotorias),
+            'promotorias'          => PromotoriaResource::collection($promotorias),
+            'eventos'              => EventoResource::collection($eventos),
+            'urgenciaAtendimentos' => UrgenciaAtendimentoResource::collection($urgenciaAtendimentos),
         ]);
     }
 }

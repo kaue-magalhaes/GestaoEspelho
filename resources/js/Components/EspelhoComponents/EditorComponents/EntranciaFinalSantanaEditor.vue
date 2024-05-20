@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import {onMounted, ref} from 'vue';
 import {Promotoria} from "@/Interfaces/Promotoria/Promotoria";
-import {GrupoPromotoria} from "@/Interfaces/GrupoPromotoria";
+import {GrupoPromotoria} from "@/Interfaces/GrupoPromotoria/GrupoPromotoria";
 import {Promotor} from "@/Interfaces/Promotor/Promotor";
-import {Evento} from "@/Interfaces/Evento";
+import {Evento} from "@/Interfaces/Evento/Evento";
 
 const emit = defineEmits([
     'update:novoEventoAdicionado',
@@ -72,6 +72,7 @@ onMounted(() => {
                 Entrância Final – Santana
             </h1>
             <TabelaPromotoriaEditor
+                :promotores="promotores"
                 :grupoPromotorias="grupoDePromotoriasNaoEspecializadas"
                 @update:novoEventoAdicionado="enviaDadosDoNovoEvento"
                 @update:umEventoFoiAlterado="enviaDadosDoEventoAlterado"
@@ -83,6 +84,7 @@ onMounted(() => {
                 Entrância Final – Santana (Especializadas)
             </h1>
             <TabelaPromotoriaEditor
+                :promotores="promotores"
                 :grupoPromotorias="grupoDePromotoriasEspecializadas"
                 @update:novoEventoAdicionado="enviaDadosDoNovoEvento"
                 @update:umEventoFoiAlterado="enviaDadosDoEventoAlterado"

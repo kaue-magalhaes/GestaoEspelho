@@ -14,8 +14,8 @@ return new class extends Migration {
             $table->id();
             $table->string('titulo')->nullable();
             $table->string('tipo');
-            $table->date('periodo_inicio');
-            $table->date('periodo_fim');
+            $table->dateTime('periodo_inicio');
+            $table->dateTime('periodo_fim');
             $table->unsignedBigInteger('promotor_titular_id');
             $table->unsignedBigInteger('promotor_designado_id');
             $table->timestamps();

@@ -22,8 +22,8 @@ class EventoFactory extends Factory
         return [
             'titulo'                => $this->faker->sentence(1),
             'tipo'                  => $this->faker->randomElement(['Férias', 'Licença', 'Plantão', 'Reunião', 'Outros']),
-            'periodo_inicio'        => $this->faker->date(),
-            'periodo_fim'           => $this->faker->date(),
+            'periodo_inicio'        => $this->faker->dateTime(),
+            'periodo_fim'           => $this->faker->dateTime(),
             'promotor_titular_id'   => Promotoria::query()->inRandomOrder()->first()->promotor_titular_id,
             'promotor_designado_id' => Promotor::query()->inRandomOrder()->first()->id,
             'created_at'            => now(),

@@ -1,28 +1,30 @@
 <script setup lang="ts">
 import {Promotor} from "@/Interfaces/Promotor/Promotor";
-import {UrgenciaAtendimento} from "@/Interfaces/UrgenciaAtendimento";
+import {UrgenciaAtendimento} from "@/Interfaces/UrgenciaAtendimento/UrgenciaAtendimento";
 
-import {usePage} from "@inertiajs/vue3";
 import {ref} from 'vue';
 
 import {Plus, Trash} from 'lucide-vue-next';
 import {format} from 'date-fns';
 
-const page = usePage();
 const emit = defineEmits([
     'delete:inputDeDadosFoiDeletado',
     'update:nomeFoiSelecionado',
     'update:periodoDoAtendimentoFoiSelecionado',
 ]);
 
-defineProps({
+const props = defineProps({
     promotores: {
         type: Array as () => Promotor[],
         required: true,
     },
+    urgenciaAtendimentos: {
+        type: Array as () => UrgenciaAtendimento[],
+        required: true,
+    },
 });
 
-const plantaoDeAtendimentos = ref<UrgenciaAtendimento[]>(page.props.urgenciaAtendimentos);
+const plantaoDeAtendimentos = ref<UrgenciaAtendimento[]>(props.urgenciaAtendimentos);
 
 const adicionarInputDeDados = () => {
     if (plantaoDeAtendimentos.value.length === 0) {
@@ -31,8 +33,6 @@ const adicionarInputDeDados = () => {
             periodo_inicio: '',
             periodo_fim: '',
             promotor_designado_id: '',
-            created_at: '',
-            updated_at: '',
         });
     } else {
         if (plantaoDeAtendimentos.value[plantaoDeAtendimentos.value.length - 1].periodo_inicio !== '' && plantaoDeAtendimentos.value[plantaoDeAtendimentos.value.length - 1].periodo_fim !== '' && plantaoDeAtendimentos.value[plantaoDeAtendimentos.value.length - 1].promotor_designado_id !== '') {
@@ -41,8 +41,6 @@ const adicionarInputDeDados = () => {
                 periodo_inicio: '',
                 periodo_fim: '',
                 promotor_designado_id: '',
-                created_at: '',
-                updated_at: '',
             });
         }
     }
@@ -91,10 +89,10 @@ function stringToDate(dateString: string) {
                         <SelectGroup>
                             <SelectLabel>Promotores</SelectLabel>
                             <SelectItem
-                                v-for="promotor in promotores" :key="promotor.id"
-                                :value="promotor.id"
+                                v-for="promotor in promotores" :key="promotores[0].id"
+                                :value="promotores[0].id"
 
-                                @click="adicionaNomeDoPromotorSelecionado(index, promotor.id)"
+                                @click="adicionaNomeDoPromotorSelecionado(index, promotores[0].id)"
                             >
                                 {{ promotor.nome }}
                             </SelectItem>

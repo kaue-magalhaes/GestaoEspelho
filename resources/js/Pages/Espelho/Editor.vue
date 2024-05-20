@@ -1,20 +1,21 @@
 <script setup lang="ts">
-import {UrgenciaAtendimento} from "@/Interfaces/UrgenciaAtendimento";
+import {UrgenciaAtendimento} from "@/Interfaces/UrgenciaAtendimento/UrgenciaAtendimento";
 import {Promotores} from "@/Interfaces/Promotor/Promotores";
 import {Espelho} from "@/Interfaces/Espelho/Espelho";
-import {Evento} from "@/Interfaces/Evento";
-import {GrupoPromotoria} from "@/Interfaces/GrupoPromotoria";
+import {Evento} from "@/Interfaces/Evento/Evento";
+import {GrupoPromotoria} from "@/Interfaces/GrupoPromotoria/GrupoPromotoria";
 import {Atribuicoes} from "@/Interfaces/Atribuicoes";
+import {Promotoria} from "@/Interfaces/Promotoria/Promotoria";
 
+import EditorComponent from "@/Components/EspelhoComponents/EditorComponent.vue";
+import PreviewComponent from "@/Components/EspelhoComponents/PreviewComponent.vue";
 import {onBeforeMount, ref} from 'vue';
 import {Head} from '@inertiajs/vue3';
 import {format} from 'date-fns';
 import axios from 'axios';
 import {toast} from 'vue-sonner';
 import {Loader2} from 'lucide-vue-next'
-import {Promotoria} from "@/Interfaces/Promotoria/Promotoria";
-import EditorComponent from "@/Components/EspelhoComponents/EditorComponent.vue";
-import PreviewComponent from "@/Components/EspelhoComponents/PreviewComponent.vue";
+import EditorLayout from "@/Layouts/EditorLayout.vue";
 
 const props = defineProps({
     espelho: {
@@ -154,8 +155,6 @@ const processaUrgenciaAtendimentos = (urgenciaAtendimentos: UrgenciaAtendimento[
         periodo_inicio: atendimentoUrgencia.periodo_inicio,
         periodo_fim: atendimentoUrgencia.periodo_fim,
         promotor_designado_id: atendimentoUrgencia.promotor_designado_id,
-        created_at: atendimentoUrgencia.created_at,
-        updated_at: atendimentoUrgencia.updated_at,
     }));
 };
 
@@ -168,40 +167,32 @@ onBeforeMount(() => {
 </script>
 
 <template>
-    <Head title="Espelho"/>
-    <AuthenticatedLayout>
-        <ContainerComponent>
-            <Carousel class="focus-visible:outline-none">
-                <CarouselContent>
-                    <CarouselItem>
-                        <EditorComponent
-                            :espelho="espelho"
-                            :promotores="props.promotores?.data"
-                            :grupoPromotorias="props.grupoPromotorias"
-                            :promotorias="props.promotorias"
-                            :eventos="eventosComUUID"
-                            :urgenciaAtendimentos="props.urgenciaAtendimentos"
-                            @update:periodoEspelho="updatePeriodoEspelho"
-                            @update:grupoDeTodasAsPromotorias="updateGrupoDeTodasAsPromotorias"
-                            @update:dadosDosAtendimentosUrgencia="updateAtendimentosUrgencia"
-                            @update:atribuicao="updateAtribuicao"
-                            @update:ListaEventos="updateListaEventos"
-                        />
-                    </CarouselItem>
-                    <CarouselItem>
-                        <PreviewComponent
-                            :periodoEspelho="periodoEspelho"
-                            :grupoPromotoriaDeTodasAsPromotorias="grupoDeTodasAsPromotoriasDados"
-                            :listaAtribuicoes="listaAtribuicoes"
-                            :atendimentosUrgenciaDados="atendimentosUrgenciaDados"
-                        />
-                    </CarouselItem>
-                </CarouselContent>
-                <CarouselPrevious/>
-                <CarouselNext/>
-            </Carousel>
-        </ContainerComponent>
-    </AuthenticatedLayout>
+    <EditorLayout>
+        <template v-slot:editor>
+            <EditorComponent
+                :espelho="espelho"
+                :promotores="props.promotores?.data"
+                :grupoPromotorias="props.grupoPromotorias"
+                :promotorias="props.promotorias"
+                :eventos="eventosComUUID"
+                :urgenciaAtendimentos="props.urgenciaAtendimentos"
+                @update:periodoEspelho="updatePeriodoEspelho"
+                @update:grupoDeTodasAsPromotorias="updateGrupoDeTodasAsPromotorias"
+                @update:dadosDosAtendimentosUrgencia="updateAtendimentosUrgencia"
+                @update:atribuicao="updateAtribuicao"
+                @update:ListaEventos="updateListaEventos"
+            />
+        </template>
+        <template v-slot:preview>
+            <PreviewComponent
+                :promotores="props.promotores?.data"
+                :periodoEspelho="periodoEspelho"
+                :grupoPromotoriaDeTodasAsPromotorias="grupoDeTodasAsPromotoriasDados"
+                :listaAtribuicoes="listaAtribuicoes"
+                :atendimentosUrgenciaDados="atendimentosUrgenciaDados"
+            />
+        </template>
+    </EditorLayout>
     <span class="fixed bottom-5 right-5 z-50 space-x-2">
         <span v-if="exibirBotaoSalvar">
             <Button v-if="!carregandoSalvamento" variant="outline" @click="salvarEspelho">

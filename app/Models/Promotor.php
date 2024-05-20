@@ -9,8 +9,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- * @property int $id
- * @property string $nome
+ * @property-read int $id
+ * @property-read string $nome
  */
 #[ScopedBy([MembrosScope::class])]
 class Promotor extends Model

@@ -5,10 +5,10 @@ import {format} from 'date-fns';
 import {Espelho} from "@/Interfaces/Espelho/Espelho";
 import {Promotor} from "@/Interfaces/Promotor/Promotor";
 import {Promotoria} from "@/Interfaces/Promotoria/Promotoria";
-import {UrgenciaAtendimento} from "@/Interfaces/UrgenciaAtendimento";
-import {GrupoPromotoria} from "@/Interfaces/GrupoPromotoria";
+import {UrgenciaAtendimento} from "@/Interfaces/UrgenciaAtendimento/UrgenciaAtendimento";
+import {GrupoPromotoria} from "@/Interfaces/GrupoPromotoria/GrupoPromotoria";
 import {Atribuicoes} from "@/Interfaces/Atribuicoes";
-import {Evento} from "@/Interfaces/Evento";
+import {Evento} from "@/Interfaces/Evento/Evento";
 
 const emit = defineEmits([
     'update:periodoEspelho',
@@ -127,8 +127,6 @@ const atualizaPromotorDesignadoParaAtendimentosDeUrgencia = (index: number, idPr
             periodo_inicio: '',
             periodo_fim: '',
             promotor_designado_id: idPromotor,
-            created_at: '',
-            updated_at: '',
         });
     }
     emit('update:dadosDosAtendimentosUrgencia', dadosDosAtendimentosUrgencia.value);
@@ -145,8 +143,6 @@ const atualizaPeriodoQueOPromotorVaiEstarDesignadoParaAtendimentosDeUrgencia = (
             periodo_inicio: periodo_start,
             periodo_fim: periodo_end,
             promotor_designado_id: '',
-            created_at: '',
-            updated_at: '',
         });
     }
     emit('update:dadosDosAtendimentosUrgencia', dadosDosAtendimentosUrgencia.value);
@@ -262,8 +258,6 @@ onBeforeMount(() => {
             periodo_inicio: atendimentoUrgencia.periodo_inicio,
             periodo_fim: atendimentoUrgencia.periodo_fim,
             promotor_designado_id: atendimentoUrgencia.promotor_designado_id,
-            created_at: atendimentoUrgencia.created_at,
-            updated_at: atendimentoUrgencia.updated_at,
         });
     });
     atualizaAsAtribuicoes(props.eventos);

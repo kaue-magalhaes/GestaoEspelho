@@ -1,13 +1,18 @@
 <script setup lang="ts">
-import {GrupoPromotoria} from "@/Interfaces/GrupoPromotoria";
+import {GrupoPromotoria} from "@/Interfaces/GrupoPromotoria/GrupoPromotoria";
 import {Atribuicoes} from "@/Interfaces/Atribuicoes";
-import {UrgenciaAtendimento} from "@/Interfaces/UrgenciaAtendimento";
+import {UrgenciaAtendimento} from "@/Interfaces/UrgenciaAtendimento/UrgenciaAtendimento";
 
 import { ref, watchEffect } from 'vue';
+import {Promotor} from "@/Interfaces/Promotor/Promotor";
 
 const props = defineProps({
     periodoEspelho: {
         type: Array as () => string[],
+        required: true,
+    },
+    promotores: {
+        type: Array as () => Promotor[],
         required: true,
     },
     grupoPromotoriaDeTodasAsPromotorias: {
@@ -98,6 +103,7 @@ watchEffect(() => {
         <CardContent class="flex flex-col items-center space-y-8 w-full">
             <EntranciaFinalMacapaPreview
                 v-if="promotoriasMacapa.length > 0 || props.atendimentosUrgenciaDados.length > 0"
+                :promotores="props.promotores"
                 :grupoPromotorias="promotoriasMacapa"
                 :urgenciaAtendimentos="props.atendimentosUrgenciaDados"
             />

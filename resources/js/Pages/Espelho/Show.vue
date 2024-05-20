@@ -6,13 +6,14 @@ import {HistoricoPromotoria} from "@/Interfaces/Historico/HistoricoPromotoria";
 import {Promotor} from "@/Interfaces/Promotor/Promotor";
 import {HistoricoEvento} from "@/Interfaces/Historico/HistoricoEvento";
 import {HistoricoUrgenciaAtendimento} from "@/Interfaces/Historico/HistoricoUrgenciaAtendimento";
-import {GrupoPromotoria} from "@/Interfaces/GrupoPromotoria";
+import {GrupoPromotoria} from "@/Interfaces/GrupoPromotoria/GrupoPromotoria";
 import {Atribuicoes} from "@/Interfaces/Atribuicoes";
-import {Evento} from "@/Interfaces/Evento";
-import {UrgenciaAtendimento} from "@/Interfaces/UrgenciaAtendimento";
+import {Evento} from "@/Interfaces/Evento/Evento";
+import {UrgenciaAtendimento} from "@/Interfaces/UrgenciaAtendimento/UrgenciaAtendimento";
 import {HistoricoEspelho} from "@/Interfaces/Historico/HistoricoEspelho";
 import {HistoricoGrupoPromotoria} from "@/Interfaces/Historico/HistoricoGrupoPromotoria";
 import {Promotoria} from "@/Interfaces/Promotoria/Promotoria";
+import PreviewComponent from "@/Components/EspelhoComponents/PreviewComponent.vue";
 
 const props = defineProps({
     historicoEspelho: {
@@ -56,8 +57,6 @@ const processaGrupoDeTodasAsPromotoriasDados = (grupoPromotorias: HistoricoGrupo
             id: grupoPromotoria.id,
             nome: grupoPromotoria.nome,
             municipio_id: grupoPromotoria.historico_municipio_id,
-            created_at: grupoPromotoria.created_at,
-            updated_at: grupoPromotoria.updated_at,
             promotorias: grupoPromotoria.promotorias?.map((promotoria) => {
                 let mappedPromotoria: Promotoria = {
                     id: promotoria.id,
@@ -67,7 +66,6 @@ const processaGrupoDeTodasAsPromotoriasDados = (grupoPromotorias: HistoricoGrupo
                     promotor_titular_id: promotoria.historico_promotor_titular_id,
                     grupo_promotoria_id: promotoria.historico_grupo_promotoria_id,
                     created_at: promotoria.created_at,
-                    updated_at: promotoria.updated_at,
                 };
 
                 if (promotoria.promotor) {
@@ -75,8 +73,6 @@ const processaGrupoDeTodasAsPromotoriasDados = (grupoPromotorias: HistoricoGrupo
                         id: promotoria.promotor.id,
                         nome: promotoria.promotor.nome,
                         is_substituto: promotoria.promotor.is_substituto,
-                        created_at: promotoria.promotor.created_at,
-                        updated_at: promotoria.promotor.updated_at,
                         eventos: promotoria.promotor.eventos?.map((evento) => {
                             return {
                                 id: evento.id,
@@ -96,8 +92,6 @@ const processaGrupoDeTodasAsPromotoriasDados = (grupoPromotorias: HistoricoGrupo
             municipio: {
                 id: grupoPromotoria.municipio?.id ? grupoPromotoria.municipio.id : '',
                 nome: grupoPromotoria.municipio?.nome ? grupoPromotoria.municipio.nome : '',
-                created_at: grupoPromotoria.municipio?.created_at ? grupoPromotoria.municipio.created_at : '',
-                updated_at: grupoPromotoria.municipio?.updated_at ? grupoPromotoria.municipio.updated_at : '',
             }
         });
     });
@@ -144,14 +138,10 @@ const processaAtendimentosUrgenciaDados = (urgenciaAtendimentos: HistoricoUrgenc
             periodo_inicio: atendimentoUrgencia.periodo_inicio,
             periodo_fim: atendimentoUrgencia.periodo_fim,
             promotor_designado_id: atendimentoUrgencia.historico_promotor_designado_id,
-            created_at: atendimentoUrgencia.created_at,
-            updated_at: atendimentoUrgencia.updated_at,
             promotor: {
                 id: atendimentoUrgencia.promotor?.id ? atendimentoUrgencia.promotor.id : '',
                 nome: atendimentoUrgencia.promotor?.nome ? atendimentoUrgencia.promotor.nome : '',
                 is_substituto: atendimentoUrgencia.promotor?.is_substituto ? atendimentoUrgencia.promotor.is_substituto : false,
-                created_at: atendimentoUrgencia.promotor?.created_at ? atendimentoUrgencia.promotor.created_at : '',
-                updated_at: atendimentoUrgencia.promotor?.updated_at ? atendimentoUrgencia.promotor.updated_at : '',
             },
         });
     });
@@ -174,7 +164,8 @@ watchEffect(() => {
 <template>
     <Head title="Espelho"/>
     <AuthenticatedLayout>
-        <Preview
+        <PreviewComponent
+            :promotores="historicoPromotores"
             :periodoEspelho="periodoEspelho"
             :grupoPromotoriaDeTodasAsPromotorias="grupoDeTodasAsPromotoriasDados"
             :listaAtribuicoes="listaAtribuicoes"

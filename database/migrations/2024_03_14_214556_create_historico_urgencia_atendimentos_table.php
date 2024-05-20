@@ -12,8 +12,8 @@ return new class extends Migration {
     {
         Schema::create('historico_urgencia_atendimentos', function (Blueprint $table) {
             $table->id();
-            $table->date('periodo_inicio');
-            $table->date('periodo_fim');
+            $table->dateTime('periodo_inicio');
+            $table->dateTime('periodo_fim');
             $table->foreignId('historico_promotor_designado_id')->references('id')->on('historico_promotores');
             $table->foreignId('historico_id')->constrained('historicos');
             $table->timestamps();

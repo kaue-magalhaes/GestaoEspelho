@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {Promotor} from "@/Interfaces/Promotor/Promotor";
 import {Promotoria} from "@/Interfaces/Promotoria/Promotoria";
-import {GrupoPromotoria} from "@/Interfaces/GrupoPromotoria";
+import {GrupoPromotoria} from "@/Interfaces/GrupoPromotoria/GrupoPromotoria";
 
 import { ref, onMounted } from 'vue';
 import { format } from 'date-fns';

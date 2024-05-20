@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {UrgenciaAtendimento} from "@/Interfaces/UrgenciaAtendimento";
+import {UrgenciaAtendimento} from "@/Interfaces/UrgenciaAtendimento/UrgenciaAtendimento";
 import {Promotor} from "@/Interfaces/Promotor/Promotor";
 
 import { usePage } from "@inertiajs/vue3";
@@ -8,13 +8,16 @@ import {onMounted} from "vue";
 
 const page = usePage();
 const props = defineProps({
+    promotores: {
+        type: Array as () => Promotor[],
+        required: true,
+    },
     plantaoDeAtendimentos: {
     type: Array as () => UrgenciaAtendimento[],
     required: true,
   },
 });
 
-const promotores = page.props.promotores as Promotor[];
 const historicoPromotores = page.props.historicoPromotores as Promotor[];
 
 function stringToDate(dateString: string) {

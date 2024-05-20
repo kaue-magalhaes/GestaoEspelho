@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import {Promotores} from "@/Interfaces/Promotor/Promotores";
+import {GrupoPromotorias} from "@/Interfaces/GrupoPromotoria/GrupoPromotorias";
 
 import {Head} from "@inertiajs/vue3";
 import AdminLayout from "@/Layouts/AdminLayout.vue";
@@ -13,6 +14,10 @@ defineProps({
         type: Object as () => Promotores,
         required: true,
     },
+    grupoPromotorias: {
+        type: Object as () => GrupoPromotorias,
+        required: true,
+    }
 });
 </script>
 
@@ -39,8 +44,9 @@ defineProps({
                         <Separator/>
                         <PromotoriaCreateForm
                             :promotores="promotores"
+                            :grupoPromotorias="grupoPromotorias.data"
                         />
-                    </CardContent>
+                    </CardContent>a
                 </Card>
             </AdminLayout>
         </ContainerComponent>

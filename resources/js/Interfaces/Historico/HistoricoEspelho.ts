@@ -5,7 +5,5 @@ export interface HistoricoEspelho {
     periodo_inicio: string;
     periodo_fim: string;
     historico_id: number;
-    created_at: string;
-    updated_at: string;
     promotorias?: HistoricoPromotoria[];
 }

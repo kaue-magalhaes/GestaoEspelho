@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {format} from "date-fns";
-import {GrupoPromotoria} from "@/Interfaces/GrupoPromotoria";
 import {Promotor} from "@/Interfaces/Promotor/Promotor";
+import {GrupoPromotoria} from "@/Interfaces/GrupoPromotoria/GrupoPromotoria";
 
 defineProps({
     promotores: {

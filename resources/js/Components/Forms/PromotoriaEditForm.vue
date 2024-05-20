@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import {GrupoPromotoria} from "@/Interfaces/GrupoPromotoria/GrupoPromotoria";
 import {Promotoria} from "@/Interfaces/Promotoria/Promotoria";
 import {Promotores} from "@/Interfaces/Promotor/Promotores";
 
@@ -20,10 +21,11 @@ const props = defineProps({
     promotoria: {
         type: Object as () => Promotoria,
         required: true
+    },
+    grupoPromotorias: {
+        type: Array as () => GrupoPromotoria[],
     }
 });
-
-const grupoPromotorias = usePage().props.grupoPromotorias;
 
 const form = useForm({
     nome: props.promotoria.nome,

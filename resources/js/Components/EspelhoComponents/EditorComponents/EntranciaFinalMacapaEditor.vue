@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import {Promotoria} from "@/Interfaces/Promotoria/Promotoria";
 import {Promotor} from "@/Interfaces/Promotor/Promotor";
-import {GrupoPromotoria} from "@/Interfaces/GrupoPromotoria";
+import {GrupoPromotoria} from "@/Interfaces/GrupoPromotoria/GrupoPromotoria";
 
 import {onMounted, ref} from "vue";
-import {Evento} from "@/Interfaces/Evento";
+import {Evento} from "@/Interfaces/Evento/Evento";
 
 const emit = defineEmits([
     'update:novoEventoAdicionado',
@@ -88,11 +88,13 @@ onMounted(() => {
                 Entrância Final – Macapá
             </h1>
             <PlantaoCaraterUrgenciaEditor
+                :promotores="promotores"
                 @delete:inputDeDadosFoiDeletado="enviaIndexInputDeDadosDeletado"
                 @update:nomeFoiSelecionado="enviaNomeDoPromotorSelecionado"
                 @update:periodoDoAtendimentoFoiSelecionado="enviaPeriodoDoAtendimentoSelecionado"
             />
             <TabelaPromotoriaEditor
+                :promotores="promotores"
                 :grupoPromotorias="grupoDePromotoriasNaoEspecializadas"
                 @update:novoEventoAdicionado="enviaDadosDoNovoEvento"
                 @update:umEventoFoiAlterado="enviaDadosDoEventoAlterado"
@@ -104,6 +106,7 @@ onMounted(() => {
                 Entrância Final – Macapá (Especializadas)
             </h1>
             <TabelaPromotoriaEditor
+                :promotores="promotores"
                 :grupoPromotorias="grupoDePromotoriasEspecializadas"
                 @update:novoEventoAdicionado="enviaDadosDoNovoEvento"
                 @update:umEventoFoiAlterado="enviaDadosDoEventoAlterado"

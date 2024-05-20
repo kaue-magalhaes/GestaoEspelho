@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import {Promotores} from "@/Interfaces/Promotor/Promotores";
+import {GrupoPromotoria} from "@/Interfaces/GrupoPromotoria/GrupoPromotoria";
 import {useForm, usePage} from "@inertiajs/vue3";
 import {
     Tooltip,
@@ -10,13 +11,15 @@ import {
 import {Switch} from "@/Components/ui/switch";
 import {toast} from "vue-sonner";
 
-const grupoPromotorias = usePage().props.grupoPromotorias;
-
 defineProps({
     promotores: {
         type: Object as () => Promotores,
         required: true,
     },
+    grupoPromotorias: {
+        type: Array as () => GrupoPromotoria[],
+        required: true,
+    }
 });
 
 const form = useForm({

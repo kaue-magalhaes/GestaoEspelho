@@ -6,7 +6,5 @@ export interface HistoricoUrgenciaAtendimento {
     periodo_inicio: string;
     periodo_fim: string;
     historico_promotor_designado_id: string;
-    created_at: string;
-    updated_at: string;
     promotor?: HistoricoPromotor;
 }
