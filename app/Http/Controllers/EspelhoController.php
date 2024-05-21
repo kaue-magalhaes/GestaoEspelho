@@ -94,7 +94,7 @@ class EspelhoController extends Controller
      */
     public function update(Request $request, string $id): void
     {
-        //dd($request->all());
+        dd($request->all());
         EspelhoUpdatedEvent::dispatch($request, $id);
     }
 

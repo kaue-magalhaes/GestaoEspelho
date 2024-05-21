@@ -30,6 +30,7 @@ const { getUrgenciaAtendimentos } = urgenciaAtendimentosStore;
 
 const updateDataStore = useUpdateDataStore();
 const { existsChanges, loading } = storeToRefs(updateDataStore);
+const { saveChanges } = updateDataStore;
 
 const props = defineProps({
     espelho: {
@@ -66,14 +67,7 @@ const listaEventos = ref<Evento[]>([]);
 const salvo = ref(false);
 const exibirBotaoSalvar = ref(false);
 const exibirBotaoPublicar = ref(false);
-const carregandoSalvamento = ref(false);
 const carregandoPublicacao = ref(false);
-
-const updatePeriodoEspelho = (value: string[]) => {
-    /*periodoEspelho.value = value;*/
-    exibirBotaoSalvar.value = true;
-    exibirBotaoPublicar.value = true;
-};
 
 const updateGrupoDeTodasAsPromotorias = (value: GrupoPromotoria[]) => {
     grupoDeTodasAsPromotoriasDados.value = value;
@@ -99,27 +93,6 @@ const updateListaEventos = (value: Evento[]) => {
     exibirBotaoSalvar.value = true;
     exibirBotaoPublicar.value = true;
 };
-
-const salvarEspelho = async () => {
-    carregandoSalvamento.value = true;
-    const data = {
-        /*periodoEspelho: periodoEspelho.value,*/
-        listaEventos: listaEventos.value,
-        atendimentosUrgenciaDados: atendimentosUrgenciaDados.value,
-    };
-
-    try {
-        await axios.put(`/espelho/${props.espelho.id}`, data);
-        exibirBotaoSalvar.value = false;
-        carregandoSalvamento.value = false;
-        salvo.value = true;
-
-        toast.success('Alteração foi salva com sucesso!');
-
-    } catch (error) {
-        console.error(error);
-    }
-}
 
 const publicarEspelho = async () => {
     carregandoPublicacao.value = true;
@@ -183,7 +156,6 @@ onBeforeMount(() => {
                 :promotorias="props.promotorias?.data"
                 :eventos="eventosComUUID"
                 :urgenciaAtendimentos="props.urgenciaAtendimentos?.data"
-                @update:periodoEspelho="updatePeriodoEspelho"
                 @update:grupoDeTodasAsPromotorias="updateGrupoDeTodasAsPromotorias"
                 @update:dadosDosAtendimentosUrgencia="updateAtendimentosUrgencia"
                 @update:atribuicao="updateAtribuicao"
@@ -205,7 +177,7 @@ onBeforeMount(() => {
                 <Loader2 class="w-4 h-4 mr-2 animate-spin"/>
                 Enviando
             </Button>
-            <Button v-else variant="outline" @click="salvarEspelho">
+            <Button v-else variant="outline" @click="saveChanges(props.espelho.id)">
                 Salvar as alterações
             </Button>
         </span>
