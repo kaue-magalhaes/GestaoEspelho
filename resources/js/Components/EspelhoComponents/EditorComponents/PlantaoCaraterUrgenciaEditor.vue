@@ -1,14 +1,22 @@
 <script setup lang="ts">
 import {Promotor} from "@/Interfaces/Promotor/Promotor";
-import {format} from 'date-fns';
-
-import {Plus, Trash} from 'lucide-vue-next';
 import {useUrgenciaAtendimentosStore} from "@/stores/urgenciaAtendimentoStore";
 import {storeToRefs} from "pinia";
 import {updateAnyPeriodo} from "@/utils/updatePeriodo";
 
+import {Plus, Trash} from 'lucide-vue-next';
+
 const store = useUrgenciaAtendimentosStore();
-const { urgenciaAtendimentos, loading } = storeToRefs(store);
+const {
+    urgenciaAtendimentos,
+    loading
+} = storeToRefs(store);
+const {
+    addNewUrgenciaAtendimento,
+    removeUrgenciaAtendimento,
+    removeDataNotChanged,
+    existsInErrosArray,
+} = store;
 
 const props = defineProps({
     promotores: {
@@ -16,32 +24,6 @@ const props = defineProps({
         required: true,
     },
 });
-
-const adicionarInputDeDados = () => {
-    // if (plantaoDeAtendimentos.value.length === 0) {
-    //     plantaoDeAtendimentos.value.push({
-    //         id: '1',
-    //         periodo_inicio: '',
-    //         periodo_fim: '',
-    //         promotor_designado_id: '',
-    //     });
-    // } else {
-    //     if (plantaoDeAtendimentos.value[plantaoDeAtendimentos.value.length - 1].periodo_inicio !== '' && plantaoDeAtendimentos.value[plantaoDeAtendimentos.value.length - 1].periodo_fim !== '' && plantaoDeAtendimentos.value[plantaoDeAtendimentos.value.length - 1].promotor_designado_id !== '') {
-    //         plantaoDeAtendimentos.value.push({
-    //             id: (parseInt(plantaoDeAtendimentos.value[plantaoDeAtendimentos.value.length - 1].id) + 1).toString(),
-    //             periodo_inicio: '',
-    //             periodo_fim: '',
-    //             promotor_designado_id: '',
-    //         });
-    //     }
-    // }
-};
-
-const removeInputDeDados = (index: number) => {
-    //plantaoDeAtendimentos.value.splice(index, 1);
-    //emit('delete:inputDeDadosFoiDeletado', index);
-};
-
 </script>
 
 <template>
@@ -57,14 +39,14 @@ const removeInputDeDados = (index: number) => {
         </Label>
         <div
             class="w-full px-4 flex justify-center items-center space-x-4"
-            v-for="(dados, index) in urgenciaAtendimentos.data" :key="index"
+            v-for="(data, index) in urgenciaAtendimentos.data" :key="index"
         >
             <div class="flex flex-row items-center w-full space-x-4">
                 <Label class="text-base whitespace-nowrap">
                     Promotor:
                 </Label>
-                <Select v-model="dados.promotor_designado_id">
-                    <SelectTrigger>
+                <Select v-model="data.promotor_designado_id">
+                    <SelectTrigger :class="{'border border-red-600 text-red-600': existsInErrosArray(data.id)}">
                         <SelectValue placeholder="Selecione o Promotor"/>
                     </SelectTrigger>
                     <SelectContent>
@@ -72,9 +54,8 @@ const removeInputDeDados = (index: number) => {
                             <SelectLabel>Promotores</SelectLabel>
                             <SelectItem
                                 v-for="promotor in promotores" :key="promotor.id"
+                                @click="removeDataNotChanged(data.id)"
                                 :value="promotor.id"
-
-                                @click="adicionaNomeDoPromotorSelecionado(index, promotor.id)"
                             >
                                 {{ promotor.nome }}
                             </SelectItem>
@@ -87,31 +68,19 @@ const removeInputDeDados = (index: number) => {
                     Período:
                 </Label>
                 <DatePicker
-                    v-if="dados.periodo_fim && dados.periodo_inicio"
-                    :period_start="new Date(dados.periodo_inicio)"
-                    :period_end="new Date(dados.periodo_fim)"
-                    :was-changed="true"
-                    @update:period="updateAnyPeriodo(dados, $event)"
+                    :period_start="data.periodo_inicio ? new Date(data.periodo_inicio) : null"
+                    :period_end="data.periodo_fim ? new Date(data.periodo_fim) : null"
+                    :was-changed="!!(data.periodo_fim && data.periodo_inicio)"
+                    @update:period="updateAnyPeriodo(data, $event)"
                 />
-                <DatePicker
-                    v-else
-                    :was-changed="false"
-                    @update:period="updateAnyPeriodo(dados, $event)"
-                />
-<!--                <DatePicker-->
-<!--                    :period_start="dados.periodo_inicio ? new Date(dados.periodo_inicio) : null"-->
-<!--                    :period_end="dados.periodo_fim ? new Date(dados.periodo_fim) : null"-->
-<!--                    :was-changed="!!(dados.periodo_fim && dados.periodo_inicio)"-->
-<!--                    @update:period="adicionaPeriodoDeAtendimentoSelecionado(index, $event)"-->
-<!--                />-->
             </div>
             <div class="flex">
-                <Button @click="removeInputDeDados(index)" variant="destructive" size="icon">
+                <Button @click="removeUrgenciaAtendimento(data.id)" variant="destructive" size="icon">
                     <Trash class="w-4 h-4"/>
                 </Button>
             </div>
         </div>
-        <Button variant="ghost" class="w-1/3" @click="adicionarInputDeDados()">
+        <Button variant="ghost" class="w-1/3" @click="addNewUrgenciaAtendimento">
             Adicionar
             <Plus class="ml-1 w-4 h-4"/>
         </Button>

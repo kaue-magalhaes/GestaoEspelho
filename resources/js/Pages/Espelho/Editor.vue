@@ -1,35 +1,40 @@
 <script setup lang="ts">
+import {onBeforeMount, ref} from 'vue';
+import {useUrgenciaAtendimentosStore} from "@/stores/urgenciaAtendimentoStore";
+import {useEspelhoStore} from "@/stores/espelhoStore";
+import {useUpdateDataStore} from "@/stores/updateDataStore";
+import {storeToRefs} from "pinia";
+
 import {UrgenciaAtendimento} from "@/Interfaces/UrgenciaAtendimento/UrgenciaAtendimento";
 import {Promotores} from "@/Interfaces/Promotor/Promotores";
 import {Espelho} from "@/Interfaces/Espelho/Espelho";
 import {Evento} from "@/Interfaces/Evento/Evento";
 import {GrupoPromotoria} from "@/Interfaces/GrupoPromotoria/GrupoPromotoria";
 import {Atribuicoes} from "@/Interfaces/Atribuicoes";
-
-import EditorComponent from "@/Components/EspelhoComponents/EditorComponent.vue";
-import PreviewComponent from "@/Components/EspelhoComponents/PreviewComponent.vue";
-import {onBeforeMount, ref} from 'vue';
-import axios from 'axios';
-import {toast} from 'vue-sonner';
-import {Loader2} from 'lucide-vue-next'
-import EditorLayout from "@/Layouts/EditorLayout.vue";
 import {Eventos} from "@/Interfaces/Evento/Eventos";
-import {UrgenciaAtendimentos} from "@/Interfaces/UrgenciaAtendimento/UrgenciaAtendimentos";
 import {GrupoPromotorias} from "@/Interfaces/GrupoPromotoria/GrupoPromotorias";
 import {Promotorias} from "@/Interfaces/Promotoria/Promotorias";
-import {useUrgenciaAtendimentosStore} from "@/stores/urgenciaAtendimentoStore";
-import {useEspelhoStore} from "@/stores/espelhoStore";
-import {storeToRefs} from "pinia";
-import {useUpdateDataStore} from "@/stores/updateDataStore";
+
+import PreviewComponent from "@/Components/EspelhoComponents/PreviewComponent.vue";
+import EditorComponent from "@/Components/EspelhoComponents/EditorComponent.vue";
+import EditorLayout from "@/Layouts/EditorLayout.vue";
+
+import {Loader2} from 'lucide-vue-next'
+import {toast} from 'vue-sonner';
+import axios from 'axios';
 
 const espelhoStore = useEspelhoStore();
+const {espelho} = storeToRefs(espelhoStore);
 const { getEspelhos } = espelhoStore;
 
 const urgenciaAtendimentosStore = useUrgenciaAtendimentosStore();
 const { getUrgenciaAtendimentos } = urgenciaAtendimentosStore;
 
 const updateDataStore = useUpdateDataStore();
-const { existsChanges, loading } = storeToRefs(updateDataStore);
+const {
+    existsChanges,
+    loading
+} = storeToRefs(updateDataStore);
 const { saveChanges } = updateDataStore;
 
 const props = defineProps({

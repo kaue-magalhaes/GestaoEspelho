@@ -30,14 +30,14 @@ const historicoPromotores = page.props.historicoPromotores as Promotor[];
             <h2 class="text-xl font-bold mb-4">PLANTÃO DE ATENDIMENTOS EM CARÁTER DE URGÊNCIA - MACAPÁ/SANTANA</h2>
             <ul class="grid grid-cols-2 gap-4">
                 <li class="mb-2 text-left" v-for="atendimento in urgenciaAtendimentos.data" :key="atendimento.uuid">
-                    <span v-if="atendimento.periodo_inicio">
+                    <span v-if="atendimento.periodo_inicio && atendimento.promotor_designado_id !== ''">
                         <span class="font-semibold">
                             - {{
                                 promotores.find(promotor => promotor.id === atendimento.promotor_designado_id)?.nome ||
                                 historicoPromotores.find(promotor => promotor.id === atendimento.promotor_designado_id)?.nome
                             }}
                         </span>
-                        <span v-if="atendimento.periodo_inicio === atendimento.periodo_fim">
+                        <span v-if="format(atendimento.periodo_inicio, 'dd/MM/yyyy') === format(atendimento.periodo_fim, 'dd/MM/yyyy')">
                             ({{ format(atendimento.periodo_inicio, 'dd/MM/yyyy') }})
                         </span>
                         <span v-else>

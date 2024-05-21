@@ -1,7 +1,6 @@
 import { defineStore } from "pinia";
-import {reactive, ref} from "vue";
+import { ref } from "vue";
 import {Espelho} from "@/Interfaces/Espelho/Espelho";
-import {useUpdateDataStore} from "@/stores/updateDataStore";
 
 export const useEspelhoStore = defineStore("espelho", () => {
 

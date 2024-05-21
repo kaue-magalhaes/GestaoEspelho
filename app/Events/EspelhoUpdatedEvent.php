@@ -40,7 +40,7 @@ class EspelhoUpdatedEvent
      */
     public function getPeriodoEspelho(): array
     {
-        return $this->request->input('periodoEspelho');
+        return $this->request->input('espelho');
     }
 
     /**
