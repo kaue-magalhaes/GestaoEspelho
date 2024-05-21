@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Espelho;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\EspelhoResource;
 use App\Http\Resources\EventoResource;
 use App\Http\Resources\GrupoPromotoriaResource;
 use App\Http\Resources\PromotoriaResource;
@@ -25,15 +24,17 @@ class EditorController extends Controller
      */
     public function __invoke(Request $request)
     {
-        $espelho              = Espelho::query()->get();
+        $espelho              = Espelho::first()->toArray();
         $promotores           = Promotor::query()->get();
         $grupoPromotorias     = GrupoPromotoria::query()->get();
         $promotorias          = Promotoria::query()->get();
         $eventos              = Evento::query()->get();
         $urgenciaAtendimentos = UrgenciaAtendimento::query()->get();
 
+        //return UrgenciaAtendimentoResource::collection($urgenciaAtendimentos);
+
         return Inertia::render('Espelho/Editor', [
-            'espelho'              => EspelhoResource::collection($espelho),
+            'espelho'              => $espelho,
             'promotores'           => PromotorResource::collection($promotores),
             'grupoPromotorias'     => GrupoPromotoriaResource::collection($grupoPromotorias),
             'promotorias'          => PromotoriaResource::collection($promotorias),

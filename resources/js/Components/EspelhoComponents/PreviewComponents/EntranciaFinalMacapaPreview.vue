@@ -55,23 +55,24 @@ watchEffect(() => {
             <PlantaoCaraterUrgenciaPreview
                 v-if="props.urgenciaAtendimentos.length > 0"
                 :promotores="props.promotores"
-                :plantaoDeAtendimentos="props.urgenciaAtendimentos"
             />
-            <TabelaPromotoriaPreview
-                v-if="grupoPromotoriasNaoEspecializadas.length > 0"
-                :promotores="props.promotores"
-                :grupoPromotorias="grupoPromotoriasNaoEspecializadas"
-            />
+<!--                :plantaoDeAtendimentos="props.urgenciaAtendimentos"-->
+
+<!--            <TabelaPromotoriaPreview-->
+<!--                v-if="grupoPromotoriasNaoEspecializadas.length > 0"-->
+<!--                :promotores="props.promotores"-->
+<!--                :grupoPromotorias="grupoPromotoriasNaoEspecializadas"-->
+<!--            />-->
         </div>
-        <div class="w-full mx-auto flex flex-col items-center space-y-4" v-if="grupoPromotoriasEspecializadas.length > 0">
-            <h1 class="text-2xl font-bold text-gray-700 dark:text-gray-200 mt-4">
-                Entrância Final – Macapá (Especializadas)
-            </h1>
-            <TabelaPromotoriaPreview
-                v-if="grupoPromotoriasEspecializadas.length > 0"
-                :promotores="props.promotores"
-                :grupoPromotorias="grupoPromotoriasEspecializadas"
-            />
-        </div>
+<!--        <div class="w-full mx-auto flex flex-col items-center space-y-4" v-if="grupoPromotoriasEspecializadas.length > 0">-->
+<!--            <h1 class="text-2xl font-bold text-gray-700 dark:text-gray-200 mt-4">-->
+<!--                Entrância Final – Macapá (Especializadas)-->
+<!--            </h1>-->
+<!--            <TabelaPromotoriaPreview-->
+<!--                v-if="grupoPromotoriasEspecializadas.length > 0"-->
+<!--                :promotores="props.promotores"-->
+<!--                :grupoPromotorias="grupoPromotoriasEspecializadas"-->
+<!--            />-->
+<!--        </div>-->
     </div>
 </template>

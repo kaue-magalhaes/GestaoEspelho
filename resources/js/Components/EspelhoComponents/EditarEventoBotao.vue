@@ -33,7 +33,7 @@ const props = defineProps({
 
 /* Variaveis Reativas */
 const tipoEvento = ref<string>(props.evento?.tipo);
-const periodoEvento = ref<{ start: Date; end: Date }>({ start: stringToDate(props.evento?.periodo_inicio), end: stringToDate(props.evento?.periodo_fim) });
+const periodoEvento = ref<{ start: Date; end: Date }>({ start: props.evento?.periodo_inicio, end: props.evento?.periodo_fim });
 const tituloEvento = ref<string>(props.evento?.titulo || '');
 const promotor_designado_id = ref<string>(props.evento?.promotor_designado_id);
 const dialogOpen = ref<boolean>(false);
@@ -72,11 +72,6 @@ const enviaDadosDoEvento = (
     emit('update:editaEvento', grupoPromotoriaID, promotoriaID, novoEvento);
     dialogOpen.value = false;
 };
-
-function stringToDate(dateString: string) {
-  const [year, month, day] = dateString.split('-').map(Number);
-  return new Date(year, month - 1, day);
-}
 </script>
 
 <template>

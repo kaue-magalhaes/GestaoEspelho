@@ -19,7 +19,7 @@ class PromotorResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id'   => $this->id,
+            'id'   => strval($this->id),
             'nome' => $this->nome,
         ];
         // CAMPOS DA TABELA

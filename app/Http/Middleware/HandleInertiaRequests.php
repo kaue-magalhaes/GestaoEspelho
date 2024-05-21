@@ -2,9 +2,6 @@
 
 namespace App\Http\Middleware;
 
-use App\Models\GrupoPromotoria;
-use App\Models\Historico\HistoricoPromotor;
-use App\Models\UrgenciaAtendimento;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -35,7 +32,12 @@ class HandleInertiaRequests extends Middleware
         $user = $request->user();
 
         if ($user) {
-            $user = $user->isAdmin() ? $user->toArray() + ['is_admin' => true] : $user->toArray();
+            $user = $user->isAdmin() ? [
+                'nome'     => $user->nome,
+                'is_admin' => true,
+            ] : [
+                'nome' => $user->nome,
+            ];
         }
 
         return [

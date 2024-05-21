@@ -113,7 +113,7 @@ class EspelhoController extends Controller
     {
         //dd(\request()->all());
         return Inertia::render('HistoryList', [
-            'espelhos' => HistoricoEspelho::query()
+            'historicoEspelhos' => HistoricoEspelho::query()
                 ->when(
                     request()->has('filters') && isset(request('filters')['search']) && request('filters')['search'] !== null,
                     function (Builder $query) {

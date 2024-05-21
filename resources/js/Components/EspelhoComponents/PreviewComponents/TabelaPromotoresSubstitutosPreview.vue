@@ -9,11 +9,6 @@ const props = defineProps({
   },
 });
 
-function stringToDate(dateString: string) {
-  const [year, month, day] = dateString.split('-').map(Number);
-  return new Date(year, month - 1, day);
-}
-
 </script>
 
 <template>
@@ -48,7 +43,7 @@ function stringToDate(dateString: string) {
                 </span>
               </span>
               <span class="text-xs">
-                ({{ format(stringToDate(atribuicao.periodo_inicio), 'dd/MM/yyyy') }} - {{ format(stringToDate(atribuicao.periodo_fim), 'dd/MM/yyyy') }})
+                ({{ format(atribuicao.periodo_inicio, 'dd/MM/yyyy') }} - {{ format(atribuicao.periodo_fim, 'dd/MM/yyyy') }})
               </span>
             </span>
           </td>

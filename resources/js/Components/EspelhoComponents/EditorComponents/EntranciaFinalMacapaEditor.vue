@@ -5,14 +5,12 @@ import {GrupoPromotoria} from "@/Interfaces/GrupoPromotoria/GrupoPromotoria";
 
 import {onMounted, ref} from "vue";
 import {Evento} from "@/Interfaces/Evento/Evento";
+import {UrgenciaAtendimento} from "@/Interfaces/UrgenciaAtendimento/UrgenciaAtendimento";
 
 const emit = defineEmits([
     'update:novoEventoAdicionado',
     'update:umEventoFoiAlterado',
     'delete:umEventoFoiDeletado',
-    'update:nomeFoiSelecionado',
-    'update:periodoDoAtendimentoFoiSelecionado',
-    'delete:inputDeDadosFoiDeletado',
 ]);
 
 const props = defineProps({
@@ -28,6 +26,10 @@ const props = defineProps({
         type: Array as () => Promotor[],
         required: true,
     },
+    urgenciaAtendimentos: {
+        type: Array as () => UrgenciaAtendimento[],
+        required: true,
+    }
 });
 
 const promotoriasNaoEspecializadas = ref<Promotoria[]>(props.promotorias.filter((promotoria) =>
@@ -50,18 +52,6 @@ const enviaDadosDoEventoAlterado = (grupoDePromotoriaID: String, promotoriaID: S
 
 const enviaDadosDoEventoDeletado = (eventoDeletado: Evento) => {
     emit('delete:umEventoFoiDeletado', eventoDeletado);
-};
-
-const enviaNomeDoPromotorSelecionado = (index: number, idPromotor: string) => {
-    emit('update:nomeFoiSelecionado', index, idPromotor);
-};
-
-const enviaPeriodoDoAtendimentoSelecionado = (index: number, periodo_start: string, periodo_end: string) => {
-    emit('update:periodoDoAtendimentoFoiSelecionado', index, periodo_start, periodo_end);
-};
-
-const enviaIndexInputDeDadosDeletado = (index: number) => {
-    emit('delete:inputDeDadosFoiDeletado', index);
 };
 
 const filtraGrupoPromotoria = (grupoPromotorias: GrupoPromotoria[], promotoriasSelecionadas: Promotoria[]) => {
@@ -87,31 +77,26 @@ onMounted(() => {
             <h1 class="text-2xl font-bold text-gray-700 dark:text-gray-200 mt-4">
                 Entrância Final – Macapá
             </h1>
-            <PlantaoCaraterUrgenciaEditor
-                :promotores="promotores"
-                @delete:inputDeDadosFoiDeletado="enviaIndexInputDeDadosDeletado"
-                @update:nomeFoiSelecionado="enviaNomeDoPromotorSelecionado"
-                @update:periodoDoAtendimentoFoiSelecionado="enviaPeriodoDoAtendimentoSelecionado"
-            />
-            <TabelaPromotoriaEditor
-                :promotores="promotores"
-                :grupoPromotorias="grupoDePromotoriasNaoEspecializadas"
-                @update:novoEventoAdicionado="enviaDadosDoNovoEvento"
-                @update:umEventoFoiAlterado="enviaDadosDoEventoAlterado"
-                @delete:umEventoFoiDeletado="enviaDadosDoEventoDeletado"
-            />
+            <slot name="PlantaoCaraterUrgencia"/>
+<!--            <TabelaPromotoriaEditor-->
+<!--                :promotores="promotores"-->
+<!--                :grupoPromotorias="grupoDePromotoriasNaoEspecializadas"-->
+<!--                @update:novoEventoAdicionado="enviaDadosDoNovoEvento"-->
+<!--                @update:umEventoFoiAlterado="enviaDadosDoEventoAlterado"-->
+<!--                @delete:umEventoFoiDeletado="enviaDadosDoEventoDeletado"-->
+<!--            />-->
         </div>
-        <div class="max-w-5xl w-full mx-auto flex flex-col items-center space-y-4">
-            <h1 class="text-2xl font-bold text-gray-700 dark:text-gray-200 mt-4">
-                Entrância Final – Macapá (Especializadas)
-            </h1>
-            <TabelaPromotoriaEditor
-                :promotores="promotores"
-                :grupoPromotorias="grupoDePromotoriasEspecializadas"
-                @update:novoEventoAdicionado="enviaDadosDoNovoEvento"
-                @update:umEventoFoiAlterado="enviaDadosDoEventoAlterado"
-                @delete:umEventoFoiDeletado="enviaDadosDoEventoDeletado"
-            />
-        </div>
+<!--        <div class="max-w-5xl w-full mx-auto flex flex-col items-center space-y-4">-->
+<!--            <h1 class="text-2xl font-bold text-gray-700 dark:text-gray-200 mt-4">-->
+<!--                Entrância Final – Macapá (Especializadas)-->
+<!--            </h1>-->
+<!--            <TabelaPromotoriaEditor-->
+<!--                :promotores="promotores"-->
+<!--                :grupoPromotorias="grupoDePromotoriasEspecializadas"-->
+<!--                @update:novoEventoAdicionado="enviaDadosDoNovoEvento"-->
+<!--                @update:umEventoFoiAlterado="enviaDadosDoEventoAlterado"-->
+<!--                @delete:umEventoFoiDeletado="enviaDadosDoEventoDeletado"-->
+<!--            />-->
+<!--        </div>-->
     </div>
 </template>

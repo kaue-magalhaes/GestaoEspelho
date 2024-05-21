@@ -44,8 +44,8 @@ const props = defineProps({
 
 const grupoDeTodasAsPromotoriasDados = ref<GrupoPromotoria[]>([]);
 const periodoEspelho = ref<string[]>([
-    format(stringToDate(props.historicoEspelho?.periodo_inicio), 'dd/MM/yyyy'),
-    format(stringToDate(props.historicoEspelho?.periodo_fim), 'dd/MM/yyyy'),
+    format(props.historicoEspelho?.periodo_inicio, 'dd/MM/yyyy'),
+    format(props.historicoEspelho?.periodo_fim, 'dd/MM/yyyy'),
 ]);
 const atendimentosUrgenciaDados = ref<UrgenciaAtendimento[]>([]);
 const eventos = ref<Evento[]>([]);
@@ -145,11 +145,6 @@ const processaAtendimentosUrgenciaDados = (urgenciaAtendimentos: HistoricoUrgenc
             },
         });
     });
-}
-
-function stringToDate(dateString: string) {
-    const [year, month, day] = dateString.split('-').map(Number);
-    return new Date(year, month - 1, day);
 }
 
 watchEffect(() => {

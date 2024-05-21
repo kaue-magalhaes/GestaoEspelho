@@ -22,7 +22,7 @@ class UrgenciaAtendimentoResource extends JsonResource
             'id'                    => $this->id,
             'periodo_inicio'        => $this->periodo_inicio,
             'periodo_fim'           => $this->periodo_fim,
-            'promotor_designado_id' => $this->promotor_designado_id,
+            'promotor_designado_id' => strval($this->promotor_designado_id),
         ];
     }
 }

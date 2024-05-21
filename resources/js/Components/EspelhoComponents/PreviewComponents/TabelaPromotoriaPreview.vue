@@ -58,8 +58,8 @@ function stringToDate(dateString: string) {
                 </span>
                 <span>
                   {{
-                        format(stringToDate(evento.periodo_inicio), 'dd/MM/yyyy')
-                    }} - {{ format(stringToDate(evento.periodo_fim), 'dd/MM/yyyy') }}
+                        format(evento.periodo_inicio, 'dd/MM/yyyy')
+                    }} - {{ format(evento.periodo_fim, 'dd/MM/yyyy') }}
                 </span>
                 <span>
                   Promotor designado: {{
@@ -106,8 +106,8 @@ function stringToDate(dateString: string) {
                 </span>
                 <span>
                   {{
-                        format(stringToDate(evento.periodo_inicio), 'dd/MM/yyyy')
-                    }} - {{ format(stringToDate(evento.periodo_fim), 'dd/MM/yyyy') }}
+                        format(evento.periodo_inicio, 'dd/MM/yyyy')
+                    }} - {{ format(evento.periodo_fim, 'dd/MM/yyyy') }}
                 </span>
                 <span>
                   Promotor designado: {{

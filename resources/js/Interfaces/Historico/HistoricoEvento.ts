@@ -5,8 +5,8 @@ export interface HistoricoEvento {
     uuid?: string;
     titulo?: string;
     tipo: string;
-    periodo_inicio: string;
-    periodo_fim: string;
+    periodo_inicio: Date;
+    periodo_fim: Date;
     historico_promotor_titular_id: string;
     historico_promotor_designado_id: string;
     historico_id: number;
