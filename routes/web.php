@@ -1,11 +1,12 @@
 <?php
 
 use App\Http\Controllers\Admin;
+use App\Http\Controllers\Espelho;
 use App\Http\Controllers\EspelhoController;
+use App\Http\Controllers\Promotor;
 use App\Http\Controllers\Promotoria;
 use App\Http\Controllers\PromotoriaController;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,7 +20,7 @@ use Inertia\Inertia;
 */
 
 Route::middleware('auth')->group(function () {
-    Route::get('/', [EspelhoController::class, 'editor'])->name('espelho.editor');
+    Route::get('/', Espelho\EditorController::class)->name('espelho.editor');
     Route::get('/espelho/historico/{id}', [EspelhoController::class, 'show'])->name('espelho.show');
     Route::put('/espelho/{id}', [EspelhoController::class, 'update'])->name('espelho.update');
     Route::post('/espelho/publicar/{id}', [EspelhoController::class, 'publish'])->name('espelho.publish');
@@ -33,12 +34,10 @@ Route::middleware('auth')->group(function () {
     Route::post('/promotoria/store', [PromotoriaController::class, 'store'])->name('promotoria.store');
     Route::put('/promotoria/update/{promotoria}', Promotoria\UpdateController::class)->name('promotoria.update');
     Route::delete('/promotoria/destroy/{promotoria}', [PromotoriaController::class, 'destroy'])->name('promotoria.destroy');
+
+    Route::post('/promotor/store', Promotor\StoreController::class)->name('promotor.store');
 });
 
 Route::get('/espelho', [EspelhoController::class, 'index'])->name('espelho.index');
-
-Route::get('/test', function () {
-    return Inertia::render('VerifyEmail');
-})->name('test');
 
 require __DIR__ . '/auth.php';

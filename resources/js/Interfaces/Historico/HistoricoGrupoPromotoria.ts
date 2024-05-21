@@ -6,8 +6,6 @@ export interface HistoricoGrupoPromotoria {
     nome: string;
     historico_municipio_id: string;
     historico_id: number;
-    created_at: string;
-    updated_at: string;
     promotorias?: HistoricoPromotoria[];
     municipio?: HistoricoMunicipio;
 }

@@ -93,6 +93,21 @@ return [
             'sslmode'        => 'prefer',
         ],
 
+        //        'ecidade' => [
+        //            'driver'         => 'pgsql',
+        //            'url'            => env('DATABASE_URL'),
+        //            'host'           => env('DB_ECIDADE_HOST', '127.0.0.1'),
+        //            'port'           => env('DB_ECIDADE_PORT', '5432'),
+        //            'database'       => env('DB_ECIDADE_DATABASE', 'forge'),
+        //            'username'       => env('DB_ECIDADE_USERNAME', 'forge'),
+        //            'password'       => env('DB_ECIDADE_PASSWORD', ''),
+        //            'charset'        => 'LATIN1',
+        //            'prefix'         => '',
+        //            'prefix_indexes' => true,
+        //            'search_path'    => 'public',
+        //            'sslmode'        => 'prefer',
+        //        ],
+
         'sqlsrv' => [
             'driver'         => 'sqlsrv',
             'url'            => env('DATABASE_URL'),

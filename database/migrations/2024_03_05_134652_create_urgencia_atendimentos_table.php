@@ -12,9 +12,9 @@ return new class extends Migration {
     {
         Schema::create('urgencia_atendimentos', function (Blueprint $table) {
             $table->id();
-            $table->date('periodo_inicio');
-            $table->date('periodo_fim');
-            $table->foreignId('promotor_designado_id')->references('id')->on('promotores');
+            $table->dateTime('periodo_inicio');
+            $table->dateTime('periodo_fim');
+            $table->unsignedBigInteger('promotor_designado_id');
             $table->timestamps();
         });
     }

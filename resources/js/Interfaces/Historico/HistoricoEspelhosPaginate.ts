@@ -1,9 +1,9 @@
-import {Espelhos} from "@/Interfaces/Espelho/Espelhos";
+import {HistoricoEspelhos} from "@/Interfaces/Historico/HistoricoEspelhos";
 import {Links} from "@/Interfaces/Links";
 
-export interface EspelhosPaginate {
+export interface HistoricoEspelhosPaginate {
     current_page: number;
-    data: Espelhos[];
+    data: HistoricoEspelhos[];
     first_page_url: string;
     from: number;
     last_page: number;

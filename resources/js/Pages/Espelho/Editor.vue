@@ -1,18 +1,41 @@
 <script setup lang="ts">
-import {UrgenciaAtendimento} from "@/Interfaces/UrgenciaAtendimento";
-import {Promotor} from "@/Interfaces/Promotor";
-import {Espelho} from "@/Interfaces/Espelho/Espelho";
-import {Evento} from "@/Interfaces/Evento";
-import {GrupoPromotoria} from "@/Interfaces/GrupoPromotoria";
-import {Atribuicoes} from "@/Interfaces/Atribuicoes";
-
 import {onBeforeMount, ref} from 'vue';
-import {Head} from '@inertiajs/vue3';
-import {format} from 'date-fns';
-import axios from 'axios';
-import {toast} from 'vue-sonner';
+import {useUrgenciaAtendimentosStore} from "@/stores/urgenciaAtendimentoStore";
+import {useEspelhoStore} from "@/stores/espelhoStore";
+import {useUpdateDataStore} from "@/stores/updateDataStore";
+import {storeToRefs} from "pinia";
+
+import {UrgenciaAtendimento} from "@/Interfaces/UrgenciaAtendimento/UrgenciaAtendimento";
+import {Promotores} from "@/Interfaces/Promotor/Promotores";
+import {Espelho} from "@/Interfaces/Espelho/Espelho";
+import {Evento} from "@/Interfaces/Evento/Evento";
+import {GrupoPromotoria} from "@/Interfaces/GrupoPromotoria/GrupoPromotoria";
+import {Atribuicoes} from "@/Interfaces/Atribuicoes";
+import {Eventos} from "@/Interfaces/Evento/Eventos";
+import {GrupoPromotorias} from "@/Interfaces/GrupoPromotoria/GrupoPromotorias";
+import {Promotorias} from "@/Interfaces/Promotoria/Promotorias";
+
+import PreviewComponent from "@/Components/EspelhoComponents/PreviewComponent.vue";
+import EditorComponent from "@/Components/EspelhoComponents/EditorComponent.vue";
+import EditorLayout from "@/Layouts/EditorLayout.vue";
+
 import {Loader2} from 'lucide-vue-next'
-import {Promotoria} from "@/Interfaces/Promotoria/Promotoria";
+import {toast} from 'vue-sonner';
+import axios from 'axios';
+
+const espelhoStore = useEspelhoStore();
+const {espelho} = storeToRefs(espelhoStore);
+const { getEspelhos } = espelhoStore;
+
+const urgenciaAtendimentosStore = useUrgenciaAtendimentosStore();
+const { getUrgenciaAtendimentos } = urgenciaAtendimentosStore;
+
+const updateDataStore = useUpdateDataStore();
+const {
+    existsChanges,
+    loading
+} = storeToRefs(updateDataStore);
+const { saveChanges } = updateDataStore;
 
 const props = defineProps({
     espelho: {
@@ -20,47 +43,32 @@ const props = defineProps({
         required: true,
     },
     grupoPromotorias: {
-        type: Array as () => GrupoPromotoria[],
+        type: Object as () => GrupoPromotorias,
         required: true,
     },
     promotorias: {
-        type: Array as () => Promotoria[],
+        type: Object as () => Promotorias,
         required: true,
     },
     promotores: {
-        type: Array as () => Promotor[],
+        type: Object as () => Promotores,
         required: true,
     },
     eventos: {
-        type: Array as () => Evento[],
+        type: Object as () => Eventos,
         required: true,
-    },
-    urgenciaAtendimentos: {
-        type: Array as () => UrgenciaAtendimento[],
-        required: true,
-    },
+    }
 });
 const eventosComUUID = ref<Evento[]>([]);
 
-const periodoEspelho = ref<string[]>([
-    format(stringToDate(props.espelho?.periodo_inicio), 'dd/MM/yyyy'),
-    format(stringToDate(props.espelho?.periodo_fim), 'dd/MM/yyyy'),
-]);
-const grupoDeTodasAsPromotoriasDados = ref<GrupoPromotoria[]>(props.grupoPromotorias);
+const grupoDeTodasAsPromotoriasDados = ref<GrupoPromotoria[]>(props.grupoPromotorias?.data);
 const atendimentosUrgenciaDados = ref<UrgenciaAtendimento[]>([]);
 const listaAtribuicoes = ref<Atribuicoes[]>([]);
 const listaEventos = ref<Evento[]>([]);
 const salvo = ref(false);
 const exibirBotaoSalvar = ref(false);
 const exibirBotaoPublicar = ref(false);
-const carregandoSalvamento = ref(false);
 const carregandoPublicacao = ref(false);
-
-const updatePeriodoEspelho = (value: string[]) => {
-    periodoEspelho.value = value;
-    exibirBotaoSalvar.value = true;
-    exibirBotaoPublicar.value = true;
-};
 
 const updateGrupoDeTodasAsPromotorias = (value: GrupoPromotoria[]) => {
     grupoDeTodasAsPromotoriasDados.value = value;
@@ -87,36 +95,10 @@ const updateListaEventos = (value: Evento[]) => {
     exibirBotaoPublicar.value = true;
 };
 
-function stringToDate(dateString: string) {
-    const [year, month, day] = dateString.split('-').map(Number);
-    return new Date(year, month - 1, day);
-}
-
-const salvarEspelho = async () => {
-    carregandoSalvamento.value = true;
-    const data = {
-        periodoEspelho: periodoEspelho.value,
-        listaEventos: listaEventos.value,
-        atendimentosUrgenciaDados: atendimentosUrgenciaDados.value,
-    };
-
-    try {
-        await axios.put(`/espelho/${props.espelho.id}`, data);
-        exibirBotaoSalvar.value = false;
-        carregandoSalvamento.value = false;
-        salvo.value = true;
-
-        toast.success('Alteração foi salva com sucesso!');
-
-    } catch (error) {
-        console.error(error);
-    }
-}
-
 const publicarEspelho = async () => {
     carregandoPublicacao.value = true;
     const data = {
-        periodoEspelho: periodoEspelho.value,
+        /*periodoEspelho: periodoEspelho.value,*/
         listaEventos: listaEventos.value,
         atendimentosUrgenciaDados: atendimentosUrgenciaDados.value,
     };
@@ -146,68 +128,46 @@ const processaEventos = (eventos: Evento[]) => {
     }));
 };
 
-const processaUrgenciaAtendimentos = (urgenciaAtendimentos: UrgenciaAtendimento[]) => {
-    return urgenciaAtendimentos.map(atendimentoUrgencia => ({
-        id: atendimentoUrgencia.id,
-        periodo_inicio: atendimentoUrgencia.periodo_inicio,
-        periodo_fim: atendimentoUrgencia.periodo_fim,
-        promotor_designado_id: atendimentoUrgencia.promotor_designado_id,
-        created_at: atendimentoUrgencia.created_at,
-        updated_at: atendimentoUrgencia.updated_at,
-    }));
-};
-
 onBeforeMount(() => {
-    eventosComUUID.value = processaEventos(props.eventos);
-    listaEventos.value = eventosComUUID.value;
+    getEspelhos()
+    getUrgenciaAtendimentos();
 
-    atendimentosUrgenciaDados.value = processaUrgenciaAtendimentos(props.urgenciaAtendimentos);
+    eventosComUUID.value = processaEventos(props.eventos?.data);
+    listaEventos.value = eventosComUUID.value;
 });
 </script>
 
 <template>
-    <Head title="Espelho"/>
-    <AuthenticatedLayout>
-        <ContainerComponent>
-            <Carousel class="focus-visible:outline-none">
-                <CarouselContent>
-                    <CarouselItem>
-                        <Editor
-                            :espelho="espelho"
-                            :promotores="props.promotores"
-                            :grupoPromotorias="props.grupoPromotorias"
-                            :promotorias="props.promotorias"
-                            :eventos="eventosComUUID"
-                            :urgenciaAtendimentos="props.urgenciaAtendimentos"
-                            @update:periodoEspelho="updatePeriodoEspelho"
-                            @update:grupoDeTodasAsPromotorias="updateGrupoDeTodasAsPromotorias"
-                            @update:dadosDosAtendimentosUrgencia="updateAtendimentosUrgencia"
-                            @update:atribuicao="updateAtribuicao"
-                            @update:ListaEventos="updateListaEventos"
-                        />
-                    </CarouselItem>
-                    <CarouselItem>
-                        <Preview
-                            :periodoEspelho="periodoEspelho"
-                            :grupoPromotoriaDeTodasAsPromotorias="grupoDeTodasAsPromotoriasDados"
-                            :listaAtribuicoes="listaAtribuicoes"
-                            :atendimentosUrgenciaDados="atendimentosUrgenciaDados"
-                        />
-                    </CarouselItem>
-                </CarouselContent>
-                <CarouselPrevious/>
-                <CarouselNext/>
-            </Carousel>
-        </ContainerComponent>
-    </AuthenticatedLayout>
+    <EditorLayout>
+        <template v-slot:editor>
+            <EditorComponent
+                :promotores="props.promotores?.data"
+                :grupoPromotorias="props.grupoPromotorias?.data"
+                :promotorias="props.promotorias?.data"
+                :eventos="eventosComUUID"
+                @update:grupoDeTodasAsPromotorias="updateGrupoDeTodasAsPromotorias"
+                @update:dadosDosAtendimentosUrgencia="updateAtendimentosUrgencia"
+                @update:atribuicao="updateAtribuicao"
+                @update:ListaEventos="updateListaEventos"
+            />
+        </template>
+        <template v-slot:preview>
+            <PreviewComponent
+                :promotores="props.promotores?.data"
+                :grupoPromotoriaDeTodasAsPromotorias="grupoDeTodasAsPromotoriasDados"
+                :listaAtribuicoes="listaAtribuicoes"
+            />
+        </template>
+    </EditorLayout>
+<!--  Actions Buttons  -->
     <span class="fixed bottom-5 right-5 z-50 space-x-2">
-        <span v-if="exibirBotaoSalvar">
-            <Button v-if="!carregandoSalvamento" variant="outline" @click="salvarEspelho">
-                Salvar as alterações
-            </Button>
-            <Button v-else variant="outline" disabled>
+        <span v-if="existsChanges">
+            <Button v-if="loading" variant="outline" disabled>
                 <Loader2 class="w-4 h-4 mr-2 animate-spin"/>
                 Enviando
+            </Button>
+            <Button v-else variant="outline" @click="saveChanges(props.espelho.id)">
+                Salvar as alterações
             </Button>
         </span>
         <span v-if="exibirBotaoPublicar && salvo">

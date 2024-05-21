@@ -17,8 +17,8 @@ class EspelhoFactory extends Factory
     public function definition(): array
     {
         return [
-            'periodo_inicio' => $this->faker->date(),
-            'periodo_fim'    => $this->faker->date(),
+            'periodo_inicio' => $this->faker->dateTime(),
+            'periodo_fim'    => $this->faker->dateTime(),
             'created_at'     => now(),
             'updated_at'     => now(),
         ];

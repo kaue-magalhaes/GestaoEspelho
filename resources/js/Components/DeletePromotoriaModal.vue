@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {Trash} from "lucide-vue-next";
 import {Button} from "@/Components/ui/button";
-import {usePromotoriaStore} from "@/Stores/promotoria";
+import {usePromotoriaStore} from "@/stores/promotoria";
 import {Promotoria} from "@/Interfaces/Promotoria/Promotoria";
 
 defineProps({

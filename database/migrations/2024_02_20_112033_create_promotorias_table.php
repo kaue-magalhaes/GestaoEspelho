@@ -15,7 +15,7 @@ return new class extends Migration {
             $table->string('nome')->unique();
             $table->boolean('is_especializada')->default(true);
             $table->foreignId('espelho_id')->references('id')->on('espelhos');
-            $table->foreignId('promotor_titular_id')->references('id')->on('promotores');
+            $table->unsignedBigInteger('promotor_titular_id');
             $table->foreignId('grupo_promotoria_id')->references('id')->on('grupo_promotorias');
             $table->timestamps();
         });

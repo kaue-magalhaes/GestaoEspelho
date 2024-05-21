@@ -2,29 +2,32 @@
 
 namespace App\Models;
 
+use App\Models\Scopes\MembrosScope;
+use Illuminate\Database\Eloquent\Attributes\ScopedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+/**
+ * @property-read int $id
+ * @property-read string $nome
+ */
+#[ScopedBy([MembrosScope::class])]
 class Promotor extends Model
 {
     use HasFactory;
 
-    protected $table = 'promotores';
+    protected $connection = 'sol';
+
+    protected $table = 'public.usuario';
+
+    protected $primaryKey = 'id';
 
     protected $fillable = [
         'nome',
         'is_substituto',
         'evento_id',
     ];
-
-    /**
-     * Converte o id para string
-     */
-    public function getIdAttribute(int $value): string
-    {
-        return (string)$value;
-    }
 
     /**
      * Busca as promotorias vinculadas ao promotor

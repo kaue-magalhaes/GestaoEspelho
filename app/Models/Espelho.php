@@ -6,6 +6,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+/**
+ * @property-read string $id
+ * @property-read string $periodo_inicio
+ * @property-read string $periodo_fim
+ */
 class Espelho extends Model
 {
     use HasFactory;
@@ -16,14 +21,6 @@ class Espelho extends Model
         'periodo_inicio',
         'periodo_fim',
     ];
-
-    /**
-     * Converte o id para string
-     */
-    public function getIdAttribute(int $value): string
-    {
-        return (string)$value;
-    }
 
     /**
      * Busca as promotorias vinculadas ao espelho

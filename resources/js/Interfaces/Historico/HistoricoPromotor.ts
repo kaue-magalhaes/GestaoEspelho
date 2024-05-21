@@ -6,8 +6,6 @@ export interface HistoricoPromotor {
     id: string;
     nome: string;
     is_substituto: boolean;
-    created_at: string;
-    updated_at: string;
     promotorias?: HistoricoPromotoria[];
     eventos?: HistoricoEvento[];
     urgenciasAtendimento?: HistoricoUrgenciaAtendimento[];

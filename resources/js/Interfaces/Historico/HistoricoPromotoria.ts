@@ -10,7 +10,6 @@ export interface HistoricoPromotoria {
     historico_promotor_titular_id: string;
     historico_grupo_promotoria_id: string;
     created_at: string;
-    updated_at: string;
     espelho?: HistoricoEspelho;
     promotor?: HistoricoPromotor;
     grupo_promotoria: HistoricoGrupoPromotoria;
