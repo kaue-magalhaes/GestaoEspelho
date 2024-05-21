@@ -17,10 +17,10 @@ import {Eventos} from "@/Interfaces/Evento/Eventos";
 import {UrgenciaAtendimentos} from "@/Interfaces/UrgenciaAtendimento/UrgenciaAtendimentos";
 import {GrupoPromotorias} from "@/Interfaces/GrupoPromotoria/GrupoPromotorias";
 import {Promotorias} from "@/Interfaces/Promotoria/Promotorias";
-import {useUrgenciaAtendimentosStore} from "@/Stores/urgenciaAtendimentoStore";
-import {useEspelhoStore} from "@/Stores/espelhoStore";
+import {useUrgenciaAtendimentosStore} from "@/stores/urgenciaAtendimentoStore";
+import {useEspelhoStore} from "@/stores/espelhoStore";
 import {storeToRefs} from "pinia";
-import {useUpdateDataStore} from "@/Stores/updateDataStore";
+import {useUpdateDataStore} from "@/stores/updateDataStore";
 
 const espelhoStore = useEspelhoStore();
 const { getEspelhos } = espelhoStore;

@@ -3,7 +3,7 @@ import {Promotor} from "@/Interfaces/Promotor/Promotor";
 
 import {usePage} from "@inertiajs/vue3";
 import {format} from 'date-fns';
-import {useUrgenciaAtendimentosStore} from "@/Stores/urgenciaAtendimentoStore";
+import {useUrgenciaAtendimentosStore} from "@/stores/urgenciaAtendimentoStore";
 import {storeToRefs} from "pinia";
 
 const page = usePage();

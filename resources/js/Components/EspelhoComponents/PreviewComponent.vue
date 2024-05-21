@@ -6,7 +6,7 @@ import {UrgenciaAtendimento} from "@/Interfaces/UrgenciaAtendimento/UrgenciaAten
 import {ref, watchEffect} from 'vue';
 import {Promotor} from "@/Interfaces/Promotor/Promotor";
 import {storeToRefs} from "pinia";
-import {useEspelhoStore} from "@/Stores/espelhoStore";
+import {useEspelhoStore} from "@/stores/espelhoStore";
 import {format} from "date-fns";
 
 const store = useEspelhoStore();

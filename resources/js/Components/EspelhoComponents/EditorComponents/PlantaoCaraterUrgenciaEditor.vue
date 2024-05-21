@@ -3,7 +3,7 @@ import {Promotor} from "@/Interfaces/Promotor/Promotor";
 import {format} from 'date-fns';
 
 import {Plus, Trash} from 'lucide-vue-next';
-import {useUrgenciaAtendimentosStore} from "@/Stores/urgenciaAtendimentoStore";
+import {useUrgenciaAtendimentosStore} from "@/stores/urgenciaAtendimentoStore";
 import {storeToRefs} from "pinia";
 
 const store = useUrgenciaAtendimentosStore();

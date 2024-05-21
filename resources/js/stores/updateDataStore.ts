@@ -2,6 +2,7 @@ import {defineStore} from "pinia";
 import {ref} from "vue";
 
 import {toast} from "vue-sonner";
+import {getCsrfToken} from "@/utils/csrfToken";
 
 export const useUpdateDataStore = defineStore("updateData", () => {
 
@@ -16,7 +17,7 @@ export const useUpdateDataStore = defineStore("updateData", () => {
                 body: JSON.stringify({teste: 'teste', teste2: 'teste2'}),
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    'X-CSRF-TOKEN': getCsrfToken(),
                 }
             });
         } catch (error) {

@@ -9,7 +9,7 @@ import {UrgenciaAtendimento} from "@/Interfaces/UrgenciaAtendimento/UrgenciaAten
 import {GrupoPromotoria} from "@/Interfaces/GrupoPromotoria/GrupoPromotoria";
 import {Atribuicoes} from "@/Interfaces/Atribuicoes";
 import {Evento} from "@/Interfaces/Evento/Evento";
-import {useEspelhoStore} from "@/Stores/espelhoStore";
+import {useEspelhoStore} from "@/stores/espelhoStore";
 import {storeToRefs} from "pinia";
 
 const emit = defineEmits([
