@@ -11,6 +11,7 @@ import {Atribuicoes} from "@/Interfaces/Atribuicoes";
 import {Evento} from "@/Interfaces/Evento/Evento";
 import {useEspelhoStore} from "@/stores/espelhoStore";
 import {storeToRefs} from "pinia";
+import {updateAnyPeriodo} from "@/utils/updatePeriodo";
 
 const emit = defineEmits([
     'update:grupoDeTodasAsPromotorias',
@@ -21,7 +22,6 @@ const emit = defineEmits([
 
 const store = useEspelhoStore();
 const {espelho, loading} = storeToRefs(store);
-const {updatePeriodoEspelho} = store;
 
 const props = defineProps({
     promotores: {
@@ -40,21 +40,11 @@ const props = defineProps({
         type: Array as () => Evento[],
         required: true,
     },
-    urgenciaAtendimentos: {
-        type: Array as () => UrgenciaAtendimento[],
-        required: true,
-    },
 });
 
 const grupoDeTodasAsPromotorias = ref<GrupoPromotoria[]>(props.grupoPromotorias);
-const dadosDosAtendimentosUrgencia = ref<UrgenciaAtendimento[]>([]);
 const atribuicao = ref<Atribuicoes[]>([]);
 const eventosReativos = ref<Evento[]>(props.eventos);
-
-/*const updatePeriodoEspelho = (value: any) => {
-    espelho.value.periodo_inicio = value.start;
-    espelho.value.periodo_fim = value.end;
-};*/
 
 const adicionaEventoNoGrupoDePromotorias = (grupoDePromotoriaID: String, promotoriaID: String, novoEvento: Evento) => {
     grupoDeTodasAsPromotorias.value.find((grupoPromotoria) =>
@@ -108,42 +98,6 @@ const deletaEventoNoGrupoDePromotorias = (eventoDeletado: Evento) => {
     emit('update:grupoDeTodasAsPromotorias', grupoDeTodasAsPromotorias.value)
     deletaAtribuicao(eventoDeletado);
     deletaEventoNoArrayReativoDeEventos(eventoDeletado);
-};
-
-const atualizaPromotorDesignadoParaAtendimentosDeUrgencia = (index: number, idPromotor: string) => {
-    if (dadosDosAtendimentosUrgencia.value[index]) {
-        dadosDosAtendimentosUrgencia.value[index].promotor_designado_id = idPromotor;
-    } else {
-        dadosDosAtendimentosUrgencia.value.push({
-            id: '',
-            uuid: uuidv4(),
-            periodo_inicio: new Date(),
-            periodo_fim: new Date(),
-            promotor_designado_id: idPromotor,
-        });
-    }
-    emit('update:dadosDosAtendimentosUrgencia', dadosDosAtendimentosUrgencia.value);
-};
-
-const atualizaPeriodoQueOPromotorVaiEstarDesignadoParaAtendimentosDeUrgencia = (index: number, periodo_start: Date, periodo_end: Date) => {
-    if (dadosDosAtendimentosUrgencia.value[index]) {
-        dadosDosAtendimentosUrgencia.value[index].periodo_inicio = periodo_start;
-        dadosDosAtendimentosUrgencia.value[index].periodo_fim = periodo_end;
-    } else {
-        dadosDosAtendimentosUrgencia.value.push({
-            id: '',
-            uuid: uuidv4(),
-            periodo_inicio: periodo_start,
-            periodo_fim: periodo_end,
-            promotor_designado_id: '',
-        });
-    }
-    emit('update:dadosDosAtendimentosUrgencia', dadosDosAtendimentosUrgencia.value);
-};
-
-const deletaInputDeDadosDeAtendimentoUrgencia = (index: number) => {
-    dadosDosAtendimentosUrgencia.value.splice(index, 1);
-    emit('update:dadosDosAtendimentosUrgencia', dadosDosAtendimentosUrgencia.value);
 };
 
 const adicionaAtribuicao = (evento: Evento) => {
@@ -240,14 +194,6 @@ const deletaEventoNoArrayReativoDeEventos = (eventoDeletado: Evento) => {
 };
 
 onBeforeMount(() => {
-    props.urgenciaAtendimentos?.forEach((atendimentoUrgencia) => {
-        dadosDosAtendimentosUrgencia.value.push({
-            id: atendimentoUrgencia.id,
-            periodo_inicio: atendimentoUrgencia.periodo_inicio,
-            periodo_fim: atendimentoUrgencia.periodo_fim,
-            promotor_designado_id: atendimentoUrgencia.promotor_designado_id,
-        });
-    });
     atualizaAsAtribuicoes(props.eventos);
 });
 </script>
@@ -269,27 +215,25 @@ onBeforeMount(() => {
                     <DatePicker
                         :period_start="new Date(espelho.periodo_inicio)"
                         :period_end="new Date(espelho.periodo_fim)"
-                        @update:period="updatePeriodoEspelho($event)"
+                        @update:period="updateAnyPeriodo(espelho, $event)"
                     />
                 </div>
             </CardHeader>
-
             <CardContent>
-                <!--                <EntranciaFinalMacapaEditor
-                                    :grupoPromotorias="grupoPromotorias?.filter((grupoPromotoria) => grupoPromotoria.municipio?.nome === 'Macapá')"
-                                    :promotorias="props.promotorias?.filter((promotoria) => promotoria.grupo_promotoria?.municipio?.nome === 'Macapá')"
-                                    :promotores="props.promotores"
-                                    :urgenciaAtendimentos="props.urgenciaAtendimentos"
-                                    @update:novoEventoAdicionado="adicionaEventoNoGrupoDePromotorias"
-                                    @update:umEventoFoiAlterado="alteraEventoNoGrupoDePromotorias"
-                                    @delete:umEventoFoiDeletado="deletaEventoNoGrupoDePromotorias"
-                                >
-                                    <template v-slot:PlantaoCaraterUrgencia>
-                                        <PlantaoCaraterUrgenciaEditor
-                                            :promotores="promotores"
-                                        />
-                                    </template>
-                                </EntranciaFinalMacapaEditor>-->
+                <EntranciaFinalMacapaEditor
+                    :grupoPromotorias="grupoPromotorias?.filter((grupoPromotoria) => grupoPromotoria.municipio?.nome === 'Macapá')"
+                    :promotorias="props.promotorias?.filter((promotoria) => promotoria.grupo_promotoria?.municipio?.nome === 'Macapá')"
+                    :promotores="props.promotores"
+                    @update:novoEventoAdicionado="adicionaEventoNoGrupoDePromotorias"
+                    @update:umEventoFoiAlterado="alteraEventoNoGrupoDePromotorias"
+                    @delete:umEventoFoiDeletado="deletaEventoNoGrupoDePromotorias"
+                >
+                    <template v-slot:PlantaoCaraterUrgencia>
+                        <PlantaoCaraterUrgenciaEditor
+                            :promotores="promotores"
+                        />
+                    </template>
+                </EntranciaFinalMacapaEditor>
                 <!--                <EntranciaFinalSantanaEditor-->
                 <!--                    :grupoPromotorias="grupoPromotorias?.filter((grupoPromotoria) => grupoPromotoria.municipio?.nome === 'Santana')"-->
                 <!--                    :promotorias="props.promotorias?.filter((promotoria) => promotoria.grupo_promotoria?.municipio?.nome === 'Santana')"-->

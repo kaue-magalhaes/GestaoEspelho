@@ -9,7 +9,7 @@ export const useUpdateDataStore = defineStore("updateData", () => {
     const existsChanges = ref(false);
     const loading = ref(false);
 
-    async function saveChanges(id: number) {
+    async function saveChanges(id: string) {
         try {
             loading.value = true;
             await fetch(`/espelho/${id}`, {

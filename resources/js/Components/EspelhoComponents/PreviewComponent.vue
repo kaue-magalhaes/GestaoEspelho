@@ -25,10 +25,6 @@ const props = defineProps({
         type: Array as () => Atribuicoes[],
         required: true,
     },
-    atendimentosUrgenciaDados: {
-        type: Array as () => UrgenciaAtendimento[],
-        required: true,
-    },
 });
 
 const promotoriasMacapa = ref<GrupoPromotoria[]>([]);
@@ -72,6 +68,7 @@ watchEffect(() => {
         Carregando...
     </div>
     <Card v-else>
+        <!--    preview header    -->
         <CardHeader>
             <div class="w-full flex justify-center items-center">
                 <div class="w-full flex flex-col items-center space-y-16">
@@ -106,12 +103,10 @@ watchEffect(() => {
             </div>
         </CardHeader>
         <CardContent class="flex flex-col items-center space-y-8 w-full">
-            <!--            <EntranciaFinalMacapaPreview
-                            v-if="promotoriasMacapa.length > 0 || props.atendimentosUrgenciaDados.length > 0"
-                            :promotores="props.promotores"
-                            :grupoPromotorias="promotoriasMacapa"
-                            :urgenciaAtendimentos="props.atendimentosUrgenciaDados"
-                        />-->
+            <EntranciaFinalMacapaPreview
+                :promotores="props.promotores"
+                :grupoPromotorias="promotoriasMacapa"
+            />
             <!--            <EntranciaFinalSantanaPreview-->
             <!--                v-if="promotoriasSantana.length > 0"-->
             <!--                :grupoPromotorias="promotoriasSantana"-->

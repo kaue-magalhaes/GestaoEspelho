@@ -25,10 +25,6 @@ const props = defineProps({
     promotores: {
         type: Array as () => Promotor[],
         required: true,
-    },
-    urgenciaAtendimentos: {
-        type: Array as () => UrgenciaAtendimento[],
-        required: true,
     }
 });
 

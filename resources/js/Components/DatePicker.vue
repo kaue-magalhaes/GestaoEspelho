@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {ref, watchEffect} from 'vue'
+import {ref} from 'vue'
 
 import {cn} from '@/lib/utils'
 import {format} from 'date-fns';
@@ -40,13 +40,6 @@ const localPeriod = ref({
 const emitirMudanca = (value: any) => {
     emit('update:period', value)
 }
-
-watchEffect(() => {
-    localPeriod.value = {
-        start: props.period_start,
-        end: props.period_end,
-    }
-})
 
 </script>
 

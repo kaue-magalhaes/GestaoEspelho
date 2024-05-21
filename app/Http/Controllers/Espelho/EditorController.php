@@ -29,7 +29,6 @@ class EditorController extends Controller
         $grupoPromotorias     = GrupoPromotoria::query()->get();
         $promotorias          = Promotoria::query()->get();
         $eventos              = Evento::query()->get();
-        $urgenciaAtendimentos = UrgenciaAtendimento::query()->get();
 
         //return UrgenciaAtendimentoResource::collection($urgenciaAtendimentos);
 
@@ -39,7 +38,6 @@ class EditorController extends Controller
             'grupoPromotorias'     => GrupoPromotoriaResource::collection($grupoPromotorias),
             'promotorias'          => PromotoriaResource::collection($promotorias),
             'eventos'              => EventoResource::collection($eventos),
-            'urgenciaAtendimentos' => UrgenciaAtendimentoResource::collection($urgenciaAtendimentos),
         ]);
     }
 }

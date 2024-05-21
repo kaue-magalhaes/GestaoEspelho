@@ -5,6 +5,7 @@ import {format} from 'date-fns';
 import {Plus, Trash} from 'lucide-vue-next';
 import {useUrgenciaAtendimentosStore} from "@/stores/urgenciaAtendimentoStore";
 import {storeToRefs} from "pinia";
+import {updateAnyPeriodo} from "@/utils/updatePeriodo";
 
 const store = useUrgenciaAtendimentosStore();
 const { urgenciaAtendimentos, loading } = storeToRefs(store);
@@ -15,8 +16,6 @@ const props = defineProps({
         required: true,
     },
 });
-
-// const plantaoDeAtendimentos = ref<UrgenciaAtendimento[]>(props.urgenciaAtendimentos);
 
 const adicionarInputDeDados = () => {
     // if (plantaoDeAtendimentos.value.length === 0) {
@@ -36,19 +35,6 @@ const adicionarInputDeDados = () => {
     //         });
     //     }
     // }
-};
-
-const adicionaNomeDoPromotorSelecionado = (index: number, idPromotor: string) => {
-    //plantaoDeAtendimentos.value[index].promotor_designado_id = idPromotor;
-    ////emit('update:nomeFoiSelecionado', index, idPromotor);
-};
-
-const adicionaPeriodoDeAtendimentoSelecionado = (index: number, periodo: { start: Date; end: Date }) => {
-    const periodo_inicio = format(periodo.start, 'yyyy-MM-dd');
-    const periodo_fim = format(periodo.end, 'yyyy-MM-dd');
-    //plantaoDeAtendimentos.value[index].periodo_inicio = periodo_inicio;
-    //plantaoDeAtendimentos.value[index].periodo_fim = periodo_fim;
-    //emit('update:periodoDoAtendimentoFoiSelecionado', index, periodo_inicio, periodo_fim);
 };
 
 const removeInputDeDados = (index: number) => {
@@ -105,13 +91,19 @@ const removeInputDeDados = (index: number) => {
                     :period_start="new Date(dados.periodo_inicio)"
                     :period_end="new Date(dados.periodo_fim)"
                     :was-changed="true"
-                    @update:period="adicionaPeriodoDeAtendimentoSelecionado(index, $event)"
+                    @update:period="updateAnyPeriodo(dados, $event)"
                 />
                 <DatePicker
                     v-else
                     :was-changed="false"
-                    @update:period="adicionaPeriodoDeAtendimentoSelecionado(index, $event)"
+                    @update:period="updateAnyPeriodo(dados, $event)"
                 />
+<!--                <DatePicker-->
+<!--                    :period_start="dados.periodo_inicio ? new Date(dados.periodo_inicio) : null"-->
+<!--                    :period_end="dados.periodo_fim ? new Date(dados.periodo_fim) : null"-->
+<!--                    :was-changed="!!(dados.periodo_fim && dados.periodo_inicio)"-->
+<!--                    @update:period="adicionaPeriodoDeAtendimentoSelecionado(index, $event)"-->
+<!--                />-->
             </div>
             <div class="flex">
                 <Button @click="removeInputDeDados(index)" variant="destructive" size="icon">

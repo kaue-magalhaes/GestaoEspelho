@@ -21,22 +21,9 @@ export const useEspelhoStore = defineStore("espelho", () => {
         }
     }
 
-    function updatePeriodoEspelho(value: any) {
-        if (!espelho.value) {
-            return;
-        }
-
-        espelho.value.periodo_inicio = value.start;
-        espelho.value.periodo_fim = value.end;
-
-        const updateDataStore = useUpdateDataStore();
-        updateDataStore.existsChanges = true;
-    }
-
     return {
         espelho,
         loading,
         getEspelhos,
-        updatePeriodoEspelho,
     };
 });

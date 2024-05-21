@@ -52,11 +52,7 @@ const props = defineProps({
     eventos: {
         type: Object as () => Eventos,
         required: true,
-    },
-    urgenciaAtendimentos: {
-        type: Object as () => UrgenciaAtendimentos,
-        required: true,
-    },
+    }
 });
 const eventosComUUID = ref<Evento[]>([]);
 
@@ -127,23 +123,12 @@ const processaEventos = (eventos: Evento[]) => {
     }));
 };
 
-const processaUrgenciaAtendimentos = (urgenciaAtendimentos: UrgenciaAtendimento[]) => {
-    return urgenciaAtendimentos.map(atendimentoUrgencia => ({
-        id: atendimentoUrgencia.id,
-        periodo_inicio: atendimentoUrgencia.periodo_inicio,
-        periodo_fim: atendimentoUrgencia.periodo_fim,
-        promotor_designado_id: atendimentoUrgencia.promotor_designado_id,
-    }));
-};
-
 onBeforeMount(() => {
     getEspelhos()
     getUrgenciaAtendimentos();
 
     eventosComUUID.value = processaEventos(props.eventos?.data);
     listaEventos.value = eventosComUUID.value;
-
-    atendimentosUrgenciaDados.value = processaUrgenciaAtendimentos(props.urgenciaAtendimentos?.data);
 });
 </script>
 
@@ -155,7 +140,6 @@ onBeforeMount(() => {
                 :grupoPromotorias="props.grupoPromotorias?.data"
                 :promotorias="props.promotorias?.data"
                 :eventos="eventosComUUID"
-                :urgenciaAtendimentos="props.urgenciaAtendimentos?.data"
                 @update:grupoDeTodasAsPromotorias="updateGrupoDeTodasAsPromotorias"
                 @update:dadosDosAtendimentosUrgencia="updateAtendimentosUrgencia"
                 @update:atribuicao="updateAtribuicao"
@@ -167,10 +151,10 @@ onBeforeMount(() => {
                 :promotores="props.promotores?.data"
                 :grupoPromotoriaDeTodasAsPromotorias="grupoDeTodasAsPromotoriasDados"
                 :listaAtribuicoes="listaAtribuicoes"
-                :atendimentosUrgenciaDados="atendimentosUrgenciaDados"
             />
         </template>
     </EditorLayout>
+<!--  Actions Buttons  -->
     <span class="fixed bottom-5 right-5 z-50 space-x-2">
         <span v-if="existsChanges">
             <Button v-if="loading" variant="outline" disabled>
