@@ -12,8 +12,8 @@ return new class extends Migration {
     {
         Schema::create('espelhos', function (Blueprint $table) {
             $table->id();
-            $table->date('periodo_inicio');
-            $table->date('periodo_fim');
+            $table->dateTime('periodo_inicio');
+            $table->dateTime('periodo_fim');
             $table->timestamps();
         });
     }

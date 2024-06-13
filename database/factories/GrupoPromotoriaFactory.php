@@ -20,7 +20,7 @@ class GrupoPromotoriaFactory extends Factory
     {
         return [
             'nome'         => fake()->name(),
-            'municipio_id' => Municipio::inRandomOrder()->first()->id,
+            'municipio_id' => Municipio::query()->inRandomOrder()->first()->id,
         ];
     }
 }

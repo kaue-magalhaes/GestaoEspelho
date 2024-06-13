@@ -1,17 +1,16 @@
 <script setup lang="ts">
 import {Head} from "@inertiajs/vue3";
-import { usePromotoriaStore } from '@/Stores/promotoria';
 import AdminLayout from "@/Layouts/AdminLayout.vue";
-import {onBeforeMount, onMounted} from "vue";
+import {PromotoriasPaginate} from "@/Interfaces/Promotoria/PromotoriaPaginate";
+import PromotoriaCardHeader from "@/Components/PromotoriaCardHeader.vue";
+import PromotoriaCardContent from "@/Components/PromotoriaCardContent.vue";
+import BreadcrumbComponent from "@/Components/BreadcrumbComponent.vue";
 
-const { promotorias, getPromotorias } = usePromotoriaStore();
-
-onBeforeMount(() => {
-    getPromotorias();
-});
-
-onMounted(() => {
-    console.log(promotorias.value);
+defineProps({
+    promotorias: {
+        type: Object as () => PromotoriasPaginate,
+        required: true
+    }
 });
 </script>
 
@@ -20,21 +19,17 @@ onMounted(() => {
     <AuthenticatedLayout>
         <ContainerComponent>
             <AdminLayout>
-                <Card>
+                <BreadcrumbComponent :items="[
+                    {label: 'Home', routeName: 'admin.dashboard'},
+                    {label: 'Promotorias', routeName: 'admin.promotorias'}
+                ]"/>
+                <Card v-if="promotorias">
                     <CardHeader>
-                        <CardTitle>
-                            Promotorias
-                        </CardTitle>
-                        <CardDescription>
-                            Aqui você pode gerenciar as promotorias do sistema.
-                        </CardDescription>
+                        <PromotoriaCardHeader :promotorias="promotorias"/>
                     </CardHeader>
                     <CardContent>
-                        <TableComponent :value="promotorias" />
+                        <PromotoriaCardContent :promotorias="promotorias"/>
                     </CardContent>
-                    <CardFooter>
-
-                    </CardFooter>
                 </Card>
             </AdminLayout>
         </ContainerComponent>

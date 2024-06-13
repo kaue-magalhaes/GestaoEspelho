@@ -1,14 +1,13 @@
 <script setup lang="ts">
-import {ref} from 'vue';
+import {computed, ref} from 'vue';
 import Dropdown from '@/Components/Dropdown.vue';
 import DropdownLink from '@/Components/DropdownLink.vue';
 import NavLink from '@/Components/NavLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
 
-import { Toaster } from '@/Components/ui/sonner'
+import {Toaster} from '@/Components/ui/sonner'
 import LogoMPAP from "@/Components/Icons/LogoMPAP.vue";
-import { computed } from 'vue'
-import { usePage } from '@inertiajs/vue3'
+import {usePage} from '@inertiajs/vue3'
 
 const page = usePage()
 
@@ -21,7 +20,7 @@ const showingNavigationDropdown = ref(false);
         <div class="min-h-screen bg-gray-100">
             <nav class="bg-MPAP-blue border-b border-gray-100">
                 <!-- Primary Navigation Menu -->
-                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div class="flex justify-between h-20">
                         <a href="https://www.mpap.mp.br/" class="flex">
                             <LogoMPAP
@@ -32,10 +31,12 @@ const showingNavigationDropdown = ref(false);
                         <div class="flex">
                             <!-- Navigation Links -->
                             <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                                <NavLink dark :href="route('espelho.editor')" :active="route().current('espelho.editor')">
+                                <NavLink dark :href="route('espelho.editor')"
+                                         :active="route().current('espelho.editor')">
                                     Editor
                                 </NavLink>
-                                <NavLink dark :href="route('espelho.history')" :active="route().current('espelho.history')">
+                                <NavLink dark :href="route('espelho.history')"
+                                         :active="route().current('espelho.history')">
                                     Histórico
                                 </NavLink>
                             </div>
@@ -70,7 +71,8 @@ const showingNavigationDropdown = ref(false);
                                     </template>
 
                                     <template #content>
-                                        <DropdownLink :href="route('admin.dashboard')" v-if="$page.props.auth.user.is_admin">
+                                        <DropdownLink :href="route('admin.dashboard')"
+                                                      v-if="$page.props.auth.user.is_admin">
                                             Área do Administrador
                                         </DropdownLink>
                                         <DropdownLink :href="route('logout')" method="post" as="button">
@@ -120,10 +122,12 @@ const showingNavigationDropdown = ref(false);
                     class="sm:hidden"
                 >
                     <div class="pt-2 pb-3 space-y-1">
-                        <ResponsiveNavLink dark :href="route('espelho.editor')" :active="route().current('espelho.editor')">
+                        <ResponsiveNavLink dark :href="route('espelho.editor')"
+                                           :active="route().current('espelho.editor')">
                             Editor
                         </ResponsiveNavLink>
-                        <ResponsiveNavLink dark :href="route('espelho.history')" :active="route().current('espelho.history')">
+                        <ResponsiveNavLink dark :href="route('espelho.history')"
+                                           :active="route().current('espelho.history')">
                             Histórico
                         </ResponsiveNavLink>
                     </div>
@@ -149,9 +153,9 @@ const showingNavigationDropdown = ref(false);
             </nav>
             <!-- Page Content -->
             <main>
-                <slot />
+                <slot/>
             </main>
         </div>
     </div>
-    <Toaster />
+    <Toaster :expand="true" position="top-center" rich-colors/>
 </template>

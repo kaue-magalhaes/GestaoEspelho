@@ -13,8 +13,7 @@ class EventoSeeder extends Seeder
     public function run(): void
     {
         for ($i = 0; $i < 20; $i++) {
-            $evento = Evento::factory()->make();
-            $evento->save();
+            Evento::factory()->create();
         }
     }
 }

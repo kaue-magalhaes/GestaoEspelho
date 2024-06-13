@@ -14,8 +14,8 @@ return new class extends Migration {
             $table->id();
             $table->string('titulo')->nullable();
             $table->string('tipo');
-            $table->date('periodo_inicio');
-            $table->date('periodo_fim');
+            $table->dateTime('periodo_inicio');
+            $table->dateTime('periodo_fim');
             $table->foreignId('historico_promotor_titular_id')->references('id')->on('historico_promotores');
             $table->foreignId('historico_promotor_designado_id')->references('id')->on('historico_promotores');
             $table->foreignId('historico_id')->constrained('historicos');

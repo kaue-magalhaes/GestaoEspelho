@@ -6,6 +6,14 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * @property-read int $id
+ * @property-read string $nome
+ * @property-read bool $is_especializada
+ * @property-read int $espelho_id
+ * @property-read int $promotor_titular_id
+ * @property-read int $grupo_promotoria_id
+ */
 class Promotoria extends Model
 {
     use HasFactory;

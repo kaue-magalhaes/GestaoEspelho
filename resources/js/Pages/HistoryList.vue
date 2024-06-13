@@ -1,15 +1,15 @@
 <script setup lang="ts">
 import {format} from 'date-fns';
 import {Head, Link, useForm} from '@inertiajs/vue3';
-import {EspelhosPaginate} from "@/Interfaces/EspelhosPaginate";
+import {HistoricoEspelhosPaginate} from "@/Interfaces/Historico/HistoricoEspelhosPaginate";
 import PaginationComponent from "@/Components/PaginationComponent.vue";
 import EspelhosListComponent from "@/Components/EspelhosListComponent.vue";
 import { Search, Trash2 } from 'lucide-vue-next'
 import {ref} from "vue";
 
 const props = defineProps({
-    espelhos: {
-        type: Object as () => EspelhosPaginate,
+    historicoEspelhos: {
+        type: Object as () => HistoricoEspelhosPaginate,
         required: true
     },
     filters: {
@@ -37,7 +37,7 @@ const props = defineProps({
 const filters = ref(props.filters);
 const orderAsc = ref(props.orderAsc);
 
-const espelhosData = ref(props.espelhos.data);
+const historicoEspelhosData = ref(props.historicoEspelhos.data);
 
 const form = useForm({
     filters: filters.value
@@ -74,7 +74,7 @@ function stringToDate(dateString: string) {
                 <CardHeader>
                     <CardTitle>Histórico</CardTitle>
                     <CardDescription>Aqui você pode ver o histórico dos Espelhos Publicados.</CardDescription>
-                    <div v-if="props.espelhos.data.length > 0" class="flex justify-between w-full items-center mt-2">
+                    <div v-if="props.historicoEspelhos.data.length > 0" class="flex justify-between w-full items-center mt-2">
                         <div class="flex items-center space-x-2">
                             <div class="relative w-[300px]">
                                 <form @submit.prevent="search">
@@ -144,21 +144,21 @@ function stringToDate(dateString: string) {
                     </div>
                 </CardHeader>
                 <CardContent>
-                    <div v-if="espelhosData.length > 0">
+                    <div v-if="historicoEspelhosData.length > 0">
                         <EspelhosListComponent
-                            :espelhos="espelhosData"
+                            :historicoEspelhos="historicoEspelhosData"
                             @invertOrderByCreatedAt="orderAsc = !orderAsc; search()"
                         />
                         <PaginationComponent
-                            v-if="props.espelhos.total > props.espelhos.per_page"
-                            :total="props.espelhos.total"
-                            :perPage="props.espelhos.per_page"
-                            :currentPage="props.espelhos.current_page"
-                            :firstPageUrl="props.espelhos.first_page_url"
-                            :prevPageUrl="props.espelhos.prev_page_url"
-                            :nextPageUrl="props.espelhos.next_page_url"
-                            :lastPageUrl="props.espelhos.last_page_url"
-                            :links="props.espelhos.links"
+                            v-if="props.historicoEspelhos.total > props.historicoEspelhos.per_page"
+                            :total="props.historicoEspelhos.total"
+                            :perPage="props.historicoEspelhos.per_page"
+                            :currentPage="props.historicoEspelhos.current_page"
+                            :firstPageUrl="props.historicoEspelhos.first_page_url"
+                            :prevPageUrl="props.historicoEspelhos.prev_page_url"
+                            :nextPageUrl="props.historicoEspelhos.next_page_url"
+                            :lastPageUrl="props.historicoEspelhos.last_page_url"
+                            :links="props.historicoEspelhos.links"
                             :filters="props.filters"
                             :orderAsc="orderAsc"
                         />

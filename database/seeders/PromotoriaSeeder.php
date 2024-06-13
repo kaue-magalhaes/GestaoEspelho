@@ -14,7 +14,7 @@ class PromotoriaSeeder extends Seeder
     public function run(): void
     {
         $numeroDosNomesGerados = [];
-        for ($i = 0; $i < 40; $i++) {
+        for ($i = 0; $i < 20; $i++) {
             $grupoPromotoria     = GrupoPromotoria::query()->inRandomOrder()->first();
             $nomeGrupoPromotoria = $grupoPromotoria->nome;
             $nomePromotoria      = str_replace("Promotorias de ", "", $nomeGrupoPromotoria);

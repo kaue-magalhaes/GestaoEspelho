@@ -3,10 +3,11 @@
 namespace App\Policies;
 
 use App\Models\InternalSystemUser;
+use App\Models\User;
 
 class PromotoriaPolicy
 {
-    public function create(InternalSystemUser $user): bool
+    public function create(InternalSystemUser|User $user): bool
     {
         if ($user->isAdmin()) {
             return true;
@@ -15,7 +16,7 @@ class PromotoriaPolicy
         return false;
     }
 
-    public function update(InternalSystemUser $user): bool
+    public function update(InternalSystemUser|User $user): bool
     {
         if ($user->isAdmin()) {
             return true;
@@ -24,7 +25,7 @@ class PromotoriaPolicy
         return false;
     }
 
-    public function delete(InternalSystemUser $user): bool
+    public function delete(InternalSystemUser|User $user): bool
     {
         if ($user->isAdmin()) {
             return true;

@@ -4,16 +4,17 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\PromotoriaRequest;
 use App\Models\Promotoria;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\RedirectResponse;
 
 class PromotoriaController extends Controller
 {
-    public function index()
+    public function index(): Collection
     {
-        // retorno de api um array com todas as promotorias
         return Promotoria::query()
             ->get();
     }
+
     public function store(PromotoriaRequest $request): RedirectResponse
     {
         $this->authorize('create', Promotoria::class);
@@ -23,18 +24,7 @@ class PromotoriaController extends Controller
                 $request->validated()
             );
 
-        return back()->with('success', 'Promotoria criada com sucesso!');
-    }
-
-    public function update(PromotoriaRequest $request, Promotoria $promotoria): RedirectResponse
-    {
-        $this->authorize('update', $promotoria);
-
-        $promotoria->update(
-            $request->validated()
-        );
-
-        return back()->with('success', 'Promotoria alterada com sucesso!');
+        return to_route('admin.promotorias')->with('success', 'Promotoria criada com sucesso!');
     }
 
     public function destroy(Promotoria $promotoria): RedirectResponse

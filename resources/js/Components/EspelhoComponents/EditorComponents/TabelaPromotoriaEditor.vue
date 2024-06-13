@@ -1,15 +1,12 @@
 <script setup lang="ts">
-import {ref} from 'vue';
-import {usePage} from '@inertiajs/vue3';
 import EditarEventoBotao from '@/Components/EspelhoComponents/EditarEventoBotao.vue';
 import AdicionarEventoBotao from '@/Components/EspelhoComponents/AdicionarEventoBotao.vue';
 
 import {Trash} from 'lucide-vue-next';
-import {Evento} from "@/Interfaces/Evento";
-import {Promotor} from "@/Interfaces/Promotor";
-import {GrupoPromotoria} from "@/Interfaces/GrupoPromotoria";
+import {Evento} from "@/Interfaces/Evento/Evento";
+import {Promotor} from "@/Interfaces/Promotor/Promotor";
+import {GrupoPromotoria} from "@/Interfaces/GrupoPromotoria/GrupoPromotoria";
 
-const page = usePage();
 const emit = defineEmits([
     'update:novoEventoAdicionado',
     'update:umEventoFoiAlterado',
@@ -17,13 +14,15 @@ const emit = defineEmits([
 ]);
 
 defineProps({
+    promotores: {
+        type: Array as () => Promotor[],
+        required: true,
+    },
     grupoPromotorias: {
         type: Array as () => GrupoPromotoria[],
         required: true,
     },
 });
-
-const promotores = ref<Promotor[]>(page.props.promotores || []);
 
 const adicionaEvento = (grupoDePromotoriaID: String, promotoriaID: String, novoEvento: Evento) => {
     emit('update:novoEventoAdicionado', grupoDePromotoriaID, promotoriaID, novoEvento);

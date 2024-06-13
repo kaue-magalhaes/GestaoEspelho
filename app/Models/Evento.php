@@ -6,6 +6,15 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * @property-read string $id
+ * @property-read string $titulo
+ * @property-read string $tipo
+ * @property-read string $periodo_inicio
+ * @property-read string $periodo_fim
+ * @property-read string $promotor_titular_id
+ * @property-read string $promotor_designado_id
+ */
 class Evento extends Model
 {
     use HasFactory;

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {format} from "date-fns";
-import {Espelhos} from "@/Interfaces/Espelhos";
+import {HistoricoEspelhos} from "@/Interfaces/Historico/HistoricoEspelhos";
 import { ArrowUpDown } from 'lucide-vue-next'
 
 defineEmits([
@@ -8,8 +8,8 @@ defineEmits([
 ]);
 
 defineProps({
-    espelhos: {
-        type: Array as () => Espelhos[],
+    historicoEspelhos: {
+        type: Array as () => HistoricoEspelhos[],
         required: true
     }
 });
@@ -37,19 +37,19 @@ defineProps({
             </TableRow>
         </TableHeader>
         <TableBody>
-            <TableRow v-for="espelho in espelhos" :key="espelho.id">
+            <TableRow v-for="historicoEspelho in historicoEspelhos" :key="historicoEspelho.id">
                 <TableCell class="font-medium">
-                    {{ espelho.titulo }}
+                    {{ historicoEspelho.titulo }}
                 </TableCell>
                 <TableCell>
-                    {{ format(new Date(espelho.created_at), 'dd/MM/yyyy') }} às
-                    {{ format(new Date(espelho.created_at), 'HH:mm') }} horas
+                    {{ format(new Date(historicoEspelho.created_at), 'dd/MM/yyyy') }} às
+                    {{ format(new Date(historicoEspelho.created_at), 'HH:mm') }} horas
                 </TableCell>
                 <TableCell>
-                    {{ espelho.user.nome }}
+                    {{ historicoEspelho.user.nome }}
                 </TableCell>
                 <TableCell>
-                    <a :href="`/espelho/historico/${espelho.id}`">
+                    <a :href="`/espelho/historico/${historicoEspelho.id}`">
                         <Button size="sm" variant="link">
                             Visualizar
                         </Button>

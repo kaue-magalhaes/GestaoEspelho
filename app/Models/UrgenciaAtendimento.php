@@ -6,6 +6,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * @property-read string $id
+ * @property-read string $periodo_inicio
+ * @property-read string $periodo_fim
+ * @property-read int $promotor_designado_id
+ */
 class UrgenciaAtendimento extends Model
 {
     use HasFactory;
@@ -22,14 +28,6 @@ class UrgenciaAtendimento extends Model
      * Converte o id para string
      */
     public function getIdAttribute(int $value): string
-    {
-        return (string)$value;
-    }
-
-    /**
-     * Converte o id do promotor designado para string
-     */
-    public function getPromotorDesignadoIdAttribute(int $value): string
     {
         return (string)$value;
     }

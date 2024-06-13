@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Espelho;
 use Illuminate\Database\Seeder;
 
 class EspelhoSeeder extends Seeder
@@ -11,7 +12,6 @@ class EspelhoSeeder extends Seeder
      */
     public function run(): void
     {
-        \App\Models\Espelho::factory()
-            ->create();
+        Espelho::factory()->create();
     }
 }

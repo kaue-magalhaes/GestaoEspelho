@@ -1,13 +1,10 @@
 import {User} from "@/Interfaces/User";
-import {Promotor} from "@/Interfaces/Promotor";
-import {UrgenciaAtendimento} from "@/Interfaces/UrgenciaAtendimento";
-import {HistoricoPromotor} from "@/Interfaces/Historico/HistoricoPromotor";
 
 export type PageProps<T extends Record<string, unknown> = Record<string, unknown>> = T & {
     auth: {
         user: User;
     };
-    promotores: Promotor[];
-    historicoPromotores: HistoricoPromotor[];
-    urgenciaAtendimentos: UrgenciaAtendimento[];
+    flash: {
+        success: string;
+    }
 };

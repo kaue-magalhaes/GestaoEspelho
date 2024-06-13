@@ -1,16 +1,17 @@
 <script setup lang="ts">
-import {GrupoPromotoria} from "@/Interfaces/GrupoPromotoria";
-import {UrgenciaAtendimento} from "@/Interfaces/UrgenciaAtendimento";
+import {GrupoPromotoria} from "@/Interfaces/GrupoPromotoria/GrupoPromotoria";
+import {UrgenciaAtendimento} from "@/Interfaces/UrgenciaAtendimento/UrgenciaAtendimento";
 
 import {ref, watchEffect} from 'vue';
+import {Promotor} from "@/Interfaces/Promotor/Promotor";
 
 const props = defineProps({
-    grupoPromotorias: {
-        type: Array as () => GrupoPromotoria[],
+    promotores: {
+        type: Array as () => Promotor[],
         required: true,
     },
-    urgenciaAtendimentos: {
-        type: Array as () => UrgenciaAtendimento[],
+    grupoPromotorias: {
+        type: Array as () => GrupoPromotoria[],
         required: true,
     },
 });
@@ -40,30 +41,30 @@ watchEffect(() => {
 </script>
 
 <template>
-    <div class="max-w-5xl w-full mx-auto flex flex-col items-center space-y-4"
-         v-if="props.grupoPromotorias.length > 0 || props.urgenciaAtendimentos.length > 0">
-        <div class="w-full mx-auto flex flex-col items-center space-y-4"
-             v-if="grupoPromotoriasNaoEspecializadas.length > 0 || props.urgenciaAtendimentos.length > 0">
+    <div class="max-w-5xl w-full mx-auto flex flex-col items-center space-y-4">
+        <div class="w-full mx-auto flex flex-col items-center space-y-4">
             <h1 class="text-2xl font-bold text-gray-700 dark:text-gray-200 mt-4">
                 Entrância Final – Macapá
             </h1>
             <PlantaoCaraterUrgenciaPreview
-                v-if="props.urgenciaAtendimentos.length > 0"
-                :plantaoDeAtendimentos="props.urgenciaAtendimentos"
+                :promotores="props.promotores"
             />
-            <TabelaPromotoriaPreview
-                v-if="grupoPromotoriasNaoEspecializadas.length > 0"
-                :grupoPromotorias="grupoPromotoriasNaoEspecializadas"
-            />
+
+<!--            <TabelaPromotoriaPreview-->
+<!--                v-if="grupoPromotoriasNaoEspecializadas.length > 0"-->
+<!--                :promotores="props.promotores"-->
+<!--                :grupoPromotorias="grupoPromotoriasNaoEspecializadas"-->
+<!--            />-->
         </div>
-        <div class="w-full mx-auto flex flex-col items-center space-y-4" v-if="grupoPromotoriasEspecializadas.length > 0">
-            <h1 class="text-2xl font-bold text-gray-700 dark:text-gray-200 mt-4">
-                Entrância Final – Macapá (Especializadas)
-            </h1>
-            <TabelaPromotoriaPreview
-                v-if="grupoPromotoriasEspecializadas.length > 0"
-                :grupoPromotorias="grupoPromotoriasEspecializadas"
-            />
-        </div>
+<!--        <div class="w-full mx-auto flex flex-col items-center space-y-4" v-if="grupoPromotoriasEspecializadas.length > 0">-->
+<!--            <h1 class="text-2xl font-bold text-gray-700 dark:text-gray-200 mt-4">-->
+<!--                Entrância Final – Macapá (Especializadas)-->
+<!--            </h1>-->
+<!--            <TabelaPromotoriaPreview-->
+<!--                v-if="grupoPromotoriasEspecializadas.length > 0"-->
+<!--                :promotores="props.promotores"-->
+<!--                :grupoPromotorias="grupoPromotoriasEspecializadas"-->
+<!--            />-->
+<!--        </div>-->
     </div>
 </template>
