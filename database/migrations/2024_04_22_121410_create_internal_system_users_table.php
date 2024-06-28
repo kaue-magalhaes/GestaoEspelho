@@ -15,6 +15,7 @@ return new class extends Migration {
             $table->string('nome');
             $table->string('login_intranet')->unique();
             $table->string('senha_intranet');
+            $table->string('matricula')->nullable();
             $table->timestamps();
         });
     }

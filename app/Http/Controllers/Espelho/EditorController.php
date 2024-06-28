@@ -11,6 +11,7 @@ use App\Http\Resources\UrgenciaAtendimentoResource;
 use App\Models\Espelho;
 use App\Models\Evento;
 use App\Models\GrupoPromotoria;
+use App\Models\InternalSystemUser;
 use App\Models\Promotor;
 use App\Models\Promotoria;
 use App\Models\UrgenciaAtendimento;
@@ -25,7 +26,7 @@ class EditorController extends Controller
     public function __invoke(Request $request)
     {
         $espelho              = Espelho::first()->toArray();
-        $promotores           = Promotor::query()->get();
+        $promotores           = $this->getPromotores();
         $grupoPromotorias     = GrupoPromotoria::query()->get();
         $promotorias          = Promotoria::query()->get();
         $eventos              = Evento::query()->get();
@@ -39,5 +40,16 @@ class EditorController extends Controller
             'promotorias'          => PromotoriaResource::collection($promotorias),
             'eventos'              => EventoResource::collection($eventos),
         ]);
+    }
+
+    private function getPromotores()
+    {
+        if (env('APP_ENV') === 'local') {
+            return InternalSystemUser::query()
+                ->where('matricula' , 'like', '10%')
+                ->get();
+        }
+
+        return Promotor::query()->get();
     }
 }

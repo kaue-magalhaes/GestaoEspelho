@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\InternalSystemUser;
 use App\Models\Promotor;
 use App\Models\UrgenciaAtendimento;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -21,7 +22,16 @@ class UrgenciaAtendimentoFactory extends Factory
         return [
             'periodo_inicio'        => $this->faker->dateTime(),
             'periodo_fim'           => $this->faker->dateTime(),
-            'promotor_designado_id' => Promotor::query()->inRandomOrder()->first()->id,
+            'promotor_designado_id' => $this->searchPromotorId(),
         ];
+    }
+
+    public function searchPromotorId(): int
+    {
+        return InternalSystemUser::query()
+            ->where('matricula', 'like', '10%')
+            ->inRandomOrder()
+            ->first()
+            ->id;
     }
 }

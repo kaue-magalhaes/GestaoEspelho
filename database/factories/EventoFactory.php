@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Evento;
+use App\Models\InternalSystemUser;
 use App\Models\Promotor;
 use App\Models\Promotoria;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -25,9 +26,18 @@ class EventoFactory extends Factory
             'periodo_inicio'        => $this->faker->dateTime(),
             'periodo_fim'           => $this->faker->dateTime(),
             'promotor_titular_id'   => Promotoria::query()->inRandomOrder()->first()->promotor_titular_id,
-            'promotor_designado_id' => Promotor::query()->inRandomOrder()->first()->id,
+            'promotor_designado_id' => $this->searchPromotorId(),
             'created_at'            => now(),
             'updated_at'            => now(),
         ];
+    }
+
+    public function searchPromotorId(): int
+    {
+        return InternalSystemUser::query()
+            ->where('matricula', 'like', '10%')
+            ->inRandomOrder()
+            ->first()
+            ->id;
     }
 }

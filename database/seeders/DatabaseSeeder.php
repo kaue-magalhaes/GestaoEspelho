@@ -16,6 +16,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             InternalSystemUserSeeder::class,
             InternalSystemNivelSeeder::class,
+            PromotorSeeder::class,
             EspelhoSeeder::class,
             MunicipioSeeder::class,
             GrupoPromotoriaSeeder::class,

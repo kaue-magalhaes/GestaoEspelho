@@ -55,7 +55,6 @@ class LoginRequest extends FormRequest
     public function authenticate(): void
     {
         $this->ensureIsNotRateLimited();
-
         if (! $this->existIntranetUser($this->only('login_intranet', 'senha_intranet'))) {
             RateLimiter::hit($this->throttleKey());
 
@@ -74,10 +73,14 @@ class LoginRequest extends FormRequest
      */
     protected function existIntranetUser(array $credentials): bool
     {
-        $user = User::where('login_intranet', $credentials['login_intranet'])->first();
+        $user = InternalSystemUser::query()
+            ->where('login_intranet', $credentials['login_intranet'])
+            ->first();
 
         if (empty($user)) {
-            $user = InternalSystemUser::where('login_intranet', $credentials['login_intranet'])->first();
+            $user = User::query()
+                ->where('login_intranet', $credentials['login_intranet'])
+                ->first();
 
             if (empty($user)) {
                 return false;
