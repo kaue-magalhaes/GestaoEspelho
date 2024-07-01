@@ -13,7 +13,7 @@ return new class extends Migration {
         Schema::create('historico_grupo_promotorias', function (Blueprint $table) {
             $table->id();
             $table->string('nome');
-            $table->foreignId('historico_municipio_id')->references('id')->on('historico_municipios');
+            $table->string('municipio');
             $table->foreignId('historico_id')->constrained('historicos');
             $table->timestamps();
         });

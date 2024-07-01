@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\GrupoPromotoria;
-use App\Models\Municipio;
 use Illuminate\Database\Seeder;
 
 class GrupoPromotoriaSeeder extends Seeder
@@ -13,6 +12,21 @@ class GrupoPromotoriaSeeder extends Seeder
      */
     public function run(): void
     {
+        $municipios = [
+            'Macapá',
+            'Macapá', // Duplicado
+            'Macapá', // Duplicado
+            'Santana',
+            'Santana', // Duplicado
+            'Santana', // Duplicado
+            'Mazagão',
+            'Oiapoque',
+            'Calçoene',
+            'Amapá',
+            'Ferreira Gomes',
+            'Laranjal do Jari',
+            'Porto Grande',
+        ];
         $grupoPromotoriasNomes = [
             'Justiça de Meio Ambiente',
             'Justiça de Direitos Humanos',
@@ -25,18 +39,18 @@ class GrupoPromotoriaSeeder extends Seeder
             'Justiça de Direito da Mulher',
         ];
         for ($i = 0; $i < 20; $i++) {
-            $municipio            = Municipio::inRandomOrder()->first();
+            $municipio            = $municipios[array_rand($municipios)];
             $grupoPromotoriasNome = $grupoPromotoriasNomes[array_rand($grupoPromotoriasNomes)];
 
-            if ($municipio->nome === 'Macapá' || $municipio->nome === 'Santana') {
+            if ($municipio === 'Macapá' || $municipio === 'Santana') {
                 GrupoPromotoria::factory()->create([
-                    'nome'         => "Promotorias de $grupoPromotoriasNome",
-                    'municipio_id' => $municipio->id,
+                    'nome'      => "Promotorias de $grupoPromotoriasNome",
+                    'municipio' => $municipio,
                 ]);
             } else {
                 GrupoPromotoria::factory()->create([
-                    'nome'         => "$municipio->nome",
-                    'municipio_id' => $municipio->id,
+                    'nome'      => $municipio,
+                    'municipio' => $municipio,
                 ]);
             }
 

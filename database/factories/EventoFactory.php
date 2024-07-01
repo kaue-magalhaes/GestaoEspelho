@@ -4,7 +4,6 @@ namespace Database\Factories;
 
 use App\Models\Evento;
 use App\Models\InternalSystemUser;
-use App\Models\Promotor;
 use App\Models\Promotoria;
 use Illuminate\Database\Eloquent\Factories\Factory;
 

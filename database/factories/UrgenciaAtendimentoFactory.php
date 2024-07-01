@@ -3,7 +3,6 @@
 namespace Database\Factories;
 
 use App\Models\InternalSystemUser;
-use App\Models\Promotor;
 use App\Models\UrgenciaAtendimento;
 use Illuminate\Database\Eloquent\Factories\Factory;
 

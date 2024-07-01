@@ -6,7 +6,6 @@ use App\Models\Espelho;
 use App\Models\GrupoPromotoria;
 use App\Models\InternalSystemUser;
 use App\Models\Model;
-use App\Models\Promotor;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**

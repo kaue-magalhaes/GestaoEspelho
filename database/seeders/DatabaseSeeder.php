@@ -18,7 +18,6 @@ class DatabaseSeeder extends Seeder
             InternalSystemNivelSeeder::class,
             PromotorSeeder::class,
             EspelhoSeeder::class,
-            MunicipioSeeder::class,
             GrupoPromotoriaSeeder::class,
             PromotoriaSeeder::class,
             EventoSeeder::class,

@@ -15,7 +15,7 @@ class HistoricoGrupoPromotoria extends Model
 
     protected $fillable = [
         'nome',
-        'historico_municipio_id',
+        'municipio',
         'historico_id',
     ];
 

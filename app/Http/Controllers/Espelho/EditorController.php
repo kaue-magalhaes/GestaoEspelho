@@ -14,7 +14,6 @@ use App\Models\GrupoPromotoria;
 use App\Models\InternalSystemUser;
 use App\Models\Promotor;
 use App\Models\Promotoria;
-use App\Models\UrgenciaAtendimento;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -25,20 +24,20 @@ class EditorController extends Controller
      */
     public function __invoke(Request $request)
     {
-        $espelho              = Espelho::first()->toArray();
-        $promotores           = $this->getPromotores();
-        $grupoPromotorias     = GrupoPromotoria::query()->get();
-        $promotorias          = Promotoria::query()->get();
-        $eventos              = Evento::query()->get();
+        $espelho          = Espelho::first()->toArray();
+        $promotores       = $this->getPromotores();
+        $grupoPromotorias = GrupoPromotoria::query()->get();
+        $promotorias      = Promotoria::query()->get();
+        $eventos          = Evento::query()->get();
 
         //return UrgenciaAtendimentoResource::collection($urgenciaAtendimentos);
 
         return Inertia::render('Espelho/Editor', [
-            'espelho'              => $espelho,
-            'promotores'           => PromotorResource::collection($promotores),
-            'grupoPromotorias'     => GrupoPromotoriaResource::collection($grupoPromotorias),
-            'promotorias'          => PromotoriaResource::collection($promotorias),
-            'eventos'              => EventoResource::collection($eventos),
+            'espelho'          => $espelho,
+            'promotores'       => PromotorResource::collection($promotores),
+            'grupoPromotorias' => GrupoPromotoriaResource::collection($grupoPromotorias),
+            'promotorias'      => PromotoriaResource::collection($promotorias),
+            'eventos'          => EventoResource::collection($eventos),
         ]);
     }
 
@@ -46,7 +45,7 @@ class EditorController extends Controller
     {
         if (env('APP_ENV') === 'local') {
             return InternalSystemUser::query()
-                ->where('matricula' , 'like', '10%')
+                ->where('matricula', 'like', '10%')
                 ->get();
         }
 
